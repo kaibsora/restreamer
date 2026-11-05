@@ -172,6 +172,24 @@ pushes still force a rebuild. It:
 8. boots and probes the application before publishing to GitHub Container Registry;
 9. emits provenance and an SBOM for both images.
 
+All jobs run on the repository's self-hosted Linux x86-64 runner pool. GitHub assigns
+the default labels `self-hosted`, `linux`, and `x64` when a runner is registered. If
+your builders use different labels, create the repository Actions variable
+`RESTREAMER_RUNNER_LABELS` containing a JSON array, for example:
+
+```json
+["self-hosted", "linux", "x64", "restreamer-builder"]
+```
+
+Each runner needs Git, Bash, curl, Docker Engine, Docker Compose v2, and at least
+40 GiB of free workspace disk. Its service account must be allowed to access Docker.
+Set `RESTREAMER_MIN_RUNNER_DISK_GB` in the runner service environment only when the
+builder has a deliberately different storage budget.
+
+Fork pull requests are not executed on these runners. A public repository handing
+unreviewed fork code a Docker socket would be an unusually efficient way to donate
+the server to strangers. Same-repository pull requests continue to run normally.
+
 GitHub Container Registry packages are not guaranteed to become public merely
 because their source repository is public. After the first successful publication,
 open each `restreamer` and `restreamer-ffmpeg` package in GitHub, connect it to this

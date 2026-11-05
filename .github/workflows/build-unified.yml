@@ -47,9 +47,15 @@ env:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    # Never execute untrusted fork code on a self-hosted runner. Same-repository
+    # pull requests remain eligible because their authors already have push access.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate self-hosted runner
+        run: scripts/verify-self-hosted-runner.sh
 
       - name: Test and build UI
         shell: bash
@@ -69,7 +75,7 @@ jobs:
             golang:1.25-alpine3.22 \
             sh -c 'cp -R /src /tmp/core && cd /tmp/core && apk add --no-cache git >/dev/null && go test ./... && go vet ./...'
 
-      - name: Validate deployment configuration
+      - name: Validate Compose configuration
         shell: bash
         run: |
           set -euo pipefail
@@ -80,6 +86,11 @@ jobs:
             --file deploy/compose.nvidia.yaml \
             --file deploy/compose.camera-example.yaml \
             config >/dev/null
+
+      - name: Validate MediaMTX configuration
+        shell: bash
+        run: |
+          set -euo pipefail
           docker run --rm \
             --volume "${PWD}/deploy/mediamtx.yml:/mediamtx.yml:ro" \
             bluenviron/mediamtx:1.21.3 \
@@ -88,7 +99,7 @@ jobs:
   version:
     if: github.event_name != 'pull_request'
     needs: quality
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
     outputs:
       ffmpeg: ${{ steps.resolve.outputs.ffmpeg }}
       published: ${{ steps.registry.outputs.published }}
@@ -97,6 +108,9 @@ jobs:
       packages: read
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate self-hosted runner
+        run: scripts/verify-self-hosted-runner.sh
 
       - name: Resolve FFmpeg release
         id: resolve
@@ -136,7 +150,7 @@ jobs:
     needs:
       - quality
       - version
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
     permissions:
       contents: read
       packages: write
@@ -146,6 +160,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: docker/setup-buildx-action@v3
+
+      - name: Validate self-hosted runner
+        run: scripts/verify-self-hosted-runner.sh
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -183,7 +200,7 @@ jobs:
       - quality
       - version
       - ffmpeg
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
     permissions:
       contents: read
       packages: write
@@ -191,6 +208,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: docker/setup-buildx-action@v3
+
+      - name: Validate self-hosted runner
+        run: scripts/verify-self-hosted-runner.sh
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
