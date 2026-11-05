@@ -1,0 +1,248 @@
+name: Build unified Restreamer
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_version:
+        description: FFmpeg release to build (blank selects the latest release)
+        required: false
+        type: string
+  schedule:
+    - cron: "23 6 * * *"
+  push:
+    branches:
+      - 2.x
+      - main
+    paths:
+      - "components/**"
+      - "scripts/**"
+      - "ui-root/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "run.sh"
+      - "deploy/**"
+      - ".github/workflows/build-unified.yml"
+  pull_request:
+    paths:
+      - "components/**"
+      - "scripts/**"
+      - "ui-root/**"
+      - "deploy/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "run.sh"
+      - ".github/workflows/build-unified.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unified-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  FFMPEG_IMAGE_NAME: ${{ github.repository_owner }}/restreamer-ffmpeg
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test and build UI
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --volume "${PWD}/components/ui:/src:ro" \
+            node:24-alpine3.22 \
+            sh -lc 'cp -R /src /tmp/ui && cd /tmp/ui && corepack enable && corepack prepare yarn@1.22.22 --activate >/dev/null && yarn install --frozen-lockfile && yarn audit-production && yarn test-ci && yarn build'
+
+      - name: Test and vet Core
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --volume "${PWD}/components/core:/src:ro" \
+            golang:1.25-alpine3.22 \
+            sh -c 'cp -R /src /tmp/core && cd /tmp/core && apk add --no-cache git >/dev/null && go test ./... && go vet ./...'
+
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose \
+            --env-file deploy/.env.example \
+            --file deploy/compose.yaml \
+            --file deploy/compose.dri.yaml \
+            --file deploy/compose.nvidia.yaml \
+            --file deploy/compose.camera-example.yaml \
+            config >/dev/null
+          docker run --rm \
+            --volume "${PWD}/deploy/mediamtx.yml:/mediamtx.yml:ro" \
+            bluenviron/mediamtx:1.21.3 \
+            --validate-conf=/mediamtx.yml
+
+  version:
+    if: github.event_name != 'pull_request'
+    needs: quality
+    runs-on: ubuntu-latest
+    outputs:
+      ffmpeg: ${{ steps.resolve.outputs.ffmpeg }}
+      published: ${{ steps.registry.outputs.published }}
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve FFmpeg release
+        id: resolve
+        env:
+          REQUESTED_VERSION: ${{ inputs.ffmpeg_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(scripts/resolve-ffmpeg-version.sh "${REQUESTED_VERSION}")"
+          echo "ffmpeg=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log in to GHCR for release lookup
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check whether this FFmpeg release is already published
+        id: registry
+        env:
+          FFMPEG_VERSION: ${{ steps.resolve.outputs.ffmpeg }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="${REGISTRY}/${FFMPEG_IMAGE_NAME}:hardware-${FFMPEG_VERSION}"
+          if docker manifest inspect "${image}" >/dev/null 2>&1; then
+            echo "published=true" >> "${GITHUB_OUTPUT}"
+            echo "${image} already exists; a scheduled run has nothing new to publish."
+          else
+            echo "published=false" >> "${GITHUB_OUTPUT}"
+            echo "${image} is not published yet."
+          fi
+
+  ffmpeg:
+    if: github.event_name != 'schedule' || needs.version.outputs.published != 'true'
+    needs:
+      - quality
+      - version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build hardware FFmpeg
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: components/ffmpeg
+          file: components/ffmpeg/Dockerfile.ubuntu.hardware
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            BUILD_IMAGE=nvidia/cuda:12.9.1-devel-ubuntu24.04
+            DEPLOY_IMAGE=nvidia/cuda:12.9.1-runtime-ubuntu24.04
+            BUILD_DATE=${{ github.run_id }}
+            BUILD_COMMIT=${{ github.sha }}
+            FFNVCODEC_VERSION=12.2.72.0
+            VULKAN_HEADERS_VERSION=1.4.362
+            FFMPEG_VERSION=${{ needs.version.outputs.ffmpeg }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:hardware-${{ needs.version.outputs.ffmpeg }}
+            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:hardware-latest
+          cache-from: type=gha,scope=ffmpeg-hardware
+          cache-to: type=gha,mode=max,scope=ffmpeg-hardware
+          provenance: mode=max
+          sbom: true
+
+  restreamer:
+    needs:
+      - quality
+      - version
+      - ffmpeg
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=ffmpeg-${{ needs.version.outputs.ffmpeg }}
+            type=sha
+
+      - name: Build unified image for validation
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          build-args: |
+            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest }}
+          tags: restreamer-smoke:local
+          cache-from: type=gha,scope=restreamer-unified
+          cache-to: type=gha,mode=max,scope=restreamer-unified
+
+      - name: Smoke test unified camera stack
+        shell: bash
+        env:
+          RESTREAMER_IMAGE: restreamer-smoke:local
+        run: |
+          scripts/smoke-compose.sh
+
+      - name: Publish unified image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=restreamer-unified
+          cache-to: type=gha,mode=max,scope=restreamer-unified
+          provenance: mode=max
+          sbom: true

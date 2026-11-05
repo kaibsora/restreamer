@@ -1,0 +1,9 @@
+.git
+.github
+**/.git
+**/node_modules
+components/ui/build
+components/ui/dist
+**/.cache
+readme-promo.gif
+readme.png

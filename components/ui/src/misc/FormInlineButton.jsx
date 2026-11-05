@@ -1,0 +1,25 @@
+import React from 'react';
+
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import { withDefaults } from '../utils/props';
+
+const useStyles = makeStyles((theme) => ({
+	button: {
+		fontSize: '.9rem!important',
+		height: '56px!important',
+	},
+}));
+
+export default function Component(inputProps) {
+	const props = withDefaults(inputProps, ComponentDefaultProps);
+	const classes = useStyles();
+
+	return (
+		<Button variant="outlined" size="large" fullWidth color="primary" className={classes.button} {...props}>
+			{props.children}
+		</Button>
+	);
+}
+
+const ComponentDefaultProps = {};

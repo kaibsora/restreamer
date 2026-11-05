@@ -1,0 +1,36 @@
+import React from 'react';
+
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Select from '@mui/material/Select';
+import { withDefaults } from '../utils/props';
+
+const MenuProps = {
+	PaperProps: {
+		style: {
+			width: 250,
+		},
+	},
+};
+
+export default function Component(inputProps) {
+	const props = withDefaults(inputProps, ComponentDefaultProps);
+	return (
+		<FormControl variant={props.variant} disabled={props.disabled} fullWidth>
+			<InputLabel>{props.label}</InputLabel>
+			<Select multiple value={props.value} onChange={props.onChange} input={<OutlinedInput />} renderValue={props.renderValue} MenuProps={MenuProps}>
+				{props.children}
+			</Select>
+		</FormControl>
+	);
+}
+
+const ComponentDefaultProps = {
+	variant: 'outlined',
+	label: '',
+	value: [],
+	disabled: false,
+	renderValue: (selected) => selected.join(', '),
+	onChange: function (event) {},
+};

@@ -1,161 +1,208 @@
-<h1 align="center">Restreamer</h1>
-<h3 align="center">A really nice and free alternative for handling live streams.</h3>
-<p align="center">
-<a href="https://github.com/datarhei/restreamer/blob/2.x/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/datarhei/restreamer" alt="License" /></a>
-<a href="https://github.com/datarhei/restreamer/releases" target="_blank"><img src="https://img.shields.io/github/v/release/datarhei/restreamer?include_prereleases" alt="License" /></a>
-<a href="https://hub.docker.com/r/datarhei/restreamer" target="_blank"><img src="https://img.shields.io/docker/pulls/datarhei/restreamer" alt="Docker pulls" /></a>
-<a href="https://docs.datarhei.com/restreamer/getting-started/quick-start" target="_blank"><img src="https://img.shields.io/badge/documentation-get%20started-green" alt="Documentation" /></a>
-</p>
-<p align="center"><a href="https://demo.datarhei.com/ui" target="_blank">Try live demo</a><br />
-<a href="https://demo.datarhei.com/ui" target="_blank"><img src="https://img.shields.io/badge/username-admin-blue" alt="demo username" /></a>
-<a href="https://demo.datarhei.com/ui" target="_blank"><img src="https://img.shields.io/badge/password-demo-blue" alt="demo password" /></a>
+# Restreamer, modernized
 
-<p align="center">
-  <a href="https://datarhei.com">
-    <img src="https://github.com/datarhei/restreamer/blob/2.x/readme-promo.gif" alt="Restreamer Promo Video" />
-  </a>
-</p>
+This fork turns the former multi-repository Restreamer build into one maintainable
+source tree and one Linux AMD64 container image. Core, UI, the patched FFmpeg build,
+deployment examples, and release automation now live together instead of requiring
+four repositories to agree on what year it is.
 
-<p align="center">Self-hosting solution to stream live to your website and publish to many like YouTube-Live, Twitter, Twitch, Vimeo, and other platforms or services. Our Docker-Image is easy to install and runs on Linux environments (MacOS/Windows by Docker Desktop). Moreover, combine the Restreamer with single-board computers like Raspberry Pi or GPU powered systems for Video-Encoding.</p>
-<br />
-<hr />
+The image is designed for multi-camera 3D-printer monitoring and contains one FFmpeg
+build with:
 
-## Features
+- NVIDIA CUDA, NVDEC, and NVENC;
+- Intel VA-API and Quick Sync through oneVPL;
+- AMD VA-API and Vulkan Video through Mesa;
+- V4L2 devices, RTSP, RTMP, SRT, HLS, and WebRTC delivery through MediaMTX;
+- Restreamer's JSON progress and HLS sequence patches.
 
-- Simplified User-Interface
-- Easy wizard configuration
-- Multiple audio/video inputs, outputs, protocols, and codecs
-- ReStreaming to platforms such as YouTube-Live, to software such as Wowza Media Server, and others based on protocols such as RTMP, SRT, ...
-- Option to mux a separate audio channel to the video
-- Build-in VideoJS-Player for your Website
-- Configurable publication website for streaming without player embedding
-- Content license with Creative Commons
-- HTTP/S- (HLS), RTMP/S- & SRT-Streaming Server
-- Automatic Let's Encrypt HTTPS certification
-- Viewer/Bandwidth Monitoring and limiting
-- Raspberry Pi (MMAL/OMX), Nvidia Cuda, Intel VAAPI support
-- Support for Hardware- and Virtual-Devices
-- FFmpeg Video-Processing (as native as possible)
-- REST-API (JSON) and 100% Swagger documented
-- Resource Monitoring (optionally by Prom-Metrics)
-- Server- and Process-Logging
-- GDPR compliant without third-party providers and does not save audience data
+The container can fall back to software processing when no GPU is exposed. Compiled
+support does not invent a working host driver, although GPU packaging has spent years
+trying to make that distinction feel unnecessarily mysterious.
 
-## Quick setup
+## Status
 
-### AMD64/ARMv7/ARM64:
+The unified image builds and boots successfully with FFmpeg 9.0.2. Its build gate
+verifies the expected hardware APIs, encoders, filters, license, and Restreamer
+patches before an image can be published. Physical-device throughput and
+glass-to-glass latency must still be measured on the target Linux host and cameras.
+
+Published images are intended to use:
+
+```text
+ghcr.io/kaibsora/restreamer:latest
+```
+
+Until the first successful GitHub release workflow completes, build the image locally
+as described below.
+
+## Quick start
+
+Requirements:
+
+- Linux AMD64 host;
+- Docker Engine with Compose v2;
+- a compatible host GPU driver for hardware acceleration;
+- NVIDIA Container Toolkit only when using an NVIDIA GPU.
+
+Clone the repository and start Restreamer plus the LAN MediaMTX relay:
+
 ```sh
-docker run -d --restart=always --name restreamer \
-   -v /opt/restreamer/config:/core/config -v /opt/restreamer/data:/core/data \
-   -p 8080:8080 -p 8181:8181 \
-   -p 1935:1935 -p 1936:1936 \
-   -p 6000:6000/udp \
-   datarhei/restreamer:latest
+git clone https://github.com/kaibsora/restreamer.git
+cd restreamer
+docker compose -f deploy/compose.yaml up -d
 ```
 
-*`--privileged` just for local devices like usb cameras.*    
-*Try `--security-opt seccomp=unconfined` if no network source can be reached.*
+Open `http://HOST:8080/ui/`. Persistent configuration and data are stored in named
+Docker volumes.
 
-### ARMv7/ARM64 Raspberry Pi:
+For Intel or AMD hardware acceleration:
+
 ```sh
-docker run -d --restart=always --name restreamer \
-   -v /opt/restreamer/config:/core/config -v /opt/restreamer/data:/core/data \
-   --privileged \
-   -p 8080:8080 -p 8181:8181 \
-   -p 1935:1935 -p 1936:1936 \
-   -p 6000:6000/udp \
-   datarhei/restreamer:rpi-latest
+RENDER_GID="$(getent group render | cut -d: -f3)" \
+VIDEO_GID="$(getent group video | cut -d: -f3)" \
+docker compose -f deploy/compose.yaml -f deploy/compose.dri.yaml up -d
 ```
 
-*`--privileged` just for local devices like usb cameras.*    
-*Try `--security-opt seccomp=unconfined` if no network source can be reached.*
+For NVIDIA hardware acceleration:
 
-### AMD64 Nvidia Cuda:
 ```sh
-docker run -d --restart=always --name restreamer \
-   -v /opt/restreamer/config:/core/config -v /opt/restreamer/data:/core/data \
-   --runtime=nvidia --privileged \
-   -p 8080:8080 -p 8181:8181 \
-   -p 1935:1935 -p 1936:1936 \
-   -p 6000:6000/udp \
-   datarhei/restreamer:cuda-latest
+docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d
 ```
 
-*`--privileged` just for local devices like usb cameras.*    
-*Try `--security-opt seccomp=unconfined` if no network source can be reached.*
+For USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the
+container needs, and add the copied file as another Compose override. Do not use
+`--privileged` merely because a webcam exists; device permissions are not a séance.
 
-### AMD64 Intel VAAPI:
+Verify what the running container can actually see:
+
 ```sh
-docker run -d --restart=always --name restreamer \
-   -v /opt/restreamer/config:/core/config -v /opt/restreamer/data:/core/data \
-   -v /dev/dri:/dev/dri --privileged \
-   -p 8080:8080 -p 8181:8181 \
-   -p 1935:1935 -p 1936:1936 \
-   -p 6000:6000/udp \
-   datarhei/restreamer:vaapi-latest
+docker exec restreamer restreamer-hardware-report
 ```
 
-*`--privileged` just for local devices like usb cameras.*    
-*Try `--security-opt seccomp=unconfined` if no network source can be reached.*
+On the target GPU host, require every detected runtime to encode a real H.264 test
+frame instead of merely trusting FFmpeg's compiled encoder list:
 
-*For external access (http/s, rtmp/s, srt), port forwarding from your Internet-Router to the Restreamer's internal IP address may need to be set up.*
-
-## Documentation
-
-Documentation is available on [docs.datarhei.com/restreamer](https://docs.datarhei.com/restreamer). We give many pieces of information, from setting up a camera, embedding your player upon your website, and streaming to services like, e.g., YouTube-Live, and many more.
-
-- [Quick start](https://docs.datarhei.com/restreamer/getting-started/quick-start)
-- [Installation](https://docs.datarhei.com/restreamer/installing/minimum-requirements)
-- [Manual](https://docs.datarhei.com/restreamer/knowledge-base/manual)
-- [Guides](https://docs.datarhei.com/restreamer/knowledge-base/user-guides)
-
-## Development
-
-### Create a custom image (bundle):
-
-#### [Restreamer FFmpeg](https://github.com/datarhei/ffmpeg):
-```
-$ git clone github.com/datarhei/ffmpeg
-$ cd ffmpeg
-$ docker build -f Dockerfile.alpine -t myffmpeg .
+```sh
+docker exec restreamer restreamer-hardware-report --verify
 ```
 
-#### [Restreamer backend](https://github.com/datarhei/core) (Golang):
+The command probes NVENC when the NVIDIA runtime is present, VA-API for an exposed
+DRM render node, Quick Sync on Intel VA-API drivers, and Vulkan Video on a discrete
+or integrated Vulkan GPU. It exits nonzero when a detected backend cannot encode or
+when no hardware runtime is available. For multi-GPU Vulkan hosts, select the FFmpeg
+device index with `RESTREAMER_VULKAN_DEVICE` on the container.
 
+See [deploy/README.md](deploy/README.md) for device mapping, WebRTC connectivity,
+Crowsnest, Moonraker, and low-latency camera topology.
+
+## Camera and latency model
+
+LAN monitoring and public viewing use separate delivery planes:
+
+1. Restreamer ingests USB cameras, IP-camera RTSP URLs, or RTSP produced by
+   Crowsnest's `camera-streamer` mode.
+2. A LAN output is copied or encoded with a short GOP and published to MediaMTX.
+3. Printer dashboards consume MediaMTX through WebRTC; native clients may use RTSP.
+4. Public viewers use Restreamer's HLS player through the authenticated reverse
+   proxy, where extra buffering is acceptable.
+
+Prefer stream copy for an existing H.264 camera feed. Every unnecessary decode and
+re-encode adds latency, GPU load, and another opportunity for software to demonstrate
+creativity. When transcoding is required, use a hardware encoder, no B-frames, a
+one-second-or-shorter GOP, and the low-latency input option exposed by the UI.
+
+Sub-second latency is a target to validate on the real network, not a property that
+can be certified by compiling an encoder inside Docker Desktop.
+
+## Build locally
+
+Build the hardware FFmpeg base first:
+
+```sh
+IMAGE_NAME=restreamer-ffmpeg:hardware components/ffmpeg/Build.sh
 ```
-$ git clone github.com/datarhei/core
-$ cd core
-$ docker build -t mycore .
+
+The helper and GitHub Actions share the same stable-release resolver. Pass a
+specific release as the first argument only when reproducing an older build.
+
+Then build the unified application:
+
+```sh
+docker buildx build --load \
+  --build-arg FFMPEG_IMAGE=restreamer-ffmpeg:hardware \
+  --tag restreamer:local .
 ```
 
-#### [Restreamer interface](https://github.com/datarhei/restreamer-ui) (React):
-```
-$ git clone github.com/datarhei/restreamer-ui
-$ cd restreamer-ui
-$ docker build -t myrsui .
-```
+Run the same FFmpeg contract used during releases:
 
-#### Restreamer bundle:
-```
-$ git clone github.com/datarhei/restreamer
-$ cd restreamer
-$ docker build --build-arg FFMPEG_IMAGE=myffmpeg --build-arg CORE_IMAGE=mycore --build-arg RESTREAMER_UI_IMAGE=myrsui -t myrestreamer .
-$ docker run -it --rm -p 8080:8080 myrestreamer
+```sh
+docker run --rm --entrypoint /usr/local/bin/restreamer-verify-ffmpeg \
+  restreamer:local
 ```
 
-### To add/fix translations in the [Restreamer interface](https://github.com/datarhei/restreamer-ui):
+Run the complete Restreamer and MediaMTX camera-stack smoke test:
 
-The Restreamer interface is currently translated in different languages, such as German, French, Italian, Spanish, and more. If you find errors in the translations or have better suggestions for some sentences, you can become a translation contributor on [poeditor.com](https://poeditor.com/join/project/ogATl3F48K).
-There you can also start a translation into a language that is not yet available in the Restreamer interface.
+```sh
+RESTREAMER_IMAGE=restreamer:local scripts/smoke-compose.sh
+```
 
-Contribute to the translations on: [https://poeditor.com/join/project/ogATl3F48K](https://poeditor.com/join/project/ogATl3F48K)
+The gate publishes four independent H.264 camera feeds by default, probes every RTSP
+path and WebRTC endpoint concurrently, and requires every first decoded RTSP frame to
+arrive in under one second. The all-intra synthetic sources deliberately remove camera
+GOP delay so the test measures container, relay, and client startup overhead. Override
+the load or threshold with `SMOKE_CAMERA_COUNT` and `SMOKE_MAX_FIRST_FRAME_MS`.
 
-## Community support
+This is a repeatable software-path latency gate, not a substitute for glass-to-glass
+measurement with the final camera, encoder settings, network, and display. Apparently
+photons remain unwilling to participate in GitHub Actions.
 
-For general help using Restreamer, please refer to the official [documentation](https://docs.datarhei.com/restreamer). For additional support, you can use Github to ask a question (Bug reports, Contributions, Features).
+## Releases
 
-## License
-See the [LICENSE](./LICENSE) file for licensing information.
+`.github/workflows/build-unified.yml` supports manual, source-triggered, and daily
+FFmpeg release checks. A scheduled run stops before the expensive image builds when
+the resolved `hardware-VERSION` tag already exists; manual runs and relevant source
+pushes still force a rebuild. It:
 
-## Business inquiries
-**We provide support for commercial requirements with professional support, agile software development, and consulting.** If you have a commercial request, be it a bug or a feature enhancement, please contact us directly at support@datarhei.com.
+1. resolves the newest stable FFmpeg source release unless a version is supplied;
+2. builds the redistributable hardware FFmpeg image;
+3. fails if required hardware support or Restreamer patches disappear;
+4. rejects high or critical production dependency vulnerabilities;
+5. runs the Core tests and vet checks plus all UI tests;
+6. validates the Compose and MediaMTX deployment configuration;
+7. pins the unified build to the FFmpeg image digest;
+8. boots and probes the application before publishing to GitHub Container Registry;
+9. emits provenance and an SBOM for both images.
+
+GitHub Container Registry packages are not guaranteed to become public merely
+because their source repository is public. After the first successful publication,
+open each `restreamer` and `restreamer-ffmpeg` package in GitHub, connect it to this
+repository if GitHub has not already done so, and set package visibility to public.
+Otherwise the lovingly automated public image will require authentication, which is
+a rather avant-garde interpretation of “anyone can use it.”
+
+Pull requests run the quality gates without publishing images. The two inherited
+bundle workflows were removed because they built external datarhei components with
+obsolete FFmpeg images and attempted to publish to the upstream Docker Hub account.
+One repository now has one release pipeline, a concept CI systems traditionally
+survive without emotional distress.
+
+An upstream FFmpeg release that no longer accepts the Restreamer patches is expected
+to fail loudly. Silently publishing an unpatched binary would be impressively tidy
+automation of the wrong result.
+
+## Repository layout
+
+- `components/core`: Go backend and process manager
+- `components/ui`: React administration and player UI
+- `components/ffmpeg`: FFmpeg source build and Restreamer patches
+- `deploy`: Compose, MediaMTX, camera, and GPU deployment assets
+- `docs/architecture.md`: system architecture and release policy
+- `.github/workflows`: image build and publication automation
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development and upstream synchronization.
+
+## License and provenance
+
+The repository retains the original Apache-2.0 project license and component
+history. FFmpeg is built without nonfree components and reports a redistributable
+GPLv3-or-later configuration. See [LICENSE](LICENSE) and the component license files
+for details.
