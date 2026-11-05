@@ -193,7 +193,9 @@ builder has a deliberately different storage budget.
 The runner preflight places `DOCKER_CONFIG` under GitHub's per-job `RUNNER_TEMP`.
 This avoids ARC images whose `/home/runner/.docker` mount is intentionally read-only
 and keeps registry credentials isolated to the ephemeral job instead of leaving them
-behind in a shared home directory.
+behind in a shared home directory. The preflight links the runner image's read-only
+`~/.docker/cli-plugins` directory into that isolated configuration so Docker Compose
+and Buildx remain discoverable in later workflow steps.
 
 Fork pull requests are not executed on these runners. A public repository handing
 unreviewed fork code a Docker socket would be an unusually efficient way to donate

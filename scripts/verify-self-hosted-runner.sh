@@ -5,6 +5,10 @@ set -euo pipefail
 if [[ -n "${GITHUB_ENV:-}" && -n "${RUNNER_TEMP:-}" ]]; then
 	docker_config="${RUNNER_TEMP}/restreamer-docker-config"
 	install -d -m 0700 "${docker_config}"
+	user_plugin_directory="${HOME}/.docker/cli-plugins"
+	if [[ -d "${user_plugin_directory}" ]]; then
+		ln -sfn "${user_plugin_directory}" "${docker_config}/cli-plugins"
+	fi
 	printf 'DOCKER_CONFIG=%s\n' "${docker_config}" >> "${GITHUB_ENV}"
 fi
 
