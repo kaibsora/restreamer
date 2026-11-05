@@ -50,7 +50,7 @@ jobs:
     # Never execute untrusted fork code on a self-hosted runner. Same-repository
     # pull requests remain eligible because their authors already have push access.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -99,7 +99,7 @@ jobs:
   version:
     if: github.event_name != 'pull_request'
     needs: quality
-    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     outputs:
       ffmpeg: ${{ steps.resolve.outputs.ffmpeg }}
       published: ${{ steps.registry.outputs.published }}
@@ -150,7 +150,7 @@ jobs:
     needs:
       - quality
       - version
-    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     permissions:
       contents: read
       packages: write
@@ -200,7 +200,7 @@ jobs:
       - quality
       - version
       - ffmpeg
-    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["self-hosted","linux","x64"]') }}
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     permissions:
       contents: read
       packages: write

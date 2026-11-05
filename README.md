@@ -172,14 +172,18 @@ pushes still force a rebuild. It:
 8. boots and probes the application before publishing to GitHub Container Registry;
 9. emits provenance and an SBOM for both images.
 
-All jobs run on the repository's self-hosted Linux x86-64 runner pool. GitHub assigns
-the default labels `self-hosted`, `linux`, and `x64` when a runner is registered. If
-your builders use different labels, create the repository Actions variable
-`RESTREAMER_RUNNER_LABELS` containing a JSON array, for example:
+All jobs run on the Actions Runner Controller scale set named `restreamer-linux`.
+ARC schedules by scale-set name and does not add the conventional `self-hosted`
+label, because apparently even labels needed two incompatible dialects. If your ARC
+scale set has another name, create the repository Actions variable
+`RESTREAMER_RUNNER_LABELS` containing a JSON array with that name, for example:
 
 ```json
-["self-hosted", "linux", "x64", "restreamer-builder"]
+["my-restreamer-linux-scale-set"]
 ```
+
+The variable also accepts a traditional self-hosted runner label set such as
+`["linux", "x64"]` when the repository is not using ARC.
 
 Each runner needs Git, Bash, curl, Docker Engine, Docker Compose v2, and at least
 40 GiB of free workspace disk. Its service account must be allowed to access Docker.
