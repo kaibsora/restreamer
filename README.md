@@ -190,6 +190,11 @@ Each runner needs Git, Bash, curl, Docker Engine, Docker Compose v2, and at leas
 Set `RESTREAMER_MIN_RUNNER_DISK_GB` in the runner service environment only when the
 builder has a deliberately different storage budget.
 
+The runner preflight places `DOCKER_CONFIG` under GitHub's per-job `RUNNER_TEMP`.
+This avoids ARC images whose `/home/runner/.docker` mount is intentionally read-only
+and keeps registry credentials isolated to the ephemeral job instead of leaving them
+behind in a shared home directory.
+
 Fork pull requests are not executed on these runners. A public repository handing
 unreviewed fork code a Docker socket would be an unusually efficient way to donate
 the server to strangers. Same-repository pull requests continue to run normally.

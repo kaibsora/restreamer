@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+if [[ -n "${GITHUB_ENV:-}" && -n "${RUNNER_TEMP:-}" ]]; then
+	docker_config="${RUNNER_TEMP}/restreamer-docker-config"
+	install -d -m 0700 "${docker_config}"
+	printf 'DOCKER_CONFIG=%s\n' "${docker_config}" >> "${GITHUB_ENV}"
+fi
+
 for command in bash curl docker git; do
 	if ! command -v "${command}" >/dev/null 2>&1; then
 		printf 'Required runner command is missing: %s\n' "${command}" >&2
