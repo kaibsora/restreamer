@@ -64,6 +64,23 @@ runtime reached the container. A successful `--verify` additionally proves the
 runtime accepted an encode. Those are separate facts, despite decades of GPU software
 trying to make them feel like one exciting mystery.
 
+Validate all real camera inputs concurrently from the same network and device
+namespace used by Restreamer:
+
+```sh
+scripts/accept-deployment.sh \
+  v4l2:/dev/video0 \
+  rtsp://printer-one.lan:8554/stream.h264 \
+  http://printer-two.lan/webcam/?action=stream
+```
+
+The command first runs the active hardware encode verification, checks the
+Restreamer API, then requires a decoded frame from every source in less than 1000ms.
+Set `ACCEPT_VERIFY_HARDWARE=false` only for a deliberate software-only deployment.
+Set `ACCEPT_MAX_FIRST_FRAME_MS` or `ACCEPT_PROBE_TIMEOUT_SECONDS` to change the
+acceptance limits. Camera URLs are numbered rather than printed so credentials are
+not helpfully donated to CI logs.
+
 ## LAN RTSP and WebRTC
 
 ### Ingest from Crowsnest or an IP camera

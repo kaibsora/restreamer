@@ -93,6 +93,21 @@ or integrated Vulkan GPU. It exits nonzero when a detected backend cannot encode
 when no hardware runtime is available. For multi-GPU Vulkan hosts, select the FFmpeg
 device index with `RESTREAMER_VULKAN_DEVICE` on the container.
 
+Then probe the real USB and IP-camera sources concurrently from inside the running
+container:
+
+```sh
+scripts/accept-deployment.sh \
+  v4l2:/dev/video0 \
+  rtsp://printer-one.lan:8554/stream.h264 \
+  rtsp://camera-two.lan/stream
+```
+
+The acceptance command requires each source to produce its first decoded frame in
+under one second by default and fails as a group if any source misses the limit.
+Override the threshold with `ACCEPT_MAX_FIRST_FRAME_MS` only when documenting an
+intentional deployment requirement, not when the camera is feeling contemplative.
+
 See [deploy/README.md](deploy/README.md) for device mapping, WebRTC connectivity,
 Crowsnest, Moonraker, and low-latency camera topology.
 

@@ -57,6 +57,14 @@ jobs:
       - name: Validate self-hosted runner
         run: scripts/verify-self-hosted-runner.sh
 
+      - name: Validate shell scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' script; do
+            bash -n "${script}"
+          done < <(git ls-files -z '*.sh')
+
       - name: Test and build UI
         shell: bash
         run: |
