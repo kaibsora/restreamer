@@ -1,5 +1,51 @@
 # Restreamer, modernized
 
+> [!WARNING]
+> **This fork is an experimental work in progress and is not production-ready.**
+> It has not yet been validated across the intended physical GPU, USB-camera,
+> IP-camera, printer, and network combinations. Automated builds and synthetic
+> smoke tests are useful evidence, but they are not a substitute for real deployment
+> testing. Expect incomplete documentation, breaking changes, and bugs with an
+> unjustified amount of confidence.
+
+## About this fork
+
+This is a personal continuation of Restreamer driven by a practical need to monitor
+multiple 3D printers with low-latency local streams and a separately buffered public
+view. The maintainer is a systems engineer with this use case, not a professional
+programmer. Refactoring, dependency upgrades, documentation, tests, and build
+automation have been developed with substantial assistance from AI coding tools.
+Those changes are reviewed and tested where possible, but AI assistance is not a
+quality guarantee and should not be mistaken for expert authorship or exhaustive
+validation.
+
+This repository is independent community work. It is not an official datarhei
+release, and the original maintainers are not responsible for changes made here.
+
+## Origin and attribution
+
+Restreamer was created by [datarhei](https://datarhei.com) and its contributors.
+This fork would not exist without their architecture, implementation, documentation,
+and years of open-source work. The unified repository incorporates and derives from
+the following original repositories:
+
+- [datarhei/restreamer](https://github.com/datarhei/restreamer) — application,
+  packaging, and original project integration;
+- [datarhei/core](https://github.com/datarhei/core) — FFmpeg process management and
+  media-server backend;
+- [datarhei/restreamer-ui](https://github.com/datarhei/restreamer-ui) — Restreamer
+  web interface;
+- [datarhei/ffmpeg](https://github.com/datarhei/ffmpeg) — FFmpeg build system,
+  patches, and base-image work.
+
+Credit and copyright remain with datarhei and the respective original contributors.
+Their source is used under the applicable open-source licenses preserved in this
+repository. Please direct issues caused by this fork here rather than to the upstream
+projects; surprising the original maintainers with somebody else's AI-assisted
+renovation would be poor form.
+
+## Project direction
+
 This fork turns the former multi-repository Restreamer build into one maintainable
 source tree and one Linux AMD64 container image. Core, UI, the patched FFmpeg build,
 deployment examples, and release automation now live together instead of requiring
@@ -18,12 +64,14 @@ The container can fall back to software processing when no GPU is exposed. Compi
 support does not invent a working host driver, although GPU packaging has spent years
 trying to make that distinction feel unnecessarily mysterious.
 
-## Status
+## Current technical status
 
 The unified image builds and boots successfully with FFmpeg 9.0.2. Its build gate
 verifies the expected hardware APIs, encoders, filters, license, and Restreamer
 patches before an image can be published. Physical-device throughput and
-glass-to-glass latency must still be measured on the target Linux host and cameras.
+glass-to-glass latency have not been validated across the target Linux hosts and
+cameras. Treat all published images as pre-release test artifacts until that hardware
+acceptance work is complete.
 
 The release workflow publishes the current image as:
 
