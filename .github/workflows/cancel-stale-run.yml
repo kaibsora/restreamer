@@ -1,0 +1,27 @@
+name: Cancel stale ARC run
+
+on:
+  push:
+    branches:
+      - 2.x
+    paths:
+      - ".github/workflows/cancel-stale-run.yml"
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cancel:
+    # Emergency control-plane job only. Image builds remain on restreamer-linux.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel wedged workflow run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.cancelWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: 42144012991,
+            });
