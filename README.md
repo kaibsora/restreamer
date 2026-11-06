@@ -25,14 +25,16 @@ verifies the expected hardware APIs, encoders, filters, license, and Restreamer
 patches before an image can be published. Physical-device throughput and
 glass-to-glass latency must still be measured on the target Linux host and cameras.
 
-Published images are intended to use:
+The release workflow publishes the current image as:
 
 ```text
 ghcr.io/kaibsora/restreamer:latest
 ```
 
-Until the first successful GitHub release workflow completes, build the image locally
-as described below.
+Versioned images are also available as `ffmpeg-VERSION`; for example,
+`ghcr.io/kaibsora/restreamer:ffmpeg-9.0.2`. Both tags are anonymously pullable from
+GitHub Container Registry. Local builds remain useful when changing the source or
+testing a release before publication.
 
 ## Quick start
 
@@ -202,11 +204,12 @@ unreviewed fork code a Docker socket would be an unusually efficient way to dona
 the server to strangers. Same-repository pull requests continue to run normally.
 
 GitHub Container Registry packages are not guaranteed to become public merely
-because their source repository is public. After the first successful publication,
-open each `restreamer` and `restreamer-ffmpeg` package in GitHub, connect it to this
-repository if GitHub has not already done so, and set package visibility to public.
-Otherwise the lovingly automated public image will require authentication, which is
-a rather avant-garde interpretation of “anyone can use it.”
+because their source repository is public. The `restreamer` and
+`restreamer-ffmpeg` packages are connected to this repository and public. If either
+package is recreated, restore that repository connection, grant Actions write
+access, and set package visibility to public. Otherwise the lovingly automated
+public image will require authentication, which is a rather avant-garde
+interpretation of “anyone can use it.”
 
 Pull requests run the quality gates without publishing images. The two inherited
 bundle workflows were removed because they built external datarhei components with
