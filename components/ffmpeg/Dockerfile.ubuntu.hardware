@@ -13,8 +13,8 @@ ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ENV SRC=/usr/local
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update -y && \
-  apt-get install -y \
+RUN apt-get -o Acquire::Retries=5 update -y && \
+  apt-get -o Acquire::Retries=5 install -y \
   pkg-config \
   curl \
   libcurl4-openssl-dev \
@@ -57,9 +57,19 @@ RUN apt-get update -y && \
 
 # install and patch ffmpeg
 RUN mkdir -p /dist && cd /dist && \
-  curl --fail --location --show-error --output Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v${VULKAN_HEADERS_VERSION}.tar.gz && \
-  curl --fail --location --show-error --remote-name https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-  curl --fail --location --show-error --remote-name https://github.com/FFmpeg/nv-codec-headers/releases/download/n${FFNVCODEC_VERSION}/nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
+  curl --fail --location --show-error \
+    --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
+    --connect-timeout 20 \
+    --output Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz \
+    https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v${VULKAN_HEADERS_VERSION}.tar.gz && \
+  curl --fail --location --show-error \
+    --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
+    --connect-timeout 20 --remote-name \
+    https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+  curl --fail --location --show-error \
+    --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
+    --connect-timeout 20 --remote-name \
+    https://github.com/FFmpeg/nv-codec-headers/releases/download/n${FFNVCODEC_VERSION}/nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
   tar -xz -f Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz && \
   tar -xz -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
   tar -xz -f nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
@@ -128,8 +138,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   ldconfig && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
+  apt-get -o Acquire::Retries=5 update && \
+  apt-get -o Acquire::Retries=5 install -y --no-install-recommends \
   ca-certificates \
   openssl \
   tzdata \
