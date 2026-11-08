@@ -73,8 +73,8 @@ jobs:
           cat > compose.yaml <<'COMPOSE'
           services:
             web:
-              image: alpine:3.22
-              command: [sh, -ec, 'mkdir -p /www; echo compose-network-ok >/www/index.html; exec httpd -f -h /www -p 8080']
+              image: python:3.12-alpine
+              command: [sh, -ec, 'mkdir -p /www; echo compose-network-ok >/www/index.html; exec python -m http.server 8080 --bind 0.0.0.0 --directory /www']
               mem_limit: 64m
             probe:
               image: alpine:3.22
@@ -82,6 +82,8 @@ jobs:
               mem_limit: 64m
           COMPOSE
           docker compose -p codex-validation-${{ matrix.slot }} up -d web
+          docker compose -p codex-validation-${{ matrix.slot }} ps --all
+          docker compose -p codex-validation-${{ matrix.slot }} logs web
           docker compose -p codex-validation-${{ matrix.slot }} run --rm probe
           docker compose -p codex-validation-${{ matrix.slot }} down --volumes
           date -u +%FT%TZ
