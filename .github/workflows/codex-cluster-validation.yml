@@ -1,0 +1,112 @@
+name: Codex cluster validation
+on:
+  push:
+    branches: [codex/cluster-validation]
+permissions:
+  contents: read
+concurrency:
+  group: codex-cluster-validation
+  cancel-in-progress: false
+jobs:
+  bounded-build:
+    name: Bounded Docker build ${{ matrix.slot }}
+    runs-on: restreamer-linux
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        slot: [1, 2, 3, 4]
+    steps:
+      - name: Validate runner and Docker tools
+        shell: bash
+        run: |
+          set -euxo pipefail
+          hostname
+          date -u +%FT%TZ
+          docker version
+          docker info --format 'driver={{.Driver}} cgroup={{.CgroupVersion}} root={{.DockerRootDir}}'
+          docker compose version
+          df -h /home/runner/_work
+          cat /sys/fs/cgroup/cpu.max
+          cat /sys/fs/cgroup/memory.max
+      - name: Exercise image build and bounded disk writes
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p cluster-validation-context
+          cd cluster-validation-context
+          dd if=/dev/urandom of=payload.bin bs=1M count=256 status=none
+          sha256sum payload.bin > payload.sha256
+          cat > Dockerfile <<'DOCKERFILE'
+          FROM alpine:3.22
+          COPY payload.bin payload.sha256 /data/
+          RUN cd /data && sha256sum -c payload.sha256 && dd if=/dev/urandom of=/build-data.bin bs=1M count=512 && sha256sum /build-data.bin >/build-data.sha256
+          CMD ["sh", "-ec", "cd /data && sha256sum -c payload.sha256 && cd / && sha256sum -c /build-data.sha256"]
+          DOCKERFILE
+          docker build --progress=plain -t codex-cluster-validation:${{ matrix.slot }} .
+          docker run --rm --label codex.cluster-validation=true codex-cluster-validation:${{ matrix.slot }}
+          docker run --rm -i --label codex.cluster-validation=true \
+            --mount "type=bind,source=$PWD,target=/io" python:3.12-alpine python - <<'PY'
+          import hashlib,json,os,time
+          chunk=os.urandom(4*1024*1024)
+          latencies=[]; total=0; end=time.monotonic()+180
+          while time.monotonic()<end:
+              started=time.monotonic()
+              with open('/io/io-probe.bin','wb') as f:
+                  for _ in range(16): f.write(chunk)
+                  f.flush(); os.fsync(f.fileno())
+              digest=hashlib.sha256(open('/io/io-probe.bin','rb').read()).hexdigest()
+              assert digest==hashlib.sha256(chunk*16).hexdigest()
+              latencies.append(time.monotonic()-started); total+=64*1024*1024
+              time.sleep(0.2)
+          latencies.sort()
+          print(json.dumps({'bytes_written':total,'iterations':len(latencies),'p95_fsync_and_verify_s':latencies[int((len(latencies)-1)*.95)],'max_s':max(latencies)}))
+          PY
+      - name: Exercise Compose network and service resolution
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p cluster-validation-compose
+          cd cluster-validation-compose
+          cat > compose.yaml <<'COMPOSE'
+          services:
+            web:
+              image: alpine:3.22
+              command: [sh, -ec, 'mkdir -p /www; echo compose-network-ok >/www/index.html; exec httpd -f -h /www -p 8080']
+              mem_limit: 64m
+            probe:
+              image: alpine:3.22
+              command: [sh, -ec, 'for i in 1 2 3 4 5; do wget -qO- http://web:8080 && exit 0; sleep 2; done; exit 1']
+              mem_limit: 64m
+          COMPOSE
+          docker compose -p codex-validation-${{ matrix.slot }} up -d web
+          docker compose -p codex-validation-${{ matrix.slot }} run --rm probe
+          docker compose -p codex-validation-${{ matrix.slot }} down --volumes
+          date -u +%FT%TZ
+  container-job:
+    needs: bounded-build
+    runs-on: restreamer-linux
+    timeout-minutes: 5
+    container: python:3.12-alpine
+    services:
+      redis:
+        image: redis:7-alpine
+    steps:
+      - name: Verify nested container job and service connectivity
+        shell: sh
+        run: |
+          set -eu
+          python - <<'PY'
+          import socket,time
+          for i in range(20):
+              try:
+                  with socket.create_connection(('redis',6379),timeout=2) as s:
+                      s.sendall(b'*1\r\n$4\r\nPING\r\n')
+                      assert s.recv(64).startswith(b'+PONG')
+                  print('CONTAINER_JOB_AND_REDIS_SERVICE_PASS')
+                  break
+              except (OSError,AssertionError):
+                  if i==19: raise
+                  time.sleep(1)
+          PY
