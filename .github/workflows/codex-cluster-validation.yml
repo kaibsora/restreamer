@@ -14,9 +14,9 @@ jobs:
     timeout-minutes: 15
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 3
       matrix:
-        slot: [1, 2, 3, 4]
+        slot: [1, 2, 3]
     steps:
       - name: Validate runner and Docker tools
         shell: bash
@@ -24,7 +24,7 @@ jobs:
           set -euxo pipefail
           hostname
           test -w /home/runner/.docker
-          echo "Validation with pod-level disk I/O protection"
+          echo "Post-cold recovery validation with pod-level disk I/O protection"
           date -u +%FT%TZ
           docker version
           docker info --format 'driver={{.Driver}} cgroup={{.CgroupVersion}} root={{.DockerRootDir}}'
@@ -38,12 +38,12 @@ jobs:
           set -euxo pipefail
           mkdir -p cluster-validation-context
           cd cluster-validation-context
-          dd if=/dev/urandom of=payload.bin bs=1M count=256 status=none
+          dd if=/dev/urandom of=payload.bin bs=1M count=32 status=none
           sha256sum payload.bin > payload.sha256
           cat > Dockerfile <<'DOCKERFILE'
           FROM alpine:3.22
           COPY payload.bin payload.sha256 /data/
-          RUN cd /data && sha256sum -c payload.sha256 && dd if=/dev/urandom of=/build-data.bin bs=1M count=512 && sha256sum /build-data.bin >/build-data.sha256
+          RUN cd /data && sha256sum -c payload.sha256 && dd if=/dev/urandom of=/build-data.bin bs=1M count=64 && sha256sum /build-data.bin >/build-data.sha256
           CMD ["sh", "-ec", "cd /data && sha256sum -c payload.sha256 && cd / && sha256sum -c /build-data.sha256"]
           DOCKERFILE
           docker build --progress=plain -t codex-cluster-validation:${{ matrix.slot }} .
@@ -52,7 +52,7 @@ jobs:
             --mount "type=bind,source=$PWD,target=/io" python:3.12-alpine python - <<'PY'
           import hashlib,json,os,time
           chunk=os.urandom(4*1024*1024)
-          latencies=[]; total=0; end=time.monotonic()+180
+          latencies=[]; total=0; end=time.monotonic()+30
           while time.monotonic()<end:
               started=time.monotonic()
               with open('/io/io-probe.bin','wb') as f:
