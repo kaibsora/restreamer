@@ -5,7 +5,9 @@ project_name="${COMPOSE_PROJECT_NAME:-restreamer-integration-smoke}"
 restreamer_image="${RESTREAMER_IMAGE:-restreamer-smoke:local}"
 camera_count="${SMOKE_CAMERA_COUNT:-4}"
 max_first_frame_ms="${SMOKE_MAX_FIRST_FRAME_MS:-1000}"
+accept_sample_seconds="${SMOKE_ACCEPT_SAMPLE_SECONDS:-2}"
 compose=(docker compose --project-name "${project_name}" --file deploy/compose.yaml)
+acceptance_report=''
 
 if [[ ! "${camera_count}" =~ ^[1-9][0-9]*$ ]]; then
     printf 'SMOKE_CAMERA_COUNT must be a positive integer, got %q.\n' "${camera_count}" >&2
@@ -26,6 +28,9 @@ fi
 cleanup() {
     status=$?
     trap - EXIT
+    if [[ -n "${acceptance_report}" ]]; then
+        rm -f -- "${acceptance_report}"
+    fi
     if [[ ${status} -ne 0 ]]; then
         "${compose[@]}" logs --no-color --tail 100 || true
     fi
@@ -179,6 +184,23 @@ done
 for read_pid in "${read_pids[@]}"; do
     wait "${read_pid}"
 done
+
+acceptance_report="$(mktemp "${TMPDIR:-/tmp}/restreamer-acceptance.XXXXXX.json")"
+acceptance_sources=()
+for camera in $(seq 1 "${camera_count}"); do
+    acceptance_sources+=("rtsp://mediamtx:8554/ci-camera-${camera}")
+done
+
+ACCEPT_VERIFY_HARDWARE=false \
+ACCEPT_MAX_FIRST_FRAME_MS="${max_first_frame_ms}" \
+ACCEPT_SAMPLE_SECONDS="${accept_sample_seconds}" \
+ACCEPT_MIN_SAMPLE_FPS=10 \
+ACCEPT_REPORT_FILE="${acceptance_report}" \
+    scripts/accept-deployment.sh "${acceptance_sources[@]}"
+
+grep -F '"passed":true' "${acceptance_report}" >/dev/null
+grep -F "\"camera_count\":${camera_count}" "${acceptance_report}" >/dev/null
+grep -F '"decoded_frames":' "${acceptance_report}" >/dev/null
 
 printf 'Validated %s concurrent RTSP camera paths and WebRTC endpoints below %sms first-frame readback.\n' \
     "${camera_count}" "${max_first_frame_ms}"

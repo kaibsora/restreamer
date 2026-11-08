@@ -145,16 +145,26 @@ Then probe the real USB and IP-camera sources concurrently from inside the runni
 container:
 
 ```sh
-scripts/accept-deployment.sh \
+ACCEPT_REPORT_FILE=restreamer-acceptance.json \
+  scripts/accept-deployment.sh \
   v4l2:/dev/video0 \
   rtsp://printer-one.lan:8554/stream.h264 \
   rtsp://camera-two.lan/stream
 ```
 
 The acceptance command requires each source to produce its first decoded frame in
-under one second by default and fails as a group if any source misses the limit.
-Override the threshold with `ACCEPT_MAX_FIRST_FRAME_MS` only when documenting an
+under one second, then keeps every source decoding concurrently for ten seconds. It
+fails as a group if any source misses the startup limit, stalls, or falls below the
+configured minimum decode rate. The optional JSON report records the container image,
+per-camera timings, decoded-frame counts, and credential-redacted source URLs. Adjust
+the sustained window and floor with `ACCEPT_SAMPLE_SECONDS` and
+`ACCEPT_MIN_SAMPLE_FPS`. Override `ACCEPT_MAX_FIRST_FRAME_MS` only when documenting an
 intentional deployment requirement, not when the camera is feeling contemplative.
+
+This gate measures connection startup and sustained decoding from the container's
+network/device namespace. It does not measure photon-to-display delay. Final
+glass-to-glass acceptance still requires a visible millisecond clock or equivalent
+physical measurement at each printer dashboard.
 
 See [deploy/README.md](deploy/README.md) for device mapping, WebRTC connectivity,
 Crowsnest, Moonraker, and low-latency camera topology.

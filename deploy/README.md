@@ -68,18 +68,28 @@ Validate all real camera inputs concurrently from the same network and device
 namespace used by Restreamer:
 
 ```sh
-scripts/accept-deployment.sh \
+ACCEPT_REPORT_FILE=restreamer-acceptance.json \
+  scripts/accept-deployment.sh \
   v4l2:/dev/video0 \
   rtsp://printer-one.lan:8554/stream.h264 \
   http://printer-two.lan/webcam/?action=stream
 ```
 
 The command first runs the active hardware encode verification, checks the
-Restreamer API, then requires a decoded frame from every source in less than 1000ms.
-Set `ACCEPT_VERIFY_HARDWARE=false` only for a deliberate software-only deployment.
-Set `ACCEPT_MAX_FIRST_FRAME_MS` or `ACCEPT_PROBE_TIMEOUT_SECONDS` to change the
-acceptance limits. Camera URLs are numbered rather than printed so credentials are
-not helpfully donated to CI logs.
+Restreamer API, requires a decoded frame from every source in less than 1000ms, and
+then sustains every decode concurrently for ten seconds. Set
+`ACCEPT_VERIFY_HARDWARE=false` only for a deliberate software-only deployment. Use
+`ACCEPT_MAX_FIRST_FRAME_MS`, `ACCEPT_PROBE_TIMEOUT_SECONDS`,
+`ACCEPT_SAMPLE_SECONDS`, and `ACCEPT_MIN_SAMPLE_FPS` to define the acceptance limits.
+The optional JSON report records reproducible evidence without exposing URL
+credentials; console output continues to number cameras instead of helpfully donating
+passwords to CI logs.
+
+Startup and sustained decoding are software-path checks, not glass-to-glass latency
+measurements. Record a visible millisecond clock at the camera and dashboard, or use
+equivalent optical instrumentation, before claiming the physical deployment is below
+one second. Computers are excellent at measuring themselves and surprisingly poor at
+noticing the photons they never observed.
 
 ## LAN RTSP and WebRTC
 
