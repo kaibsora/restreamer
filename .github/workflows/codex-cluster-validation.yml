@@ -23,6 +23,7 @@ jobs:
         run: |
           set -euxo pipefail
           hostname
+          test -w /home/runner/.docker
           date -u +%FT%TZ
           docker version
           docker info --format 'driver={{.Driver}} cgroup={{.CgroupVersion}} root={{.DockerRootDir}}'
