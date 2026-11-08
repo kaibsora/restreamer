@@ -44,6 +44,11 @@ if ! docker compose version >/dev/null 2>&1; then
 	exit 1
 fi
 
+if ! docker buildx version >/dev/null 2>&1; then
+	echo 'Docker Buildx is unavailable on the self-hosted runner.' >&2
+	exit 1
+fi
+
 minimum_disk_gb="${RESTREAMER_MIN_RUNNER_DISK_GB:-40}"
 if ! [[ "${minimum_disk_gb}" =~ ^[0-9]+$ ]]; then
 	printf 'RESTREAMER_MIN_RUNNER_DISK_GB must be an integer, found: %s\n' \
@@ -59,7 +64,7 @@ if (( available_kb < required_kb )); then
 	exit 1
 fi
 
-printf 'Self-hosted runner ready: %s, Docker %s, Compose %s, %s GiB free.\n' \
+printf 'Self-hosted runner ready: %s, Docker %s, Compose %s, Buildx available, %s GiB free.\n' \
 	"$(uname -m)" \
 	"$(docker version --format '{{.Server.Version}}')" \
 	"$(docker compose version --short)" \

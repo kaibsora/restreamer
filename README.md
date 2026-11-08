@@ -250,10 +250,10 @@ scale set has another name, create the repository Actions variable
 The variable also accepts a traditional self-hosted runner label set such as
 `["linux", "x64"]` when the repository is not using ARC.
 
-Each runner needs Git, Bash, curl, Docker Engine, Docker Compose v2, and at least
-40 GiB of free workspace disk. Its service account must be allowed to access Docker.
-Set `RESTREAMER_MIN_RUNNER_DISK_GB` in the runner service environment only when the
-builder has a deliberately different storage budget.
+Each runner needs Git, Bash, curl, Docker Engine, Docker Compose v2, Docker Buildx,
+and at least 40 GiB of free workspace disk. Its service account must be allowed to
+access Docker. Set `RESTREAMER_MIN_RUNNER_DISK_GB` in the runner service environment
+only when the builder has a deliberately different storage budget.
 
 The runner preflight places `DOCKER_CONFIG` under GitHub's per-job `RUNNER_TEMP`.
 This avoids ARC images whose `/home/runner/.docker` mount is intentionally read-only
