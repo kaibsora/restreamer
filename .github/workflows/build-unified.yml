@@ -111,11 +111,17 @@ jobs:
     outputs:
       ffmpeg: ${{ steps.resolve.outputs.ffmpeg }}
       published: ${{ steps.registry.outputs.published }}
+      digest: ${{ steps.registry.outputs.digest }}
+      rebuild: ${{ steps.plan.outputs.rebuild }}
     permissions:
       contents: read
       packages: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The build plan compares the complete pushed range so a multi-commit
+          # push cannot hide an FFmpeg source change outside a shallow clone.
+          fetch-depth: 0
 
       - name: Validate self-hosted runner
         run: scripts/verify-self-hosted-runner.sh
@@ -146,15 +152,73 @@ jobs:
           set -euo pipefail
           image="${REGISTRY}/${FFMPEG_IMAGE_NAME}:hardware-${FFMPEG_VERSION}"
           if docker manifest inspect "${image}" >/dev/null 2>&1; then
+            digest="$(docker buildx imagetools inspect \
+              "${image}" --format '{{.Manifest.Digest}}')"
+            if ! [[ "${digest}" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+              echo "Unable to resolve a valid digest for ${image}: ${digest}" >&2
+              exit 1
+            fi
             echo "published=true" >> "${GITHUB_OUTPUT}"
+            echo "digest=${digest}" >> "${GITHUB_OUTPUT}"
             echo "${image} already exists; a scheduled run has nothing new to publish."
           else
             echo "published=false" >> "${GITHUB_OUTPUT}"
+            echo "digest=" >> "${GITHUB_OUTPUT}"
             echo "${image} is not published yet."
           fi
 
+      - name: Decide whether FFmpeg must be rebuilt
+        id: plan
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+          PUBLISHED: ${{ steps.registry.outputs.published }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rebuild=false
+          reason="published FFmpeg image is reusable"
+
+          case "${EVENT_NAME}" in
+            workflow_dispatch)
+              rebuild=true
+              reason="manual workflow request"
+              ;;
+            schedule)
+              if [[ "${PUBLISHED}" != true ]]; then
+                rebuild=true
+                reason="new upstream FFmpeg release"
+              fi
+              ;;
+            push)
+              if [[ "${PUBLISHED}" != true ]]; then
+                rebuild=true
+                reason="FFmpeg image is not published"
+              elif [[ -z "${BEFORE_SHA}" || "${BEFORE_SHA}" =~ ^0+$ ]]; then
+                rebuild=true
+                reason="push has no comparable base revision"
+              elif ! git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+                rebuild=true
+                reason="push base revision is unavailable"
+              elif ! git diff --quiet "${BEFORE_SHA}" "${GITHUB_SHA}" -- \
+                components/ffmpeg \
+                scripts/resolve-ffmpeg-version.sh \
+                .github/workflows/build-unified.yml; then
+                rebuild=true
+                reason="FFmpeg build inputs changed"
+              fi
+              ;;
+            *)
+              rebuild=true
+              reason="unrecognized event requires a conservative rebuild"
+              ;;
+          esac
+
+          echo "rebuild=${rebuild}" >> "${GITHUB_OUTPUT}"
+          echo "FFmpeg rebuild: ${rebuild} (${reason})."
+
   ffmpeg:
-    if: github.event_name != 'schedule' || needs.version.outputs.published != 'true'
+    if: needs.version.outputs.rebuild == 'true'
     needs:
       - quality
       - version
@@ -204,6 +268,12 @@ jobs:
           sbom: true
 
   restreamer:
+    if: >-
+      always() &&
+      needs.quality.result == 'success' &&
+      needs.version.result == 'success' &&
+      (needs.ffmpeg.result == 'success' || needs.ffmpeg.result == 'skipped') &&
+      (github.event_name != 'schedule' || needs.version.outputs.published != 'true')
     needs:
       - quality
       - version
@@ -246,7 +316,7 @@ jobs:
           load: true
           push: false
           build-args: |
-            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest }}
+            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
           tags: restreamer-smoke:local
           cache-from: type=gha,scope=restreamer-unified
           cache-to: type=gha,mode=max,scope=restreamer-unified
@@ -267,7 +337,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest }}
+            FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=restreamer-unified

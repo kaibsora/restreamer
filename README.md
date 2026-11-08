@@ -280,6 +280,13 @@ obsolete FFmpeg images and attempted to publish to the upstream Docker Hub accou
 One repository now has one release pipeline, a concept CI systems traditionally
 survive without emotional distress.
 
+The workflow resolves the published FFmpeg image to an immutable digest before it
+builds Restreamer. Ordinary Core, UI, and deployment changes reuse that digest
+instead of recompiling FFmpeg. FFmpeg is rebuilt when its source or build inputs
+change, when a scheduled check discovers a new upstream release, or when a manual
+workflow run requests a build. Scheduled checks become clean no-ops when the current
+release is already published.
+
 An upstream FFmpeg release that no longer accepts the Restreamer patches is expected
 to fail loudly. Silently publishing an unpatched binary would be impressively tidy
 automation of the wrong result.
