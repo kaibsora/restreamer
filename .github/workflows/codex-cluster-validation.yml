@@ -24,7 +24,7 @@ jobs:
           set -euxo pipefail
           hostname
           test -w /home/runner/.docker
-          echo "Etcd OS filesystem isolation validation"
+          echo "Post-sync Longhorn durability validation 2026-11-08"
           date -u +%FT%TZ
           docker version
           docker info --format 'driver={{.Driver}} cgroup={{.CgroupVersion}} root={{.DockerRootDir}}'
