@@ -24,6 +24,7 @@ jobs:
           set -euxo pipefail
           hostname
           test -w /home/runner/.docker
+          echo "Validation with pod-level disk I/O protection"
           date -u +%FT%TZ
           docker version
           docker info --format 'driver={{.Driver}} cgroup={{.CgroupVersion}} root={{.DockerRootDir}}'
