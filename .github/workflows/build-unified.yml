@@ -219,8 +219,7 @@ jobs:
                 reason="push base revision is unavailable"
               elif ! git diff --quiet "${BEFORE_SHA}" "${GITHUB_SHA}" -- \
                 components/ffmpeg \
-                scripts/resolve-ffmpeg-version.sh \
-                .github/workflows/build-unified.yml; then
+                scripts/resolve-ffmpeg-version.sh; then
                 rebuild=true
                 reason="FFmpeg build inputs changed"
               fi
@@ -269,12 +268,8 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            BUILD_IMAGE=nvidia/cuda:12.9.1-devel-ubuntu24.04
-            DEPLOY_IMAGE=ubuntu:24.04
             BUILD_DATE=${{ github.run_id }}
             BUILD_COMMIT=${{ github.sha }}
-            FFNVCODEC_VERSION=12.2.72.0
-            VULKAN_HEADERS_VERSION=1.4.362
             FFMPEG_VERSION=${{ needs.version.outputs.ffmpeg }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:hardware-${{ needs.version.outputs.ffmpeg }}
