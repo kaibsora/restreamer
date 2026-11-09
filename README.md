@@ -278,6 +278,18 @@ This implements the encoded branding requested in
 [upstream issue #946](https://github.com/datarhei/restreamer/issues/946) and
 [upstream issue #982](https://github.com/datarhei/restreamer/issues/982).
 
+### Disable the public landing page
+
+Open **Publication website → General**, clear **Publish public landing page**, and
+save. Restreamer removes the root landing page, every generated per-channel landing
+page, and its generated script. Direct HLS, RTMP, SRT, RTSP, RTP/MPEG-TS, and
+MediaMTX publications keep running; disabling a website should not also unplug the
+camera, despite both involving the word “stream.” Custom templates remain stored so
+they are available if the landing page is enabled again.
+
+This completes the publication control requested in
+[upstream issue #892](https://github.com/datarhei/restreamer/issues/892).
+
 See [docs/reverse-proxy.md](docs/reverse-proxy.md) for TLS termination and complete
 NGINX, Caddy, and IIS routing examples.
 

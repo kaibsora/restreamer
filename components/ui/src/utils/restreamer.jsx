@@ -3178,10 +3178,23 @@ class Restreamer {
 	}
 
 	async _removePlayersiteEssentials() {
-		await this._deleteAsset('/index.html');
-		await this._deleteAsset('/playersite/default_bg.jpg');
-		await this._deleteAsset('/playersite/bg.jpg');
-		await this._deleteAsset('/playersite/bg.png');
+		const channelPages = (await this._listAssets('/playersite_*.html')).filter((path) =>
+			/^\/playersite_[0-9a-z-]+\.html$/i.test(path),
+		);
+		const generatedAssets = [
+			'/index.html',
+			...channelPages,
+			'/playersite/player.js',
+			'/playersite/default_bg.jpg',
+			'/playersite/bg.jpg',
+			'/playersite/bg.png',
+		];
+
+		for (const path of generatedAssets) {
+			await this._deleteAsset(path);
+		}
+
+		return true;
 	}
 
 	async _updatePublicEssentials() {

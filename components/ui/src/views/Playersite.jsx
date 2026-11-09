@@ -354,7 +354,19 @@ export default function Playersite(inputProps) {
 									</Typography>
 								</Grid>
 								<Grid item xs={12}>
-									<Checkbox label={<Trans>Playersite</Trans>} checked={$settings.playersite} onChange={handleChange('playersite')} />
+									<Checkbox
+										label={<Trans>Publish public landing page</Trans>}
+										checked={$settings.playersite}
+										onChange={handleChange('playersite')}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="caption">
+										<Trans>
+											Disabling this removes every generated landing page. Direct HLS, RTMP, SRT, RTSP, and MediaMTX
+											publications remain available.
+										</Trans>
+									</Typography>
 								</Grid>
 								<Grid item xs={12}>
 									<TextField
