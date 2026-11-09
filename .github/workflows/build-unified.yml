@@ -48,9 +48,20 @@ env:
 
 jobs:
   quality:
+    name: quality / ${{ matrix.suite }}
     # Never execute untrusted fork code on a self-hosted runner. Same-repository
     # pull requests remain eligible because their authors already have push access.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      # Use the three-runner ARC pool while retaining results from every suite
+      # when one fails. The aggregate matrix result still gates version/build.
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        suite:
+          - ui
+          - core
+          - configuration
     runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +70,7 @@ jobs:
         run: scripts/verify-self-hosted-runner.sh
 
       - name: Validate shell scripts
+        if: matrix.suite == 'configuration'
         shell: bash
         run: |
           set -euo pipefail
@@ -67,6 +79,7 @@ jobs:
           done < <(git ls-files -z '*.sh')
 
       - name: Test and build UI
+        if: matrix.suite == 'ui'
         shell: bash
         run: |
           set -euo pipefail
@@ -76,6 +89,7 @@ jobs:
             sh -lc 'cp -R /src /tmp/ui && cd /tmp/ui && corepack enable && corepack prepare yarn@1.22.22 --activate >/dev/null && yarn install --frozen-lockfile && yarn audit-production && yarn test-ci && yarn build'
 
       - name: Test and vet Core
+        if: matrix.suite == 'core'
         shell: bash
         run: |
           set -euo pipefail
@@ -85,6 +99,7 @@ jobs:
             sh -c 'cp -R /src /tmp/core && cd /tmp/core && apk add --no-cache git >/dev/null && go test ./... && go vet ./...'
 
       - name: Validate Compose configuration
+        if: matrix.suite == 'configuration'
         shell: bash
         run: |
           set -euo pipefail
@@ -97,6 +112,7 @@ jobs:
             config >/dev/null
 
       - name: Validate MediaMTX configuration
+        if: matrix.suite == 'configuration'
         shell: bash
         run: |
           set -euo pipefail
