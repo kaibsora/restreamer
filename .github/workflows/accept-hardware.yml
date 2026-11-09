@@ -42,13 +42,13 @@ jobs:
     runs-on: ${{ fromJSON(vars.RESTREAMER_HARDWARE_RUNNER_LABELS || vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate self-hosted runner
         run: scripts/verify-self-hosted-runner.sh
 
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -130,7 +130,7 @@ jobs:
 
       - name: Publish hardware evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: hardware-${{ inputs.backend }}-${{ github.run_id }}
           path: |

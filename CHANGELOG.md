@@ -7,6 +7,9 @@
 -   Add an on-demand ARC hardware-acceptance workflow that records the immutable
     unified-image digest and performs a real NVENC, VA-API, Quick Sync, or Vulkan
     encode on a GPU-backed runner, retaining the evidence as a workflow artifact.
+-   Move the release and hardware workflows to the current Node 24 generations of
+    GitHub Checkout, Artifact, and Docker actions instead of relying on the runner's
+    compatibility shim for deprecated Node 20 actions.
 -   Track FFmpeg's development branch by immutable commit for default local and
     scheduled builds, while retaining `stable`, exact-release, and exact-commit
     inputs for rollback and reproducibility.
