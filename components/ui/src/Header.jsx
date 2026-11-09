@@ -26,6 +26,7 @@ import WebIcon from '@mui/icons-material/Web';
 
 import * as Storage from './utils/storage';
 import * as Version from './version';
+import * as Project from './project';
 import welcomeImage from './assets/images/welcome.png';
 import LanguageSelect from './misc/LanguageSelect';
 import Logo from './misc/Logo/rsLogo';
@@ -151,18 +152,22 @@ function AboutModal(inputProps) {
 
 	return (
 		<Modal open={props.open} onClose={props.onClose} className="modal">
-			<ModalContent title="About datarhei Restreamer" onClose={props.onClose} className={classes.modalPaper}>
+			<ModalContent title="About Restreamer" onClose={props.onClose} className={classes.modalPaper}>
 				<Grid container spacing={1}>
 					<Grid item xs={12} className={classes.aboutImage}>
 						<PaperThumb image={welcomeImage} title="Welcome to Restreamer v2" height="200px" />
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="body1">
-							This is the frontend and a part of a free open source livestreaming solution for video data. The second part is the{' '}
-							<Link color="secondary" href="https://github.com/datarhei/core" target="_blank">
-								datarhei Core
+							This maintained fork packages the Restreamer UI, Core, and FFmpeg build into one repository. It is based on the original{' '}
+							<Link color="secondary" href={Project.UpstreamRepository} target="_blank" rel="noopener noreferrer">
+								datarhei Restreamer
 							</Link>{' '}
-							which can be operated separately.
+							and{' '}
+							<Link color="secondary" href={Project.UpstreamCore} target="_blank" rel="noopener noreferrer">
+								datarhei Core
+							</Link>
+							.
 						</Typography>
 					</Grid>
 					<Grid item xs={12}></Grid>
@@ -171,26 +176,32 @@ function AboutModal(inputProps) {
 							<strong>Release</strong>: {Version.UI}
 						</Typography>
 						<Typography>
-							<strong>Repo</strong>:{' '}
-							<Link color="secondary" target="_blank" href="https://github.com/datarhei/restreamer">
-								github.com/datarhei/restreamer
+							<strong>Maintained repo</strong>:{' '}
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Repository}>
+								github.com/kaibsora/restreamer
+							</Link>
+						</Typography>
+						<Typography>
+							<strong>Bundled Core</strong>:{' '}
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Core}>
+								components/core
 							</Link>
 						</Typography>
 						<Typography>
 							<strong>Licence</strong>:{' '}
-							<Link color="secondary" target="_blank" href="https://github.com/datarhei/restreamer/blob/master/LICENSE">
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.License}>
 								Apache License 2.0
 							</Link>
 						</Typography>
 						<Typography>
-							<strong>Donation</strong>:{' '}
-							<Link color="secondary" target="_blank" href="https://patreon.com/datarhei/">
-								patreon.com/datarhei
+							<strong>Upstream repo</strong>:{' '}
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.UpstreamRepository}>
+								github.com/datarhei/restreamer
 							</Link>
 						</Typography>
 						<Typography>
-							<strong>Website</strong>:{' '}
-							<Link color="secondary" target="_blank" href="https://datarhei.com">
+							<strong>Original creator</strong>:{' '}
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.UpstreamWebsite}>
 								datarhei.com
 							</Link>
 						</Typography>
@@ -237,7 +248,7 @@ function HeaderMenu(inputProps) {
 				<StyledMenu anchorEl={$anchorEl} open={$anchorEl !== null} onClose={handleMenuClose} onClick={handleMenuClose} disableScrollLock>
 					{props.hasService === true && (
 						<React.Fragment>
-							<MenuItem component="a" href="https://service.datarhei.com" target="blank">
+							<MenuItem component="a" href="https://service.datarhei.com" target="_blank" rel="noopener noreferrer">
 								<ListItemIcon>
 									<LayersIcon fontSize="small" />
 								</ListItemIcon>
@@ -269,13 +280,13 @@ function HeaderMenu(inputProps) {
 						</ListItemIcon>
 						<Trans>About</Trans>
 					</MenuItem>
-					<MenuItem component="a" href="https://docs.datarhei.com/restreamer" target="blank">
+					<MenuItem component="a" href={Project.Documentation} target="_blank" rel="noopener noreferrer">
 						<ListItemIcon>
 							<HelpOutlineIcon fontSize="small" />
 						</ListItemIcon>
 						<Trans>Docs</Trans>
 					</MenuItem>
-					<MenuItem component="a" href="https://github.com/datarhei/restreamer/issues" target="blank">
+					<MenuItem component="a" href={Project.Issues} target="_blank" rel="noopener noreferrer">
 						<ListItemIcon>
 							<BugReportIcon fontSize="small" />
 						</ListItemIcon>
@@ -310,13 +321,13 @@ function HeaderMenu(inputProps) {
 						</ListItemIcon>
 						<Trans>About</Trans>
 					</MenuItem>
-					<MenuItem component="a" href="https://docs.datarhei.com/restreamer" target="blank">
+					<MenuItem component="a" href={Project.Documentation} target="_blank" rel="noopener noreferrer">
 						<ListItemIcon>
 							<HelpOutlineIcon fontSize="small" />
 						</ListItemIcon>
 						<Trans>Docs</Trans>
 					</MenuItem>
-					<MenuItem component="a" href="https://github.com/datarhei/restreamer/issues" target="blank">
+					<MenuItem component="a" href={Project.Issues} target="_blank" rel="noopener noreferrer">
 						<ListItemIcon>
 							<BugReportIcon fontSize="small" />
 						</ListItemIcon>

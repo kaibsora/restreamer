@@ -1263,8 +1263,8 @@ export default function Settings(inputProps) {
 								<Grid item xs={12}>
 									<Typography variant="body1">
 										<Trans>Setting for connection to the service.</Trans>{' '}
-										<Link color="secondary" href="https://service.datarhei.com" target="_blank">
-											<Trans>More about the service</Trans>
+										<Link color="secondary" href="https://service.datarhei.com" target="_blank" rel="noopener noreferrer">
+											datarhei Restreamer Service (legacy third party)
 										</Link>
 										.
 									</Typography>

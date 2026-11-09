@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import WarningIcon from '@mui/icons-material/Warning';
 
+import * as Project from '../../../project';
 import BoxText from '../../../misc/BoxText';
 
 import Paper from '../../../misc/Paper';
@@ -51,7 +52,7 @@ export default function Video(inputProps) {
 							<Typography textAlign="center">
 								<Trans>
 									The source doesn't provide any compatible video streams. Please check the{' '}
-									<Link color="secondary" target="_blank" href="https://github.com/datarhei/restreamer">
+									<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Requirements}>
 										requirements
 									</Link>
 									.

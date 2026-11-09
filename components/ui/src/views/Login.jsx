@@ -12,6 +12,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 
+import * as Project from '../project';
 import * as auth0 from '../utils/auth0';
 import Paper from '../misc/Paper';
 import Password from '../misc/Password';
@@ -330,7 +331,7 @@ export default function Login(inputProps) {
 							</Grid>
 						</Grid>
 						<Grid item xs={12}>
-							<Button variant="service" color="primary" fullWidth size="large" href="https://service.datarhei.com" target="blank">
+							<Button variant="service" color="primary" fullWidth size="large" href="https://service.datarhei.com" target="_blank" rel="noopener noreferrer">
 								<Trans>Sign up (free)</Trans>
 							</Button>
 						</Grid>
@@ -344,7 +345,7 @@ export default function Login(inputProps) {
 									<Typography>
 										<Trans>
 											Use Auth0 for your running Restreamer Core. More{' '}
-											<Link color="secondary" target="_blank" href="https://github.com/datarhei">
+											<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Documentation}>
 												details
 											</Link>
 											.

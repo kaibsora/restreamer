@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 import welcomeImage from '../assets/images/welcome.png';
+import * as Project from '../project';
 import Paper from '../misc/Paper';
 import PaperThumb from '../misc/PaperThumb';
 
@@ -26,7 +27,7 @@ export default function Welcome(props) {
 					<Typography align="center">
 						<Trans>
 							Welcome to Restreamer v2, the solution for fast and easy video publishing. Free for private and commercial use. Further help in the{' '}
-							<Link color="secondary" target="_blank" href="https://docs.datarhei.com">
+							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Documentation}>
 								docs
 							</Link>
 							.

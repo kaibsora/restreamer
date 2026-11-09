@@ -339,7 +339,7 @@ function Resources(inputProps) {
 						)}
 					</ListItem>
 					{/* <ListItem divider>
-						<Button variant="service" color="primary" fullWidth size="large" component="a" href="https://service.datarhei.com" target="blank">
+						<Button variant="service" color="primary" fullWidth size="large" component="a" href="https://service.datarhei.com" target="_blank" rel="noopener noreferrer">
 							<Trans>More details</Trans>
 						</Button>
 					</ListItem> */}

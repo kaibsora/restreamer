@@ -46,6 +46,11 @@
 
 ### UI
 
+-   Route documentation, issue-reporting, requirements, logo, and repository links
+    to the maintained fork while preserving explicit attribution and links to the
+    original datarhei Restreamer and Core projects. Label the optional datarhei
+    service as a legacy third-party integration instead of presenting it as the
+    fork's own infrastructure.
 -   Remove the browser-side datarhei update request and the misleading update and
     anonymous-metrics controls. Fork updates are published as immutable GHCR image
     tags until this project establishes its own release-version contract.
