@@ -160,8 +160,9 @@ ACCEPT_RELAY_REPORT_FILE=restreamer-relays.json \
   scripts/accept-relays.sh printer-one printer-two
 ```
 
-The command checks every WebRTC player endpoint from the deployment host and decodes
-every corresponding RTSP stream concurrently from inside the Restreamer container.
+The command checks every WebRTC player and WHEP discovery endpoint from the
+deployment host, then decodes every corresponding RTSP stream concurrently from
+inside the Restreamer container.
 The RTSP checks inherit `ACCEPT_MAX_FIRST_FRAME_MS`, `ACCEPT_SAMPLE_SECONDS`, and
 `ACCEPT_MIN_SAMPLE_FPS`; the defaults require a first frame below one second and a
 ten-second sustained decode. If MediaMTX is not using the Compose defaults, set
@@ -178,6 +179,11 @@ stream_url: http://RESTREAMER_LAN_IP:8889/printer-one
 snapshot_url:
 target_fps: 25
 ```
+
+Use the stream path shown above, without adding `/whep`. Mainsail's
+`webrtc-mediamtx` client appends `/whep` itself and performs the WHEP signaling
+exchange with MediaMTX. The relay acceptance command verifies that discovery
+endpoint as well as decoding the corresponding RTSP stream.
 
 Moonraker identifies `webrtc-mediamtx` as a supported Mainsail webcam service.
 Moonraker stores the URL and Mainsail consumes it; neither Moonraker nor Crowsnest

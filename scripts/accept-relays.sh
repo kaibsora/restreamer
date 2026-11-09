@@ -11,8 +11,9 @@ usage() {
 Usage: scripts/accept-relays.sh PATH [PATH ...]
 
 Verify named MediaMTX publications from the deployed Restreamer stack. Each path
-must expose a reachable WebRTC player endpoint and an RTSP stream that satisfies
-accept-deployment.sh's startup and sustained-decode limits.
+must expose a reachable WebRTC player, a Mainsail-compatible WHEP endpoint, and an
+RTSP stream that satisfies accept-deployment.sh's startup and sustained-decode
+limits.
 
 Environment:
   RESTREAMER_MEDIAMTX_RTSP_BASE    RTSP URL visible inside Restreamer
@@ -99,8 +100,12 @@ probe_webrtc() {
     local index=$1
     local relay_path=$2
     local endpoint="${webrtc_base}/${relay_path}"
+    local whep_endpoint="${endpoint}/whep"
     local safe_endpoint
+    local safe_whep_endpoint
+    local status
     safe_endpoint="$(redact_url "${endpoint}")"
+    safe_whep_endpoint="$(redact_url "${whep_endpoint}")"
 
     if ! curl --fail --silent \
         --max-time "${probe_timeout_seconds}" "${endpoint}" >/dev/null; then
@@ -108,7 +113,25 @@ probe_webrtc() {
             "${index}" "${safe_endpoint}" >&2
         return 1
     fi
-    printf 'Relay %s WebRTC endpoint passed: %s\n' "${index}" "${safe_endpoint}"
+
+    if ! status="$(curl --fail --silent \
+        --request OPTIONS \
+        --output /dev/null \
+        --write-out '%{http_code}' \
+        --max-time "${probe_timeout_seconds}" \
+        "${whep_endpoint}")"; then
+        printf 'Relay %s WHEP discovery failed: %s\n' \
+            "${index}" "${safe_whep_endpoint}" >&2
+        return 1
+    fi
+    if [[ "${status}" != 204 ]]; then
+        printf 'Relay %s WHEP discovery returned HTTP %s, expected 204: %s\n' \
+            "${index}" "${status}" "${safe_whep_endpoint}" >&2
+        return 1
+    fi
+
+    printf 'Relay %s WebRTC player passed: %s\n' "${index}" "${safe_endpoint}"
+    printf 'Relay %s WHEP discovery passed: %s\n' "${index}" "${safe_whep_endpoint}"
 }
 
 probe_pids=()
@@ -133,6 +156,6 @@ ACCEPT_HARDWARE_BACKENDS='' \
 ACCEPT_REPORT_FILE="${ACCEPT_RELAY_REPORT_FILE:-}" \
     "${repository_root}/scripts/accept-deployment.sh" "${rtsp_sources[@]}"
 
-printf 'Validated %s named MediaMTX relay(s) over WebRTC and RTSP.\n' \
+printf 'Validated %s named MediaMTX relay(s) over WHEP and RTSP.\n' \
     "${#relay_paths[@]}"
 printf '%s\n' 'MediaMTX relay acceptance passed.'

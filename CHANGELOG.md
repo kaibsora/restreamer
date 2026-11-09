@@ -57,6 +57,8 @@
     or Vulkan backends so one working GPU cannot mask a missing target runtime.
 -   Allow multi-GPU deployments to target explicit VA-API and Quick Sync DRM
     render nodes during active hardware acceptance.
+-   Validate the MediaMTX WHEP discovery endpoint used by Mainsail for every
+    named printer relay instead of accepting an HTML player page alone.
 
 ## 2.12.0
 

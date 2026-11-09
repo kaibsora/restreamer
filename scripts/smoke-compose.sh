@@ -295,6 +295,6 @@ grep -F "\"camera_count\":${camera_count}" "${acceptance_report}" >/dev/null
 grep -F '"decoded_frames":' "${acceptance_report}" >/dev/null
 grep -F '"required_hardware_backends":[]' "${acceptance_report}" >/dev/null
 
-printf 'Validated %s concurrent RTSP camera paths and WebRTC endpoints below %sms first-frame readback.\n' \
+printf 'Validated %s concurrent RTSP camera paths and WHEP endpoints below %sms first-frame readback.\n' \
     "${camera_count}" "${max_first_frame_ms}"
 printf '%s\n' 'Unified Restreamer + MediaMTX camera-stack smoke test passed.'
