@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Deployment and FFmpeg
+
+-   Track FFmpeg's development branch by immutable commit for default local and
+    scheduled builds, while retaining `stable`, exact-release, and exact-commit
+    inputs for rollback and reproducibility.
+-   Rebase the Restreamer JSON statistics patch onto current FFmpeg development
+    sources and compile-test it together with the HLS patch before enabling the
+    development-branch policy.
+
 ### Core
 
 -   Discover container-mapped `/dev/videoN` devices even when `v4l2-ctl` cannot

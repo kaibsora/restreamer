@@ -5,11 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 
-FFMPEG_VERSION="${1:-${FFMPEG_VERSION:-}}"
-if [[ -z "${FFMPEG_VERSION}" ]]; then
-	FFMPEG_VERSION="$("${REPOSITORY_ROOT}/scripts/resolve-ffmpeg-version.sh")"
-fi
-FFMPEG_VERSION="${FFMPEG_VERSION#v}"
+FFMPEG_VERSION="$("${REPOSITORY_ROOT}/scripts/resolve-ffmpeg-version.sh" "${1:-${FFMPEG_VERSION:-master}}")"
 
 IMAGE_NAME="${IMAGE_NAME:-restreamer-ffmpeg:hardware-${FFMPEG_VERSION}}"
 BUILD_IMAGE="${BUILD_IMAGE:-nvidia/cuda:12.9.1-devel-ubuntu24.04}"

@@ -54,7 +54,10 @@ the buffered public HLS delivery plane.
 
 ## Release policy
 
-The unified workflow resolves the newest FFmpeg release on scheduled and manual
-builds, builds the patched hardware image first, then pins the final Restreamer build
-to the resulting immutable digest. Patch drift is expected to fail loudly in CI so
-it can be rebased and reviewed instead of silently publishing an unpatched binary.
+The unified workflow resolves FFmpeg's current `master` commit on scheduled and
+manual builds, builds the patched hardware image first, then pins the final
+Restreamer build to the resulting immutable digest. Each source image is tagged with
+the full Git commit (`hardware-git-SHA`), so a moving branch never produces a moving
+artifact. `stable` and exact numbered releases remain available for reproduction and
+rollback. Patch drift is expected to fail loudly in CI so it can be rebased and
+reviewed instead of silently publishing an unpatched binary.

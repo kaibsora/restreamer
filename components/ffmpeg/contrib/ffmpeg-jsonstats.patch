@@ -1,35 +1,6 @@
-From 4846ad35916a4567a65c873a40e017f8b8e28586 Mon Sep 17 00:00:00 2001
-From: Ingo Oppermann <ingo@datarhei.com>
-Date: Thu, 17 Sep 2026 12:56:58 +0200
-Subject: [PATCH v4] progress (8.1.1)
-
----
- README.PROGRESS.md      | 759 +++++++++++++++++++++++++++++++++++
- fftools/Makefile        |   1 +
- fftools/ffmpeg.c        |  33 +-
- fftools/ffmpeg.h        |   1 +
- fftools/ffmpeg_demux.c  | 165 ++------
- fftools/ffmpeg_demux.h  | 180 +++++++++
- fftools/ffmpeg_filter.c |  20 +-
- fftools/ffmpeg_json.c   | 861 ++++++++++++++++++++++++++++++++++++++++
- fftools/ffmpeg_json.h   |  16 +
- fftools/ffmpeg_mux.c    |  45 ++-
- fftools/ffmpeg_mux.h    |  13 +
- fftools/ffmpeg_opt.c    |   6 +
- fftools/ffmpeg_sched.c  |   6 +-
- libavformat/fifo.c      |   7 +
- libavformat/tee.c       |  15 +-
- test.sh                 | 190 +++++++++
- 16 files changed, 2188 insertions(+), 130 deletions(-)
- create mode 100644 README.PROGRESS.md
- create mode 100644 fftools/ffmpeg_demux.h
- create mode 100644 fftools/ffmpeg_json.c
- create mode 100644 fftools/ffmpeg_json.h
- create mode 100755 test.sh
-
 diff --git a/README.PROGRESS.md b/README.PROGRESS.md
 new file mode 100644
-index 00000000..cf650df5
+index 0000000..cf650df
 --- /dev/null
 +++ b/README.PROGRESS.md
 @@ -0,0 +1,759 @@
@@ -793,7 +764,7 @@ index 00000000..cf650df5
 +}
 +```
 diff --git a/fftools/Makefile b/fftools/Makefile
-index 01b16fa8..a43b0943 100644
+index 3ffcedf..660d8bd 100644
 --- a/fftools/Makefile
 +++ b/fftools/Makefile
 @@ -21,6 +21,7 @@ OBJS-ffmpeg +=                  \
@@ -805,7 +776,7 @@ index 01b16fa8..a43b0943 100644
      fftools/sync_queue.o        \
      fftools/thread_queue.o      \
 diff --git a/fftools/ffmpeg.c b/fftools/ffmpeg.c
-index b394243f..ee7b9478 100644
+index 186b549..864ac16 100644
 --- a/fftools/ffmpeg.c
 +++ b/fftools/ffmpeg.c
 @@ -82,8 +82,11 @@
@@ -820,7 +791,7 @@ index b394243f..ee7b9478 100644
  #include "graph/graphprint.h"
  
  const char program_name[] = "ffmpeg";
-@@ -569,7 +572,7 @@ void update_benchmark(const char *fmt, ...)
+@@ -583,7 +586,7 @@ void update_benchmark(const char *fmt, ...)
      }
  }
  
@@ -829,7 +800,7 @@ index b394243f..ee7b9478 100644
  {
      AVBPrint buf, buf_script;
      int64_t total_size = of_filesize(output_files[0]);
-@@ -731,6 +734,18 @@ static void print_report(int is_last_report, int64_t timer_start, int64_t cur_ti
+@@ -745,6 +748,18 @@ static void print_report(int is_last_report, int64_t timer_start, int64_t cur_ti
      first_report = 0;
  }
  
@@ -848,7 +819,7 @@ index b394243f..ee7b9478 100644
  static void print_stream_maps(void)
  {
      av_log(NULL, AV_LOG_INFO, "Stream mapping:\n");
-@@ -886,7 +901,7 @@ static int check_keyboard_interaction(int64_t cur_time)
+@@ -900,7 +915,7 @@ static int check_keyboard_interaction(int64_t cur_time)
   */
  static int transcode(Scheduler *sch)
  {
@@ -857,7 +828,7 @@ index b394243f..ee7b9478 100644
      int64_t timer_start, transcode_ts = 0;
  
      print_stream_maps();
-@@ -914,6 +929,13 @@ static int transcode(Scheduler *sch)
+@@ -928,6 +943,13 @@ static int transcode(Scheduler *sch)
              if (check_keyboard_interaction(cur_time) < 0)
                  break;
  
@@ -871,7 +842,7 @@ index b394243f..ee7b9478 100644
          /* dump report by using the output first video and audio streams */
          print_report(0, timer_start, cur_time, transcode_ts);
      }
-@@ -926,6 +948,11 @@ static int transcode(Scheduler *sch)
+@@ -940,6 +962,11 @@ static int transcode(Scheduler *sch)
          ret = err_merge(ret, err);
      }
  
@@ -883,7 +854,7 @@ index b394243f..ee7b9478 100644
      term_exit();
  
      /* dump report by using the first video and audio streams */
-@@ -1010,6 +1037,8 @@ int main(int argc, char **argv)
+@@ -1024,6 +1051,8 @@ int main(int argc, char **argv)
      if (ret < 0)
          goto finish;
  
@@ -893,10 +864,10 @@ index b394243f..ee7b9478 100644
          show_usage();
          av_log(NULL, AV_LOG_WARNING, "Use -h to get full help or, even better, run 'man %s'\n", program_name);
 diff --git a/fftools/ffmpeg.h b/fftools/ffmpeg.h
-index b4d3a2c2..e340bfef 100644
+index fbf44bf..0a53618 100644
 --- a/fftools/ffmpeg.h
 +++ b/fftools/ffmpeg.h
-@@ -774,6 +774,7 @@ extern int debug_ts;
+@@ -763,6 +763,7 @@ extern int debug_ts;
  extern int exit_on_error;
  extern int abort_on_flags;
  extern int print_stats;
@@ -905,7 +876,7 @@ index b4d3a2c2..e340bfef 100644
  extern int stdin_interaction;
  extern AVIOContext *progress_avio;
 diff --git a/fftools/ffmpeg_demux.c b/fftools/ffmpeg_demux.c
-index 7c708ff0..0fb5d4dd 100644
+index 5409dcd..81d669c 100644
 --- a/fftools/ffmpeg_demux.c
 +++ b/fftools/ffmpeg_demux.c
 @@ -20,6 +20,7 @@
@@ -916,10 +887,23 @@ index 7c708ff0..0fb5d4dd 100644
  #include "ffmpeg_sched.h"
  #include "ffmpeg_utils.h"
  
-@@ -41,130 +42,7 @@
+@@ -41,144 +42,12 @@
  
  #include "libavformat/avformat.h"
  
+-typedef struct DemuxStreamGroup {
+-    InputStreamGroup         istg;
+-
+-    // name used for logging
+-    char                     log_name[32];
+-
+-    // Temporary fields for LCEVC merging
+-    AVBitStreamFilterGraph   *graph;
+-    AVBitStreamFilterContext *lcevc[2];
+-    AVBitStreamFilterContext *sink;
+-    int graph_enabled;
+-} DemuxStreamGroup;
+-
 -typedef struct DemuxStream {
 -    InputStream              ist;
 -
@@ -974,18 +958,14 @@ index 7c708ff0..0fb5d4dd 100644
 -
 -    AVBSFContext            *bsf;
 -
+-    DemuxStreamGroup       **dsg;
+-    int                      nb_dsg;
+-
 -    /* number of packets successfully read for this stream */
 -    uint64_t                 nb_packets;
 -    // combined size of all the packets read
 -    uint64_t                 data_size;
 -} DemuxStream;
--
--typedef struct DemuxStreamGroup {
--    InputStreamGroup         istg;
--
--    // name used for logging
--    char                     log_name[32];
--} DemuxStreamGroup;
 -
 -typedef struct Demuxer {
 -    InputFile             f;
@@ -1043,12 +1023,17 @@ index 7c708ff0..0fb5d4dd 100644
 -    AVPacket *pkt_bsf;
 -} DemuxThreadContext;
 -
+ static DemuxStreamGroup *dsg_from_istg(InputStreamGroup *istg)
+ {
+     return (DemuxStreamGroup*)istg;
+ }
+ 
 -static DemuxStream *ds_from_ist(InputStream *ist)
 +DemuxStream *ds_from_ist(InputStream *ist)
  {
      return (DemuxStream*)ist;
  }
-@@ -489,6 +370,48 @@ static int input_packet_process(Demuxer *d, AVPacket *pkt, unsigned *send_flags)
+@@ -507,6 +376,48 @@ static int input_packet_process(Demuxer *d, AVPacket *pkt, unsigned *send_flags)
      ds->data_size += pkt->size;
      ds->nb_packets++;
  
@@ -1099,10 +1084,10 @@ index 7c708ff0..0fb5d4dd 100644
      if (debug_ts) {
 diff --git a/fftools/ffmpeg_demux.h b/fftools/ffmpeg_demux.h
 new file mode 100644
-index 00000000..34f1dd76
+index 0000000..9b08eda
 --- /dev/null
 +++ b/fftools/ffmpeg_demux.h
-@@ -0,0 +1,183 @@
+@@ -0,0 +1,193 @@
 +/*
 + * This file is part of FFmpeg.
 + *
@@ -1144,6 +1129,7 @@ index 00000000..34f1dd76
 +#include "libavutil/threadmessage.h"
 +
 +#include "libavcodec/packet.h"
++#include "libavcodec/bsf.h"
 +
 +#include "libavformat/avformat.h"
 +
@@ -1201,6 +1187,9 @@ index 00000000..34f1dd76
 +
 +    AVBSFContext            *bsf;
 +
++    struct DemuxStreamGroup **dsg;
++    int                      nb_dsg;
++
 +    /* number of packets successfully read for this stream */
 +    uint64_t                 nb_packets;
 +    // combined size of all the packets read
@@ -1220,6 +1209,12 @@ index 00000000..34f1dd76
 +
 +    // name used for logging
 +    char                     log_name[32];
++
++    // Temporary fields for LCEVC merging
++    AVBitStreamFilterGraph   *graph;
++    AVBitStreamFilterContext *lcevc[2];
++    AVBitStreamFilterContext *sink;
++    int graph_enabled;
 +} DemuxStreamGroup;
 +
 +typedef struct Demuxer {
@@ -1286,9 +1281,8 @@ index 00000000..34f1dd76
 +DemuxStream *ds_from_ist(InputStream *ist);
 +
 +#endif /* FFTOOLS_FFMPEG_DEMUX_H */
-\ No newline at end of file
 diff --git a/fftools/ffmpeg_filter.c b/fftools/ffmpeg_filter.c
-index 765b65d0..be09012e 100644
+index 32ff664..ab06648 100644
 --- a/fftools/ffmpeg_filter.c
 +++ b/fftools/ffmpeg_filter.c
 @@ -21,6 +21,7 @@
@@ -1299,7 +1293,7 @@ index 765b65d0..be09012e 100644
  #include "graph/graphprint.h"
  
  #include "libavfilter/avfilter.h"
-@@ -43,6 +44,8 @@
+@@ -44,6 +45,8 @@
  typedef struct FilterGraphPriv {
      FilterGraph      fg;
  
@@ -1308,7 +1302,7 @@ index 765b65d0..be09012e 100644
      // name used for logging
      char             log_name[32];
  
-@@ -2228,6 +2231,11 @@ static int configure_filtergraph(FilterGraph *fg, FilterGraphThread *fgt)
+@@ -2357,6 +2360,11 @@ static int configure_filtergraph(FilterGraph *fg, FilterGraphThread *fgt)
              goto fail;
      }
  
@@ -1320,7 +1314,7 @@ index 765b65d0..be09012e 100644
      return 0;
  fail:
      cleanup_filtergraph(fg, fgt);
-@@ -3299,7 +3307,7 @@ static int filter_thread(void *arg)
+@@ -3510,7 +3518,7 @@ static int filter_thread(void *arg)
      FilterGraph      *fg = &fgp->fg;
  
      FilterGraphThread fgt;
@@ -1329,9 +1323,9 @@ index 765b65d0..be09012e 100644
  
      ret = fg_thread_init(&fgt, fg);
      if (ret < 0)
-@@ -3396,6 +3404,12 @@ read_frames:
-             if (av_buffersrc_get_status(ifp->ifilter.filter))
-                 close_input(ifp);
+@@ -3600,6 +3608,12 @@ read_frames:
+                    av_err2str(ret));
+             goto finish;
          }
 +
 +        if (once == 0 && atomic_load(&nb_output_dumped) >= nb_output_files) {
@@ -1342,7 +1336,7 @@ index 765b65d0..be09012e 100644
      }
  
      for (unsigned i = 0; i < fg->nb_outputs; i++) {
-@@ -3414,6 +3428,10 @@ finish:
+@@ -3618,6 +3632,10 @@ finish:
      if (print_graphs || print_graphs_file)
          print_filtergraph(fg, fgt.graph);
  
@@ -1355,7 +1349,7 @@ index 765b65d0..be09012e 100644
          ret = 0;
 diff --git a/fftools/ffmpeg_json.c b/fftools/ffmpeg_json.c
 new file mode 100644
-index 00000000..b35ead52
+index 0000000..b35ead5
 --- /dev/null
 +++ b/fftools/ffmpeg_json.c
 @@ -0,0 +1,861 @@
@@ -2222,7 +2216,7 @@ index 00000000..b35ead52
 +}
 diff --git a/fftools/ffmpeg_json.h b/fftools/ffmpeg_json.h
 new file mode 100644
-index 00000000..becf6b7f
+index 0000000..becf6b7
 --- /dev/null
 +++ b/fftools/ffmpeg_json.h
 @@ -0,0 +1,16 @@
@@ -2243,10 +2237,10 @@ index 00000000..becf6b7f
 +
 +#endif /* FFTOOLS_FFMPEG_JSON_H */
 diff --git a/fftools/ffmpeg_mux.c b/fftools/ffmpeg_mux.c
-index 25f66dd1..9e0d0f7e 100644
+index a6991af..5e99f06 100644
 --- a/fftools/ffmpeg_mux.c
 +++ b/fftools/ffmpeg_mux.c
-@@ -43,7 +43,7 @@ typedef struct MuxThreadContext {
+@@ -44,7 +44,7 @@ typedef struct MuxThreadContext {
      AVPacket *fix_sub_duration_pkt;
  } MuxThreadContext;
  
@@ -2255,7 +2249,7 @@ index 25f66dd1..9e0d0f7e 100644
  {
      return (Muxer*)of;
  }
-@@ -226,8 +226,51 @@ static int write_packet(Muxer *mux, OutputStream *ost, AVPacket *pkt)
+@@ -220,8 +220,51 @@ static int write_packet(Muxer *mux, OutputStream *ost, AVPacket *pkt)
          goto fail;
  
      ms->data_size_mux += pkt->size;
@@ -2308,10 +2302,13 @@ index 25f66dd1..9e0d0f7e 100644
  
      if (ms->stats.io)
 diff --git a/fftools/ffmpeg_mux.h b/fftools/ffmpeg_mux.h
-index 4ca8ab73..56cf5b97 100644
+index 3d6686d..67f0ad7 100644
 --- a/fftools/ffmpeg_mux.h
 +++ b/fftools/ffmpeg_mux.h
-@@ -85,1 +85,13 @@ typedef struct MuxStream {
+@@ -82,6 +82,18 @@ typedef struct MuxStream {
+     int             copy_prior_start;
+     int             streamcopy_started;
+ 
 +    uint64_t        nb_packets;
 +    uint64_t        nb_keyframes;
 +    // number of frames/samples sent to the encoder
@@ -2325,6 +2322,8 @@ index 4ca8ab73..56cf5b97 100644
 +    double          sum_gopsize, min_gopsize, max_gopsize, avg_gopsize;
 +
      AVRational      frame_rate;
+     AVRational      max_frame_rate;
+     int             force_fps;
 @@ -122,6 +134,7 @@ typedef struct Muxer {
  } Muxer;
  
@@ -2334,7 +2333,7 @@ index 4ca8ab73..56cf5b97 100644
  static inline MuxStream *ms_from_ost(OutputStream *ost)
  {
 diff --git a/fftools/ffmpeg_opt.c b/fftools/ffmpeg_opt.c
-index a2566193..8dfa3895 100644
+index 603e9df..9c5bb15 100644
 --- a/fftools/ffmpeg_opt.c
 +++ b/fftools/ffmpeg_opt.c
 @@ -28,7 +28,9 @@
@@ -2347,7 +2346,7 @@ index a2566193..8dfa3895 100644
  #include "cmdutils.h"
  #include "opt_common.h"
  
-@@ -71,6 +73,7 @@ int debug_ts          = 0;
+@@ -68,6 +70,7 @@ int debug_ts          = 0;
  int exit_on_error     = 0;
  int abort_on_flags    = 0;
  int print_stats       = -1;
@@ -2355,7 +2354,7 @@ index a2566193..8dfa3895 100644
  int stdin_interaction = 1;
  float max_error_rate  = 2.0/3;
  char *filter_nbthreads;
-@@ -1858,6 +1861,9 @@ const OptionDef options[] = {
+@@ -1810,6 +1813,9 @@ const OptionDef options[] = {
      { "stats",               OPT_TYPE_BOOL, 0,
          { &print_stats },
          "print progress report during encoding", },
@@ -2366,7 +2365,7 @@ index a2566193..8dfa3895 100644
          { .func_arg = opt_stats_period },
          "set the period at which ffmpeg updates stats and -progress output", "time" },
 diff --git a/libavformat/fifo.c b/libavformat/fifo.c
-index e66002b9..f30ba292 100644
+index bb9c79e..1493d79 100644
 --- a/libavformat/fifo.c
 +++ b/libavformat/fifo.c
 @@ -38,6 +38,9 @@ typedef struct FifoContext {
@@ -2379,7 +2378,7 @@ index e66002b9..f30ba292 100644
      char *format;
      AVDictionary *format_options;
  
-@@ -377,6 +380,8 @@ static int fifo_thread_attempt_recovery(FifoThreadContext *ctx, FifoMessage *msg
+@@ -380,6 +383,8 @@ static int fifo_thread_attempt_recovery(FifoThreadContext *ctx, FifoMessage *msg
      }
  
      ctx->recovery_nr++;
@@ -2388,7 +2387,7 @@ index e66002b9..f30ba292 100644
  
      if (fifo->max_recovery_attempts) {
          av_log(avf, AV_LOG_VERBOSE, "Recovery attempt #%d/%d\n",
-@@ -394,11 +399,13 @@ static int fifo_thread_attempt_recovery(FifoThreadContext *ctx, FifoMessage *msg
+@@ -397,11 +402,13 @@ static int fifo_thread_attempt_recovery(FifoThreadContext *ctx, FifoMessage *msg
          if (is_recoverable(fifo, ret)) {
              return fifo_thread_process_recovery_failure(ctx, pkt, ret);
          } else {
@@ -2403,7 +2402,7 @@ index e66002b9..f30ba292 100644
  
      return 0;
 diff --git a/libavformat/tee.c b/libavformat/tee.c
-index 8980b422..0b62187f 100644
+index 9407800..859049b 100644
 --- a/libavformat/tee.c
 +++ b/libavformat/tee.c
 @@ -49,6 +49,9 @@ typedef struct {
@@ -2462,7 +2461,7 @@ index 8980b422..0b62187f 100644
      tee_slave->avf = avf2;
      av_dict_copy(&avf2->metadata, avf->metadata, 0);
      avf2->opaque   = avf->opaque;
-@@ -400,6 +410,7 @@ static int open_slave(AVFormatContext *avf, char *slave, TeeSlave *tee_slave)
+@@ -408,6 +418,7 @@ static int open_slave(AVFormatContext *avf, char *slave, TeeSlave *tee_slave)
  
  end:
      av_free(format);
@@ -2471,8 +2470,8 @@ index 8980b422..0b62187f 100644
      av_dict_free(&options);
      av_dict_free(&bsf_options);
 diff --git a/test.sh b/test.sh
-new file mode 100755
-index 00000000..ea5b1c16
+new file mode 100644
+index 0000000..ea5b1c1
 --- /dev/null
 +++ b/test.sh
 @@ -0,0 +1,190 @@
@@ -2667,8 +2666,3 @@ index 00000000..ea5b1c16
 +rm left.json right.json
 +rm example_noaudio.mp4 example_audio.mp4 example.jpg
 \ No newline at end of file
-
-base-commit: bc80614c323b2b6d0ca134efb5f945b44f7871b6
--- 
-2.54.0 (Apple Git-157)
-

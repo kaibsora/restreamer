@@ -67,8 +67,9 @@ trying to make that distinction feel unnecessarily mysterious.
 
 ## Current technical status
 
-The unified image builds and boots successfully with FFmpeg 9.0.2. Its build gate
-verifies the expected hardware APIs, encoders, filters, license, and Restreamer
+The last published unified image builds and boots successfully with FFmpeg 9.0.2;
+new builds track FFmpeg's current development branch by immutable commit. The build
+gate verifies the expected hardware APIs, encoders, filters, license, and Restreamer
 patches before an image can be published. Physical-device throughput and
 glass-to-glass latency have not been validated across the target Linux hosts and
 cameras. Treat all published images as pre-release test artifacts until that hardware
@@ -260,8 +261,10 @@ Build the hardware FFmpeg base first:
 IMAGE_NAME=restreamer-ffmpeg:hardware components/ffmpeg/Build.sh
 ```
 
-The helper and GitHub Actions share the same stable-release resolver. Pass a
-specific release as the first argument only when reproducing an older build.
+The helper and GitHub Actions resolve FFmpeg's current `master` commit by default,
+then build that immutable SHA. Pass `stable` for the newest numbered release, an
+exact release such as `9.0.2`, or `git-` followed by a full 40-character commit SHA
+when reproducing a build.
 
 Then build the unified application:
 
@@ -297,11 +300,11 @@ photons remain unwilling to participate in GitHub Actions.
 ## Releases
 
 `.github/workflows/build-unified.yml` supports manual, source-triggered, and daily
-FFmpeg release checks. A scheduled run stops before the expensive image builds when
-the resolved `hardware-VERSION` tag already exists; manual runs and relevant source
+FFmpeg source checks. A scheduled run stops before the expensive image builds when
+the resolved `hardware-git-SHA` tag already exists; manual runs and relevant source
 pushes still force a rebuild. It:
 
-1. resolves the newest stable FFmpeg source release unless a version is supplied;
+1. resolves FFmpeg's current development commit unless another source is supplied;
 2. builds the redistributable hardware FFmpeg image;
 3. fails if required hardware support or Restreamer patches disappear;
 4. rejects high or critical production dependency vulnerabilities;
@@ -357,11 +360,11 @@ survive without emotional distress.
 The workflow resolves the published FFmpeg image to an immutable digest before it
 builds Restreamer. Ordinary Core, UI, and deployment changes reuse that digest
 instead of recompiling FFmpeg. FFmpeg is rebuilt when its source or build inputs
-change, when a scheduled check discovers a new upstream release, or when a manual
+change, when a scheduled check discovers a new upstream commit, or when a manual
 workflow run requests a build. Scheduled checks become clean no-ops when the current
-release is already published.
+commit is already published.
 
-An upstream FFmpeg release that no longer accepts the Restreamer patches is expected
+An upstream FFmpeg commit that no longer accepts the Restreamer patches is expected
 to fail loudly. Silently publishing an unpatched binary would be impressively tidy
 automation of the wrong result.
 

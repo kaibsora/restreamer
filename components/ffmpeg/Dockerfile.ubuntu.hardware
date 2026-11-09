@@ -66,16 +66,36 @@ RUN mkdir -p /dist && cd /dist && \
     --connect-timeout 20 \
     --output Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz \
     https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v${VULKAN_HEADERS_VERSION}.tar.gz && \
+  case "${FFMPEG_VERSION}" in \
+    git-[0-9a-f][0-9a-f]*) \
+      FFMPEG_SHA="${FFMPEG_VERSION#git-}"; \
+      printf '%s' "${FFMPEG_SHA}" | grep -Eq '^[0-9a-f]{40}$' || \
+        { echo "Invalid FFmpeg Git commit: ${FFMPEG_SHA}" >&2; exit 2; }; \
+      FFMPEG_URL="https://github.com/FFmpeg/FFmpeg/archive/${FFMPEG_SHA}.tar.gz" \
+      ;; \
+    [0-9]*.[0-9]*) \
+      printf '%s' "${FFMPEG_VERSION}" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?$' || \
+        { echo "Invalid FFmpeg release: ${FFMPEG_VERSION}" >&2; exit 2; }; \
+      FFMPEG_URL="https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz" \
+      ;; \
+    *) \
+      echo "Invalid resolved FFmpeg source: ${FFMPEG_VERSION}" >&2; \
+      exit 2 \
+      ;; \
+  esac && \
+  mkdir -p ffmpeg-${FFMPEG_VERSION} && \
   curl --fail --location --show-error \
     --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
-    --connect-timeout 20 --remote-name \
-    https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+    --connect-timeout 20 \
+    --output ffmpeg-${FFMPEG_VERSION}.tar.gz \
+    "${FFMPEG_URL}" && \
   curl --fail --location --show-error \
     --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
     --connect-timeout 20 --remote-name \
     https://github.com/FFmpeg/nv-codec-headers/releases/download/n${FFNVCODEC_VERSION}/nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
   tar -xz -f Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz && \
-  tar -xz -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+  tar -xz -f ffmpeg-${FFMPEG_VERSION}.tar.gz \
+    --strip-components=1 --directory ffmpeg-${FFMPEG_VERSION} && \
   tar -xz -f nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
   cp -R Vulkan-Headers-${VULKAN_HEADERS_VERSION}/include/. /usr/local/include/ && \
   rm Vulkan-Headers-${VULKAN_HEADERS_VERSION}.tar.gz ffmpeg-${FFMPEG_VERSION}.tar.gz nv-codec-headers-${FFNVCODEC_VERSION}.tar.gz && \
