@@ -138,14 +138,31 @@ docker exec restreamer restreamer-hardware-report --verify
 The command probes NVENC when the NVIDIA runtime is present, VA-API for an exposed
 DRM render node, Quick Sync on Intel VA-API drivers, and Vulkan Video on a discrete
 or integrated Vulkan GPU. It exits nonzero when a detected backend cannot encode or
-when no hardware runtime is available. For multi-GPU Vulkan hosts, select the FFmpeg
-device index with `RESTREAMER_VULKAN_DEVICE` on the container.
+when no hardware runtime is available. Require the backend intended for a particular
+host so another working GPU cannot hide a missing runtime:
+
+```sh
+# Intel
+docker exec restreamer restreamer-hardware-report \
+  --verify --require vaapi --require qsv
+
+# NVIDIA
+docker exec restreamer restreamer-hardware-report --verify --require nvenc
+
+# AMD (choose the backend configured for the channel)
+docker exec restreamer restreamer-hardware-report --verify --require vaapi
+docker exec restreamer restreamer-hardware-report --verify --require vulkan
+```
+
+For multi-GPU Vulkan hosts, select the FFmpeg device index with
+`RESTREAMER_VULKAN_DEVICE` on the container.
 
 Then probe the real USB and IP-camera sources concurrently from inside the running
 container:
 
 ```sh
 ACCEPT_REPORT_FILE=restreamer-acceptance.json \
+ACCEPT_HARDWARE_BACKENDS=vaapi,qsv \
   scripts/accept-deployment.sh \
   v4l2:/dev/video0 \
   rtsp://printer-one.lan:8554/stream.h264 \

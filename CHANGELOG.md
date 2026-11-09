@@ -23,6 +23,11 @@
 -   Preserve the complete RTMP application name when normalizing leading and
     trailing slashes ([#825](https://github.com/datarhei/restreamer/issues/825)).
 
+### Deployment
+
+-   Allow deployment acceptance to require specific NVENC, VA-API, Quick Sync,
+    or Vulkan backends so one working GPU cannot mask a missing target runtime.
+
 ## 2.12.0
 
 ### UI v1.13.0 > v1.14.0

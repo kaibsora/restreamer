@@ -277,6 +277,7 @@ ACCEPT_REPORT_FILE="${acceptance_report}" \
 grep -F '"passed":true' "${acceptance_report}" >/dev/null
 grep -F "\"camera_count\":${camera_count}" "${acceptance_report}" >/dev/null
 grep -F '"decoded_frames":' "${acceptance_report}" >/dev/null
+grep -F '"required_hardware_backends":[]' "${acceptance_report}" >/dev/null
 
 printf 'Validated %s concurrent RTSP camera paths and WebRTC endpoints below %sms first-frame readback.\n' \
     "${camera_count}" "${max_first_frame_ms}"

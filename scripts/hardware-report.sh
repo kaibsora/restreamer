@@ -1,15 +1,39 @@
 #!/bin/sh
 set -eu
 
+usage() {
+    echo "Usage: restreamer-hardware-report [--verify] [--require BACKEND]..." >&2
+    echo "Backends: nvenc, vaapi, qsv, vulkan" >&2
+    exit 64
+}
+
 verify=false
-case "${1:-}" in
-    "") ;;
-    --verify) verify=true ;;
-    *)
-        echo "Usage: restreamer-hardware-report [--verify]" >&2
-        exit 64
-        ;;
-esac
+required_backends=''
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --verify)
+            verify=true
+            shift
+            ;;
+        --require)
+            [ "$#" -ge 2 ] || usage
+            case "$2" in
+                nvenc|vaapi|qsv|vulkan) ;;
+                *)
+                    printf 'Unknown required hardware backend: %s\n' "$2" >&2
+                    usage
+                    ;;
+            esac
+            case " ${required_backends} " in
+                *" $2 "*) ;;
+                *) required_backends="${required_backends}${required_backends:+ }$2" ;;
+            esac
+            verify=true
+            shift 2
+            ;;
+        *) usage ;;
+    esac
+done
 
 workdir="$(mktemp -d)"
 trap 'rm -rf "${workdir}"' EXIT INT TERM
@@ -88,6 +112,10 @@ echo "== Active hardware encode verification =="
 
 runtime_count=0
 failure_count=0
+detected_nvenc=false
+detected_vaapi=false
+detected_qsv=false
+detected_vulkan=false
 
 verify_encoder() {
     label=$1
@@ -104,6 +132,7 @@ verify_encoder() {
 }
 
 if [ -n "${nvidia_info}" ]; then
+    detected_nvenc=true
     verify_encoder "NVIDIA NVENC" \
         ffmpeg -hide_banner -loglevel error \
         -f lavfi -i color=size=128x72:rate=1 \
@@ -111,6 +140,7 @@ if [ -n "${nvidia_info}" ]; then
 fi
 
 if [ -n "${render_device}" ]; then
+    detected_vaapi=true
     verify_encoder "VA-API (${render_device})" \
         ffmpeg -hide_banner -loglevel error \
         -init_hw_device "vaapi=va:${render_device}" -filter_hw_device va \
@@ -118,6 +148,7 @@ if [ -n "${render_device}" ]; then
         -vf format=nv12,hwupload -frames:v 1 -c:v h264_vaapi -f null -
 
     if printf '%s\n' "${va_info}" | grep -Eqi 'Intel|iHD|i965'; then
+        detected_qsv=true
         verify_encoder "Intel Quick Sync (${render_device})" \
             ffmpeg -hide_banner -loglevel error \
             -init_hw_device "vaapi=va:${render_device}" \
@@ -130,6 +161,7 @@ fi
 
 if printf '%s\n' "${vulkan_info}" \
     | grep -Eq 'PHYSICAL_DEVICE_TYPE_(DISCRETE|INTEGRATED)_GPU'; then
+    detected_vulkan=true
     vulkan_device="${RESTREAMER_VULKAN_DEVICE:-0}"
     verify_encoder "Vulkan Video (device ${vulkan_device})" \
         ffmpeg -hide_banner -loglevel error \
@@ -138,15 +170,33 @@ if printf '%s\n' "${vulkan_info}" \
         -vf format=nv12,hwupload -frames:v 1 -c:v h264_vulkan -f null -
 fi
 
+for backend in ${required_backends}; do
+    case "${backend}" in
+        nvenc) detected=${detected_nvenc} ;;
+        vaapi) detected=${detected_vaapi} ;;
+        qsv) detected=${detected_qsv} ;;
+        vulkan) detected=${detected_vulkan} ;;
+    esac
+
+    if [ "${detected}" != true ]; then
+        printf 'FAIL: required hardware backend %s was not detected.\n' \
+            "${backend}" >&2
+        failure_count=$((failure_count + 1))
+    fi
+done
+
 if [ "${runtime_count}" -eq 0 ]; then
     echo "FAIL: no usable hardware-encoding runtime was detected." >&2
     exit 2
 fi
 
 if [ "${failure_count}" -ne 0 ]; then
-    printf 'Hardware verification failed for %s runtime(s).\n' \
+    printf 'Hardware verification failed with %s error(s).\n' \
         "${failure_count}" >&2
     exit 1
 fi
 
 printf 'Hardware verification passed for %s runtime(s).\n' "${runtime_count}"
+if [ -n "${required_backends}" ]; then
+    printf 'Required hardware backends passed: %s\n' "${required_backends}"
+fi

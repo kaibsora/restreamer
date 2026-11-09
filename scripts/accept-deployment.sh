@@ -6,6 +6,7 @@ base_url="${RESTREAMER_BASE_URL:-http://127.0.0.1:8080}"
 max_first_frame_ms="${ACCEPT_MAX_FIRST_FRAME_MS:-1000}"
 probe_timeout_seconds="${ACCEPT_PROBE_TIMEOUT_SECONDS:-8}"
 verify_hardware="${ACCEPT_VERIFY_HARDWARE:-true}"
+required_hardware_backends="${ACCEPT_HARDWARE_BACKENDS:-}"
 sample_seconds="${ACCEPT_SAMPLE_SECONDS:-10}"
 min_sample_fps="${ACCEPT_MIN_SAMPLE_FPS:-1}"
 report_file="${ACCEPT_REPORT_FILE:-}"
@@ -26,6 +27,8 @@ Environment:
   ACCEPT_MAX_FIRST_FRAME_MS     Per-camera limit (default: 1000)
   ACCEPT_PROBE_TIMEOUT_SECONDS  Hard probe timeout (default: 8)
   ACCEPT_VERIFY_HARDWARE        Run active GPU encoding checks (default: true)
+  ACCEPT_HARDWARE_BACKENDS      Comma-separated required GPU backends
+                                (nvenc, vaapi, qsv, vulkan)
   ACCEPT_SAMPLE_SECONDS         Sustained decode window (default: 10)
   ACCEPT_MIN_SAMPLE_FPS         Minimum decoded FPS during the window (default: 1)
   ACCEPT_REPORT_FILE            Optional JSON report output path
@@ -53,6 +56,27 @@ case "${verify_hardware}" in
         ;;
 esac
 
+hardware_backends=()
+if [[ -n "${required_hardware_backends}" ]]; then
+    IFS=',' read -r -a hardware_backends <<<"${required_hardware_backends}"
+    for backend in "${hardware_backends[@]}"; do
+        case "${backend}" in
+            nvenc|vaapi|qsv|vulkan) ;;
+            *)
+                printf 'ACCEPT_HARDWARE_BACKENDS contains an invalid backend: %q.\n' \
+                    "${backend}" >&2
+                exit 64
+                ;;
+        esac
+    done
+fi
+
+if [[ "${verify_hardware}" != true && ${#hardware_backends[@]} -ne 0 ]]; then
+    printf '%s\n' \
+        'ACCEPT_HARDWARE_BACKENDS requires ACCEPT_VERIFY_HARDWARE=true.' >&2
+    exit 64
+fi
+
 if [[ -n "${report_file}" && ! -d "$(dirname -- "${report_file}")" ]]; then
     printf 'ACCEPT_REPORT_FILE parent directory does not exist: %q\n' \
         "$(dirname -- "${report_file}")" >&2
@@ -70,7 +94,11 @@ curl --fail --silent --show-error "${base_url%/}/api" >/dev/null
 
 if [[ "${verify_hardware}" == true ]]; then
     printf '%s\n' 'Running active hardware-encode verification...'
-    docker exec "${container}" restreamer-hardware-report --verify
+    hardware_args=(--verify)
+    for backend in "${hardware_backends[@]}"; do
+        hardware_args+=(--require "${backend}")
+    done
+    docker exec "${container}" restreamer-hardware-report "${hardware_args[@]}"
 fi
 
 result_dir="$(mktemp -d "${TMPDIR:-/tmp}/restreamer-accept.XXXXXX")"
@@ -274,6 +302,14 @@ if [[ -n "${report_file}" ]]; then
         printf '  "base_url":"%s",\n' \
             "$(json_escape "$(redact_source "${base_url}")")"
         printf '  "hardware_verification_enabled":%s,\n' "${verify_hardware}"
+        printf '  "required_hardware_backends":['
+        for ((index = 0; index < ${#hardware_backends[@]}; index++)); do
+            if (( index > 0 )); then
+                printf ','
+            fi
+            printf '"%s"' "$(json_escape "${hardware_backends[index]}")"
+        done
+        printf '],\n'
         printf '  "max_first_frame_ms":%s,\n' "${max_first_frame_ms}"
         printf '  "sample_seconds":%s,\n' "${sample_seconds}"
         printf '  "min_sample_fps":%s,\n' "${min_sample_fps}"

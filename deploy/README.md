@@ -55,6 +55,10 @@ docker exec restreamer restreamer-hardware-report --verify
 This encodes a real frame with every detected backend: NVENC, VA-API, Intel Quick
 Sync, and hardware Vulkan Video. A compiled encoder is listed even when Docker cannot
 reach its driver; `--verify` turns that decorative optimism into a failing exit code.
+Use `--require nvenc`, `--require vaapi`, `--require qsv`, or
+`--require vulkan` (repeatable) to assert the backend intended for that host. A
+requirement also enables active verification, so a different working GPU cannot
+camouflage the missing one.
 For a Vulkan GPU that is not FFmpeg device `0`, set
 `RESTREAMER_VULKAN_DEVICE=<index>` in the Restreamer service environment.
 
@@ -69,6 +73,7 @@ namespace used by Restreamer:
 
 ```sh
 ACCEPT_REPORT_FILE=restreamer-acceptance.json \
+ACCEPT_HARDWARE_BACKENDS=vaapi,qsv \
   scripts/accept-deployment.sh \
   v4l2:/dev/video0 \
   rtsp://printer-one.lan:8554/stream.h264 \
@@ -79,6 +84,8 @@ The command first runs the active hardware encode verification, checks the
 Restreamer API, requires a decoded frame from every source in less than 1000ms, and
 then sustains every decode concurrently for ten seconds. Set
 `ACCEPT_VERIFY_HARDWARE=false` only for a deliberate software-only deployment. Use
+`ACCEPT_HARDWARE_BACKENDS=nvenc`, `vaapi`, `vaapi,qsv`, or `vulkan` to require the
+accelerator expected on the target host. Use
 `ACCEPT_MAX_FIRST_FRAME_MS`, `ACCEPT_PROBE_TIMEOUT_SECONDS`,
 `ACCEPT_SAMPLE_SECONDS`, and `ACCEPT_MIN_SAMPLE_FPS` to define the acceptance limits.
 The optional JSON report records reproducible evidence without exposing URL
