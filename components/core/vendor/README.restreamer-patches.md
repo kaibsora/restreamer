@@ -16,6 +16,19 @@ data and echoes `C1` in `S2`, matching the upstream fix and strict librtmp clien
 `rtmp.TestSimpleHandshakeEchoesC1InS2` exercises the vendored server over an actual
 in-memory connection and will fail if vendoring discards the patch.
 
+## Joy4 late RTMP timestamp recovery
+
+- File: `github.com/datarhei/joy4/format/rtmp/rtmp.go`
+- Restreamer issue: `datarhei/restreamer#952`
+
+Joy4 switched to connection-wall-clock timestamps when a publisher started with a
+broken media clock, but disconnected the same publisher when its timestamps froze
+after the first twenty packets. Long-running cameras can develop precisely that
+late fault. The patch consistently switches the affected RTMP chunk stream to its
+connection wall clock instead of turning a recoverable clock defect into a dead
+pull URL. `rtmp.TestPublisherContinuesAfterTimestampFreeze` publishes normally,
+then freezes AAC timestamps after packet 25 over a real loopback TCP connection.
+
 ## echo-swagger automatic Bearer authentication
 
 - File: `github.com/swaggo/echo-swagger/swagger.go`

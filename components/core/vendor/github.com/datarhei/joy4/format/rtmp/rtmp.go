@@ -1724,14 +1724,13 @@ func (conn *Conn) readChunk() (err error) {
 					cs.sametscount = 0
 				}
 
-				// if the previous timestamp is the same as the current for too often in a row, assume defect timestamps
+				// If the previous timestamp is the same as the current too often in
+				// a row, keep the established publisher alive and recover against
+				// the connection wall clock. Some cameras freeze their RTMP clock
+				// after hours of otherwise valid output. Disconnecting them here
+				// only converts a repairable timestamp defect into an outage.
 				if cs.sametscount > 10 {
-					if cs.msgcount < 20 { // only consider the first video and audio messages
-						cs.genwallclocktime = true
-					} else { // otherwise bail out
-						err = fmt.Errorf("detected sequence of non-changing timestamps: %d (msgtypeid %d)", cs.timenow, cs.msgtypeid)
-						return
-					}
+					cs.genwallclocktime = true
 				}
 
 				cs.prevtimenow = cs.timenow

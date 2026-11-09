@@ -294,6 +294,17 @@ cannot certify a particular capture card, kernel driver, or oscillator. This add
 the software-side drift reported in
 [upstream issue #936](https://github.com/datarhei/restreamer/issues/936).
 
+### Recover a frozen RTMP publisher clock
+
+The embedded RTMP server keeps an established publisher connected when its media
+timestamps stop advancing. After eleven repeated timestamps it derives timestamps
+from the connection wall clock, matching the recovery already used for broken
+startup clocks. This prevents a transient camera or encoder clock fault from killing
+the pull URL while other outputs mysteriously continue working. A loopback publisher
+regression starts with valid AAC timestamps, freezes them after packet 25, and proves
+that later packets remain readable. This addresses the failure reported in
+[upstream issue #952](https://github.com/datarhei/restreamer/issues/952).
+
 ### Disable the public landing page
 
 Open **Publication website → General**, clear **Publish public landing page**, and

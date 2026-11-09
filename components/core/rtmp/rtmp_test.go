@@ -9,6 +9,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/datarhei/joy4/av"
+	"github.com/datarhei/joy4/codec/aacparser"
 	joyrtmp "github.com/datarhei/joy4/format/rtmp"
 	"github.com/stretchr/testify/require"
 )
@@ -79,5 +81,88 @@ func TestSimpleHandshakeEchoesC1InS2(t *testing.T) {
 	case <-result:
 	case <-time.After(time.Second):
 		t.Fatal("RTMP server did not finish after the test client closed")
+	}
+}
+
+func TestPublisherContinuesAfterTimestampFreeze(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	require.NoError(t, err)
+	defer listener.Close()
+
+	type readResult struct {
+		packets int
+		err     error
+	}
+
+	const expectedPackets = 39
+	result := make(chan readResult, 1)
+	server := &joyrtmp.Server{
+		HandlePublish: func(conn *joyrtmp.Conn) {
+			if _, err := conn.Streams(); err != nil {
+				result <- readResult{err: err}
+				return
+			}
+
+			for packets := 0; packets < expectedPackets; packets++ {
+				if _, err := conn.ReadPacket(); err != nil {
+					result <- readResult{packets: packets, err: err}
+					return
+				}
+			}
+
+			result <- readResult{packets: expectedPackets}
+		},
+	}
+
+	go func() {
+		serverConn, err := listener.Accept()
+		if err != nil {
+			result <- readResult{err: err}
+			return
+		}
+		_ = serverConn.SetDeadline(time.Now().Add(5 * time.Second))
+		_ = server.HandleNetConn(serverConn)
+	}()
+
+	publisher, err := joyrtmp.DialTimeout(
+		"rtmp://"+listener.Addr().String()+"/live/timestamp-freeze",
+		5*time.Second,
+		joyrtmp.DialOptions{},
+	)
+	require.NoError(t, err)
+	defer publisher.Close()
+	require.NoError(t, publisher.NetConn().SetDeadline(time.Now().Add(5*time.Second)))
+
+	codec, err := aacparser.NewCodecDataFromMPEG4AudioConfigBytes([]byte{0x12, 0x10})
+	require.NoError(t, err)
+	require.NoError(t, publisher.WriteHeader([]av.CodecData{codec}))
+
+	writePacket := func(timestamp time.Duration) {
+		require.NoError(t, publisher.WritePacket(av.Packet{
+			Idx:  0,
+			Time: timestamp,
+			Data: []byte{0x01, 0x02},
+		}))
+	}
+
+	for i := 0; i < 25; i++ {
+		writePacket(time.Duration(i) * 23 * time.Millisecond)
+	}
+
+	// A device may freeze its RTMP timestamps after running normally. Joy4
+	// historically repaired this only during startup and disconnected an
+	// established publisher after eleven repeats.
+	for i := 0; i < 13; i++ {
+		writePacket(575 * time.Millisecond)
+	}
+	writePacket(600 * time.Millisecond)
+	require.NoError(t, publisher.WriteTrailer())
+
+	select {
+	case got := <-result:
+		require.NoError(t, got.err)
+		require.Equal(t, expectedPackets, got.packets)
+	case <-time.After(5 * time.Second):
+		t.Fatal("RTMP server did not consume the timestamp-recovery stream")
 	}
 }
