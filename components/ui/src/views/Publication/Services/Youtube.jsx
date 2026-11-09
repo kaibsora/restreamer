@@ -54,8 +54,14 @@ const requires = {
 	protocols: ['rtmps', 'https'],
 	formats: ['flv', 'hls'],
 	codecs: {
-		audio: ['aac', 'mp3'],
+		audio: ['aac'],
 		video: ['h264', 'hevc', 'av1'],
+	},
+	// YouTube can develop distorted or stuttering audio when it receives copied
+	// AAC timestamps from long-running or reconnected inputs. Re-encoding audio
+	// normalizes that timeline while video remains eligible for passthrough.
+	copy: {
+		audio: false,
 	},
 };
 

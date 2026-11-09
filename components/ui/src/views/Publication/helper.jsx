@@ -81,6 +81,7 @@ export function validateRequirements(requires) {
 		formats: [],
 		devices: [],
 		codecs: {},
+		copy: {},
 		...requires,
 	};
 
@@ -88,6 +89,12 @@ export function validateRequirements(requires) {
 		audio: [],
 		video: [],
 		...requires.codecs,
+	};
+
+	requires.copy = {
+		audio: true,
+		video: true,
+		...requires.copy,
 	};
 
 	return requires;
@@ -200,8 +207,8 @@ export function conflateServiceSkills(requires, skills) {
 		formats: [],
 		devices: {},
 		codecs: {
-			audio: ['copy'],
-			video: ['copy'],
+			audio: requires.copy.audio === true ? ['copy'] : [],
+			video: requires.copy.video === true ? ['copy'] : [],
 		},
 	};
 
@@ -272,6 +279,10 @@ export function preselectProfile(profile, type, streams, codecs, skills) {
 			return false;
 		}
 
+		if (profile.encoder.coder === 'copy' && !codecs.includes('copy')) {
+			return false;
+		}
+
 		if (!codecs.includes(streams[profile.stream].codec)) {
 			if (profile.encoder.coder === 'copy') {
 				return false;
@@ -316,8 +327,9 @@ export function preselectProfile(profile, type, streams, codecs, skills) {
 		// Select the first stream with matching type.
 		profile.stream = i;
 
-		if (!codecs.includes(streams[i].codec)) {
-			// The codec doesn't match. Select the first available coder for one of the target codecs.
+		if (!codecs.includes(streams[i].codec) || !codecs.includes('copy')) {
+			// The codec doesn't match or this service forbids passthrough. Select the
+			// first available coder for one of the target codecs.
 			for (let codec of codecs) {
 				if (codec === 'copy') {
 					continue;

@@ -8,7 +8,7 @@ import { withDefaults } from '../../../../utils/props';
 
 function init(initialState) {
 	const state = {
-		bitrate: '64',
+		bitrate: '128',
 		...initialState,
 	};
 

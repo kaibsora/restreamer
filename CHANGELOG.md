@@ -14,6 +14,11 @@
 
 ### UI
 
+-   Normalize YouTube audio timestamps by forcing AAC re-encoding at 128 kbit/s,
+    preventing the distortion and stuttering reported with long-running AAC
+    passthrough streams
+    ([#648](https://github.com/datarhei/restreamer/issues/648),
+    [#728](https://github.com/datarhei/restreamer/issues/728)).
 -   Show configurable, clickable LAN RTSP and WebRTC client URLs in the MediaMTX
     publication preset.
 -   Add a dedicated MediaMTX LAN relay publication with safe channel-derived paths,
