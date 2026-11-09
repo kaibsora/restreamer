@@ -9,6 +9,9 @@
   existing `/api` version response, and verify that identity in the image smoke test.
 - Build Core executables from clean output paths and assert their file type and
   execute bits before starting the Compose smoke stack.
+- Resolve the immutable FFmpeg source concurrently with quality checks; image and
+  FFmpeg publication remain gated on every quality lane, without deferring creation
+  of the source-resolution job behind the matrix.
 - Fail hardware acceptance early with daemon-side ARC/DinD GPU preflight evidence
   and document the device/runtime wiring required by dedicated GPU runner scale sets.
 
