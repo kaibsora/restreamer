@@ -13,3439 +13,3396 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/misc/EncodingSelect.js:237
+#: src/misc/EncodingSelect.jsx
 msgid "<0>Compatibility list</0>"
 msgstr "<0>호환 목록</0>"
 
-#: src/views/Edit/Profile.js:560
-#: src/views/Edit/Profile.js:719
+#: src/views/Edit/Profile.jsx
 msgid "<0>Show probe details</0>"
 msgstr "<0>확인 결과 보기</0>"
 
-#: src/views/Publication/Services/Core.js:209
+#: src/views/Publication/Services/Core.jsx
 msgid "1. Switch to the interface of the target Restreamer."
 msgstr "1. 대상 Restreamer의 인터페이스를 엽니다."
 
-#: src/views/Publication/Services/Core.js:211
+#: src/views/Publication/Services/Core.jsx
 msgid "2. Create a new channel and select RTMP or SRT server."
 msgstr "2. RTMP나 SRT 형식으로 새로운 채널을 만듭니다."
 
-#: src/views/Publication/Services/Core.js:213
+#: src/views/Publication/Services/Core.jsx
 msgid "3. Copy the URL and paste it in the \"Target address\" field."
 msgstr "3. URL을 복사해 \"대상 주소\" 필드에 붙여넣습니다."
 
-#: src/misc/controls/HLS.js:81
+#: src/misc/controls/HLS.jsx
 msgid "6 (+ guaranteed to start with a Key frame)"
 msgstr "6 (+ 키프레임 재생 보장)"
 
-#: src/misc/controls/HLS.js:84
+#: src/misc/controls/HLS.jsx
 msgid "7 (+ fragmented MP4 format)"
 msgstr "7 (+ 조각난 MP4 형식)"
 
-#: src/misc/ChannelList.js:412
-#: src/views/Edit/index.js:647
-#: src/views/Edit/index.js:666
-#: src/views/Edit/Profile.js:599
-#: src/views/Edit/Wizard/Abort.js:14
-#: src/views/Publication/Edit.js:631
-#: src/views/Settings.js:2278
-#: src/views/Settings.js:2300
+#: src/misc/ChannelList.jsx
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Profile.jsx
+#: src/views/Edit/Wizard/Abort.jsx
+#: src/views/Publication/Edit.jsx
+#: src/views/Settings.jsx
 msgid "Abort"
 msgstr "취소"
 
-#: src/Header.js:283
-#: src/Header.js:324
+#: src/Header.jsx
 msgid "About"
 msgstr "정보"
 
-#: src/misc/ChannelList.js:425
+#: src/misc/ChannelList.jsx
 msgid "Add"
 msgstr "추가"
 
-#: src/misc/modals/Hint.js:154
+#: src/misc/modals/Hint.jsx
 msgid "Add Audio"
 msgstr ""
 
-#: src/views/Playersite.js:733
+#: src/views/Playersite.jsx
 msgid "Add external widgets and styles to the publication site. You can find some examples on the help page."
 msgstr "송출 사이트에 외부 위젯과 스타일을 추가합니다. 도움말에서 예시를 찾을 수 있습니다."
 
-#: src/misc/ChannelList.js:409
+#: src/misc/ChannelList.jsx
 msgid "Add new channel"
 msgstr "새로운 채널 추가"
 
-#: src/views/Publication/Add.js:363
+#: src/views/Publication/Add.jsx
 msgid "Add Publication"
 msgstr "송출 대상 추가하기"
 
-#: src/misc/modals/Hint.js:158
+#: src/misc/modals/Hint.js
 #~ msgid "Add Stream"
 #~ msgstr ""
 
-#: src/views/Publication/Add.js:366
+#. placeholder {0}: service.name
+#: src/views/Publication/Add.jsx
 msgid "Add: {0}"
 msgstr "추가: {0}"
 
-#: src/views/Playersite.js:397
+#: src/views/Playersite.jsx
 msgid "Additional channels"
 msgstr ""
 
-#: src/views/Playersite.js:428
+#: src/views/Playersite.jsx
 msgid "Additional channels to display on the playersite."
 msgstr ""
 
-#: src/views/Edit/Sources/Network.js:765
-#: src/views/Edit/Wizard/Sources/Network.js:66
-#: src/views/Publication/Services/Azure.js:98
-#: src/views/Publication/Services/Brightcove.js:95
-#: src/views/Publication/Services/Core.js:224
-#: src/views/Publication/Services/DASH.js:192
-#: src/views/Publication/Services/HLS.js:181
-#: src/views/Publication/Services/Icecast.js:162
-#: src/views/Publication/Services/Image2.js:126
-#: src/views/Publication/Services/Linkedin.js:93
-#: src/views/Publication/Services/MPEGTS.js:170
-#: src/views/Publication/Services/Red5.js:115
-#: src/views/Publication/Services/RTMP.js:159
-#: src/views/Publication/Services/RTSP.js:150
-#: src/views/Publication/Services/SRT.js:161
-#: src/views/Publication/Services/UDP.js:127
-#: src/views/Publication/Services/WOWZA.js:132
-#: src/views/Settings.js:1396
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
+#: src/views/Publication/Services/Azure.jsx
+#: src/views/Publication/Services/Brightcove.jsx
+#: src/views/Publication/Services/Core.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/Linkedin.jsx
+#: src/views/Publication/Services/MPEGTS.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Publication/Services/UDP.jsx
+#: src/views/Publication/Services/WOWZA.jsx
+#: src/views/Settings.jsx
 msgid "Address"
 msgstr "주소"
 
-#: src/views/Playersite.js:667
+#: src/views/Playersite.jsx
 msgid "Address for the background image."
 msgstr "배경 이미지의 주소입니다."
 
-#: src/views/Settings.js:1426
+#: src/views/Settings.jsx
 msgid "Address to listen on for HTTP requests."
 msgstr "HTTP 요청을 수신할 주소입니다."
 
-#: src/views/Settings.js:1440
+#: src/views/Settings.jsx
 msgid "Address to listen on for HTTPS requests."
 msgstr "HTTPS 요청을 수신할 주소입니다."
 
-#: src/views/Edit/Sources/Network.js:972
-#: src/views/Edit/Sources/Network.js:1066
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:122
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:122
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Address:"
 msgstr "주소:"
 
-#: src/views/Playersite.js:552
+#: src/views/Playersite.jsx
 msgid "Adjust publication site colors and background as you like."
 msgstr "송출 사이트의 색상과 배경을 원하는대로 설정합니다."
 
-#: src/views/Login.js:322
+#: src/views/Login.jsx
 msgid "Advanced monitoring"
 msgstr "심화 모니터링"
 
-#: src/views/Edit/Sources/Network.js:518
-#: src/views/Publication/Services/DASH.js:204
-#: src/views/Publication/Services/HLS.js:193
-#: src/views/Publication/Services/Icecast.js:172
-#: src/views/Publication/Services/Image2.js:132
-#: src/views/Publication/Services/MPEGTS.js:176
-#: src/views/Publication/Services/RTMP.js:174
-#: src/views/Publication/Services/RTSP.js:162
-#: src/views/Publication/Services/SRT.js:170
-#: src/views/Publication/Services/UDP.js:133
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/MPEGTS.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Publication/Services/UDP.jsx
 msgid "Advanced settings"
 msgstr "심화 설정"
 
-#: src/views/Edit/Wizard/Source.js:38
+#: src/views/Edit/Wizard/Source.jsx
 msgid "Advanced setup"
 msgstr "심화 구성"
 
-#: src/views/Playersite.js:449
-#: src/views/Publication/Player.js:527
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "AirPlay"
 msgstr "AirPlay"
 
-#: src/views/Login.js:325
+#: src/views/Login.jsx
 msgid "Alerting by email"
 msgstr "이메일로 알림"
 
-#: src/views/Publication/Add.js:386
+#: src/views/Publication/Add.jsx
 msgid "All"
 msgstr "모두"
 
-#: src/misc/filters/video/Bwdif.js:80
+#: src/misc/filters/video/Bwdif.jsx
 msgid "All frames"
 msgstr "모든 프레임"
 
-#: src/views/Settings.js:1257
+#: src/views/Settings.jsx
 msgid "All important system settings."
 msgstr "모든 중요한 시스템 설정입니다."
 
-#: src/views/Settings.js:1594
+#: src/views/Settings.jsx
 msgid "Allow all referrer"
 msgstr "모든 접속 허용"
 
-#: src/views/Settings.js:1634
+#: src/views/Settings.jsx
 msgid "Allow counting how many viewers the stream has."
 msgstr "스트림의 시청자 수를 셉니다."
 
-#: src/views/Edit/Sources/ALSA.js:156
+#: src/views/Edit/Sources/ALSA.jsx
 msgid "ALSA"
 msgstr "ALSA"
 
-#: src/views/Edit/Sources/VirtualAudio.js:126
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Amplitude"
 msgstr "음량"
 
-#: src/misc/Env.js:41
+#: src/misc/Env.jsx
 msgid "An environment variable sets this value."
 msgstr "환경 변수로 이 값을 설정합니다."
 
-#: src/views/Settings.js:1000
+#: src/views/Settings.jsx
 msgid "API endpoint not found. Settings not saved."
 msgstr "API 엔드포인트를 찾을 수 없습니다. 설정이 저장되지 않습니다."
 
-#: src/views/Settings.js:1989
+#: src/views/Settings.jsx
 msgid "App"
 msgstr "앱"
 
-#: src/Footer.js:218
-#: src/views/Publication/Services/Red5.js:126
-#: src/views/Publication/Services/WOWZA.js:148
+#: src/Footer.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/WOWZA.jsx
 msgid "Application"
 msgstr "애플리케이션"
 
-#: src/views/Edit/Wizard/Abort.js:33
+#: src/views/Edit/Wizard/Abort.jsx
 msgid "Are you sure you want to abort the wizard?"
 msgstr "정말 설정 마법사를 취소하시겠습니까?"
 
-#: src/views/Publication/Add.js:527
+#: src/views/Publication/Add.jsx
 msgid "Audio"
 msgstr "소리"
 
-#: src/views/Edit/Sources/ALSA.js:114
-#: src/views/Edit/Sources/AVFoundation.js:159
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Audio device"
 msgstr "소리 장치"
 
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:111
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
 msgid "Audio Device"
 msgstr "소리 장치"
 
-#: src/views/Edit/Wizard/Audio.js:72
-#: src/views/Edit/Wizard/Audio.js:84
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "Audio from device"
 msgstr "장치의 소리"
 
-#: src/views/Edit/Profile.js:614
-#: src/views/Edit/ProfileSummary.js:90
-#: src/views/Publication/Edit.js:565
+#: src/views/Edit/Profile.jsx
+#: src/views/Edit/ProfileSummary.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Audio settings"
 msgstr "소리 설정"
 
-#: src/views/Edit/Wizard/Audio.js:25
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "Audio setup"
 msgstr "소리 구성"
 
-#: src/views/Login.js:236
+#: src/views/Login.jsx
 msgid "Auth0"
 msgstr "Auth0"
 
-#: src/views/Login.js:356
+#: src/views/Login.jsx
 msgid "Auth0 is currently not available because this interface is loaded from an insecure origin."
 msgstr "이 인터페이스의 출처가 안전하지 않아 Auth0를 사용할 수 없습니다."
 
-#: src/views/Login.js:365
+#: src/views/Login.jsx
 msgid "Auth0 Tenant"
 msgstr "Auth0 테넌트"
 
-#: src/misc/controls/Metadata.js:71
+#: src/misc/controls/Metadata.jsx
 msgid "Author"
 msgstr "저작자"
 
-#: src/views/Settings.js:1236
-#: src/views/Settings.js:1529
+#: src/views/Settings.jsx
 msgid "Authorization"
 msgstr "사용자 인증"
 
-#: src/misc/filters/video/Bwdif.js:65
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Auto"
 msgstr "자동"
 
-#: src/misc/controls/HLS.js:123
+#: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "모든 미디어 데이터를 자동으로 청소합니다."
 
-#: src/views/Publication/Player.js:524
+#: src/views/Publication/Player.jsx
 msgid "Autoplay"
 msgstr "자동재생"
 
-#: src/views/Playersite.js:477
+#: src/views/Playersite.jsx
 msgid "Available"
 msgstr "가능"
 
-#: src/views/Edit/Sources/AVFoundation.js:221
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "AVFoundation"
 msgstr "AVFoundation"
 
-#: src/views/Edit/Sources/Network.js:730
+#: src/views/Edit/Sources/Network.jsx
 msgid "avoid_negative_ts"
 msgstr "avoid_negative_ts"
 
-#: src/views/Edit/Profile.js:760
-#: src/views/Edit/Wizard/Abort.js:25
-#: src/views/Edit/Wizard/Audio.js:109
-#: src/views/Edit/Wizard/License.js:38
-#: src/views/Edit/Wizard/Metadata.js:35
-#: src/views/Edit/Wizard/Video.js:66
-#: src/views/Edit/Wizard/VideoProfile.js:67
-#: src/views/Publication/Add.js:561
+#: src/views/Edit/Profile.jsx
+#: src/views/Edit/Wizard/Abort.jsx
+#: src/views/Edit/Wizard/Audio.jsx
+#: src/views/Edit/Wizard/License.jsx
+#: src/views/Edit/Wizard/Metadata.jsx
+#: src/views/Edit/Wizard/Video.jsx
+#: src/views/Edit/Wizard/VideoProfile.jsx
+#: src/views/Publication/Add.jsx
 msgid "Back"
 msgstr "뒤로"
 
-#: src/views/Playersite.js:601
+#: src/views/Playersite.jsx
 msgid "Background colors"
 msgstr "배경 색상"
 
-#: src/views/Playersite.js:654
+#: src/views/Playersite.jsx
 msgid "Background image"
 msgstr "배경 이미지"
 
-#: src/views/Publication/Services/DaCast.js:182
+#: src/views/Publication/Services/DaCast.jsx
 msgid "Backup server"
 msgstr "백업 서버"
 
-#: src/views/Publication/Services/Youtube.js:198
+#: src/views/Publication/Services/Youtube.jsx
 msgid "Backup stream"
 msgstr "백업 스트림"
 
-#: src/views/Publication/Services/Facebook.js:124
+#: src/views/Publication/Services/Facebook.jsx
 msgid "Backup stream key"
 msgstr "백업 스트림 키"
 
-#: src/views/Publication/Services/Akamai.js:196
+#: src/views/Publication/Services/Akamai.jsx
 msgid "Backup URL"
 msgstr "백업 URL"
 
-#: src/Footer.js:256
-#: src/Footer.js:269
+#: src/Footer.jsx
 msgid "Bandwidth"
 msgstr "대역폭"
 
-#: src/views/Settings.js:1485
+#: src/views/Settings.jsx
 msgid "Bandwidth control"
 msgstr "대역폭 설정"
 
-#: src/misc/modals/Process.js:143
+#: src/misc/modals/Process.jsx
 msgid "Banner"
 msgstr "요약 보고"
 
-#: src/views/Login.js:241
-#: src/views/Settings.js:1534
+#: src/views/Login.jsx
+#: src/views/Settings.jsx
 msgid "Basic"
 msgstr "기본"
 
-#: src/views/Edit/Sources/VirtualAudio.js:157
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Beep factor"
 msgstr "비프 인수"
 
-#: src/misc/coders/settings/Audio.js:50
-#: src/misc/coders/settings/Video.js:51
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/coders/settings/Video.jsx
 msgid "Bitrate"
 msgstr "비트율"
 
-#: src/views/Settings.js:1903
+#: src/views/Settings.jsx
 msgid "Block cache types"
 msgstr "불허할 캐시 유형"
 
-#: src/views/Edit/Sources/VirtualAudio.js:114
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "blue"
 msgstr "파란색"
 
-#: src/misc/filters/video/Bwdif.js:62
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Bottom field"
 msgstr "하단 필드"
 
-#: src/views/Edit/index.js:582
-#: src/views/Edit/Wizard/Metadata.js:24
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Wizard/Metadata.jsx
 msgid "Briefly describe what the audience will see during the live stream."
 msgstr "이 영상이 어떤 것인지 시청자에게 간략히 설명해주세요."
 
-#: src/views/Edit/Sources/VirtualAudio.js:113
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "brown"
 msgstr "갈색"
 
-#: src/views/Publication/Player.js:413
+#: src/views/Publication/Player.jsx
 msgid "Button color"
 msgstr "버튼 색상"
 
-#: src/misc/filters/video/Scale.js:51
+#: src/misc/filters/video/Scale.jsx
 msgid "By height"
 msgstr "높이 맞춤"
 
-#: src/misc/filters/video/Scale.js:54
+#: src/misc/filters/video/Scale.jsx
 msgid "By width"
 msgstr "폭 맞춤"
 
-#: src/views/Settings.js:1805
+#: src/views/Settings.jsx
 msgid "Cache for files on /data."
 msgstr "/data 위치에 있는 파일을 위한 캐시입니다."
 
-#: src/views/Settings.js:1847
+#: src/views/Settings.jsx
 msgid "Cache time (Seconds)"
 msgstr "캐시 시간 (초)"
 
-#: src/views/Settings.js:1888
+#: src/views/Settings.jsx
 msgid "Cache types"
 msgstr "캐시 유형"
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:193
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Capture buffer"
 msgstr "버퍼 캡쳐"
 
-#: src/views/Edit/Sources/AVFoundation.js:197
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Capture clicks"
 msgstr "클릭 캡쳐"
 
-#: src/views/Edit/Sources/AVFoundation.js:194
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Capture cursor"
 msgstr "커서 캡쳐"
 
-#: src/views/Edit/index.js:351
+#. placeholder {0}: $data.meta.name
+#: src/views/Edit/index.jsx
 msgid "Channel \"{0}\" saved"
 msgstr "\"{0}\" 채널을 저장했습니다."
 
-#: src/views/Edit/Sources/ALSA.js:129
+#: src/views/Edit/Sources/ALSA.jsx
 msgid "Channels"
 msgstr "채널"
 
-#: src/views/Settings.js:1266
+#: src/views/Settings.jsx
 msgid "Check for updates"
 msgstr "업데이트 확인"
 
-#: src/views/Publication/Add.js:316
+#: src/views/Publication/Add.jsx
 msgid "Check the requirements"
 msgstr "요구사항 확인"
 
-#: src/views/Edit/StreamSelect.js:53
+#: src/views/Edit/StreamSelect.jsx
 msgid "Choose a video stream"
 msgstr "영상 스트림 선택"
 
-#: src/views/Edit/StreamSelect.js:68
+#: src/views/Edit/StreamSelect.jsx
 msgid "Choose an audio stream"
 msgstr "소리 스트림 선택"
 
-#: src/views/Edit/Sources/ALSA.js:96
-#: src/views/Edit/Sources/Framebuffer.js:80
-#: src/views/Edit/Sources/Raspicam.js:93
-#: src/views/Edit/Sources/V4L.js:93
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/Framebuffer.jsx
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Sources/V4L.jsx
 msgid "Choose an input device ..."
 msgstr "입력 장치 선택..."
 
-#: src/views/Edit/Sources/Network.js:948
-#: src/views/Edit/Sources/Network.js:1042
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:96
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:96
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Choose an input stream ..."
 msgstr "입력 스트림 선택 ..."
 
-#: src/misc/coders/settings/Video.js:380
+#: src/misc/coders/settings/Video.jsx
 msgid "Choose between CFR and VFR (Auto)"
 msgstr "CFR과 VFR(자동) 중 선택"
 
-#: src/misc/EncodingSelect.js:215
+#: src/misc/EncodingSelect.jsx
 msgid "Choose codec ..."
 msgstr "코덱 선택..."
 
-#: src/views/Login.js:367
+#: src/views/Login.jsx
 msgid "Choose tenant ..."
 msgstr "테넌트 선택 ..."
 
-#: src/views/Playersite.js:441
-#: src/views/Publication/Player.js:526
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Chromecast"
 msgstr "크롬캐스트"
 
-#: src/views/Publication/Services/DASH.js:309
-#: src/views/Publication/Services/HLS.js:249
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
 msgid "Chunk"
 msgstr "조각"
 
-#: src/misc/Changelog.js:177
-#: src/misc/ModalContent.js:77
-#: src/misc/modals/Hint.js:181
-#: src/views/Edit/index.js:621
-#: src/views/Playersite.js:823
-#: src/views/Publication/Add.js:404
-#: src/views/Publication/Add.js:558
-#: src/views/Publication/Edit.js:595
-#: src/views/Publication/Player.js:536
-#: src/views/Settings.js:2219
+#: src/misc/Changelog.jsx
+#: src/misc/ModalContent.jsx
+#: src/misc/modals/Hint.jsx
+#: src/views/Edit/index.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
+#: src/views/Publication/Player.jsx
+#: src/views/Settings.jsx
 msgid "Close"
 msgstr "닫기"
 
-#: src/views/Playersite.js:332
+#: src/views/Playersite.jsx
 msgid "Code injection"
 msgstr "코드 삽입"
 
-#: src/misc/EncodingSelect.js:213
-#: src/misc/modals/Hint.js:68
-#: src/misc/modals/Hint.js:83
+#: src/misc/EncodingSelect.jsx
+#: src/misc/modals/Hint.jsx
 msgid "Codec"
 msgstr "코덱"
 
-#: src/views/Edit/Sources/VirtualAudio.js:110
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Color"
 msgstr "색상"
 
-#: src/misc/modals/Process.js:134
+#: src/misc/modals/Process.jsx
 msgid "Command"
 msgstr "명령"
 
-#: src/views/Settings.js:1376
+#: src/views/Settings.jsx
 msgid "Config"
 msgstr "설정"
 
-#: src/views/Password.js:134
+#: src/views/Password.jsx
 msgid "Confirm password"
 msgstr "비밀번호 확인"
 
-#: src/misc/ActionButton.js:38
+#: src/misc/ActionButton.jsx
 msgid "Connect"
 msgstr "연결"
 
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:157
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
 msgid "Connected device"
 msgstr "연결된 장치"
 
-#: src/views/Publication/Process.js:54
+#: src/views/Publication/Process.jsx
 msgid "Connected since <0/>"
 msgstr "<0/> 부터 연결됨"
 
-#: src/misc/ActionButton.js:12
-#: src/views/Main/index.js:337
-#: src/views/Publication/Process.js:40
+#: src/misc/ActionButton.jsx
+#: src/views/Main/index.jsx
+#: src/views/Publication/Process.jsx
 msgid "Connecting ..."
 msgstr "연결 중..."
 
-#: src/views/Initializing.js:21
+#: src/views/Initializing.jsx
 msgid "Connecting to Restreamer Core ..."
 msgstr "Restreamer Core에 연결 중 ..."
 
-#: src/views/Invalid.js:36
+#: src/views/Invalid.jsx
 msgid "Connecting to Restreamer Core failed probably because of mixed content."
 msgstr "복합적인 문제로 Restreamer Core에 연결하지 못했습니다."
 
-#: src/misc/coders/settings/Video.js:374
+#: src/misc/coders/settings/Video.jsx
 msgid "Constant frame rate (CFR)"
 msgstr "고정 프레임율 (CFR)"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:175
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Constant Quantizer Mode (-1 to 255)."
 msgstr "상수 퀀타이저 모드(-1~255)."
 
-#: src/misc/controls/Metadata.js:70
-#: src/views/Playersite.js:700
-#: src/views/Playersite.js:717
+#: src/misc/controls/Metadata.jsx
+#: src/views/Playersite.jsx
 msgid "Content"
 msgstr "내용"
 
-#: src/views/Main/index.js:397
+#: src/views/Main/index.jsx
 msgid "Content URL"
 msgstr "내용 URL"
 
-#: src/views/Edit/Sources/Network.js:715
+#: src/views/Edit/Sources/Network.jsx
 msgid "copyts"
 msgstr "copyts"
 
-#: src/Footer.js:193
+#: src/Footer.jsx
 msgid "Cores"
 msgstr "코어"
 
-#: src/misc/Progress.js:66
+#: src/misc/Progress.jsx
 msgid "CPU"
 msgstr "CPU"
 
-#: src/misc/controls/Limits.js:44
+#: src/misc/controls/Limits.jsx
 msgid "CPU Limit (percent)"
 msgstr "CPU 제한(퍼센트)"
 
-#: src/misc/controls/Limits.js:49
+#: src/misc/controls/Limits.jsx
 msgid "CPU usage limit in percent (0-100%), 0 for unlimited."
 msgstr "CPU 사용량 제한(%)(0-100%), 무제한은 0입니다."
 
-#: src/misc/controls/License/index.js:112
+#: src/misc/controls/License/index.jsx
 msgid "Creative Commons"
 msgstr "크리에이티브 커먼즈"
 
-#: src/misc/coders/Encoders/audio/opus.js:66
-#: src/misc/coders/settings/Audio.js:25
-#: src/misc/coders/settings/Audio.js:111
-#: src/misc/coders/settings/Audio.js:162
-#: src/misc/coders/settings/Video.js:31
-#: src/misc/coders/settings/Video.js:70
-#: src/misc/coders/settings/Video.js:115
-#: src/misc/coders/settings/Video.js:181
-#: src/misc/coders/settings/Video.js:223
-#: src/misc/coders/settings/Video.js:266
-#: src/misc/coders/settings/Video.js:305
-#: src/misc/coders/settings/Video.js:342
-#: src/misc/filters/audio/Resample.js:63
-#: src/misc/filters/audio/Resample.js:114
-#: src/misc/filters/audio/Volume.js:58
-#: src/misc/filters/video/Framerate.js:48
-#: src/views/Edit/Sources/ALSA.js:101
-#: src/views/Edit/Sources/AVFoundation.js:120
-#: src/views/Edit/Sources/AVFoundation.js:153
-#: src/views/Edit/Sources/V4L.js:99
+#: src/misc/coders/Encoders/audio/opus.jsx
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/coders/settings/Video.jsx
+#: src/misc/filters/audio/Resample.jsx
+#: src/misc/filters/audio/Volume.jsx
+#: src/misc/filters/video/Framerate.jsx
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Sources/V4L.jsx
 msgid "Custom ..."
 msgstr "직접설정 ..."
 
-#: src/views/Edit/Sources/ALSA.js:115
+#: src/views/Edit/Sources/ALSA.jsx
 msgid "Custom audio device"
 msgstr "소리 장치 직접 설정"
 
-#: src/views/Edit/Sources/AVFoundation.js:160
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Custom audio index"
 msgstr "소리 목록 직접 설정"
 
-#: src/misc/coders/settings/Audio.js:51
-#: src/misc/coders/settings/Video.js:52
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/coders/settings/Video.jsx
 msgid "Custom bitrate (kbit/s)"
 msgstr "비트율 직접 설정 (kbit/s)"
 
-#: src/views/Playersite.js:728
+#: src/views/Playersite.jsx
 msgid "Custom code injection"
 msgstr "코드 직접 삽입"
 
-#: src/misc/coders/Encoders/audio/opus.js:92
+#: src/misc/coders/Encoders/audio/opus.jsx
 msgid "Custom delay"
 msgstr "딜레이 직접 입력"
 
-#: src/views/Edit/Sources/Framebuffer.js:88
+#: src/views/Edit/Sources/Framebuffer.jsx
 msgid "Custom device"
 msgstr "장치 직접 입력"
 
-#: src/misc/coders/settings/Video.js:326
-#: src/misc/coders/settings/Video.js:363
+#: src/misc/coders/settings/Video.jsx
 msgid "Custom format"
 msgstr "양식 직접 입력"
 
-#: src/misc/coders/settings/Video.js:136
-#: src/misc/filters/video/Framerate.js:66
+#: src/misc/coders/settings/Video.jsx
+#: src/misc/filters/video/Framerate.jsx
 msgid "Custom framerate"
 msgstr "프레임률 직접 입력"
 
-#: src/views/Settings.js:1382
+#: src/views/Settings.jsx
 msgid "Custom JSON config for datarhei Core."
 msgstr "datarhei Core의 JSON Config를 직접 설정합니다."
 
-#: src/misc/coders/settings/Video.js:91
+#: src/misc/coders/settings/Video.jsx
 msgid "Custom keyframe interval"
 msgstr "키프레임 간격 직접 입력"
 
-#: src/misc/coders/settings/Audio.js:138
-#: src/misc/filters/audio/Resample.js:90
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "Custom layout"
 msgstr "레이아웃 직접 입력"
 
-#: src/misc/coders/settings/Audio.js:189
-#: src/misc/filters/audio/Resample.js:141
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "Custom sampling (Hz)"
 msgstr "샘플률 직접 입력 (Hz)"
 
-#: src/views/Edit/Sources/VirtualVideo.js:149
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Custom scale"
 msgstr "비율 직접 입력"
 
-#: src/misc/coders/settings/Video.js:202
-#: src/misc/coders/settings/Video.js:244
-#: src/misc/coders/settings/Video.js:287
+#: src/misc/coders/settings/Video.jsx
 msgid "Custom size"
 msgstr "크기 직접 입력"
 
-#: src/views/Edit/Sources/V4L.js:113
+#: src/views/Edit/Sources/V4L.jsx
 msgid "Custom video device"
 msgstr "영상 장치 직접 입력"
 
-#: src/views/Edit/Sources/AVFoundation.js:127
+#: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Custom video index"
 msgstr "영상 목록 직접 입력"
 
-#: src/misc/CopyButton.js:20
-#: src/misc/Textarea.js:46
-#: src/misc/TextFieldCopy.js:33
+#: src/misc/CopyButton.jsx
+#: src/misc/Textarea.jsx
+#: src/misc/TextFieldCopy.jsx
 msgid "Data copied to clipboard"
 msgstr "데이터를 클립보드로 복사함"
 
-#: src/views/Edit/Sources/VirtualVideo.js:167
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Death color"
 msgstr "비활성화 색상"
 
-#: src/misc/filters/audio/Volume.js:74
+#: src/misc/filters/audio/Volume.jsx
 msgid "Decibels (dB)"
 msgstr "데시벨(dB)"
 
-#: src/misc/EncodingSelect.js:223
-#: src/views/Edit/Wizard/VideoProfile.js:48
+#: src/misc/EncodingSelect.jsx
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Decoder"
 msgstr "디코더"
 
-#: src/views/Edit/Sources/AVFoundation.js:115
-#: src/views/Edit/Sources/AVFoundation.js:149
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:76
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:105
-#: src/views/Playersite.js:483
-#: src/views/Playersite.js:564
-#: src/views/Playersite.js:608
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
+#: src/views/Playersite.jsx
 msgid "Default"
 msgstr "기본"
 
-#: src/views/Edit/Sources/Network.js:656
+#. placeholder {0}: 2500
+#: src/views/Edit/Sources/Network.jsx
 msgid "Default {0}"
 msgstr "기본 {0}"
 
-#: src/views/Edit/Sources/Network.js:696
+#. placeholder {0}: 5000000
+#. placeholder {1}: 5
+#: src/views/Edit/Sources/Network.jsx
 msgid "Default {0} ({1} seconds)"
 msgstr "기본 {0}({1}초)"
 
-#: src/misc/filters/video/Bwdif.js:128
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Deinterlace (bwdif)"
 msgstr "디인터레이스 (bwdif)"
 
-#: src/misc/filters/video/Bwdif.js:78
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Deinterlace deint"
 msgstr "디인터레이스 대상(deint)"
 
-#: src/misc/filters/video/Bwdif.js:39
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Deinterlace mode"
 msgstr "디인터레이스 모드"
 
-#: src/misc/filters/video/Bwdif.js:57
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Deinterlace parity"
 msgstr "디인터레이스 기준(parity)"
 
-#: src/misc/coders/Encoders/audio/opus.js:91
+#: src/misc/coders/Encoders/audio/opus.jsx
 msgid "Delay"
 msgstr "딜레이"
 
-#: src/views/Edit/Sources/ALSA.js:132
+#: src/views/Edit/Sources/ALSA.jsx
 msgid "Delay (ms)"
 msgstr "딜레이 (ms)"
 
-#: src/views/Edit/index.js:635
-#: src/views/Edit/index.js:671
-#: src/views/Playersite.js:506
-#: src/views/Publication/Edit.js:604
-#: src/views/Publication/Edit.js:636
+#: src/views/Edit/index.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Delete"
 msgstr "삭제"
 
-#: src/views/Publication/Edit.js:641
+#: src/views/Publication/Edit.jsx
 msgid "Deleting a publication service cannot be reversed. The publication stops immediately."
 msgstr "송출 서비스의 삭제는 되돌릴 수 없습니다. 해당 송출은 즉시 멈춥니다."
 
-#: src/views/Publication/Services/Twitter.js:141
-#: src/views/Publication/Services/Youtube.js:183
+#: src/views/Publication/Services/Twitter.jsx
+#: src/views/Publication/Services/Youtube.jsx
 msgid "Delivering mode"
 msgstr "전송 방식"
 
-#: src/misc/controls/Metadata.js:85
-#: src/misc/controls/Metadata.js:110
+#: src/misc/controls/Metadata.jsx
 msgid "Description"
 msgstr "설명"
 
-#: src/views/Playersite.js:330
-#: src/views/Playersite.js:547
+#: src/views/Playersite.jsx
 msgid "Design"
 msgstr "디자인"
 
-#: src/views/Edit/Sources/Framebuffer.js:87
-#: src/views/Edit/Wizard/Audio.js:87
-#: src/views/Publication/Services/Framebuffer.js:93
+#: src/views/Edit/Sources/Framebuffer.jsx
+#: src/views/Edit/Wizard/Audio.jsx
+#: src/views/Publication/Services/Framebuffer.jsx
 msgid "Device"
 msgstr "장치"
 
-#: src/misc/ActionButton.js:24
-#: src/misc/ActionButton.js:45
-#: src/misc/ActionButton.js:59
+#: src/misc/ActionButton.jsx
 msgid "Disconnect"
 msgstr "연결 해제"
 
-#: src/views/Edit/index.js:652
+#: src/views/Edit/index.jsx
 msgid "Disconnect & Continue"
 msgstr "연결 끊고 계속"
 
-#: src/misc/ActionButton.js:18
-#: src/views/Publication/Process.js:47
+#: src/misc/ActionButton.jsx
+#: src/views/Publication/Process.jsx
 msgid "Disconnecting ..."
 msgstr "연결 끊는 중..."
 
-#: src/misc/controls/HLS.js:70
-#: src/views/Settings.js:1767
+#: src/misc/controls/HLS.jsx
+#: src/views/Settings.jsx
 msgid "Disk"
 msgstr "디스크"
 
-#: src/views/Settings.js:1802
-#: src/views/Settings.js:1810
+#: src/views/Settings.jsx
 msgid "Disk cache"
 msgstr "저장소 캐시"
 
-#: src/Footer.js:315
-#: src/Footer.js:328
+#: src/Footer.jsx
 msgid "Disk storage"
 msgstr "저장소 사용량"
 
-#: src/views/Settings.js:2310
+#: src/views/Settings.jsx
 msgid "Do you really want to restart the application now?"
 msgstr "바로 애플리케이션을 다시 시작할까요?"
 
-#: src/views/Edit/index.js:663
+#. placeholder {0}: $data.meta.name
+#: src/views/Edit/index.jsx
 msgid "Do you want to delete \"{0}\"?"
 msgstr "\"{0}\"을(를) 삭제하시겠습니까?"
 
-#: src/views/Publication/Edit.js:628
+#: src/views/Publication/Edit.jsx
 msgid "Do you want to delete {title}?"
 msgstr "{title}을(를) 삭제할까요?"
 
-#: src/views/Edit/index.js:644
+#. placeholder {0}: $data.meta.name
+#: src/views/Edit/index.jsx
 msgid "Do you want to disconnect \"{0}\"?"
 msgstr "\"{0}\"의 연결을 끊겠습니까?"
 
-#: src/Header.js:289
-#: src/Header.js:330
+#: src/Header.jsx
 msgid "Docs"
 msgstr "문서"
 
-#: src/views/Publication/Services/DASH.js:501
-#: src/views/Publication/Services/HLS.js:496
-#: src/views/Publication/Services/Icecast.js:240
-#: src/views/Publication/Services/Image2.js:171
-#: src/views/Publication/Services/MPEGTS.js:365
-#: src/views/Publication/Services/RTMP.js:286
-#: src/views/Publication/Services/RTSP.js:235
-#: src/views/Publication/Services/SRT.js:428
-#: src/views/Publication/Services/UDP.js:241
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/MPEGTS.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Publication/Services/UDP.jsx
 msgid "Documentation"
 msgstr "문서"
 
-#: src/misc/Progress.js:157
+#: src/misc/Progress.jsx
 msgid "Dup. frames"
 msgstr "복제된 프레임"
 
-#: src/misc/filters/video/Bwdif.js:44
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Each field"
 msgstr "각 필드"
 
-#: src/misc/filters/video/Bwdif.js:41
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Each frames"
 msgstr "각 프레임"
 
-#: src/views/Edit/index.js:409
+#: src/views/Edit/index.jsx
 msgid "Edit"
 msgstr "수정"
 
-#: src/views/Edit/index.js:435
+#: src/views/Edit/index.jsx
 msgid "Edit the audio and video sources for the live stream. Add a description, and set your desired content license."
 msgstr "실시간 송출을 위한 영상과 소리 원본을 설정하세요. 설명을 더하고, 원하는 저작권 정책을 책정할 수 있습니다."
 
-#: src/views/Publication/Edit.js:417
+#: src/views/Publication/Edit.jsx
 msgid "Edit: {title}"
 msgstr "수정: {title}"
 
-#: src/views/Publication/Player.js:347
+#: src/views/Publication/Player.jsx
 msgid "EDIT: Player"
 msgstr "편집: 재생기"
 
-#: src/views/Playersite.js:324
+#: src/views/Playersite.jsx
 msgid "EDIT: Publication Website"
 msgstr "편집: 송출 웹사이트"
 
-#: src/views/Settings.js:1466
+#: src/views/Settings.jsx
 msgid "Email"
 msgstr "이메일"
 
-#: src/views/Publication/Player.js:381
+#: src/views/Publication/Player.jsx
 msgid "Embed"
 msgstr "포함"
 
-#: src/misc/controls/RTMP.js:48
-#: src/misc/controls/SRT.js:48
+#: src/misc/controls/RTMP.jsx
+#: src/misc/controls/SRT.jsx
 msgid "Enable"
 msgstr "활성화"
 
-#: src/views/Edit/Sources/VirtualAudio.js:162
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Enable a periodic beep every second with this value times the carrier frequency"
 msgstr "이 값에 반송 주파수를 곱한 값으로 매초 삐 소리 활성화"
 
-#: src/views/Publication/Services/Dummy.js:284
-#: src/views/Publication/Services/Facebook.js:139
+#: src/views/Publication/Services/Dummy.jsx
+#: src/views/Publication/Services/Facebook.jsx
 msgid "Enable backup stream"
 msgstr "백업 스트림 활성화"
 
-#: src/views/Publication/Player.js:514
+#: src/views/Publication/Player.jsx
 msgid "Enable nerd statistics"
 msgstr "무지 상세한 통계 활성화"
 
-#: src/misc/controls/RTMP.js:70
-#: src/misc/controls/SRT.js:70
+#: src/misc/controls/RTMP.jsx
+#: src/misc/controls/SRT.jsx
 msgid "Enable now"
 msgstr "바로 활성화"
 
-#: src/views/Publication/Services/Dummy.js:283
-#: src/views/Publication/Services/Facebook.js:138
+#: src/views/Publication/Services/Dummy.jsx
+#: src/views/Publication/Services/Facebook.jsx
 msgid "Enable primary stream"
 msgstr "기본 스트림 활성화"
 
-#: src/views/Edit/Sources/Network.js:929
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:79
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
 msgid "Enable RTMP server ..."
 msgstr "RTMP 서버 활성화..."
 
-#: src/views/Publication/Services/PeerTube.js:100
+#: src/views/Publication/Services/PeerTube.jsx
 msgid "Enable RTMPS transfer"
 msgstr "RTMPS 전송 활성화"
 
-#: src/misc/controls/Snapshot.js:44
+#: src/misc/controls/Snapshot.jsx
 msgid "Enable snapshots"
 msgstr "스냅샷 활성화"
 
-#: src/views/Edit/Sources/Network.js:1023
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:79
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Enable SRT server ..."
 msgstr "SRT 서버 활성화..."
 
-#: src/views/Settings.js:1549
+#: src/views/Settings.jsx
 msgid "Enabling authorization is strongly advised. Otherwise, anybody can access this instance."
 msgstr "사용자 인증을 사용할 것을 강력히 권장합니다. 그러지 않으면 누구나 접속이 가능해집니다."
 
-#: src/views/Settings.js:1709
+#: src/views/Settings.jsx
 msgid "Enabling basic auth is strongly advised. Otherwise, anybody could write data to /memfs."
 msgstr "기본 보안을 활성화할 것을 강력히 권장합니다. 그러지 않으면 누구나 /memfs 에 데이터를 쓸 수 있게 됩니다."
 
-#: src/views/Edit/Wizard/VideoProfile.js:54
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Encoder"
 msgstr "인코더"
 
-#: src/views/Edit/Summary.js:95
-#: src/views/Publication/Add.js:492
-#: src/views/Publication/Edit.js:528
+#: src/views/Edit/Summary.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Encoding"
 msgstr "인코딩"
 
-#: src/views/Publication/Services/HLS.js:445
-#: src/views/Publication/Services/RTMP.js:258
-#: src/views/Publication/Services/SRT.js:372
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/SRT.jsx
 msgid "Encryption"
 msgstr "암호화"
 
-#: src/misc/ChannelList.js:432
+#: src/misc/ChannelList.jsx
 msgid "Enter a name for the new channel."
 msgstr "새로운 채널의 이름을 입력하세요."
 
-#: src/views/Password.js:122
+#: src/views/Password.jsx
 msgid "Enter password"
 msgstr "비밀번호 입력"
 
-#: src/views/Edit/Sources/Network.js:758
-#: src/views/Edit/Wizard/Sources/Network.js:59
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "Enter the address of your network source:"
 msgstr "네트워크상에 있는 원본의 주소를 입력하세요:"
 
-#: src/views/Password.js:110
+#: src/views/Password.jsx
 msgid "Enter username"
 msgstr "사용자 이름을 입력하세요"
 
-#: src/misc/coders/Encoders/video/h264_videotoolbox.js:69
+#: src/misc/coders/Encoders/video/h264_videotoolbox.jsx
 msgid "Entropy coder"
 msgstr "엔트로피 부호화"
 
-#: src/views/Edit/Wizard/Error.js:16
-#: src/views/Incompatible.js:30
-#: src/views/Invalid.js:29
-#: src/views/Publication/Process.js:63
-#: src/views/Settings.js:1202
+#: src/views/Edit/Wizard/Error.jsx
+#: src/views/Incompatible.jsx
+#: src/views/Invalid.jsx
+#: src/views/Publication/Process.jsx
+#: src/views/Settings.jsx
 msgid "Error"
 msgstr "오류"
 
-#: src/misc/CopyButton.js:22
-#: src/misc/Textarea.js:48
-#: src/misc/TextFieldCopy.js:35
+#: src/misc/CopyButton.jsx
+#: src/misc/Textarea.jsx
+#: src/misc/TextFieldCopy.jsx
 msgid "Error while copying data to clipboard"
 msgstr "데이터를 클립보드로 복사하는 중 오류 발생"
 
-#: src/views/Main/index.js:356
-#: src/views/Publication/Process.js:64
+#. placeholder {0}: anonymize($state.progress.error) || 'unknown'
+#. placeholder {0}: progress.error
+#: src/views/Main/index.jsx
+#: src/views/Publication/Process.jsx
 msgid "Error: {0}"
 msgstr "오류: {0}"
 
-#: src/views/Playersite.js:773
+#: src/views/Playersite.jsx
 msgid "Expands the area above the channel list (live chat)."
 msgstr "채널 목록 윗 공간을 넓힙니다(실시간 채팅)."
 
-#: src/views/Playersite.js:793
+#: src/views/Playersite.jsx
 msgid "Expands the area under the channel description (comment boxes)."
 msgstr "채널 설명 아랫 공간을 넓힙니다(댓글상자)."
 
-#: src/views/Settings.js:1293
+#: src/views/Settings.jsx
 msgid "Expert mode"
 msgstr "전문가 모드"
 
-#: src/misc/controls/HLS.js:78
+#: src/misc/controls/HLS.jsx
 msgid "EXT-X-VERSION"
 msgstr "EXT-X-VERSION"
 
-#: src/views/Playersite.js:758
+#: src/views/Playersite.jsx
 msgid "Extend channel list"
 msgstr "채널 목록 확장"
 
-#: src/views/Playersite.js:778
+#: src/views/Playersite.jsx
 msgid "Extend content"
 msgstr "내용 확장"
 
-#: src/views/Playersite.js:798
+#: src/views/Playersite.jsx
 msgid "Extend footer"
 msgstr "하단 확장"
 
-#: src/views/Playersite.js:738
+#: src/views/Playersite.jsx
 msgid "Extend header"
 msgstr "헤더 확장"
 
-#: src/views/Publication/Add.js:229
+#. placeholder {0}: err.message
+#: src/views/Publication/Add.jsx
 msgid "Failed to create publication service ({0})"
 msgstr "송출 서비스 생성 실패 ({0})"
 
-#: src/views/Playersite.js:282
+#: src/views/Playersite.jsx
 msgid "Failed to create publication website files."
 msgstr "송출 웹사이트 파일을 만드는데 실패했습니다."
 
-#: src/views/Edit/Profile.js:512
-#: src/views/Edit/Profile.js:671
+#: src/views/Edit/Profile.jsx
 msgid "Failed to probe the source. Please check the <0>probe details</0>."
 msgstr "원본을 확인하지 못했습니다. <0>확인 결과</0>를 검토해주세요."
 
-#: src/utils/restreamer.js:449
+#. placeholder {0}: err.message
+#: src/utils/restreamer.jsx
 msgid "Failed to refresh token: {0}"
 msgstr "토큰 갱신 실패: {0}"
 
-#: src/views/Edit/index.js:316
+#: src/views/Edit/index.jsx
 msgid "Failed to save ingest metadata"
 msgstr "삽입 메타데이터 저장 실패"
 
-#: src/views/Edit/index.js:187
+#: src/views/Edit/index.jsx
 msgid "Failed to stop process"
 msgstr "프로세스 중지 실패"
 
-#: src/views/Playersite.js:275
+#: src/views/Playersite.jsx
 msgid "Failed to store player size setting."
 msgstr "재생기 크기 설정을 저장하는데 실패했습니다."
 
-#: src/views/Publication/Edit.js:269
+#. placeholder {0}: err.message
+#: src/views/Publication/Edit.jsx
 msgid "Failed to store publication service ({0})"
 msgstr "송출 서비스 저장 실패 ({0})"
 
-#: src/views/Edit/index.js:309
+#. placeholder {0}: err.message
+#: src/views/Edit/index.jsx
 msgid "Failed to update ingest process ({0})"
 msgstr "삽입 프로세스 갱신 실패 ({0})"
 
-#: src/views/Edit/index.js:322
+#. placeholder {0}: err.message
+#: src/views/Edit/index.jsx
 msgid "Failed to update ingest snapshot process ({0})"
 msgstr "삽입 스냅샷 프로세스 갱신 실패 ({0})"
 
-#: src/views/Edit/index.js:328
+#: src/views/Edit/index.jsx
 msgid "Failed to update the player"
 msgstr "재생기 갱신 실패"
 
-#: src/views/Edit/index.js:334
+#: src/views/Edit/index.jsx
 msgid "Failed to update the playersite"
 msgstr "재생 사이트 갱신 실패"
 
-#: src/views/Edit/Wizard/Audio.js:35
-#: src/views/Edit/Wizard/Video.js:33
+#: src/views/Edit/Wizard/Audio.jsx
+#: src/views/Edit/Wizard/Video.jsx
 msgid "Failed to verify the source. Please check the address."
 msgstr "원본 검증에 실패했습니다. 주소를 확인해주세요."
 
-#: src/views/Settings.js:2181
+#: src/views/Settings.jsx
 msgid "FFmpeg"
 msgstr "FFmpeg"
 
-#: src/views/Edit/Sources/AudioLoop.js:142
-#: src/views/Edit/Sources/VideoLoop.js:150
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
 msgid "File path"
 msgstr "파일 경로"
 
-#: src/views/Edit/Summary.js:101
+#: src/views/Edit/Summary.jsx
 msgid "Filter"
 msgstr "필터"
 
-#: src/views/Edit/Profile.js:768
+#: src/views/Edit/Profile.jsx
 msgid "Finish"
 msgstr "완료"
 
-#: src/misc/filters/video/Scale.js:48
+#: src/misc/filters/video/Scale.jsx
 msgid "Fix size"
 msgstr "크기 고정"
 
-#: src/views/Edit/Sources/VirtualVideo.js:182
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Flags"
 msgstr "플래그"
 
-#: src/views/Playersite.js:813
+#: src/views/Playersite.jsx
 msgid "For Javascripts."
 msgstr "자바스크립트를 입력합니다."
 
-#: src/views/Playersite.js:753
+#: src/views/Playersite.jsx
 msgid "For Stylesheets."
 msgstr "스타일시트를 입력합니다."
 
-#: src/views/Edit/Sources/Network.js:561
+#: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
 msgstr "입력 프레임률 고정"
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:190
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Force key frames"
 msgstr "키 프레임 강제"
 
-#: src/misc/coders/settings/Video.js:325
+#: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "형식"
 
-#: src/misc/Progress.js:92
-#: src/views/Main/Progress.js:77
+#: src/misc/Progress.jsx
+#: src/views/Main/Progress.jsx
 msgid "FPS"
 msgstr "FPS"
 
-#: src/misc/Progress.js:144
+#: src/misc/Progress.jsx
 msgid "Frame drops"
 msgstr "프레임 드롭"
 
-#: src/misc/coders/settings/Video.js:371
+#: src/misc/coders/settings/Video.jsx
 msgid "Frame is passed through (Passthrough)"
 msgstr "프레임을 그대로 사용합니다 (Passthrogh)"
 
-#: src/views/Edit/Sources/Framebuffer.js:129
+#: src/views/Edit/Sources/Framebuffer.jsx
 msgid "Framebuffer"
 msgstr "프레임버퍼"
 
-#: src/misc/coders/settings/Video.js:135
-#: src/misc/filters/video/Framerate.js:65
-#: src/views/Edit/Sources/Network.js:574
+#: src/misc/coders/settings/Video.jsx
+#: src/misc/filters/video/Framerate.jsx
+#: src/views/Edit/Sources/Network.jsx
 msgid "Framerate"
 msgstr "프레임률"
 
-#: src/misc/filters/video/Framerate.js:107
+#: src/misc/filters/video/Framerate.jsx
 msgid "Framerate conversion (frame interpolation)"
 msgstr "프레임 속도 변환(프레임 보간)"
 
-#: src/misc/coders/settings/Video.js:369
+#: src/misc/coders/settings/Video.jsx
 msgid "Framerate mode"
 msgstr "프레임율 방식"
 
-#: src/views/Edit/Sources/VirtualAudio.js:145
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Frequency (Hz)"
 msgstr "주파수 (Hz)"
 
-#: src/views/Edit/index.js:418
-#: src/views/Edit/index.js:430
-#: src/views/Edit/Sources/Network.js:612
-#: src/views/Playersite.js:328
-#: src/views/Playersite.js:341
-#: src/views/Publication/Add.js:414
-#: src/views/Publication/Edit.js:426
-#: src/views/Publication/Services/DASH.js:211
-#: src/views/Publication/Services/HLS.js:200
-#: src/views/Publication/Services/Icecast.js:179
-#: src/views/Publication/Services/Image2.js:139
-#: src/views/Publication/Services/RTMP.js:181
-#: src/views/Publication/Services/RTSP.js:169
-#: src/views/Publication/Services/SRT.js:177
-#: src/views/Settings.js:1231
-#: src/views/Settings.js:1252
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Settings.jsx
 msgid "General"
 msgstr "일반"
 
-#: src/views/Publication/Services/DLive.js:79
-#: src/views/Publication/Services/Facebook.js:115
-#: src/views/Publication/Services/Facebook.js:133
-#: src/views/Publication/Services/Instagram.js:85
-#: src/views/Publication/Services/Kick.js:107
-#: src/views/Publication/Services/MediaNetwork.js:79
-#: src/views/Publication/Services/NimoTv.js:103
-#: src/views/Publication/Services/PeerTube.js:96
-#: src/views/Publication/Services/Restream.js:120
-#: src/views/Publication/Services/Rumble.js:107
-#: src/views/Publication/Services/Trovo.js:79
-#: src/views/Publication/Services/Twitch.js:155
-#: src/views/Publication/Services/Twitter.js:179
-#: src/views/Publication/Services/Wettercom.js:107
-#: src/views/Publication/Services/Youtube.js:193
+#: src/views/Publication/Services/DLive.jsx
+#: src/views/Publication/Services/Facebook.jsx
+#: src/views/Publication/Services/Instagram.jsx
+#: src/views/Publication/Services/Kick.jsx
+#: src/views/Publication/Services/MediaNetwork.jsx
+#: src/views/Publication/Services/NimoTv.jsx
+#: src/views/Publication/Services/PeerTube.jsx
+#: src/views/Publication/Services/Restream.jsx
+#: src/views/Publication/Services/Rumble.jsx
+#: src/views/Publication/Services/Trovo.jsx
+#: src/views/Publication/Services/Twitch.jsx
+#: src/views/Publication/Services/Twitter.jsx
+#: src/views/Publication/Services/Wettercom.jsx
+#: src/views/Publication/Services/Youtube.jsx
 msgid "GET"
 msgstr "얻기"
 
-#: src/views/Publication/Player.js:497
+#: src/views/Publication/Player.jsx
 msgid "Google Analytics ID"
 msgstr "Google 애널리틱스 ID"
 
-#: src/views/Publication/Player.js:507
+#: src/views/Publication/Player.jsx
 msgid "Google Analytics Tracker Name"
 msgstr "Google 애널리틱스 추적 도구 이름"
 
-#: src/views/Edit/Sources/V4L.js:154
-#: src/views/Edit/Wizard/Sources/V4L.js:140
+#: src/misc/coders/Encoders/video/hardware.jsx
+#: src/views/Edit/Sources/V4L.jsx
+#: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Hardware device"
 msgstr "하드웨어 장치"
 
-#: src/views/Playersite.js:617
+#: src/views/Playersite.jsx
 msgid "Header"
 msgstr "헤더"
 
-#: src/views/Playersite.js:573
+#: src/views/Playersite.jsx
 msgid "Headline"
 msgstr "헤드라인"
 
-#: src/misc/coders/settings/Video.js:243
+#: src/misc/coders/settings/Video.jsx
 msgid "Height"
 msgstr "높이"
 
-#: src/views/Main/index.js:406
+#: src/views/Main/index.jsx
 msgid "HLS"
 msgstr "HLS"
 
-#: src/views/Edit/index.js:490
+#: src/views/Edit/index.jsx
 msgid "HLS output"
 msgstr "HLS 출력"
 
-#: src/views/Edit/Wizard/Sources/InternalHLS.js:73
+#: src/views/Edit/Wizard/Sources/InternalHLS.jsx
 msgid "HLS server"
 msgstr "HLS 서버"
 
-#: src/views/Settings.js:1626
+#: src/views/Settings.jsx
 msgid "HLS statistic for the In-memory storage"
 msgstr "HLS 통계를 메모리에 저장"
 
-#: src/misc/filters/video/HFlip.js:65
+#: src/misc/filters/video/HFlip.jsx
 msgid "Horizontal Flip"
 msgstr "좌/우 뒤집기"
 
-#: src/views/Login.js:319
+#: src/views/Login.jsx
 msgid "Hosted Restreamer interface"
 msgstr "Restreamer 인터페이스 제공"
 
-#: src/views/Edit/Sources/Network.js:551
+#: src/views/Edit/Sources/Network.jsx
 msgid "HTTP and HTTPS"
 msgstr "HTTP와 HTTPS"
 
-#: src/views/Settings.js:1418
+#: src/views/Settings.jsx
 msgid "HTTP port"
 msgstr "HTTP 포트"
 
-#: src/views/Settings.js:1448
+#: src/views/Settings.jsx
 msgid "HTTPS (SSL/TLS)"
 msgstr "HTTPS (SSL/TLS)"
 
-#: src/views/Settings.js:1432
+#: src/views/Settings.jsx
 msgid "HTTPS port"
 msgstr "HTTPS 포트"
 
-#: src/views/Settings.js:1352
+#: src/views/Settings.jsx
 msgid "Human readable name on the service."
 msgstr "사용자에게 표시할 서비스 이름을 입력해주세요."
 
-#: src/views/Settings.js:2255
+#: src/views/Settings.jsx
 msgid "If you changed the ports, it might be that Restreamer Core restarted already, but it is now available on a different port."
 msgstr "포트를 변경한 경우, 이미 Restreamer 코어를 재시작 하였더라도, 다른 포트에서 사용할 수 있습니다."
 
-#: src/views/Settings.js:2249
+#: src/views/Settings.jsx
 msgid "If you enabled Let's Encrypt TLS it might take some time to acquire the certificates. Make sure that Restreamer Core is reachable via port 80 from the internet. Please check the console log of Restreamer Core."
 msgstr "Let's Encrypt의 TLS 접속을 활성하려면 인증을 진행하기까지 시간이 소요됩니다. 네트워크의 80포트로 Restreamer Core에 접근할 수 있게 하세요. Restreamer Core의 콘솔 기록을 검토해주세요."
 
-#: src/views/Publication/Player.js:392
+#: src/views/Publication/Player.jsx
 msgid "iframe code"
 msgstr "아이프레임 코드"
 
-#: src/views/Settings.js:1641
+#: src/views/Settings.jsx
 msgid "Ignore IP ranges"
 msgstr "기록하지 않을 IP 범위"
 
-#: src/views/Playersite.js:662
-#: src/views/Publication/Player.js:427
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Image URL"
 msgstr "이미지 URL"
 
-#: src/views/Playersite.js:690
+#: src/views/Playersite.jsx
 msgid "Imprint"
 msgstr "각인"
 
-#: src/views/Playersite.js:346
+#: src/views/Playersite.jsx
 msgid "In addition to the player, the Restreamer offers a complete landingpage, which you can use to present your live stream easily and quickly."
 msgstr "재생기에 더하여, Restreamer는 현재 라이브 스트림을 쉽고 빠르게 확인할 수 있는 페이지를 제공합니다."
 
-#: src/views/Edit/Profile.js:521
-#: src/views/Edit/Profile.js:680
+#: src/views/Edit/Profile.jsx
 msgid "In order to proceed anyways, you can provide <0>hints</0> about the available streams."
 msgstr ""
 
-#: src/misc/controls/HLS.js:67
-#: src/views/Settings.js:1693
+#: src/misc/controls/HLS.jsx
+#: src/views/Settings.jsx
 msgid "In-memory"
 msgstr "메모리"
 
-#: src/Footer.js:285
-#: src/Footer.js:298
+#: src/Footer.jsx
 msgid "In-memory storage"
 msgstr "메모리 저장소"
 
-#: src/views/Publication/Add.js:313
+#: src/views/Publication/Add.jsx
 msgid "Incompatible"
 msgstr "호환되지 않음"
 
-#: src/misc/coders/settings/Audio.js:107
-#: src/misc/coders/settings/Audio.js:158
-#: src/misc/filters/audio/Pan.js:47
-#: src/misc/filters/audio/Resample.js:59
-#: src/misc/filters/audio/Resample.js:110
-#: src/misc/filters/audio/Volume.js:46
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Pan.jsx
+#: src/misc/filters/audio/Resample.jsx
+#: src/misc/filters/audio/Volume.jsx
 msgid "Inherit"
 msgstr "상속"
 
-#: src/views/Playersite.js:748
+#: src/views/Playersite.jsx
 msgid "Inject 1"
 msgstr "삽입 1"
 
-#: src/views/Playersite.js:768
+#: src/views/Playersite.jsx
 msgid "Inject 2"
 msgstr "삽입 2"
 
-#: src/views/Playersite.js:788
+#: src/views/Playersite.jsx
 msgid "Inject 3"
 msgstr "삽입 3"
 
-#: src/views/Playersite.js:808
+#: src/views/Playersite.jsx
 msgid "Inject 4"
 msgstr "삽입 4"
 
-#: src/views/Edit/Sources/Network.js:961
-#: src/views/Edit/Sources/Network.js:1055
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:111
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:111
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Input stream"
 msgstr "입력 스트림"
 
-#: src/views/Publication/Services/Instagram.js:121
+#: src/views/Publication/Services/Instagram.js
 #~ msgid "Instafeed.me"
 #~ msgstr "Instafeed.me"
 
-#: src/views/Publication/Services/PeerTube.js:85
+#: src/views/Publication/Services/PeerTube.jsx
 msgid "Instance domain"
 msgstr "인스턴스 도메인"
 
-#: src/misc/controls/Snapshot.js:50
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Internal destination:"
+msgstr ""
+
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Internal MediaMTX server"
+msgstr ""
+
+#: src/misc/controls/Snapshot.jsx
 msgid "Interval (seconds)"
 msgstr "간격 (초)"
 
-#: src/Header.js:295
-#: src/Header.js:336
+#: src/Header.jsx
 msgid "Issue alert"
 msgstr "문제 알리기"
 
-#: src/misc/Progress.js:105
-#: src/views/Main/Progress.js:67
-#: src/views/Main/Publication.js:184
+#: src/misc/Progress.jsx
+#: src/views/Main/Progress.jsx
+#: src/views/Main/Publication.jsx
 msgid "kbit/s"
 msgstr "kbit/s"
 
-#: src/misc/coders/settings/Video.js:90
+#: src/misc/coders/settings/Video.jsx
 msgid "Keyframe interval (seconds)"
 msgstr "키프레임 간격 (초)"
 
-#: src/misc/coders/settings/Audio.js:137
-#: src/misc/filters/audio/Resample.js:89
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "LAN clients:"
+msgstr ""
+
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "Layout"
 msgstr "레이아웃"
 
-#: src/views/Settings.js:1453
+#: src/views/Settings.jsx
 msgid "Let's Encrypt certification"
 msgstr "Let's Encrypt 인증"
 
-#: src/views/Settings.js:1461
+#: src/views/Settings.jsx
 msgid "Let's Encrypt requires one or more public domain names and an accessible port 80/TCP."
 msgstr "Let's Encrypt로 인증하려면 하나 이상의 공공 도메인 이름과 80포트의 TCP 접속이 가능해야 합니다."
 
-#: src/misc/coders/Encoders/video/h264_nvenc.js:117
+#: src/misc/coders/Encoders/video/h264_nvenc.jsx
 msgid "Level"
 msgstr "레벨"
 
-#: src/views/Settings.js:2162
+#: src/views/Settings.jsx
 msgid "Level of system protocol."
 msgstr "시스템 프로토콜의 레벨입니다."
 
-#: src/views/Edit/index.js:421
-#: src/views/Edit/index.js:597
-#: src/views/Edit/Wizard/License.js:17
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Wizard/License.jsx
 msgid "License"
 msgstr "라이선스"
 
-#: src/views/Edit/Sources/VirtualVideo.js:176
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Life color"
 msgstr "활성화 색상"
 
-#: src/views/Edit/index.js:565
-#: src/views/Publication/Add.js:458
-#: src/views/Publication/Edit.js:470
+#: src/views/Edit/index.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Limits"
 msgstr "제한"
 
-#: src/views/Playersite.js:644
+#: src/views/Playersite.jsx
 msgid "Linecolor"
 msgstr "행 색상"
 
-#: src/views/Publication/Services/NimoTv.js:93
+#: src/views/Publication/Services/NimoTv.jsx
 msgid "Lines"
 msgstr "라인"
 
-#: src/views/Playersite.js:582
-#: src/views/Publication/Player.js:460
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Link"
 msgstr "링크"
 
-#: src/views/Playersite.js:591
+#: src/views/Playersite.jsx
 msgid "Link, mouseover"
 msgstr "링크에 마우스를 올릴 때"
 
-#: src/views/Settings.js:1911
+#: src/views/Settings.jsx
 msgid "List of file extensions not to cache (e.g. \".m3u8\"), one per line. Leave empty for none."
 msgstr "캐시하지 않을 파일 확장자(예: \".m3u8\")를 한 줄에 하나씩 입력하세요. 없으면 비워두세요."
 
-#: src/views/Settings.js:1896
+#: src/views/Settings.jsx
 msgid "List of file extensions to cache (e.g. \".html\"), one per line. Leave empty to cache all file types."
 msgstr "캐시할 파일 확장자 목록(예: \".html\")은 한 줄에 하나씩 입력해주세요. 모든 파일 유형을 캐시하려면 비워두세요."
 
-#: src/views/Settings.js:1649
+#: src/views/Settings.jsx
 msgid "List of IP ranges in CIDR notation, e.g., 127.0.0.1/32, that the statistics will not record—one IP range per line. Leave empty to record all sessions."
 msgstr "CIDR로 표기된, 통계를 기록하지 않을 IP 범위입니다(예: 127.0.0.1/32). 한 줄에 하나의 IP범위만 입력합니다. 모든 세션의 통계를 기록하려면 비워두세요."
 
-#: src/misc/controls/HLS.js:107
+#: src/misc/controls/HLS.jsx
 msgid "List size (segments)"
 msgstr "목록 크기 (세그먼트)"
 
-#: src/views/Publication/Services/DLive.js:15
+#: src/views/Publication/Services/DLive.jsx
 msgid "Live-Streaming to dlive Live RTMP Service."
 msgstr "dlive Live RTMP Service로 송출합니다."
 
-#: src/views/Publication/Services/Facebook.js:16
+#: src/views/Publication/Services/Facebook.jsx
 msgid "Live-Streaming to Facebook Live RTMP service"
 msgstr "Facebook Live RTMP 서비스로 송출"
 
-#: src/views/Publication/Services/Instagram.js:16
+#: src/views/Publication/Services/Instagram.jsx
 msgid "Live-Streaming to Instagram Live RTMP Service."
 msgstr ""
 
-#: src/views/Publication/Services/Instagram.js:19
+#: src/views/Publication/Services/Instagram.js
 #~ msgid "Live-Streaming to Instagram Live RTMP Service. The stream key requires a service such as <0>Instafeed.me</0> or <1>Yellow Duck</1>."
 #~ msgstr "Instagram 라이브 RTMP 서비스로 송출합니다. 스트림 키는 <0>Instafeed.me</0>나 <1>Yellow Duck</1>과 같은 서비스를 필요로합니다."
 
-#: src/views/Publication/Services/MediaNetwork.js:15
+#: src/views/Publication/Services/MediaNetwork.jsx
 msgid "Live-Streaming to Media Network RTMP Service."
 msgstr "Media Network RTMP Service로 송출합니다."
 
-#: src/views/Publication/Services/PeerTube.js:16
+#: src/views/Publication/Services/PeerTube.jsx
 msgid "Live-Streaming to PeerTube v3+ RTMP/S Service."
 msgstr "PeerTube V3 RTMP/S Service로 송출합니다."
 
-#: src/views/Publication/Services/Trovo.js:15
+#: src/views/Publication/Services/Trovo.jsx
 msgid "Live-Streaming to Trovo Live RTMP Service."
 msgstr "Trovo Live RTMP Service로 송출합니다."
 
-#: src/views/Publication/Services/Twitch.js:17
+#: src/views/Publication/Services/Twitch.jsx
 msgid "Live-Streaming to Twitch Live RTMP Service."
 msgstr "Twitch 라이브 RTMP 서비스로 송출합니다."
 
-#: src/views/Publication/Services/Vimeo.js:12
+#: src/views/Publication/Services/Vimeo.jsx
 msgid "Live-Streaming to Vimeo Live RTMP Service"
 msgstr "Vimeo 라이브 RTMP 서비스로 송출합니다."
 
-#: src/views/Publication/Services/Livespotting.js:94
+#: src/views/Publication/Services/Livespotting.jsx
 msgid "Livesource ID"
 msgstr "Livesource ID"
 
-#: src/views/Settings.js:2114
+#: src/views/Settings.jsx
 msgid "Log level"
 msgstr "기록 단계"
 
-#: src/misc/modals/Process.js:153
-#: src/views/Settings.js:1241
-#: src/views/Settings.js:2090
+#: src/misc/modals/Process.jsx
+#: src/views/Settings.jsx
 msgid "Logging"
 msgstr "기록"
 
-#: src/views/Login.js:297
-#: src/views/Login.js:391
-#: src/views/Login.js:406
-#: src/views/Publication/Services/Akamai.js:124
+#: src/views/Login.jsx
+#: src/views/Publication/Services/Akamai.jsx
 msgid "Login"
 msgstr "접속"
 
-#: src/utils/restreamer.js:262
-#: src/utils/restreamer.js:296
+#. placeholder {0}: err.message
+#: src/utils/restreamer.jsx
 msgid "Login failed: {0}"
 msgstr "접속 실패: {0}"
 
-#: src/utils/restreamer.js:271
-#: src/utils/restreamer.js:276
-#: src/utils/restreamer.js:305
-#: src/utils/restreamer.js:310
+#: src/utils/restreamer.jsx
 msgid "Login failed: Couldn't load API details"
 msgstr "접속 실패: API 세부사항을 불러올 수 없습니다"
 
-#: src/views/Settings.js:1539
+#: src/views/Settings.jsx
 msgid "Login/JWT authorization"
 msgstr "로그인/JWT 인증"
 
-#: src/views/Publication/Player.js:382
+#: src/views/Publication/Player.jsx
 msgid "Logo"
 msgstr "로고"
 
-#: src/Header.js:307
+#: src/Header.jsx
 msgid "Logout"
 msgstr "로그아웃"
 
-#: src/views/Edit/Sources/AudioLoop.js:194
-#: src/views/Edit/Sources/VideoLoop.js:202
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
 msgid "Loop"
 msgstr "Loop"
 
-#: src/misc/filters/audio/Loudnorm.js:66
+#: src/misc/filters/audio/Loudnorm.jsx
 msgid "Loudness Normalization"
 msgstr "소리 크기 평균화"
 
-#: src/misc/controls/Process.js:48
+#: src/misc/controls/Process.jsx
 msgid "Low latency (Buffer)"
 msgstr "낮은 지연시간 (버퍼)"
 
-#: src/views/Main/index.js:292
-#: src/views/Playersite.js:367
+#: src/views/Main/index.jsx
+#: src/views/Playersite.jsx
 msgid "Main channel"
 msgstr "주 채널"
 
-#: src/views/Publication/Player.js:111
+#: src/views/Publication/Player.jsx
 msgid "Main channel not found"
 msgstr "기본 채널 없음"
 
-#: src/views/Edit/Wizard/index.js:200
+#: src/views/Edit/Wizard/index.jsx
 msgid "Main channel saved"
 msgstr "기본 채널 저장됨"
 
-#: src/views/Playersite.js:390
+#: src/views/Playersite.jsx
 msgid "Main page channel (index.html)."
 msgstr "접속시 보여질 채널입니다(index.html)."
 
-#: src/views/Edit/index.js:398
+#: src/views/Edit/index.jsx
 msgid "Main Source"
 msgstr "기본 원본"
 
-#: src/views/Publication/TabContent.js:49
+#: src/views/Publication/TabContent.jsx
 msgid "Maintainer:"
 msgstr "유지/보수:"
 
-#: src/misc/controls/RTMP.js:54
+#: src/misc/controls/RTMP.jsx
 msgid "Make the channel available as an RTMP stream (experimental)."
 msgstr "채널을 RTMP 스트림으로 준비합니다. (시범기능)"
 
-#: src/misc/controls/SRT.js:54
+#: src/misc/controls/SRT.jsx
 msgid "Make the channel available as an SRT stream (experimental)."
 msgstr "채널을 SRT 스트림으로 준비합니다. (시범기능)"
 
-#: src/misc/filters/video/Bwdif.js:83
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Marked frames"
 msgstr "표시된 프레임"
 
-#: src/misc/controls/HLS.js:117
+#: src/misc/controls/HLS.jsx
 msgid "Master playlist (increases browser/client compatibility)"
 msgstr "마스터 플레이리스트 (브라우저/클라이언트 호환성 증대)"
 
-#: src/views/Settings.js:1841
+#: src/views/Settings.jsx
 msgid "Maximum allowed cache size, 0 for unlimited."
 msgstr "최대 캐시 크기를 입력해주세요. 0은 제한을 두지 않습니다."
 
-#: src/views/Settings.js:1749
+#: src/views/Settings.jsx
 msgid "Maximum allowed megabytes of RAM for /memfs, 0 for unlimited."
 msgstr "/memfs에 할당된 RAM을 MB단위로 입력해주세요. 0은 제한을 두지 않습니다."
 
-#: src/views/Settings.js:1794
+#: src/views/Settings.jsx
 msgid "Maximum allowed megabytes to consume from hard disk. 0 for unlimited."
 msgstr "디스크에 할당할 공간을 메가바이트 단위로 입력합니다. 0은 제한을 두지 않습니다."
 
-#: src/views/Settings.js:1508
+#: src/views/Settings.jsx
 msgid "Maximum bandwidth Mbit/s"
 msgstr "최대 대역폭 (Mbits/s)"
 
-#: src/misc/coders/Encoders/audio/opus.js:81
+#: src/misc/coders/Encoders/audio/opus.jsx
 msgid "Maximum delay in milliseconds."
 msgstr "최대 딜레이를 밀리초로 입력합니다."
 
-#: src/views/Settings.js:1861
+#: src/views/Settings.jsx
 msgid "Maximum file size (Megabytes)"
 msgstr "최대 파일 크기 (메가바이트)"
 
-#: src/views/Settings.js:1881
+#: src/views/Settings.jsx
 msgid "Maximum file size to put in cache."
 msgstr "캐시에 저장할 최대 파일 크기입니다."
 
-#: src/views/Settings.js:2201
+#: src/views/Settings.jsx
 msgid "Maximum log histroy"
 msgstr "최대 기록 역사"
 
-#: src/views/Settings.js:2168
-#: src/views/Settings.js:2187
+#: src/views/Settings.jsx
 msgid "Maximum log lines"
 msgstr "최대 기록 줄"
 
-#: src/views/Settings.js:1741
-#: src/views/Settings.js:1786
-#: src/views/Settings.js:1821
+#: src/views/Settings.jsx
 msgid "Maximum size (Megabytes)"
 msgstr "최대 크기 (메가바이트)"
 
-#: src/views/Settings.js:1658
+#: src/views/Settings.jsx
 msgid "Maximum viewer idle time (Seconds)"
 msgstr "시청 기록이 없는 시간 (초)"
 
-#: src/views/Settings.js:1491
+#: src/views/Settings.jsx
 msgid "Maximum viewers"
 msgstr "최대 시청자"
 
-#: src/Footer.js:208
+#: src/Footer.jsx
 msgid "MB"
 msgstr "MB"
 
-#: src/Footer.js:202
-#: src/misc/Progress.js:79
+#: src/Footer.jsx
+#: src/misc/Progress.jsx
 msgid "Memory"
 msgstr "메모리"
 
-#: src/misc/controls/Limits.js:58
+#: src/misc/controls/Limits.jsx
 msgid "Memory Limit (megabytes)"
 msgstr "메모리 제한(메가바이트)"
 
-#: src/misc/controls/Limits.js:63
+#: src/misc/controls/Limits.jsx
 msgid "Memory usage limit in megabytes, 0 for unlimited."
 msgstr "메모리 사용량 제한은 메가바이트 단위로, 무제한은 0입니다."
 
-#: src/views/Edit/index.js:420
+#: src/views/Edit/index.jsx
 msgid "Meta information"
 msgstr "메타 정보"
 
-#: src/views/Edit/index.js:577
-#: src/views/Edit/Wizard/Metadata.js:17
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Wizard/Metadata.jsx
 msgid "Metadata"
 msgstr "메타데이터"
 
-#: src/views/Edit/Sources/Network.js:639
+#. placeholder {0}: 32
+#. placeholder {1}: 5000000
+#: src/views/Edit/Sources/Network.jsx
 msgid "Mininum {0}, default {1}"
 msgstr "최소 {0}, 기본 {1}"
 
-#: src/views/Edit/Sources/VirtualVideo.js:158
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Mold"
 msgstr "몰드"
 
-#: src/views/Publication/Services/Facebook.js:17
-#: src/views/Publication/Services/Twitch.js:18
-#: src/views/Publication/Services/Vimeo.js:14
+#: src/views/Publication/Services/Facebook.jsx
+#: src/views/Publication/Services/Twitch.jsx
+#: src/views/Publication/Services/Vimeo.jsx
 msgid "More about licenses here"
 msgstr "저작권 안내 입력"
 
-#: src/views/Settings.js:1321
+#: src/views/Settings.jsx
 msgid "More about the service"
 msgstr "서비스 세부사항"
 
-#: src/views/Publication/Services/Twitter.js:30
+#: src/views/Publication/Services/Twitter.jsx
 msgid "More about Twitter's copyright <0>here</0>."
 msgstr "Twitter의 저작권 정책은 <0>여기</0>에서 확인할 수 있습니다."
 
-#: src/views/Publication/Services/Youtube.js:31
+#: src/views/Publication/Services/Youtube.jsx
 msgid "More about YouTube's copyright <0>here</0>."
 msgstr "YouTube의 저작권 정책은 <0>여기</0>에서 확인할 수 있습니다."
 
-#: src/views/Settings.js:1833
+#: src/views/Settings.jsx
 msgid "Must be larger than maximum file size in cache."
 msgstr "캐시의 최대 파일 크기보다 커야 합니다."
 
-#: src/views/Settings.js:1873
+#: src/views/Settings.jsx
 msgid "Must be smaller than maximum cache size."
 msgstr "최대 캐시 크기보다 작아야 합니다."
 
-#: src/views/Publication/Player.js:525
+#: src/views/Publication/Player.jsx
 msgid "Mute"
 msgstr "음소거"
 
-#: src/misc/filters/audio/Pan.js:57
+#: src/misc/filters/audio/Pan.jsx
 msgid "Mute a channel."
 msgstr "채널 음소거."
 
-#: src/misc/filters/audio/Pan.js:50
+#: src/misc/filters/audio/Pan.jsx
 msgid "Mute left"
 msgstr "왼쪽 음소거"
 
-#: src/misc/filters/audio/Pan.js:53
+#: src/misc/filters/audio/Pan.jsx
 msgid "Mute right"
 msgstr "오른쪽 음소거"
 
-#: src/misc/ChannelList.js:436
-#: src/misc/controls/Metadata.js:76
-#: src/misc/controls/Metadata.js:98
-#: src/views/Playersite.js:521
-#: src/views/Settings.js:1344
+#: src/misc/ChannelList.jsx
+#: src/misc/controls/Metadata.jsx
+#: src/views/Playersite.jsx
+#: src/views/Settings.jsx
 msgid "Name"
 msgstr "이름"
 
-#: src/views/Playersite.js:526
+#: src/views/Playersite.jsx
 msgid "Name for the template. If the name already exists, it will be overwritten."
 msgstr "템플릿의 이름입니다. 이미 존재할 경우 덮어씁니다."
 
-#: src/views/Settings.js:1235
-#: src/views/Settings.js:1391
+#: src/views/Settings.jsx
 msgid "Network"
 msgstr "네트워크"
 
-#: src/views/Edit/Sources/Network.js:1190
-#: src/views/Edit/Wizard/Sources/Network.js:123
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "Network source"
 msgstr "네트워크 원본"
 
-#: src/views/Edit/Wizard/Audio.js:114
-#: src/views/Edit/Wizard/Metadata.js:40
-#: src/views/Edit/Wizard/Video.js:71
-#: src/views/Edit/Wizard/VideoProfile.js:78
+#: src/views/Edit/Wizard/Audio.jsx
+#: src/views/Edit/Wizard/Metadata.jsx
+#: src/views/Edit/Wizard/Video.jsx
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Next"
 msgstr "다음"
 
-#: src/views/Edit/Profile.js:602
+#: src/views/Edit/Profile.jsx
 msgid "Next: Audio"
 msgstr "다음: 소리"
 
-#: src/views/Welcome.js:39
+#: src/views/Welcome.jsx
 msgid "Next: Video setup"
 msgstr "다음: 영상 구성"
 
-#: src/views/Edit/Wizard/Abort.js:43
+#: src/views/Edit/Wizard/Abort.jsx
 msgid "No"
 msgstr "아니오"
 
-#: src/views/Edit/Sources/NoAudio.js:45
-#: src/views/Edit/Wizard/Audio.js:98
+#: src/views/Edit/Sources/NoAudio.jsx
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "No audio"
 msgstr "소리 없음"
 
-#: src/views/Edit/StreamSelect.js:62
+#: src/views/Edit/StreamSelect.jsx
 msgid "No audio stream available"
 msgstr "소리 스트림 없음"
 
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:70
-#: src/views/Edit/Wizard/Sources/V4L.js:99
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
+#: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "No input device available"
 msgstr "입력 장치가 없습니다."
 
-#: src/views/Edit/Wizard/Video.js:31
+#: src/views/Edit/Wizard/Video.jsx
 msgid "No live stream was detected. Please check the software that sends the stream."
 msgstr "송출중인 스트림이 감지되지 않았습니다. 송출 소프트웨어를 점검해주세요."
 
-#: src/views/Edit/Summary.js:29
+#: src/views/Edit/Summary.jsx
 msgid "No source selected"
 msgstr "소리 원본 선택되지 않음"
 
-#: src/views/Edit/SourceSelect.js:180
+#: src/views/Edit/SourceSelect.jsx
 msgid "No sources available"
 msgstr "원본이 없습니다."
 
-#: src/misc/EncodingSelect.js:175
+#: src/misc/EncodingSelect.jsx
 msgid "No suitable encoder found."
 msgstr "적절한 인코더가 없습니다."
 
-#: src/misc/FilterSelect.js:106
+#: src/misc/FilterSelect.jsx
 msgid "No suitable filter found."
 msgstr "적절한 필터를 찾을 수 없습니다."
 
-#: src/views/Main/index.js:318
-#: src/views/Publication/Player.js:356
+#: src/views/Main/index.jsx
+#: src/views/Publication/Player.jsx
 msgid "No video"
 msgstr "비디오 없음"
 
-#: src/views/Edit/StreamSelect.js:47
+#: src/views/Edit/StreamSelect.jsx
 msgid "No video stream available"
 msgstr "영상 스트림이 없음"
 
-#: src/views/Settings.js:1337
+#: src/views/Settings.jsx
 msgid "Node ID"
 msgstr "Node ID"
 
-#: src/views/Edit/Sources/VirtualAudio.js:90
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Noise"
 msgstr "잡음"
 
-#: src/misc/filters/video/Scale.js:45
-#: src/views/Edit/Sources/AVFoundation.js:145
-#: src/views/Edit/Summary.js:31
-#: src/views/Edit/Summary.js:107
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:98
+#: src/misc/filters/video/Scale.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Summary.jsx
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
 msgid "None"
 msgstr "없음"
 
-#: src/views/Playersite.js:331
-#: src/views/Playersite.js:685
+#: src/views/Playersite.jsx
 msgid "Notes"
 msgstr "비고"
 
-#: src/views/Settings.js:2176
-#: src/views/Settings.js:2195
+#: src/views/Settings.jsx
 msgid "Number of log lines to keep."
 msgstr "유지할 로그 줄 수입니다."
 
-#: src/views/Settings.js:2209
+#: src/views/Settings.jsx
 msgid "Number of logs to keep for each process."
 msgstr "프로세스 당 유지할 기록의 개수입니다."
 
-#: src/misc/controls/Limits.js:77
+#: src/misc/controls/Limits.jsx
 msgid "Number of seconds the limits are allowed to be exceeded."
 msgstr "제한을 초과할 수 있는 시간(초)입니다."
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:217
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Number of tiles columns to encode with."
 msgstr "인코딩할 타일 열의 개수입니다."
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:189
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Number of tiles encode with."
 msgstr "인코딩할 타일 수입니다."
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:203
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Number of tiles rows to encode with."
 msgstr "인코딩할 타일 행의 개수입니다."
 
-#: src/views/Edit/Sources/AudioLoop.js:168
-#: src/views/Edit/Sources/VideoLoop.js:176
-#: src/views/Playersite.js:854
-#: src/views/Publication/Player.js:567
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "OK"
 msgstr "확인"
 
-#: src/views/Settings.js:1613
+#: src/views/Settings.jsx
 msgid "One referrer per line, e.g. http://www.example.com"
 msgstr "한 줄에 하나의 리퍼러만 입력합니다. 예) http://www.example.com"
 
-#: src/views/Playersite.js:839
+#: src/views/Playersite.jsx
 msgid "Open"
 msgstr "열기"
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:196
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Output buffer"
 msgstr "출력 버퍼"
 
-#: src/misc/filters/audio/Pan.js:45
+#: src/misc/filters/audio/Pan.jsx
 msgid "Pan"
 msgstr "좌/우"
 
-#: src/views/Publication/Services/Core.js:238
-#: src/views/Settings.js:2064
+#: src/views/Publication/Services/Core.jsx
+#: src/views/Settings.jsx
 msgid "Passphrase"
 msgstr "암호문"
 
-#: src/views/Settings.js:2081
+#: src/views/Settings.jsx
 msgid "Passphrase for SRT encryption."
 msgstr "SRT 암호화를 위한 암호문"
 
-#: src/views/Settings.js:2073
+#: src/views/Settings.jsx
 msgid "Passphrase must be between 10 and 79 characters long"
 msgstr "암호문은 10에서 79자 사이여야 합니다."
 
-#: src/views/Publication/Edit.js:533
+#: src/views/Publication/Edit.jsx
 msgid "Passthrough (copy) should only be disabled if necessary. Each encoding requires additional CPU/GPU resources."
 msgstr "필요할때만 \"그대로 전달(복사)\" 옵션을 해제하세요. 인코딩을 하려면 더 많은 CPU/GPU 자원이 필요합니다."
 
-#: src/views/Edit/Sources/Network.js:805
-#: src/views/Edit/Wizard/Sources/Network.js:97
-#: src/views/Login.js:282
-#: src/views/Publication/Services/Akamai.js:134
-#: src/views/Publication/Services/DaCast.js:142
-#: src/views/Publication/Services/DASH.js:198
-#: src/views/Publication/Services/HLS.js:187
-#: src/views/Publication/Services/Red5.js:157
-#: src/views/Publication/Services/RTSP.js:156
-#: src/views/Publication/Services/WOWZA.js:178
-#: src/views/Settings.js:1569
-#: src/views/Settings.js:1727
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
+#: src/views/Login.jsx
+#: src/views/Publication/Services/Akamai.jsx
+#: src/views/Publication/Services/DaCast.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/WOWZA.jsx
+#: src/views/Settings.jsx
 msgid "Password"
 msgstr "비밀번호"
 
-#: src/views/Settings.js:1575
-#: src/views/Settings.js:1735
+#: src/views/Settings.jsx
 msgid "Password for authorization."
 msgstr "사용자 인증을 위한 비밀번호입니다."
 
-#: src/views/Edit/Sources/Network.js:810
-#: src/views/Edit/Wizard/Sources/Network.js:103
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "Password for the device."
 msgstr "장치의 비밀번호입니다."
 
-#: src/views/Settings.js:1671
+#: src/views/Settings.jsx
 msgid "Persist viewer statistics"
 msgstr "시청자 통계 유지"
 
-#: src/views/Edit/Sources/VirtualAudio.js:112
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "pink"
 msgstr "분홍색"
 
-#: src/views/Publication/Services/Framebuffer.js:102
+#: src/views/Publication/Services/Framebuffer.jsx
 msgid "Pixel format"
 msgstr "픽셀 유형"
 
-#: src/misc/coders/settings/Video.js:362
+#: src/misc/coders/settings/Video.jsx
 msgid "Pixel Format"
 msgstr ""
 
-#: src/views/Login.js:311
+#: src/views/Login.jsx
 msgid "Plan: <0>Starter</0>"
 msgstr "플랜: <0>스타터</0>"
 
-#: src/views/Publication/Add.js:389
+#: src/views/Publication/Add.jsx
 msgid "Platforms"
 msgstr "플랫폼"
 
-#: src/views/Publication/Player.js:384
-#: src/views/Settings.js:1237
-#: src/views/Settings.js:1584
+#: src/views/Publication/Player.jsx
+#: src/views/Settings.jsx
 msgid "Playback"
 msgstr "재생"
 
-#: src/views/Main/Egress.js:100
+#: src/views/Main/Egress.jsx
 msgid "Player"
 msgstr "재생기"
 
-#: src/views/Publication/Player.js:300
+#: src/views/Publication/Player.jsx
 msgid "Player settings saved"
 msgstr "플레이어 설정 저장됨"
 
-#: src/views/Publication/Player.js:389
+#: src/views/Publication/Player.jsx
 msgid "Player URL"
 msgstr "재생기 URL"
 
-#: src/Header.js:267
-#: src/views/Playersite.js:353
+#: src/Header.jsx
+#: src/views/Playersite.jsx
 msgid "Playersite"
 msgstr "재생사이트"
 
-#: src/views/Publication/Services/DASH.js:348
-#: src/views/Publication/Services/HLS.js:288
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
 msgid "Playlist"
 msgstr "재생목록"
 
-#: src/misc/controls/HLS.js:88
+#: src/misc/controls/HLS.jsx
 msgid "Playlist version (M3U8). Version 3 has the best browser/client compatibility."
 msgstr "M3U8 버전입니다. 버전 3이  가장 좋은 브라우저와 클라이언트 사이의 호환성을 보장합니다."
 
-#: src/views/Main/index.js:361
+#: src/views/Main/index.jsx
 msgid "Please check the <0>process log</0>"
 msgstr "<0>프로세스 기록</0>을 검토해주세요."
 
-#: src/views/Publication/Services/Akamai.js:29
-#: src/views/Publication/Services/Azure.js:29
-#: src/views/Publication/Services/Brightcove.js:23
-#: src/views/Publication/Services/CDN77.js:23
-#: src/views/Publication/Services/Core.js:27
-#: src/views/Publication/Services/DaCast.js:26
-#: src/views/Publication/Services/DASH.js:35
-#: src/views/Publication/Services/HLS.js:37
-#: src/views/Publication/Services/Icecast.js:29
-#: src/views/Publication/Services/Image2.js:33
-#: src/views/Publication/Services/Linkedin.js:24
-#: src/views/Publication/Services/Livepush.js:25
-#: src/views/Publication/Services/Livespotting.js:23
-#: src/views/Publication/Services/MPEGTS.js:35
-#: src/views/Publication/Services/NimoTv.js:26
-#: src/views/Publication/Services/PicartoTv.js:25
-#: src/views/Publication/Services/Red5.js:25
-#: src/views/Publication/Services/Restream.js:26
-#: src/views/Publication/Services/RTMP.js:32
-#: src/views/Publication/Services/RTSP.js:36
-#: src/views/Publication/Services/SRT.js:33
-#: src/views/Publication/Services/UDP.js:31
-#: src/views/Publication/Services/WOWZA.js:28
+#: src/views/Publication/Services/Akamai.jsx
+#: src/views/Publication/Services/Azure.jsx
+#: src/views/Publication/Services/Brightcove.jsx
+#: src/views/Publication/Services/CDN77.jsx
+#: src/views/Publication/Services/Core.jsx
+#: src/views/Publication/Services/DaCast.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/Linkedin.jsx
+#: src/views/Publication/Services/Livepush.jsx
+#: src/views/Publication/Services/Livespotting.jsx
+#: src/views/Publication/Services/MPEGTS.jsx
+#: src/views/Publication/Services/NimoTv.jsx
+#: src/views/Publication/Services/PicartoTv.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/Restream.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Publication/Services/UDP.jsx
+#: src/views/Publication/Services/WOWZA.jsx
 msgid "Please contact the operator of the service and check what happens."
 msgstr "서비스 운영자에게 문의하시기 바랍니다."
 
-#: src/views/Settings.js:1474
+#: src/views/Settings.jsx
 msgid "Please enter your email address to signify agreement with the Let's Encrypt CA's terms of service and to be notified in case of issues."
 msgstr "Let's Encrypt CA의 이용약관에 동의하고 문제 발생시 알림을 받으려면 이메일 주소를 입력해주세요."
 
-#: src/views/Publication/Services/Dailymotion.js:23
-#: src/views/Publication/Services/Kick.js:24
-#: src/views/Publication/Services/Owncast.js:23
-#: src/views/Publication/Services/Rumble.js:24
-#: src/views/Publication/Services/Telegram.js:14
-#: src/views/Publication/Services/Wettercom.js:24
+#: src/views/Publication/Services/Dailymotion.jsx
+#: src/views/Publication/Services/Kick.jsx
+#: src/views/Publication/Services/Owncast.jsx
+#: src/views/Publication/Services/Rumble.jsx
+#: src/views/Publication/Services/Telegram.jsx
+#: src/views/Publication/Services/Wettercom.jsx
 msgid "Please get in touch with the operator of the service and check what happens."
 msgstr "운영자에게 무슨 일이 일어났는지 문의하세요."
 
-#: src/views/Edit/Sources/AudioLoop.js:84
-#: src/views/Edit/Sources/VideoLoop.js:92
-#: src/views/Playersite.js:220
-#: src/views/Publication/Player.js:195
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Please select a file to upload."
 msgstr "업로드할 파일을 선택해주세요."
 
-#: src/views/Publication/Add.js:497
+#: src/views/Publication/Add.jsx
 msgid "Please use \"Passthrough (copy)\" if possible. Encoding requires additional CPU/GPU resources."
 msgstr "가능한 한 \"그대로 전달(복사)\" 옵션을 사용하세요. 인코딩을 하려면 더 많은 CPU/GPU 자원이 필요합니다."
 
-#: src/views/Edit/Wizard/Probe.js:21
+#: src/views/Edit/Wizard/Probe.jsx
 msgid "Please wait. Probe stream data ..."
 msgstr "스트림 데이터를 확인하고 있습니다. 잠시만 기다려주세요..."
 
-#: src/views/Edit/Wizard/Saving.js:21
+#: src/views/Edit/Wizard/Saving.jsx
 msgid "Please wait. Setting up the stream ..."
 msgstr "스트림을 설정합니다. 잠시만 기다려주세요..."
 
-#: src/views/Settings.js:2038
+#: src/views/Settings.jsx
 msgid "Port"
 msgstr "포트"
 
-#: src/views/Publication/Player.js:445
+#: src/views/Publication/Player.jsx
 msgid "Position"
 msgstr "위치"
 
-#: src/views/Publication/Player.js:383
+#: src/views/Publication/Player.jsx
 msgid "Poster"
 msgstr "포스터"
 
-#: src/views/Publication/Player.js:474
+#: src/views/Publication/Player.jsx
 msgid "Poster image URL"
 msgstr "포스터 이미지 URL"
 
-#: src/misc/coders/Encoders/video/h264_libx264.js:82
-#: src/misc/coders/Encoders/video/h264_nvenc.js:75
-#: src/misc/coders/Encoders/video/hevc_libx265.js:82
+#: src/misc/coders/Encoders/video/h264_libx264.jsx
+#: src/misc/coders/Encoders/video/h264_nvenc.jsx
+#: src/misc/coders/Encoders/video/hardware.jsx
+#: src/misc/coders/Encoders/video/hevc_libx265.jsx
 msgid "Preset"
 msgstr "사전설정"
 
-#: src/views/Publication/Services/Youtube.js:197
+#: src/views/Publication/Services/Youtube.jsx
 msgid "Primary stream"
 msgstr "기본 스트림"
 
-#: src/views/Publication/Services/Facebook.js:106
+#: src/views/Publication/Services/Facebook.jsx
 msgid "Primary stream key"
 msgstr "프라이머리 스트림 키"
 
-#: src/views/Edit/Sources/ALSA.js:136
-#: src/views/Edit/Sources/AudioLoop.js:155
-#: src/views/Edit/Sources/AVFoundation.js:201
-#: src/views/Edit/Sources/Framebuffer.js:110
-#: src/views/Edit/Sources/Network.js:822
-#: src/views/Edit/Sources/Network.js:904
-#: src/views/Edit/Sources/Network.js:985
-#: src/views/Edit/Sources/Network.js:1079
-#: src/views/Edit/Sources/Raspicam.js:125
-#: src/views/Edit/Sources/V4L.js:134
-#: src/views/Edit/Sources/VideoLoop.js:163
-#: src/views/Edit/Sources/VirtualAudio.js:169
-#: src/views/Edit/Sources/VirtualVideo.js:188
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Sources/Framebuffer.jsx
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Sources/V4L.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Edit/Sources/VirtualAudio.jsx
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Probe"
 msgstr "확인하기"
 
-#: src/views/Edit/index.js:554
-#: src/views/Publication/Add.js:447
-#: src/views/Publication/Edit.js:459
+#: src/views/Edit/index.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Process"
 msgstr "프로세스"
 
-#: src/views/Publication/Add.js:416
-#: src/views/Publication/Edit.js:428
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Process control"
 msgstr "프로세스 조절"
 
-#: src/views/Main/index.js:451
-#: src/views/Main/index.js:467
-#: src/views/Publication/Edit.js:494
-#: src/views/Publication/Edit.js:613
+#: src/views/Main/index.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Process details"
 msgstr "프로세스 상세"
 
-#: src/views/Main/index.js:454
-#: src/views/Main/index.js:475
-#: src/views/Publication/Edit.js:497
-#: src/views/Publication/Edit.js:621
+#: src/views/Main/index.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Process report"
 msgstr "프로세스 보고서"
 
-#: src/views/Edit/index.js:419
-#: src/views/Edit/index.js:482
+#: src/views/Edit/index.jsx
 msgid "Processing & Control"
 msgstr "프로세싱과 조절"
 
-#: src/misc/coders/Encoders/video/h264_nvenc.js:100
-#: src/misc/coders/Encoders/video/h264_vaapi.js:89
-#: src/misc/coders/Encoders/video/hevc_vaapi.js:91
-#: src/misc/coders/Encoders/video/hevc_videotoolbox.js:64
-#: src/misc/coders/Encoders/video/vp9_vaapi.js:91
-#: src/misc/coders/settings/Video.js:142
-#: src/views/Edit/Wizard/VideoProfile.js:27
+#: src/misc/coders/Encoders/video/h264_nvenc.jsx
+#: src/misc/coders/Encoders/video/h264_vaapi.jsx
+#: src/misc/coders/Encoders/video/hevc_vaapi.jsx
+#: src/misc/coders/Encoders/video/hevc_videotoolbox.jsx
+#: src/misc/coders/Encoders/video/vp9_vaapi.jsx
+#: src/misc/coders/settings/Video.jsx
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Profile"
 msgstr "프로파일"
 
-#: src/views/Edit/Sources/Network.js:856
-#: src/views/Publication/Services/Akamai.js:144
-#: src/views/Publication/Services/Akamai.js:182
-#: src/views/Publication/Services/Azure.js:89
-#: src/views/Publication/Services/Brightcove.js:87
-#: src/views/Publication/Services/CDN77.js:90
-#: src/views/Publication/Services/Core.js:219
-#: src/views/Publication/Services/DaCast.js:110
-#: src/views/Publication/Services/DaCast.js:168
-#: src/views/Publication/Services/DASH.js:186
-#: src/views/Publication/Services/HLS.js:175
-#: src/views/Publication/Services/Icecast.js:156
-#: src/views/Publication/Services/Image2.js:120
-#: src/views/Publication/Services/Linkedin.js:84
-#: src/views/Publication/Services/MPEGTS.js:164
-#: src/views/Publication/Services/Owncast.js:88
-#: src/views/Publication/Services/Red5.js:105
-#: src/views/Publication/Services/RTMP.js:149
-#: src/views/Publication/Services/RTSP.js:144
-#: src/views/Publication/Services/SRT.js:158
-#: src/views/Publication/Services/Telegram.js:79
-#: src/views/Publication/Services/UDP.js:124
-#: src/views/Publication/Services/WOWZA.js:122
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Publication/Services/Akamai.jsx
+#: src/views/Publication/Services/Azure.jsx
+#: src/views/Publication/Services/Brightcove.jsx
+#: src/views/Publication/Services/CDN77.jsx
+#: src/views/Publication/Services/Core.jsx
+#: src/views/Publication/Services/DaCast.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Icecast.jsx
+#: src/views/Publication/Services/Image2.jsx
+#: src/views/Publication/Services/Linkedin.jsx
+#: src/views/Publication/Services/MPEGTS.jsx
+#: src/views/Publication/Services/Owncast.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/RTMP.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/SRT.jsx
+#: src/views/Publication/Services/Telegram.jsx
+#: src/views/Publication/Services/UDP.jsx
+#: src/views/Publication/Services/WOWZA.jsx
 msgid "Protocol"
 msgstr "프로토콜"
 
-#: src/views/Publication/Add.js:395
+#: src/views/Publication/Add.jsx
 msgid "Protocols"
 msgstr "프로토콜"
 
-#: src/views/Settings.js:1401
+#: src/views/Settings.jsx
 msgid "Public domain/s"
 msgstr "퍼블릭 도메인"
 
-#: src/views/Publication/Edit.js:117
-#: src/views/Publication/Edit.js:127
+#: src/views/Publication/Edit.jsx
 msgid "Publication service not found"
 msgstr "송출 서비스를 찾을 수 없음"
 
-#: src/views/Playersite.js:291
+#: src/views/Playersite.jsx
 msgid "Publication website settings saved"
 msgstr "송출 웹사이트 설정 저장"
 
-#: src/views/Main/Publication.js:163
+#: src/views/Main/Publication.jsx
 msgid "Publications"
 msgstr "공개"
 
-#: src/views/Edit/Sources/Network.js:1154
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Publish a low-latency H.264 stream to the bundled MediaMTX service for LAN RTSP and WebRTC clients. See the <0>deployment guide</0>."
+msgstr ""
+
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Publisher transport"
+msgstr ""
+
+#: src/views/Edit/Sources/Network.jsx
 msgid "Pull Mode"
 msgstr "Pull 모드"
 
-#: src/views/Edit/Sources/Network.js:1153
+#: src/views/Edit/Sources/Network.jsx
 msgid "Pull or recieve the data:"
 msgstr "데이터 수신:"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:170
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "QP"
 msgstr "QP"
 
-#: src/misc/coders/Encoders/video/h264_vaapi.js:146
-#: src/misc/coders/Encoders/video/hevc_vaapi.js:148
-#: src/misc/coders/Encoders/video/vp9_vaapi.js:148
-#: src/misc/Progress.js:118
+#: src/misc/coders/Encoders/video/h264_vaapi.jsx
+#: src/misc/coders/Encoders/video/hevc_vaapi.jsx
+#: src/misc/coders/Encoders/video/vp9_vaapi.jsx
+#: src/misc/Progress.jsx
 msgid "Quality"
 msgstr "품질"
 
-#: src/views/Edit/Sources/Raspicam.js:144
-#: src/views/Edit/Wizard/Sources/Raspicam.js:117
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Wizard/Sources/Raspicam.jsx
 msgid "Raspberry Pi camera"
 msgstr "Raspberry Pi 카메라"
 
-#: src/misc/coders/Encoders/video/h264_nvenc.js:152
-#: src/misc/coders/Encoders/video/h264_vaapi.js:70
-#: src/misc/coders/Encoders/video/hevc_vaapi.js:72
-#: src/misc/coders/Encoders/video/vp9_vaapi.js:72
+#: src/misc/coders/Encoders/video/h264_nvenc.jsx
+#: src/misc/coders/Encoders/video/h264_vaapi.jsx
+#: src/misc/coders/Encoders/video/hevc_vaapi.jsx
+#: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 msgid "Rate control"
 msgstr "비율 조정"
 
-#: src/views/Edit/Sources/VirtualVideo.js:161
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Ratio"
 msgstr "비율"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:221
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "rav1e Parameters"
 msgstr "rav1e 매개변수"
 
-#: src/views/Edit/Sources/Network.js:556
+#: src/views/Edit/Sources/Network.jsx
 msgid "Read input at native speed"
 msgstr "원본 속도로 입력 읽어들이기"
 
-#: src/views/Edit/Sources/Network.js:1155
+#: src/views/Edit/Sources/Network.jsx
 msgid "Receive Mode"
 msgstr "수신 모드"
 
-#: src/misc/ActionButton.js:32
-#: src/misc/ActionButton.js:53
-#: src/misc/controls/Process.js:47
+#: src/misc/ActionButton.jsx
+#: src/misc/controls/Process.jsx
 msgid "Reconnect"
 msgstr "재연결"
 
-#: src/misc/controls/Process.js:55
+#: src/misc/controls/Process.jsx
 msgid "Reconnect delay (seconds)"
 msgstr "재연결 지연시간 (초)"
 
-#: src/views/Main/index.js:372
-#: src/views/Publication/Process.js:68
-#: src/views/Publication/Process.js:81
+#. placeholder {0}: $state.progress.reconnect
+#. placeholder {0}: progress.reconnect
+#: src/views/Main/index.jsx
+#: src/views/Publication/Process.jsx
 msgid "Reconnecting in {0}s"
 msgstr "{0}초 후 재연결"
 
-#: src/views/Settings.js:2246
+#: src/views/Settings.jsx
 msgid "Reconnecting to Restreamer Core failed for the last {RETRIES} seconds."
 msgstr "{RETRIES} 동안 Restreamer Core 접속에 실패하였습니다."
 
-#: src/views/Password.js:167
+#: src/views/Password.jsx
 msgid "Reconnecting to Restreamer Core failed."
 msgstr "Restreamer Core 접속에 실패했습니다."
 
-#: src/views/Edit/Sources/ALSA.js:122
-#: src/views/Edit/Sources/AVFoundation.js:181
-#: src/views/Edit/Sources/Network.js:965
-#: src/views/Edit/Sources/Network.js:1059
-#: src/views/Edit/Sources/Raspicam.js:111
-#: src/views/Edit/Sources/V4L.js:120
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:135
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:115
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:115
-#: src/views/Edit/Wizard/Sources/V4L.js:120
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Sources/V4L.jsx
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
+#: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Refresh"
 msgstr "다시 보기"
 
-#: src/views/Publication/Services/Livepush.js:85
-#: src/views/Publication/Services/PicartoTv.js:85
-#: src/views/Publication/Services/Restream.js:86
-#: src/views/Publication/Services/Twitch.js:83
-#: src/views/Publication/Services/Twitter.js:150
-#: src/views/Publication/Services/Twitter.js:166
+#: src/views/Publication/Services/Livepush.jsx
+#: src/views/Publication/Services/PicartoTv.jsx
+#: src/views/Publication/Services/Restream.jsx
+#: src/views/Publication/Services/Twitch.jsx
+#: src/views/Publication/Services/Twitter.jsx
 msgid "Region"
 msgstr "지역"
 
-#: src/views/Password.js:146
+#: src/views/Password.jsx
 msgid "Register user"
 msgstr "사용자 등록"
 
-#: src/views/Password.js:178
-#: src/views/Settings.js:2266
+#: src/views/Password.jsx
+#: src/views/Settings.jsx
 msgid "Reload"
 msgstr "다시 불러오기"
 
-#: src/misc/modals/Hint.js:159
+#: src/misc/modals/Hint.jsx
 msgid "Remove Audio"
 msgstr ""
 
-#: src/misc/modals/Hint.js:150
+#: src/misc/modals/Hint.js
 #~ msgid "Remove Stream"
 #~ msgstr ""
 
-#: src/views/Settings.js:1754
+#: src/views/Settings.jsx
 msgid "Remove the oldest entries if the /memfs is full"
 msgstr "/memfs가 가득 차면 오래된 것부터 지움"
 
-#: src/views/Settings.js:1942
+#: src/views/Settings.jsx
 msgid "Requires activation"
 msgstr "활성화 필요"
 
-#: src/views/Publication/Player.js:546
+#: src/views/Publication/Player.jsx
 msgid "Reset logo"
 msgstr "로고 초기화"
 
-#: src/views/Publication/Player.js:551
+#: src/views/Publication/Player.jsx
 msgid "Reset poster"
 msgstr "포스터 초기화"
 
-#: src/views/Settings.js:1300
-#: src/views/Settings.js:2283
-#: src/views/Settings.js:2296
-#: src/views/Settings.js:2305
+#: src/views/Settings.jsx
 msgid "Restart"
 msgstr "재시작"
 
-#: src/views/Settings.js:2274
+#: src/views/Settings.jsx
 msgid "Restart required"
 msgstr "다시 시작 필요"
 
-#: src/views/Password.js:155
-#: src/views/Settings.js:2234
+#: src/views/Password.jsx
+#: src/views/Settings.jsx
 msgid "Restarting"
 msgstr "다시 시작"
 
-#: src/views/Password.js:160
-#: src/views/Settings.js:2239
+#: src/views/Password.jsx
+#: src/views/Settings.jsx
 msgid "Restarting Restreamer Core ..."
 msgstr "Restreamer Core를 다시 시작합니다 ..."
 
-#: src/views/Settings.js:1108
+#: src/views/Settings.jsx
 msgid "Restarting the application failed."
 msgstr "애플리케이션을 다시 시작하는데 실패했습니다."
 
-#: src/views/Publication/Services/Core.js:206
+#: src/views/Publication/Services/Core.jsx
 msgid "Restreamer instructions"
 msgstr "Restreamer 사용법"
 
-#: src/views/Settings.js:1328
+#: src/views/Settings.jsx
 msgid "Restreamer Service"
 msgstr "Restreamer 서비스"
 
-#: src/views/Main/index.js:276
+#: src/views/Main/index.jsx
 msgid "Retrieving stream data ..."
 msgstr "스트림 데이터 검색중..."
 
-#: src/views/Edit/Wizard/Error.js:26
-#: src/views/Invalid.js:43
-#: src/views/Settings.js:1209
+#: src/views/Edit/Wizard/Error.jsx
+#: src/views/Invalid.jsx
+#: src/views/Settings.jsx
 msgid "Retry"
 msgstr "재시도"
 
-#: src/views/Edit/Sources/VirtualVideo.js:118
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "RGB test pattern"
 msgstr "RGB 테스트 패턴"
 
-#: src/misc/filters/video/Transpose.js:46
+#: src/misc/filters/video/Transpose.jsx
 msgid "Rotate"
 msgstr "회전"
 
-#: src/views/Main/index.js:415
-#: src/views/Settings.js:1239
-#: src/views/Settings.js:1920
+#: src/views/Main/index.jsx
+#: src/views/Settings.jsx
 msgid "RTMP"
 msgstr "RTMP"
 
-#: src/views/Settings.js:1997
+#: src/views/Settings.jsx
 msgid "RTMP app for publishing."
 msgstr "송출을 위한 RTMP 앱입니다."
 
-#: src/views/Edit/index.js:505
+#: src/views/Edit/index.jsx
 msgid "RTMP output"
 msgstr "RTMP 출력"
 
-#: src/views/Settings.js:1962
+#: src/views/Settings.jsx
 msgid "RTMP Port"
 msgstr "RTMP 포트"
 
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:154
-#: src/views/Settings.js:1925
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Settings.jsx
 msgid "RTMP server"
 msgstr "RTMP 서버"
 
-#: src/views/Edit/Sources/Network.js:924
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:74
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
 msgid "RTMP server is not enabled"
 msgstr "RTMP서버가 활성화되지 않음"
 
-#: src/views/Settings.js:1970
+#: src/views/Settings.jsx
 msgid "RTMP server listen address."
 msgstr "RTMP 수신을 위한 서버 주소입니다."
 
-#: src/views/Settings.js:2010
+#: src/views/Settings.jsx
 msgid "RTMP token for publishing and playing. The token is the value of the URL query parameter 'token.'"
 msgstr "송출과 재생을 위한 RTMP 토큰입니다. URL 쿼리 파라미터 중 'token'에 해당합니다."
 
-#: src/views/Settings.js:1976
+#: src/views/Settings.jsx
 msgid "RTMPS Port"
 msgstr "RTMPS 포트"
 
-#: src/views/Settings.js:1933
+#: src/views/Settings.jsx
 msgid "RTMPS server"
 msgstr "RTMPS 서버"
 
-#: src/views/Settings.js:1984
+#: src/views/Settings.jsx
 msgid "RTMPS server listen address."
 msgstr "RTMPS 수신을 위한 서버 주소"
 
-#: src/views/Edit/Sources/Network.js:527
+#: src/views/Edit/Sources/Network.jsx
 msgid "RTSP"
 msgstr "RTSP"
 
-#: src/views/Edit/Sources/VirtualVideo.js:155
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Rule"
 msgstr "룰"
 
-#: src/misc/coders/settings/Audio.js:188
-#: src/misc/filters/audio/Resample.js:140
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "Sampling"
 msgstr "샘플링"
 
-#: src/misc/modals/Hint.js:186
-#: src/views/Edit/index.js:632
-#: src/views/Edit/Wizard/License.js:43
-#: src/views/Playersite.js:829
-#: src/views/Publication/Add.js:567
-#: src/views/Publication/Edit.js:601
-#: src/views/Publication/Player.js:542
-#: src/views/Settings.js:2224
+#: src/misc/modals/Hint.jsx
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Wizard/License.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
+#: src/views/Publication/Player.jsx
+#: src/views/Settings.jsx
 msgid "Save"
 msgstr "저장"
 
-#: src/misc/filters/video/Scale.js:43
-#: src/views/Edit/Sources/VirtualVideo.js:148
+#: src/misc/filters/video/Scale.jsx
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Scale"
 msgstr "축척"
 
-#: src/misc/filters/video/Scale.js:99
-#: src/misc/filters/video/Scale.js:104
-#: src/misc/filters/video/Scale.js:109
+#: src/misc/filters/video/Scale.jsx
 msgid "Scale size"
 msgstr "비율 크기"
 
-#: src/views/Settings.js:1855
+#: src/views/Settings.jsx
 msgid "Seconds to keep files in cache."
 msgstr "파일을 캐시로 유지할 시간(초)입니다."
 
-#: src/misc/controls/Process.js:61
+#: src/misc/controls/Process.jsx
 msgid "Seconds until a process is restarted."
 msgstr "프로세스를 재시작하기 위해 기다릴 시간(초)입니다."
 
-#: src/misc/controls/Process.js:74
+#: src/misc/controls/Process.jsx
 msgid "Seconds until a staled process is terminated."
 msgstr "잘못된 프로세스를 종료하기 까지 기다릴 시간(초)입니다."
 
-#: src/misc/controls/Snapshot.js:56
+#: src/misc/controls/Snapshot.jsx
 msgid "Seconds until the snapshot/thumbnail of the video source is updated."
 msgstr "영상 원본의 스냅샷/썸네일이 갱신되기 까지의 시간(초)입니다."
 
-#: src/views/Settings.js:1589
+#: src/views/Settings.jsx
 msgid "Security"
 msgstr "보안"
 
-#: src/views/Publication/Services/Livespotting.js:103
+#: src/views/Publication/Services/Livespotting.jsx
 msgid "Security token"
 msgstr "보안 토큰"
 
-#: src/views/Publication/Player.js:403
+#: src/views/Publication/Player.jsx
 msgid "Seekbar color"
 msgstr "탐색줄 색상"
 
-#: src/misc/controls/HLS.js:95
+#: src/misc/controls/HLS.jsx
 msgid "Segment length (seconds)"
 msgstr "조각 길이 (초)"
 
-#: src/misc/controls/HLS.js:100
+#: src/misc/controls/HLS.jsx
 msgid "Segment will be cut on the following keyframe after this time has passed. 2 is recommended."
 msgstr "세그먼트는 길이로 조각납니다. 2를 권장합니다."
 
-#: src/views/Publication/Services/DASH.js:429
-#: src/views/Publication/Services/HLS.js:358
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
 msgid "Segmentation"
 msgstr "조각화"
 
-#: src/views/Edit/Sources/ALSA.js:108
-#: src/views/Edit/Sources/AVFoundation.js:172
-#: src/views/Edit/Sources/Framebuffer.js:99
-#: src/views/Edit/Sources/Raspicam.js:105
-#: src/views/Edit/Sources/V4L.js:106
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:120
-#: src/views/Edit/Wizard/Sources/Raspicam.js:95
-#: src/views/Edit/Wizard/Sources/V4L.js:114
+#: src/views/Edit/Sources/ALSA.jsx
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Sources/Framebuffer.jsx
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Sources/V4L.jsx
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
+#: src/views/Edit/Wizard/Sources/Raspicam.jsx
+#: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Select a device:"
 msgstr "장치 선택:"
 
-#: src/views/Edit/Sources/VirtualAudio.js:84
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Select audio source:"
 msgstr "소리 원본 선택:"
 
-#: src/views/Publication/Add.js:480
-#: src/views/Publication/Edit.js:520
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Select RTMP or SRT (if enabled) for less latency."
 msgstr "가능하다면, RTMP나 SRT를 선택하여 지연시간을 낮출 수 있습니다."
 
-#: src/views/Edit/Sources/VirtualVideo.js:114
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Select source ..."
 msgstr "원본 선택..."
 
-#: src/views/Edit/Sources/VirtualVideo.js:108
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Select video source:"
 msgstr "비디오 원본 선택:"
 
-#: src/views/Edit/Wizard/Source.js:19
+#: src/views/Edit/Wizard/Source.jsx
 msgid "Select whether you pull the stream from a <0>network source</0> (such as a network camera) or the <1>internal RTMP server</1> (e.g., OBS streams to the Restreamer)."
 msgstr "스트림을 <0>네트워크 소스</0>(네트워크 카메라 등) 혹은 <1>내부 RTMP 서버</1>(Restreamer로 전달된 OBS 스트림 등)에서 받아올지 선택합니다."
 
-#: src/misc/EncodingSelect.js:209
+#: src/misc/EncodingSelect.jsx
 msgid "Select your encoding setting:"
 msgstr "인코딩 설정 선택:"
 
-#: src/misc/FilterSelect.js:121
+#: src/misc/FilterSelect.jsx
 msgid "Select your filter settings (optional):"
 msgstr "필터 설정을 고르세요(선택사항)"
 
-#: src/views/Playersite.js:626
+#: src/views/Playersite.jsx
 msgid "Selected"
 msgstr "선택됨"
 
-#: src/views/Playersite.js:373
+#: src/views/Playersite.jsx
 msgid "Selected channel"
 msgstr "선택된 채널"
 
-#: src/views/Playersite.js:481
+#: src/views/Playersite.jsx
 msgid "Selection"
 msgstr "선택"
 
-#: src/views/Settings.js:1284
+#: src/views/Settings.jsx
 msgid "Send anonymous metrics (helps us for future development)"
 msgstr "익명으로 통계 전송 (개발에 도움이 됩니다)"
 
-#: src/views/Edit/Sources/Network.js:954
-#: src/views/Edit/Sources/Network.js:1048
-#: src/views/Edit/Wizard/Sources/InternalRTMP.js:102
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:102
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Send stream to address ..."
 msgstr "주소로 스트림 보내기 ..."
 
-#: src/views/Edit/Sources/Network.js:893
-#: src/views/Edit/Wizard/Sources/InternalHLS.js:48
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalHLS.jsx
 msgid "Send stream to this address:"
 msgstr "스트림을 전달할 주소:"
 
-#: src/views/Publication/Services/Framebuffer.js:16
+#: src/views/Publication/Services/Framebuffer.jsx
 msgid "Send video to Framebuffer"
 msgstr "영상을 프레임버퍼로 전송"
 
-#: src/views/Publication/Services/DaCast.js:120
+#: src/views/Publication/Services/DaCast.jsx
 msgid "Server"
 msgstr "서버"
 
-#: src/views/Publication/Services/Kick.js:88
-#: src/views/Publication/Services/Owncast.js:100
-#: src/views/Publication/Services/Rumble.js:88
-#: src/views/Publication/Services/Telegram.js:91
+#: src/views/Publication/Services/Instagram.jsx
+#: src/views/Publication/Services/Kick.jsx
+#: src/views/Publication/Services/Owncast.jsx
+#: src/views/Publication/Services/Rumble.jsx
+#: src/views/Publication/Services/Telegram.jsx
 msgid "Server URL"
 msgstr "서버 URL"
 
-#: src/Header.js:257
-#: src/views/Login.js:246
-#: src/views/Settings.js:1233
-#: src/views/Settings.js:1314
+#: src/Header.jsx
+#: src/views/Login.jsx
+#: src/views/Settings.jsx
 msgid "Service"
 msgstr "서비스"
 
-#: src/views/Publication/Add.js:427
-#: src/views/Publication/Edit.js:439
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Service name"
 msgstr "서비스 이름"
 
-#: src/views/Settings.js:1365
+#: src/views/Settings.jsx
 msgid "Service token for monitoring."
 msgstr "확인을 위한 서비스 토큰입니다."
 
-#: src/Footer.js:240
+#: src/Footer.jsx
 msgid "Sessions"
 msgstr "세션"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:223
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Set the rav1e configuration using a :-separated list of key=value parameters."
 msgstr "키=값 매개변수의 :로 구분된 목록을 사용하여 rav1e 구성을 설정합니다."
 
-#: src/views/Settings.js:1516
+#: src/views/Settings.jsx
 msgid "Sets a bandwidth limit in Mbit per second for outgoing HLS data transfer. All services, such as RTMP and outgoing processes, are included in the calculation. If the bandwidth is exceeded, HLS viewers receive the HTTP status code 509 (Bandwidth Limit Exceeded). 0 is unlimited."
 msgstr "송출할 HLS 데이터의 전송 대역폭을 초당 메가비트로 설정합니다. RTMP를 포함한 모든 송출 프로세스가 합산됩니다. 대역폭이 가득 차면 HLS 시청자에게 HTTP 오류 509를 반환합니다(대역폭 제한 초과). 제한을 두지 않으려면 0을 입력하세요."
 
-#: src/views/Settings.js:1499
+#: src/views/Settings.jsx
 msgid "Sets a viewer limit for HLS sessions. If the limit is exceeded, HLS viewers receive the HTTP status code 509 (Bandwidth Limit Exceeded). 0 is unlimited."
 msgstr "HLS 세션당 시청자를 제한합니다. 한계에 달하면 HTTP 오류 509를 반환합니다(대역폭 제한 초과). 제한을 두지 않으려면 0을 입력하세요."
 
-#: src/views/Settings.js:1319
+#: src/views/Settings.jsx
 msgid "Setting for connection to the service."
 msgstr "서비스 접속 설정입니다."
 
-#: src/views/Settings.js:1219
+#: src/views/Settings.jsx
 msgid "Settings"
 msgstr "설정"
 
-#: src/views/Settings.js:1221
+#: src/views/Settings.jsx
 msgid "Settings (expert mode)"
 msgstr "설정 (전문가 모드)"
 
-#: src/views/Settings.js:1770
-msgid "Settings for /data path. The access is protected by"
-msgstr "/data 경로에 대한 설정입니다. 이 접근은 다음으로 보호됩니다:"
+#: src/views/Settings.js
+#~ msgid "Settings for /data path. The access is protected by"
+#~ msgstr "/data 경로에 대한 설정입니다. 이 접근은 다음으로 보호됩니다:"
 
-#: src/views/Settings.js:1696
+#: src/views/Settings.jsx
+msgid "Settings for /data path. The access is protected by "
+msgstr ""
+
+#: src/views/Settings.jsx
 msgid "Settings for /memfs path."
 msgstr "/memfs 경로에 대한 설정입니다."
 
-#: src/views/Settings.js:1051
+#: src/views/Settings.jsx
 msgid "Settings saved. All changes will be applied after restarting the application."
 msgstr "설정을 저장했습니다. 변경 사항은 애플리케이션을 다시 시작할 때 반영됩니다."
 
-#: src/views/Playersite.js:433
+#: src/views/Playersite.jsx
 msgid "Share button"
 msgstr "고유 버튼"
 
-#: src/views/Playersite.js:463
+#: src/views/Playersite.jsx
 msgid "Shows a reference to the project."
 msgstr "프로젝트에 대한 참조를 보여줍니다."
 
-#: src/views/Login.js:332
+#: src/views/Login.jsx
 msgid "Sign up (free)"
 msgstr "가입 (무료)"
 
-#: src/views/Edit/Sources/VirtualAudio.js:89
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Silence"
 msgstr "무음"
 
-#: src/views/Edit/Wizard/Audio.js:95
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "Silence Audio"
 msgstr "무음 소리"
 
-#: src/views/Edit/Sources/VirtualAudio.js:91
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "Sine"
 msgstr "사인파"
 
-#: src/views/Playersite.js:359
+#: src/views/Playersite.jsx
 msgid "Sitename"
 msgstr "사이트 이름"
 
-#: src/misc/coders/settings/Video.js:201
+#: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "크기"
 
-#: src/views/Edit/index.js:543
-#: src/views/Main/index.js:434
+#: src/views/Edit/index.jsx
+#: src/views/Main/index.jsx
 msgid "Snapshot"
 msgstr "스냅샷"
 
-#: src/views/Login.js:316
+#: src/views/Login.jsx
 msgid "Social-login (OAuth2, 2FA)"
 msgstr "소셜 로그인 (OAuth2, 2FA)"
 
-#: src/views/Edit/Sources/Network.js:540
+#: src/views/Edit/Sources/Network.jsx
 msgid "Socket timeout (microseconds)"
 msgstr "소켓 타임아웃 (마이크로초)"
 
-#: src/views/Publication/Add.js:392
+#: src/views/Publication/Add.jsx
 msgid "Software"
 msgstr "소프트웨어"
 
-#: src/misc/controls/Source.js:74
-#: src/views/Edit/Sources/VirtualAudio.js:88
-#: src/views/Edit/Sources/VirtualVideo.js:112
-#: src/views/Publication/Add.js:475
-#: src/views/Publication/Edit.js:515
+#: src/misc/controls/Source.jsx
+#: src/views/Edit/Sources/VirtualAudio.jsx
+#: src/views/Edit/Sources/VirtualVideo.jsx
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Source"
 msgstr "원본"
 
-#: src/views/Publication/Add.js:415
-#: src/views/Publication/Add.js:470
-#: src/views/Publication/Edit.js:427
-#: src/views/Publication/Edit.js:510
+#: src/views/Publication/Add.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Source & Encoding"
 msgstr "원본과 인코딩"
 
-#: src/misc/Progress.js:131
+#: src/misc/Progress.jsx
 msgid "Speed"
 msgstr "속도"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:90
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Speed Preset"
 msgstr "속도 프리셋"
 
-#: src/views/Main/index.js:425
-#: src/views/Settings.js:1240
-#: src/views/Settings.js:2019
+#: src/views/Main/index.jsx
+#: src/views/Settings.jsx
 msgid "SRT"
 msgstr "SRT"
 
-#: src/views/Edit/index.js:524
+#: src/views/Edit/index.jsx
 msgid "SRT output"
 msgstr "SRT 출력"
 
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:152
-#: src/views/Settings.js:2024
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
+#: src/views/Settings.jsx
 msgid "SRT server"
 msgstr "SRT 서버"
 
-#: src/views/Edit/Sources/Network.js:1018
-#: src/views/Edit/Wizard/Sources/InternalSRT.js:74
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "SRT server is not enabled"
 msgstr "SRT 서버가 활성화되지 않았습니다."
 
-#: src/views/Settings.js:2046
+#: src/views/Settings.jsx
 msgid "SRT server listen address."
 msgstr "SRT 수신을 위한 서버 주소"
 
-#: src/views/Settings.js:2059
+#: src/views/Settings.jsx
 msgid "SRT token for publishing and playing. The token is the value of the streamid parameter 'token.'"
 msgstr "SRT 송출과 재생을 위한 토큰입니다. streamid 파라메터의 'token' 값입니다."
 
-#: src/misc/controls/Process.js:69
+#: src/misc/controls/Process.jsx
 msgid "Stale timeout (seconds)"
 msgstr "시간 경과 (초)"
 
-#: src/views/Edit/Sources/Network.js:717
+#: src/views/Edit/Sources/Network.jsx
 msgid "start_at_zero"
 msgstr "start_at_zero"
 
-#: src/views/Settings.js:1621
+#: src/views/Settings.jsx
 msgid "Statistics"
 msgstr "통계"
 
-#: src/misc/controls/HLS.js:65
-#: src/views/Settings.js:1238
-#: src/views/Settings.js:1688
+#: src/misc/controls/HLS.jsx
+#: src/views/Settings.jsx
 msgid "Storage"
 msgstr "저장공간"
 
-#: src/views/Settings.js:1679
+#: src/views/Settings.jsx
 msgid "Stores the viewer statistics to the disk."
 msgstr "시청자 통계를 디스크에 저장합니다."
 
-#: src/views/Edit/StreamSelect.js:30
-#: src/views/Edit/StreamSelect.js:36
-#: src/views/Edit/StreamSelect.js:81
-#: src/views/Edit/Wizard/Audio.js:75
+#: src/views/Edit/StreamSelect.jsx
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "Stream"
 msgstr "스트림"
 
-#: src/views/Publication/Services/Wettercom.js:90
+#: src/views/Publication/Services/Wettercom.jsx
 msgid "Stream ID"
 msgstr ""
 
-#: src/views/Publication/Services/CDN77.js:113
-#: src/views/Publication/Services/DaCast.js:153
-#: src/views/Publication/Services/Dailymotion.js:98
-#: src/views/Publication/Services/DLive.js:75
-#: src/views/Publication/Services/Dummy.js:280
-#: src/views/Publication/Services/Instagram.js:81
-#: src/views/Publication/Services/Kick.js:100
-#: src/views/Publication/Services/Livepush.js:104
-#: src/views/Publication/Services/MediaNetwork.js:75
-#: src/views/Publication/Services/NimoTv.js:99
-#: src/views/Publication/Services/Owncast.js:110
-#: src/views/Publication/Services/PeerTube.js:92
-#: src/views/Publication/Services/PicartoTv.js:95
-#: src/views/Publication/Services/Restream.js:116
-#: src/views/Publication/Services/Rumble.js:100
-#: src/views/Publication/Services/Telegram.js:101
-#: src/views/Publication/Services/Trovo.js:75
-#: src/views/Publication/Services/Twitch.js:151
-#: src/views/Publication/Services/Twitter.js:175
-#: src/views/Publication/Services/Vimeo.js:73
-#: src/views/Publication/Services/Wettercom.js:100
-#: src/views/Publication/Services/Youtube.js:189
+#: src/views/Publication/Services/CDN77.jsx
+#: src/views/Publication/Services/DaCast.jsx
+#: src/views/Publication/Services/Dailymotion.jsx
+#: src/views/Publication/Services/DLive.jsx
+#: src/views/Publication/Services/Dummy.jsx
+#: src/views/Publication/Services/Instagram.jsx
+#: src/views/Publication/Services/Kick.jsx
+#: src/views/Publication/Services/Livepush.jsx
+#: src/views/Publication/Services/MediaNetwork.jsx
+#: src/views/Publication/Services/NimoTv.jsx
+#: src/views/Publication/Services/Owncast.jsx
+#: src/views/Publication/Services/PeerTube.jsx
+#: src/views/Publication/Services/PicartoTv.jsx
+#: src/views/Publication/Services/Restream.jsx
+#: src/views/Publication/Services/Rumble.jsx
+#: src/views/Publication/Services/Telegram.jsx
+#: src/views/Publication/Services/Trovo.jsx
+#: src/views/Publication/Services/Twitch.jsx
+#: src/views/Publication/Services/Twitter.jsx
+#: src/views/Publication/Services/Vimeo.jsx
+#: src/views/Publication/Services/Wettercom.jsx
+#: src/views/Publication/Services/Youtube.jsx
 msgid "Stream key"
 msgstr "스트림 키"
 
-#: src/views/Publication/Services/RTMP.js:165
+#: src/views/Publication/Services/RTMP.jsx
 msgid "Stream Key"
 msgstr "스트림 키"
 
-#: src/views/Publication/Services/Brightcove.js:101
-#: src/views/Publication/Services/Red5.js:136
-#: src/views/Publication/Services/WOWZA.js:158
+#: src/views/Publication/Services/Brightcove.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/WOWZA.jsx
 msgid "Stream name"
 msgstr "스트림 이름"
 
-#: src/views/Publication/Services/Akamai.js:167
+#: src/views/Publication/Services/Akamai.jsx
 msgid "Stream names"
 msgstr "스트림 이름"
 
-#: src/misc/controls/Source.js:78
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Stream path"
+msgstr ""
+
+#: src/misc/controls/Source.jsx
 msgid "Stream source for publication service (experimental)."
 msgstr "송출 서비스로 전달 (시험기능)"
 
-#: src/views/Publication/Services/Akamai.js:156
-#: src/views/Publication/Services/CDN77.js:102
-#: src/views/Publication/Services/Dailymotion.js:86
+#: src/views/Publication/Services/Akamai.jsx
+#: src/views/Publication/Services/CDN77.jsx
+#: src/views/Publication/Services/Dailymotion.jsx
 msgid "Stream URL"
 msgstr "스트림 URL"
 
-#: src/views/Playersite.js:457
+#: src/views/Playersite.jsx
 msgid "Support datarhei Restreamer"
 msgstr "datarhei Restreamer 지지"
 
-#: src/views/Edit/Sources/Network.js:771
-#: src/views/Edit/Wizard/Sources/Network.js:72
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "Supports HTTP (HLS, DASH), RTP, RTSP, RTMP, SRT and more."
 msgstr "HTTP(HPS, DASH), RTP, RTSP, RTMP, SRT 등을 지원합니다."
 
-#: src/Footer.js:184
-#: src/Header.js:275
-#: src/views/Settings.js:2095
+#: src/Footer.jsx
+#: src/Header.jsx
+#: src/views/Settings.jsx
 msgid "System"
 msgstr "시스템"
 
-#: src/views/Publication/Services/Core.js:196
+#: src/views/Publication/Services/Core.jsx
 msgid "Target address"
 msgstr "목표 주소"
 
-#: src/views/Playersite.js:329
-#: src/views/Playersite.js:472
+#: src/views/Playersite.jsx
 msgid "Template"
 msgstr "템플릿"
 
-#: src/views/Playersite.js:494
+#: src/views/Playersite.jsx
 msgid "Template to be used for creating the publication website. The delete button removes the selection from the system."
 msgstr "송출 웹사이트를 만들기 위한 템플릿입니다. 삭제 버튼을 누르면 선택된 템플릿을 삭제합니다."
 
-#: src/views/Playersite.js:707
+#: src/views/Playersite.jsx
 msgid "Terms"
 msgstr "이용조건"
 
-#: src/views/Edit/Sources/VirtualVideo.js:116
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Test pattern"
 msgstr "테스트 패턴"
 
-#: src/views/Edit/Sources/VirtualVideo.js:117
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Test pattern (extended)"
 msgstr "테스트 패턴 (확장)"
 
-#: src/views/Playersite.js:557
+#: src/views/Playersite.jsx
 msgid "Text colors"
 msgstr "글씨 색상"
 
-#: src/views/Edit/Sources/VirtualAudio.js:131
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The amplitude (0.0 - 1.0) of the generated audio stream"
 msgstr "생성된 소리 스트림의 음량(0.0 - 1.0)"
 
-#: src/views/Settings.js:1304
+#: src/views/Settings.jsx
 msgid "The application is using an older version of the settings."
 msgstr "애플리케이션이 구버전의 설정을 사용중입니다."
 
-#: src/views/Edit/Sources/Network.js:844
+#: src/views/Edit/Sources/Network.jsx
 msgid "The available FFmpeg binary doesn't support any of the required protocols."
 msgstr "현재 FFmpeg 바이너리는 필요한 프로토콜을 지원하지 않습니다."
 
-#: src/misc/coders/settings/Audio.js:40
+#: src/misc/coders/settings/Audio.jsx
 msgid "The bitrate of the audio stream."
 msgstr "소리 스트림의 비트율입니다."
 
-#: src/views/Edit/Sources/VirtualAudio.js:150
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The carrier frequency"
 msgstr "반송주파수"
 
-#: src/views/Edit/index.js:376
+#. placeholder {0}: $data.meta.name
+#: src/views/Edit/index.jsx
 msgid "The channel \"{0}\" could not be deleted"
 msgstr "\"{0}\" 채널을 삭제할 수 없음"
 
-#: src/views/Edit/index.js:385
+#. placeholder {0}: $data.meta.name
+#: src/views/Edit/index.jsx
 msgid "The channel \"{0}\" has been deleted"
 msgstr "\"{0}\" 채널 삭제함"
 
-#: src/views/Edit/index.js:676
+#: src/views/Edit/index.jsx
 msgid "The deletion of this channel can not be recovered. All publications of this channel will be removed."
 msgstr "채널 삭제는 되돌릴 수 없습니다. 이 채널에 연결된 모든 송출 서비스도 삭제됩니다."
 
-#: src/views/Edit/index.js:302
-#: src/views/Edit/Wizard/index.js:176
-#: src/views/Publication/Edit.js:262
+#: src/views/Edit/index.jsx
+#: src/views/Edit/Wizard/index.jsx
+#: src/views/Publication/Edit.jsx
 msgid "The input profile is not complete. Please define a video and audio source."
 msgstr "프로파일 입력이 완료되지 않았습니다. 영상과 소리 원본을 정의해주세요."
 
-#: src/views/Publication/Add.js:222
+#: src/views/Publication/Add.jsx
 msgid "The input profile is not complete. Please define a video and/or audio source."
 msgstr "입력 프로필이 완료되지 않았습니다. 비디오 및/또는 오디오 소스를 정의해 주세요."
 
-#: src/misc/coders/settings/Audio.js:126
-#: src/misc/filters/audio/Resample.js:78
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "The layout of the audio stream."
 msgstr "소리 스트림의 레이아웃입니다."
 
-#: src/misc/controls/HLS.js:112
+#: src/misc/controls/HLS.jsx
 msgid "The maximum number of playlist segments. 0 will contain all the segments. 6 is recommended."
 msgstr "재색목록의 최대 세그먼트 수 입니다. 0은 모든 세그먼트를 포함합니다. 6을 권장합니다."
 
-#: src/views/Edit/Sources/VirtualAudio.js:119
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The noise color"
 msgstr "잡음 종류"
 
-#: src/misc/controls/License/index.js:60
+#: src/misc/controls/License/index.jsx
 msgid "The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law. You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission."
 msgstr "저작물에 이 일반권리증서를 첨부한 자는 법이 정한 범위 내에서 저작인접권을 포함해 저작권법에 따라 전세계적으로 해당 저작물에 대해 자신이 갖는 일체의 권리를 포기함으로써 저작물을 퍼블릭 도메인으로 양도하였습니다. 저작권자의 허락을 구하지 않아도 이 저작물을 상업적인 목적을 포함 모든 목적으로 복사, 수정, 배포, 실연하실 수 있습니다."
 
-#: src/views/Settings.js:1409
+#: src/views/Settings.jsx
 msgid "The public reachable domain name of the host this Restreamer is running on. Separate multiple domain names by a comma."
 msgstr "현재 Restreamer에 접근할 수 있는 도메인 주소입니다. 여러 도메인은 쉼표로 구분해주세요."
 
-#: src/views/Publication/Edit.js:317
+#. placeholder {0}: $settings.name
+#: src/views/Publication/Edit.jsx
 msgid "The publication service \"{0}\" could not be deleted"
 msgstr "송출 서비스 \"{0}\"은(는) 삭제할 수 없습니다."
 
-#: src/views/Publication/Add.js:237
+#. placeholder {0}: $settings.name
+#: src/views/Publication/Add.jsx
 msgid "The publication service \"{0}\" has been created"
 msgstr "송출 서비스 \"{0}\"이(가) 생성되었습니다."
 
-#: src/views/Publication/Edit.js:323
+#. placeholder {0}: $settings.name
+#: src/views/Publication/Edit.jsx
 msgid "The publication service \"{0}\" has been deleted"
 msgstr "송출 서비스 \"{0}\"을(를) 삭제함"
 
-#: src/views/Publication/Add.js:235
+#: src/views/Publication/Add.jsx
 msgid "The publication service has been created"
 msgstr "송출 서비스가 생성됨"
 
-#: src/misc/controls/RTMP.js:61
+#: src/misc/controls/RTMP.jsx
 msgid "The RTMP output requires the RTMP Server."
 msgstr "RTMP 송출을 위해 RTMP 서버가 필요합니다."
 
-#: src/misc/coders/settings/Audio.js:177
-#: src/misc/filters/audio/Resample.js:129
+#: src/misc/coders/settings/Audio.jsx
+#: src/misc/filters/audio/Resample.jsx
 msgid "The sample rate of the audio stream."
 msgstr "소리 스트림의 샘플률입니다."
 
-#: src/views/Edit/Sources/AudioLoop.js:95
-#: src/views/Edit/Sources/VideoLoop.js:103
-#: src/views/Playersite.js:231
-#: src/views/Publication/Player.js:206
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "The selected file is too big (<0/>). Only <1/> are allowed."
 msgstr "선택한 파일이 너무 큽니다(<0/>). <1/>만 허용됩니다."
 
-#: src/views/Edit/Sources/AudioLoop.js:88
-#: src/views/Edit/Sources/VideoLoop.js:96
-#: src/views/Playersite.js:224
-#: src/views/Publication/Player.js:199
+#. placeholder {0}: err.actual
+#. placeholder {1}: err.allowed.join(', ')
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "The selected file type ({0}) is not allowed. Allowed file types are {1}"
 msgstr "선택한 파일 형식({0})은 허용되지 않습니다. 허용되는 파일 형식은 {1}입니다."
 
-#: src/views/Publication/Edit.js:277
+#. placeholder {0}: $settings.name
+#: src/views/Publication/Edit.jsx
 msgid "The settings for \"{0}\" have been saved"
 msgstr "\"{0}\"에 대한 설정 저장함"
 
-#: src/views/Edit/Wizard/Audio.js:43
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "The source doesn't provide any audio streams."
 msgstr "이 원본은 소리 스트림을 제공하지 않습니다."
 
-#: src/views/Edit/Profile.js:696
+#: src/views/Edit/Profile.jsx
 msgid "The source doesn't provide any audio streams. Please check the <0>probe details</0>."
 msgstr "이 원본에는 소리가 포함되지 않았습니다. <0>확인 결과</0>를 검토해주세요."
 
-#: src/views/Edit/Wizard/Audio.js:51
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "The source doesn't provide any compatible audio streams."
 msgstr "이 원본은 호환되는 소리 스트림을 제공하지 않습니다."
 
-#: src/views/Edit/Wizard/Video.js:50
+#: src/views/Edit/Wizard/Video.jsx
 msgid "The source doesn't provide any compatible video streams. Please check the <0>requirements</0>."
 msgstr "이 원본에는 지원되는 영상 스트림이 포함되지 않았습니다. <0>요구사항</0>을 검토해주세요."
 
-#: src/views/Edit/Profile.js:537
+#: src/views/Edit/Profile.jsx
 msgid "The source doesn't provide any video streams. Please check the <0>probe details</0>."
 msgstr "이 원본에는 영상이 포함되지 않았습니다. <0>확인 결과</0>를 검토해주세요."
 
-#: src/views/Edit/Wizard/Video.js:42
+#: src/views/Edit/Wizard/Video.jsx
 msgid "The source doesn't provide any video streams. Please check the device."
 msgstr "이 원본에는 영상이 포함되지 않았습니다. 장치를 점검해주세요."
 
-#: src/misc/controls/SRT.js:61
+#: src/misc/controls/SRT.jsx
 msgid "The SRT output requires the SRT Server."
 msgstr "SRT 송출을 위해 SRT 서버가 필요합니다."
 
-#: src/views/Edit/Wizard/Audio.js:62
+#: src/views/Edit/Wizard/Audio.jsx
 msgid "The video source doesn't provide any compatible audio stream. <0>Silence audio</0> is recommended. Services e.g. YouTube, Facebook & Co. require an audio channel."
 msgstr "이 비디오 원본은 호환되는 소리 스트림을 제공하지 않습니다. <0>무음 소리</0>를 추천합니다. YouTube, Facebook 등은 소리 채널을 필요로 합니다."
 
-#: src/views/Edit/Wizard/VideoProfile.js:23
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "The video source is compatible. Select the desired resolution:"
 msgstr "호환되는 영상 스트림입니다. 원하는 해상도를 선택해주세요:"
 
-#: src/views/Settings.js:1276
+#: src/views/Settings.jsx
 msgid "There are updates available. Here you get more information."
 msgstr "업데이트가 있습니다. 자세한 사항은 다음을 참고하세요."
 
-#: src/views/Settings.js:1004
+#: src/views/Settings.jsx
 msgid "There was a problem storing the settings. Settings not saved."
 msgstr "설정을 저장하는데 문제가 발생했습니다. 설정을 저장하지 못했습니다."
 
-#: src/views/Invalid.js:32
+#. placeholder {0}: props.address
+#: src/views/Invalid.jsx
 msgid "There was an error connecting to Restreamer Core at {0}."
 msgstr "Restreamer Core에 접속하는데 오류가 발생했습니다. ({0})"
 
-#: src/views/Edit/Sources/AudioLoop.js:102
-#: src/views/Edit/Sources/VideoLoop.js:110
-#: src/views/Playersite.js:238
-#: src/views/Publication/Player.js:213
+#. placeholder {0}: err.message
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "There was an error during upload: {0}"
 msgstr "업로드 하는데 오류가 발생했습니다: {0}"
 
-#: src/views/Edit/Wizard/Error.js:21
+#: src/views/Edit/Wizard/Error.jsx
 msgid "There was an error setting up the stream."
 msgstr "스트림을 설정하는데 오류가 발생했습니다."
 
-#: src/views/Settings.js:1002
+#: src/views/Settings.jsx
 msgid "There were some errors in the settings. Settings not saved."
 msgstr "설정에 오류가 있습니다. 설정을 저장하지 않습니다."
 
-#: src/views/Login.js:257
+#: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "로그인 할 수 있는 방법이 없습니다."
 
-#: src/views/Publication/Services/Dummy.js:26
+#: src/views/Publication/Services/Dummy.jsx
 msgid "This is a dummy service that explains to you the concepts of service."
 msgstr "이 서비스는 개념을 설명하는 모의 서비스입니다."
 
-#: src/views/Password.js:170
+#: src/views/Password.jsx
 msgid "This is not necessarily an error. However, it may take a bit longer for Restreamer Core to restart.."
 msgstr "오류가 발생한 것은 아닙니다. 다만 Restreamer Core가 다시 시작하는데 시간이 좀 걸리겠습니다.."
 
-#: src/views/Publication/Services/Dummy.js:31
+#: src/views/Publication/Services/Dummy.jsx
 msgid "This is to mention the copyright regulations for the target of this service."
 msgstr "이 서비스에 대한 저작권 정책을 언급하기 위함입니다."
 
-#: src/misc/controls/License/index.js:95
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to copy and distribute the material in any medium or format in unadapted form only, and only so long as attribution is given to the creator. The license allows for commercial use."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함)이 가능합니다. 영리목적으로도 이용이 가능합니다."
 
-#: src/misc/controls/License/index.js:102
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to copy and distribute the material in any medium or format in unadapted form only, for noncommercial purposes only, and only so long as attribution is given to the creator."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 비상업적인 용도로 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함)이 가능합니다."
 
-#: src/misc/controls/License/index.js:81
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 비상업적인 용도로 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함), 리믹스, 변형, 2차적 저작물의 작성이 가능합니다."
 
-#: src/misc/controls/License/index.js:88
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 비상업적인 용도로 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함), 리믹스, 변형, 2차적 저작물의 작성이 가능합니다. 생성된 리믹스, 변형, 2차적 저작물에는 원저작물과 동일한 라이선스를 적용해야 합니다."
 
-#: src/misc/controls/License/index.js:67
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함), 리믹스, 변형, 2차적 저작물의 작성이 가능합니다. 영리목적으로도 이용이 가능합니다."
 
-#: src/misc/controls/License/index.js:74
+#: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함), 리믹스, 변형, 2차적 저작물의 작성이 가능합니다. 영리목적으로도 이용이 가능합니다. 생성된 리믹스, 변형, 2차적 저작물에는 원저작물과 동일한 라이선스를 적용해야 합니다."
 
-#: src/views/Edit/Sources/Network.js:781
+#: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."
 msgstr "이 프로토콜은 확인할 수 없거나 현재 FFmpeg 바이너리에서 지원하지 않습니다."
 
-#: src/views/Edit/index.js:657
+#: src/views/Edit/index.jsx
 msgid "This source cannot be edited while it is in use. To continue, you have to disconnect the source."
 msgstr "이 원본은 사용 중일 때엔 편집할 수 없습니다. 계속하려면 원본의 연결을 해제하세요."
 
-#: src/views/Incompatible.js:21
+#. placeholder {0}: props.have
+#. placeholder {1}: props.want
+#: src/views/Incompatible.jsx
 msgid "This version of the UI doesn't support the available FFmpeg binary ({0}). The UI requires {1}. Please use a supported FFmpeg binary."
 msgstr "현재 UI 버전에서는 해당 FFmpeg 바이너리({0})를 지원하지 않습니다. {1}이(가) 필요합니다. 지원되는 FFmpeg 바이너리를 사용해주세요."
 
-#: src/views/Incompatible.js:14
+#. placeholder {0}: props.have
+#. placeholder {1}: props.want
+#: src/views/Incompatible.jsx
 msgid "This version of the UI doesn't support the connected Core ({0}). The UI requires {1}. Please use a compatible version of the UI."
 msgstr "현재 UI 버전에서는 연결된 Core({0})를 지원하지 않습니다. {1}이(가) 필요합니다. 호환되는 UI 버전을 사용해주세요."
 
-#: src/views/Incompatible.js:10
+#: src/views/Incompatible.jsx
 msgid "This version of the UI is compatible."
 msgstr "현재 UI 버전은 호환됩니다."
 
-#: src/misc/controls/Limits.js:72
+#: src/misc/controls/Limits.jsx
 msgid "Threshold (seconds)"
 msgstr "임계값(초)"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:212
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Tile Columns"
 msgstr "타일 기둥"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:198
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Tile Rows"
 msgstr "타일 행"
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:184
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "Tiles"
 msgstr "타일"
 
-#: src/views/Settings.js:1666
+#: src/views/Settings.jsx
 msgid "Time until an inactive viewer connection is treated as closed."
 msgstr "활동 중이 아닌 시청자 연결을 끊기까지의 시간입니다."
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:181
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "To stabilize the system, increase the HLS segment length for the keyframe interval by 2-3 * (Processing and Control)."
 msgstr "시스템을 안정화하기 위해, 키프레임 간격을 위한 HLS 조각의 길이를 2-3 늘립니다. * (프로세싱과 조절)"
 
-#: src/views/Settings.js:1357
-#: src/views/Settings.js:2002
-#: src/views/Settings.js:2051
+#: src/views/Settings.jsx
 msgid "Token"
 msgstr "토큰"
 
-#: src/misc/filters/video/Bwdif.js:59
+#: src/misc/filters/video/Bwdif.jsx
 msgid "Top field"
 msgstr "상단 필드"
 
-#: src/views/Publication/Services/Telegram.js:13
+#: src/views/Publication/Services/Telegram.jsx
 msgid "Transmit a Livestream to a Telegram Channel."
 msgstr "텔레그램 채널로 송출합니다."
 
-#: src/views/Publication/Services/Image2.js:25
+#: src/views/Publication/Services/Image2.jsx
 msgid "Transmit snapshots of the main source to an HTTP/S Server. More details about the settings can be found <0>here</0>."
 msgstr "기본 원본의 스냅샷을 HTTP/S 서버로 전송합니다. 더 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Icecast.js:21
+#: src/views/Publication/Services/Icecast.jsx
 msgid "Transmit the audio channel of the main source to an Icecast Server. More details about the settings can be found <0>here</0>."
 msgstr "기본 원본의 소리 채널을 Icecast Server로 전송합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/HLS.js:29
+#: src/views/Publication/Services/HLS.jsx
 msgid "Transmit the main source as HTTP-Live-Streaming (HLS) to an HTTP/S Server. More details about the settings can be found <0>here</0>."
 msgstr "기본 원본을 HTTP-Live-Streaming(HLS) 형식으로 HTTP/S Server로 송출합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/DASH.js:27
+#: src/views/Publication/Services/DASH.jsx
 msgid "Transmit the main source as MPEG-DASH to an HTTP/S Server. More details about the settings can be found <0>here</0>."
 msgstr "기본 원본을 MPEG-DASH 형식으로 HTTP/S Server로 송출합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Brightcove.js:15
+#: src/views/Publication/Services/Brightcove.jsx
 msgid "Transmit the main source to a Brightcove Live Service. More details about the settings can be found <0>here</0>."
 msgstr "기본 원본을 Brightcove Live Service로 전송합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/CDN77.js:15
+#: src/views/Publication/Services/CDN77.jsx
 msgid "Transmit the main source to an CDN77 RTMP Service. More about the setup <0>here</0>."
 msgstr "주 원본을 CDN77 RTMP 서비스로 전송합니다. 자세한 구성방법은 <0>여기</0>를 참고해주세요."
 
-#: src/views/Publication/Services/DaCast.js:18
+#: src/views/Publication/Services/DaCast.jsx
 msgid "Transmit the main source to an DaCast RTMP Service. More about the setup <0>here</0>."
 msgstr "주 원본을 DaCast RTMP 서비스로 전송합니다. 자세한 구성방법은 <0>여기</0>를 참고해주세요."
 
-#: src/views/Publication/Services/Core.js:19
+#: src/views/Publication/Services/Core.jsx
 msgid "Transmit the main source to an datarhei Core Ressource. More details about the settings can be found <0>here</0>."
 msgstr "영상을 datarhei Core Ressource로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Livespotting.js:15
+#: src/views/Publication/Services/Livespotting.jsx
 msgid "Transmit the main source to an livespotting.com Ressource. More details about the settings can be found <0>here</0>."
 msgstr "영상을 livespotting.com Ressource로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/MPEGTS.js:27
+#: src/views/Publication/Services/MPEGTS.jsx
 msgid "Transmit the main source to an MPEG-TS Service. More details about the settings can be found here <0>here</0>."
 msgstr "주 원본을 MPEG-TS 서비스로 전송합니다. 자세한 설정법은 <0>여기</0>를 참고해주세요."
 
-#: src/views/Publication/Services/Red5.js:17
+#: src/views/Publication/Services/Red5.jsx
 msgid "Transmit the main source to an Red5/Pro Server. More details about the settings can be found <0>here</0>."
 msgstr "Red5/Pro Server로 송출합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/RTMP.js:24
+#: src/views/Publication/Services/RTMP.jsx
 msgid "Transmit the main source to an RTMP(e|s|t|te|ts) Server. More details about the settings can be found <0>here</0>."
 msgstr "주 원본을 RTMP(e|s|t|te|ts) 서버로 전송합니다. 자세한 설정법은 <0>여기</0>를 참고해주세요."
 
-#: src/views/Publication/Services/RTSP.js:28
+#: src/views/Publication/Services/RTSP.jsx
 msgid "Transmit the main source to an RTSP Server. More details about the settings can be found <0>here</0>."
 msgstr "영상을 RTSP서버로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/SRT.js:25
+#: src/views/Publication/Services/SRT.jsx
 msgid "Transmit the main source to an SRT Server. More details about the settings can be found <0>here</0>."
 msgstr "영상을 SRT서버로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/UDP.js:23
+#: src/views/Publication/Services/UDP.jsx
 msgid "Transmit the main source to an UDP Server. More details about the settings can be found <0>here</0>."
 msgstr "영상을 UDP서버로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/WOWZA.js:20
+#: src/views/Publication/Services/WOWZA.jsx
 msgid "Transmit the main source to an WOWZA Server. More details about the settings can be found <0>here</0>."
 msgstr "영상을 WOWZA 서버로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Akamai.js:17
+#: src/views/Publication/Services/Akamai.jsx
 msgid "Transmit the main source to the Akamai (MSL) Media Services Live. More details about the MSL Encoder settings can be found on <0>here</0>."
 msgstr "영상을 Akamai (MSL) 미디어 서비스 라이브로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Livepush.js:17
+#: src/views/Publication/Services/Livepush.jsx
 msgid "Transmit the main source to the Livepush RTMP Service. More details about the settings can be found <0>here</0>."
 msgstr "메인 소스를 Livepush RTMP 서비스로 전송합니다. 설정에 대한 자세한 내용은 <0>여기</0>에서 확인할 수 있습니다."
 
-#: src/views/Publication/Services/NimoTv.js:18
+#: src/views/Publication/Services/NimoTv.jsx
 msgid "Transmit the main source to the Nimo TV RTMP Service. More details about the settings can be found <0>here</0>."
 msgstr "메인 소스를 Nimo TV RTMP 서비스로 전송합니다. 설정에 대한 자세한 내용은 <0>여기</0>에서 확인할 수 있습니다."
 
-#: src/views/Publication/Services/PicartoTv.js:17
+#: src/views/Publication/Services/PicartoTv.jsx
 msgid "Transmit the main source to the Picarto TV RTMP Service. More details about the settings can be found <0>here</0>."
 msgstr "메인 소스를 Picarto TV RTMP 서비스로 전송합니다. 설정에 대한 자세한 내용은 <0>여기</0>에서 확인할 수 있습니다."
 
-#: src/views/Publication/Services/Restream.js:18
+#: src/views/Publication/Services/Restream.jsx
 msgid "Transmit the main source to the Restream RTMP Service. More details about the settings can be found <0>here</0>."
 msgstr "영상을 Restream RTMP 서비스로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Azure.js:17
+#: src/views/Publication/Services/Azure.jsx
 msgid "Transmit to a Azure Media Services. More details can be found <0>here</0>."
 msgstr "Azure 미디어 서비스로 송출합니다. 자세한 내용은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Linkedin.js:16
+#: src/views/Publication/Services/Linkedin.jsx
 msgid "Transmit to LinkedIn. More details can be found <0>here</0>."
 msgstr "LinkedIn으로 송출합니다. 자세한 사항은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Dailymotion.js:15
+#: src/views/Publication/Services/Dailymotion.jsx
 msgid "Transmit your Livestream to an Dailymotion RTMP service. <0>Here </0>you can find more details about the settings."
 msgstr "생방송을 데일리모션 RTMP 서비스로 전송합니다. <0>여기 </0>에서 설정에 대한 자세한 내용을 확인할 수 있습니다."
 
-#: src/views/Publication/Services/Kick.js:16
+#: src/views/Publication/Services/Kick.jsx
 msgid "Transmit your Livestream to an Kick.com RTMP service. <0>Here </0>you can find more details about the settings."
 msgstr "생방송을 Kick.com RTMP 서비스로 전송합니다. <0>여기 </0>에서 설정에 대한 자세한 내용을 확인할 수 있습니다."
 
-#: src/views/Publication/Services/Owncast.js:15
+#: src/views/Publication/Services/Owncast.jsx
 msgid "Transmit your Livestream to an Owncast server. <0>Here </0>you can find more details about the settings."
 msgstr "Owncast 서버로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Rumble.js:16
+#: src/views/Publication/Services/Rumble.jsx
 msgid "Transmit your Livestream to an Rumble RTMP service. <0>Here </0>you can find more details about the settings."
 msgstr "내 생방송을 럼블 RTMP 서비스로 전송합니다. <0>여기 </0>에서 설정에 대한 자세한 내용을 확인할 수 있습니다."
 
-#: src/views/Publication/Services/Wettercom.js:16
+#: src/views/Publication/Services/Wettercom.jsx
 msgid "Transmit your Livestream to wetter.com. Contact the publisher  <0>here </0>."
 msgstr ""
 
-#: src/views/Publication/Services/Youtube.js:21
+#: src/views/Publication/Services/Youtube.jsx
 msgid "Transmits your video as an RTMP stream with the required key generated in YouTube Studio. You can find more information on setting up a live stream at YouTube's <0>Creator Academy</0>."
 msgstr "영상을 YouTube 스튜디오에서 생성한 스트림키로 송출합니다(RTMP). 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/views/Publication/Services/Twitter.js:20
+#: src/views/Publication/Services/Twitter.jsx
 msgid "Transmits your video stream with the required key, which was generated in Twitter Producer. You can find more information on seting up a live stream at Twitter's <0>Producer</0>."
 msgstr "영상을 Twitter Producer에서 생성한 키로 송출합니다. 자세한 설정법은 <0>이곳</0>을 참고해주세요."
 
-#: src/misc/coders/Encoders/video/h264_libx264.js:103
-#: src/misc/coders/Encoders/video/hevc_libx265.js:103
+#: src/misc/coders/Encoders/video/h264_libx264.jsx
+#: src/misc/coders/Encoders/video/hevc_libx265.jsx
 msgid "Tune"
 msgstr "튠"
 
-#: src/misc/modals/Hint.js:60
+#: src/misc/modals/Hint.js
 #~ msgid "Type"
 #~ msgstr ""
 
-#: src/views/Edit/Sources/Network.js:531
-#: src/views/Edit/Wizard/Sources/Network.js:77
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "UDP transport"
 msgstr "UDP 전송"
 
-#: src/views/Settings.js:1204
+#: src/views/Settings.jsx
 msgid "Unable to load the config."
 msgstr "설정을 불러오지 못했습니다."
 
-#: src/views/Settings.js:1339
+#: src/views/Settings.jsx
 msgid "Unique ident on the service."
 msgstr "서비스의 고유 ID입니다."
 
-#: src/views/Main/Egress.js:96
+#: src/views/Main/Egress.jsx
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: src/views/Edit/Sources/AudioLoop.js:105
-#: src/views/Edit/Sources/VideoLoop.js:113
-#: src/views/Playersite.js:241
-#: src/views/Publication/Player.js:216
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Unknown upload error"
 msgstr "알 수 없는 업로드 오류"
 
-#: src/views/Playersite.js:635
+#: src/views/Playersite.jsx
 msgid "Unselected"
 msgstr "미선택"
 
-#: src/misc/Changelog.js:173
+#: src/misc/Changelog.jsx
 msgid "Update details (Changelog)"
 msgstr "업데이트 내역 (변경점)"
 
-#: src/views/Edit/Sources/AudioLoop.js:146
-#: src/views/Edit/Sources/VideoLoop.js:154
-#: src/views/Playersite.js:514
-#: src/views/Playersite.js:534
-#: src/views/Playersite.js:672
-#: src/views/Publication/Player.js:434
-#: src/views/Publication/Player.js:481
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
+#: src/views/Publication/Player.jsx
 msgid "Upload"
 msgstr "업로드"
 
-#: src/views/Edit/Sources/AudioLoop.js:138
+#. placeholder {0}: imageTypes.map((t) => t.mimetype).join(', ')
+#: src/views/Edit/Sources/AudioLoop.jsx
 msgid "Upload an audio file ({0}) in order to loop it."
 msgstr "오디오 파일({0})을 업로드하여 반복합니다."
 
-#: src/views/Edit/Sources/VideoLoop.js:146
+#. placeholder {0}: imageTypes.map((t) => t.mimetype).join(', ')
+#: src/views/Edit/Sources/VideoLoop.jsx
 msgid "Upload an image or video file ({0}) in order to loop it."
 msgstr "반복하려면 이미지 또는 비디오 파일({0})을 업로드하세요."
 
-#: src/views/Edit/Sources/AudioLoop.js:149
-#: src/views/Edit/Sources/VideoLoop.js:157
-#: src/views/Playersite.js:537
-#: src/views/Playersite.js:675
+#: src/views/Edit/Sources/AudioLoop.jsx
+#: src/views/Edit/Sources/VideoLoop.jsx
+#: src/views/Playersite.jsx
 msgid "Uploading the file failed"
 msgstr "파일 업로드 실패"
 
-#: src/views/Publication/Player.js:437
+#: src/views/Publication/Player.jsx
 msgid "Uploading the logo failed"
 msgstr "로고 업로드 실패"
 
-#: src/views/Publication/Player.js:484
+#: src/views/Publication/Player.jsx
 msgid "Uploading the poster failed"
 msgstr "포스터 업로드에 실패했습니다."
 
-#: src/Footer.js:165
-#: src/misc/Progress.js:53
-#: src/views/Main/Progress.js:57
+#: src/Footer.jsx
+#: src/misc/Progress.jsx
+#: src/views/Main/Progress.jsx
 msgid "Uptime"
 msgstr "가동시간"
 
-#: src/views/Login.js:343
+#: src/views/Login.jsx
 msgid "Use Auth0 for your running Restreamer Core. More <0>details</0>."
 msgstr "Restreamer Core에 Auto0을 적용합니다. <0>자세한 내용</0>"
 
-#: src/views/Edit/index.js:444
+#: src/views/Edit/index.jsx
 msgid "Use the wizard (<0/>) for a quick and easy setup, or edit (<1/>) the sources directly in custom mode."
 msgstr "설정 마법사(<0/>)를 통해 쉽고 빠르게 구성하거나, 사용자 모드에서 직접 구성(<1/>)할 수 있습니다."
 
-#: src/views/Edit/Wizard/License.js:24
+#: src/views/Edit/Wizard/License.jsx
 msgid "Use your copyright and choose the correct image license. Whether free for all or highly restricted. Briefly discuss what others are allowed to do with your image."
 msgstr "저작권을 명기해 올바른 이미지 라이선스를 선택하세요. 자유롭게 제공하거나 철저히 제한할 수 있습니다. 다른 사람이 당신의 이미지로 무엇을 할 수 있는지 간략히 설명하세요."
 
-#: src/views/Edit/index.js:602
+#: src/views/Edit/index.jsx
 msgid "Use your copyright and choose the right image licence. Whether free for all or highly restricted. Briefly discuss what others are allowed to do with your image."
 msgstr "저작권을 명기해 올바른 이미지 라이선스를 선택하세요. 자유롭게 제공하거나 철저히 제한할 수 있습니다. 다른 사람이 당신의 이미지로 무엇을 할 수 있는지 간략히 설명하세요."
 
-#: src/views/Edit/Sources/Network.js:722
+#: src/views/Edit/Sources/Network.jsx
 msgid "use_wallclock_as_timestamps"
 msgstr "use_wallclock_as_timestamps"
 
-#: src/views/Password.js:99
+#: src/views/Password.jsx
 msgid "User registration"
 msgstr "사용자 등록"
 
-#: src/views/Edit/Sources/Network.js:793
-#: src/views/Edit/Wizard/Sources/Network.js:84
-#: src/views/Login.js:272
-#: src/views/Publication/Services/DaCast.js:131
-#: src/views/Publication/Services/DASH.js:195
-#: src/views/Publication/Services/HLS.js:184
-#: src/views/Publication/Services/Red5.js:146
-#: src/views/Publication/Services/RTSP.js:153
-#: src/views/Publication/Services/WOWZA.js:168
-#: src/views/Settings.js:1556
-#: src/views/Settings.js:1714
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
+#: src/views/Login.jsx
+#: src/views/Publication/Services/DaCast.jsx
+#: src/views/Publication/Services/DASH.jsx
+#: src/views/Publication/Services/HLS.jsx
+#: src/views/Publication/Services/Red5.jsx
+#: src/views/Publication/Services/RTSP.jsx
+#: src/views/Publication/Services/WOWZA.jsx
+#: src/views/Settings.jsx
 msgid "Username"
 msgstr "사용자 이름"
 
-#: src/views/Settings.js:1562
-#: src/views/Settings.js:1722
+#: src/views/Settings.jsx
 msgid "Username for authorization."
 msgstr "사용자 인증을 위한 이름입니다."
 
-#: src/views/Edit/Sources/Network.js:798
-#: src/views/Edit/Wizard/Sources/Network.js:90
+#: src/views/Edit/Sources/Network.jsx
+#: src/views/Edit/Wizard/Sources/Network.jsx
 msgid "Username for the device."
 msgstr "장치의 사용자 이름입니다."
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:167
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "V4L2_M2M is experimental."
 msgstr "V4L2_M2M은 시범기능입니다."
 
-#: src/misc/coders/settings/Video.js:377
+#: src/misc/coders/settings/Video.jsx
 msgid "Variable frame rate (VFR)"
 msgstr "가변 프레임율 (VFR)"
 
-#: src/views/Edit/Sources/VirtualAudio.js:116
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "velvet"
 msgstr "자주색"
 
-#: src/misc/filters/video/VFlip.js:65
+#: src/misc/filters/video/VFlip.jsx
 msgid "Vertical Flip"
 msgstr "위/아래 뒤집기"
 
-#: src/views/Publication/Add.js:502
+#: src/views/Publication/Add.jsx
 msgid "Video"
 msgstr "영상"
 
-#: src/views/Edit/Sources/AVFoundation.js:126
-#: src/views/Edit/Sources/Raspicam.js:98
-#: src/views/Edit/Sources/V4L.js:112
-#: src/views/Edit/Wizard/Sources/AVFoundation.js:82
-#: src/views/Edit/Wizard/Sources/Raspicam.js:86
-#: src/views/Edit/Wizard/Sources/V4L.js:105
+#: src/views/Edit/Sources/AVFoundation.jsx
+#: src/views/Edit/Sources/Raspicam.jsx
+#: src/views/Edit/Sources/V4L.jsx
+#: src/views/Edit/Wizard/Sources/AVFoundation.jsx
+#: src/views/Edit/Wizard/Sources/Raspicam.jsx
+#: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Video device"
 msgstr "영상 장치"
 
-#: src/views/Edit/Profile.js:490
-#: src/views/Edit/ProfileSummary.js:66
-#: src/views/Publication/Edit.js:540
+#: src/views/Edit/Profile.jsx
+#: src/views/Edit/ProfileSummary.jsx
+#: src/views/Publication/Edit.jsx
 msgid "Video settings"
 msgstr "영상 설정"
 
-#: src/views/Edit/Wizard/Source.js:15
-#: src/views/Edit/Wizard/Video.js:19
-#: src/views/Edit/Wizard/VideoProfile.js:16
+#: src/views/Edit/Wizard/Source.jsx
+#: src/views/Edit/Wizard/Video.jsx
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Video setup"
 msgstr "영상 구성"
 
-#: src/views/Edit/Sources/VideoAudio.js:45
+#: src/views/Edit/Sources/VideoAudio.jsx
 msgid "Video source"
 msgstr "영상 원본"
 
-#: src/Footer.js:227
-#: src/Footer.js:232
-#: src/Footer.js:245
-#: src/views/Main/Publication.js:173
+#: src/Footer.jsx
+#: src/views/Main/Publication.jsx
 msgid "Viewer"
 msgstr "뷰어"
 
-#: src/views/Edit/Sources/VirtualAudio.js:115
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "violet"
 msgstr "보라색"
 
-#: src/views/Edit/Sources/VirtualAudio.js:187
-#: src/views/Edit/Sources/VirtualVideo.js:206
+#: src/views/Edit/Sources/VirtualAudio.jsx
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Virtual source"
 msgstr "가상 입력"
 
-#: src/misc/filters/audio/Volume.js:44
+#: src/misc/filters/audio/Volume.jsx
 msgid "Volume"
 msgstr "소리 크기"
 
-#: src/views/Publication/Services/Livespotting.js:88
+#: src/views/Publication/Services/Livespotting.jsx
 msgid "VPU ID"
 msgstr "VPU ID"
 
-#: src/misc/coders/Encoders/video/h264_v4l2m2m.js:169
+#: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "We recommend OpenMAX IL for Raspberry PI (3/4) with a 32-bit operating system."
 msgstr "OpenMAX IL은 32비트 운영체제를 탑재한 Raspberry Pi(3/4)에 권장합니다."
 
-#: src/views/Welcome.js:27
+#: src/views/Welcome.jsx
 msgid "Welcome to Restreamer v2, the solution for fast and easy video publishing. Free for private and commercial use. Further help in the <0>docs</0>."
 msgstr "빠르고 쉽게 영상을 송출하는 해결책인 Restreamer v2에 오신 것을 환영합니다. 개인이나 상업적인 용도로 자유롭게 사용할 수 있습니다. 자세한 도움말은 <0>문서</0>를 참고해주세요."
 
-#: src/misc/coders/Encoders/video/av1_librav1e.js:105
+#: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "What speed preset to use."
 msgstr "사용할 속도 사전 설정."
 
-#: src/misc/controls/HLS.js:74
+#: src/misc/controls/HLS.jsx
 msgid "Where to store the HLS playlist and segments. In-Memory is recommended."
 msgstr "HLS 재생목록과 조각을 저장하는 곳입니다. 메모리에 저장할 것을 권장합니다."
 
-#: src/views/Edit/Sources/VirtualAudio.js:111
+#: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "white"
 msgstr "하얀색"
 
-#: src/misc/coders/settings/Video.js:286
+#: src/misc/coders/settings/Video.jsx
 msgid "Width"
 msgstr "폭"
 
-#: src/views/Settings.js:1701
+#: src/views/Settings.jsx
 msgid "Write protection"
 msgstr "쓰기 보호"
 
-#: src/views/Publication/Services/Instagram.js:127
+#: src/views/Publication/Services/Instagram.js
 #~ msgid "Yellow Duck"
 #~ msgstr "Yellow Duck"
 
-#: src/views/Edit/Wizard/Abort.js:38
+#: src/views/Edit/Wizard/Abort.jsx
 msgid "Yes"
 msgstr "네"
 
-#: src/views/Edit/Wizard/Abort.js:20
+#: src/views/Edit/Wizard/Abort.jsx
 msgid "You can't abort the wizard because at least one input must be defined."
 msgstr "설정 마법사를 취소할 수 없습니다. 적어도 하나의 입력을 설정해야 합니다."
 
-#: src/views/Settings.js:2288
+#: src/views/Settings.jsx
 msgid "You have changed the configuration. In order for the changes to take effect, you have to restart the application. Do you want to restart now?"
 msgstr "변경된 구성이 반영되려면 애플리케이션을 다시 시작해야 합니다. 지금 하시겠습니까?"
 
-#: src/views/Main/index.js:379
-#: src/views/Publication/Process.js:73
+#: src/views/Main/index.jsx
+#: src/views/Publication/Process.jsx
 msgid "You have to reconnect manually"
 msgstr "수동으로 재연결해야 합니다"
 
-#: src/views/Publication/Edit.js:482
+#: src/views/Publication/Edit.jsx
 msgid "You have unsaved changes. Please save them before you can control the service again."
 msgstr "변경사항이 저장되지 않았습니다. 진행하기 전에 저장해주세요."
 
-#: src/views/Edit/Wizard/VideoProfile.js:36
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Your stream needs to be encoded, but there's no suitable encoder available."
 msgstr "스트림을 인코딩해야 하나, 적절한 인코더가 없습니다."
 
-#: src/views/Edit/Wizard/VideoProfile.js:43
+#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Your stream needs to be encoded. Choose the desired encoder:"
 msgstr "이 스트림은 인코딩해야 합니다. 원하는 인코더를 선택해주세요:"
 
-#: src/views/Edit/Sources/VirtualVideo.js:119
+#: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "YUV test pattern"
 msgstr "YUV 테스트 패턴"

@@ -7,6 +7,12 @@ const maximumInitialBytes = 1_300_000;
 const maximumChunkBytes = 750_000;
 const minimumDynamicCatalogs = 14;
 const routeChunks = ['Add-', 'ChannelSelect-', 'Edit-', 'Main-', 'Player-', 'Playersite-', 'Settings-', 'Wizard-'];
+const requiredCatalogMessages = [
+	'Internal MediaMTX server',
+	'LAN clients:',
+	'Publisher transport',
+	'Stream path',
+];
 
 const html = fs.readFileSync(path.join(buildDirectory, 'index.html'), 'utf8');
 const initialAssets = [
@@ -41,6 +47,19 @@ if (oversized.length > 0) {
 const catalogs = scripts.filter((file) => file.startsWith('messages-'));
 if (catalogs.length < minimumDynamicCatalogs) {
 	throw new Error(`Expected at least ${minimumDynamicCatalogs} dynamic locale chunks, found ${catalogs.length}.`);
+}
+
+const catalogContents = catalogs
+	.map((file) => fs.readFileSync(path.join(assetDirectory, file), 'utf8'))
+	.join('\n');
+const missingCatalogMessages = requiredCatalogMessages.filter(
+	(message) => !catalogContents.includes(message),
+);
+if (missingCatalogMessages.length > 0) {
+	throw new Error(
+		`Compiled locale catalogs are missing required messages: ${missingCatalogMessages.join(', ')}. ` +
+			'Run the Lingui extract and compile commands before building.',
+	);
 }
 
 const missingRoutes = routeChunks.filter((prefix) => !scripts.some((file) => file.startsWith(prefix)));
