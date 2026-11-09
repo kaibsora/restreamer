@@ -128,6 +128,12 @@ rtsp://mediamtx:8554/printer-one
 rtsp://mediamtx:8554/printer-two
 ```
 
+Set **LAN hostname or IP** to the Restreamer host address reachable by the printer
+dashboards. The form then displays usable RTSP and WebRTC URLs instead of a template
+that users must edit by hand. When the UI is opened through the LAN address, that
+hostname is selected automatically; override it when configuring through a public
+reverse proxy.
+
 Prefer stream copy when the camera already emits browser-compatible H.264. If it
 must be encoded, select a low-latency hardware encoder; the unified hardware presets
 default to a one-second GOP and no B-frames. The MediaMTX publication defaults to

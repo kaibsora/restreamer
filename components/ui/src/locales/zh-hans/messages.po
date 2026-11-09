@@ -124,6 +124,10 @@ msgstr "HTTP请求监听的地址。"
 msgid "Address to listen on for HTTPS requests."
 msgstr "HTTPS请求监听地址。"
 
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Address used by printer dashboards and other LAN clients."
+msgstr ""
+
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
 #: src/views/Edit/Wizard/Sources/InternalSRT.jsx
@@ -1332,6 +1336,10 @@ msgstr "关键帧间隔（秒）"
 
 #: src/views/Publication/Services/MediaMTX.jsx
 msgid "LAN clients:"
+msgstr ""
+
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "LAN hostname or IP"
 msgstr ""
 
 #: src/misc/coders/settings/Audio.jsx

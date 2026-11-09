@@ -124,6 +124,10 @@ msgstr "Порт для запросов HTTP."
 msgid "Address to listen on for HTTPS requests."
 msgstr "Порт для запросов HTTPS."
 
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Address used by printer dashboards and other LAN clients."
+msgstr ""
+
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
 #: src/views/Edit/Wizard/Sources/InternalSRT.jsx
@@ -1332,6 +1336,10 @@ msgstr "Интервал между ключевыми кадрами (секу�
 
 #: src/views/Publication/Services/MediaMTX.jsx
 msgid "LAN clients:"
+msgstr ""
+
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "LAN hostname or IP"
 msgstr ""
 
 #: src/misc/coders/settings/Audio.jsx

@@ -67,6 +67,23 @@ test('derives a safe default path from channel metadata', () => {
 	expect(MediaMTX.slugifyPath('***')).toBe('camera');
 });
 
+test('creates usable LAN client URLs without leaking UI ports or paths', () => {
+	expect(
+		MediaMTX.createClientUrls({
+			client_host: 'https://restreamer.lan:8080/ui/',
+			path: '/printer-one/',
+		}),
+	).toEqual({
+		rtsp: 'rtsp://restreamer.lan:8554/printer-one',
+		webrtc: 'http://restreamer.lan:8889/printer-one',
+	});
+
+	expect(MediaMTX.normalizeClientHost('[fd00::20]:8080')).toBe('[fd00::20]');
+	expect(
+		MediaMTX.createClientUrls({ client_host: '', path: 'printer-one' }),
+	).toEqual({ rtsp: '', webrtc: '' });
+});
+
 test('initializes the publication output when the form opens', async () => {
 	const changes = [];
 

@@ -71,11 +71,59 @@ function slugifyPath(value) {
 	return path || 'camera';
 }
 
+function defaultClientHost() {
+	if (
+		typeof window !== 'undefined' &&
+		typeof window.location?.hostname === 'string' &&
+		window.location.hostname.length !== 0
+	) {
+		return window.location.hostname;
+	}
+
+	return 'RESTREAMER_LAN_IP';
+}
+
+function normalizeClientHost(value) {
+	let host = String(value || '')
+		.trim()
+		.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '')
+		.split('/')[0];
+
+	const bracketedIPv6 = host.match(/^\[([^\]]+)\](?::[0-9]+)?$/);
+	if (bracketedIPv6 !== null) {
+		return `[${bracketedIPv6[1]}]`;
+	}
+
+	if ((host.match(/:/g) || []).length > 1) {
+		return `[${host}]`;
+	}
+
+	return host.replace(/:[0-9]+$/, '');
+}
+
+function createClientUrls(inputSettings) {
+	const settings = init(inputSettings);
+	const host = normalizeClientHost(settings.client_host);
+	const path = String(settings.path || '')
+		.trim()
+		.replace(/^\/+|\/+$/g, '');
+
+	if (host.length === 0 || path.length === 0) {
+		return { rtsp: '', webrtc: '' };
+	}
+
+	return {
+		rtsp: `rtsp://${host}:8554/${path}`,
+		webrtc: `http://${host}:8889/${path}`,
+	};
+}
+
 function init(settings, metadata = {}) {
 	return {
 		server: 'rtsp://mediamtx:8554',
 		path: slugifyPath(metadata.name),
 		transport: 'tcp',
+		client_host: defaultClientHost(),
 		...settings,
 	};
 }
@@ -126,6 +174,7 @@ function Service(inputProps) {
 	};
 
 	const output = createOutput(settings);
+	const clientUrls = createClientUrls(settings);
 
 	return (
 		<Grid container spacing={2}>
@@ -159,13 +208,43 @@ function Service(inputProps) {
 				</Select>
 			</Grid>
 			<Grid item xs={12}>
+				<TextField
+					variant="outlined"
+					fullWidth
+					label={<Trans>LAN hostname or IP</Trans>}
+					value={settings.client_host}
+					onChange={handleChange('client_host')}
+					helperText={
+						<Trans>
+							Address used by printer dashboards and other LAN
+							clients.
+						</Trans>
+					}
+				/>
+			</Grid>
+			<Grid item xs={12}>
 				<Typography color="textSecondary">
 					<Trans>Internal destination:</Trans> {output.address || '—'}
 				</Typography>
 				<Typography color="textSecondary">
-					<Trans>LAN clients:</Trans> rtsp://RESTREAMER_LAN_IP:8554/
-					{settings.path} · http://RESTREAMER_LAN_IP:8889/
-					{settings.path}
+					<Trans>LAN clients:</Trans>{' '}
+					{clientUrls.rtsp.length === 0 ? (
+						'—'
+					) : (
+						<>
+							<Link href={clientUrls.rtsp}>
+								{clientUrls.rtsp}
+							</Link>{' '}
+							·{' '}
+							<Link
+								href={clientUrls.webrtc}
+								target="_blank"
+								rel="noreferrer"
+							>
+								{clientUrls.webrtc}
+							</Link>
+						</>
+					)}
 				</Typography>
 			</Grid>
 		</Grid>
@@ -191,8 +270,10 @@ export {
 	category,
 	requires,
 	slugifyPath,
+	normalizeClientHost,
 	init,
 	createOutput,
+	createClientUrls,
 	ServiceIcon as icon,
 	Service as component,
 };

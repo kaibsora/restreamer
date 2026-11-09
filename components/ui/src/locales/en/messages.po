@@ -124,6 +124,10 @@ msgstr "Address to listen on for HTTP requests."
 msgid "Address to listen on for HTTPS requests."
 msgstr "Address to listen on for HTTPS requests."
 
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Address used by printer dashboards and other LAN clients."
+msgstr "Address used by printer dashboards and other LAN clients."
+
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
 #: src/views/Edit/Wizard/Sources/InternalSRT.jsx
@@ -1333,6 +1337,10 @@ msgstr "Keyframe interval (seconds)"
 #: src/views/Publication/Services/MediaMTX.jsx
 msgid "LAN clients:"
 msgstr "LAN clients:"
+
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "LAN hostname or IP"
+msgstr "LAN hostname or IP"
 
 #: src/misc/coders/settings/Audio.jsx
 #: src/misc/filters/audio/Resample.jsx

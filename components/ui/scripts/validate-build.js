@@ -8,8 +8,10 @@ const maximumChunkBytes = 750_000;
 const minimumDynamicCatalogs = 14;
 const routeChunks = ['Add-', 'ChannelSelect-', 'Edit-', 'Main-', 'Player-', 'Playersite-', 'Settings-', 'Wizard-'];
 const requiredCatalogMessages = [
+	'Address used by printer dashboards and other LAN clients.',
 	'Internal MediaMTX server',
 	'LAN clients:',
+	'LAN hostname or IP',
 	'Publisher transport',
 	'Stream path',
 ];

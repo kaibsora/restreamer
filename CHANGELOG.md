@@ -14,6 +14,8 @@
 
 ### UI
 
+-   Show configurable, clickable LAN RTSP and WebRTC client URLs in the MediaMTX
+    publication preset.
 -   Add a dedicated MediaMTX LAN relay publication with safe channel-derived paths,
     H.264 compatibility, and low-latency RTSP defaults for printer dashboards.
 -   Expose the compiled AV1 VA-API, NVENC, Quick Sync, and Vulkan encoders in the
