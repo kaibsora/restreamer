@@ -8,6 +8,12 @@
     describe them, addressing USB capture-device discovery failures
     ([#890](https://github.com/datarhei/restreamer/issues/890)).
 
+### UI
+
+-   Restore player logo overlays by synchronizing the vendored overlay plugin with
+    Video.js 8 and correct image load handling
+    ([#912](https://github.com/datarhei/restreamer/issues/912)).
+
 ## 2.12.0
 
 ### UI v1.13.0 > v1.14.0

@@ -36,9 +36,9 @@ player.ready(function () {
 		var overlay = null;
 
 		var imgTag = new Image();
-		imgTag.onLoad = function () {
+		imgTag.onload = function () {
 			imgTag.setAttribute('width', this.width);
-			imgTag.setAttribute('height'.this.height);
+			imgTag.setAttribute('height', this.height);
 		};
 		imgTag.src = playerConfig.logo.image + '?' + Math.random();
 

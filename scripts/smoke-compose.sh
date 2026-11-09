@@ -70,6 +70,11 @@ printf '%s\n' 'Validated fallback discovery for a container-mapped V4L2 device.'
 ui_html=$(curl --fail --silent --show-error http://127.0.0.1:8080/ui/)
 grep -F '<title>Restreamer</title>' <<<"${ui_html}" >/dev/null
 
+overlay_plugin=$(curl --fail --silent --show-error \
+    http://127.0.0.1:8080/ui/_player/videojs/dist/videojs-overlay.min.js)
+grep -F '@version 3.1.0' <<<"${overlay_plugin}" >/dev/null
+printf '%s\n' 'Validated the Video.js 8-compatible public logo overlay plugin.'
+
 while read -r relative_asset; do
     asset_path="${relative_asset#./}"
     content_type=$(curl --fail --silent --show-error \
