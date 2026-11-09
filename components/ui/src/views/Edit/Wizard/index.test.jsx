@@ -940,3 +940,41 @@ test('wizard: license', async () => {
 		fireEvent.click(button);
 	});
 });
+
+test('wizard: save failure shows an error and allows retry', async () => {
+	const failingRestreamer = {
+		...restreamer,
+		UpsertIngest: () => [null, new Error('ingest save failed')],
+	};
+
+	await act(async () => {
+		render(<Wizard restreamer={failingRestreamer} />, {}, '/wizard/test', '/wizard/:channelid');
+	});
+
+	let button = screen.getByRole('button', { name: 'Network source' });
+	fireEvent.click(button);
+
+	const input = screen.getByLabelText('Address');
+	fireEvent.change(input, { target: { value: 'rtsp://127.0.0.1/live/h264-aac' } });
+
+	for (let step = 0; step < 4; step++) {
+		button = screen.getByRole('button', { name: 'Next' });
+		await act(async () => {
+			fireEvent.click(button);
+		});
+	}
+
+	button = screen.getByRole('button', { name: 'Save' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	expect(screen.getByText('There was an error setting up the stream.')).toBeInTheDocument();
+
+	button = screen.getByRole('button', { name: 'Retry' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	expect(screen.getByText('Network source')).toBeInTheDocument();
+});

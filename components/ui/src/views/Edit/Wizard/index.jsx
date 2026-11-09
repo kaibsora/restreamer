@@ -830,9 +830,9 @@ export default function Wizard(inputProps) {
 		handleNext = async () => {
 			setStep('SAVING');
 
-			const res = await handleDone();
+			const saved = await handleDone();
 
-			if (res === false) {
+			if (saved === true) {
 				setStep('DONE');
 			} else {
 				setStep('ERROR');
@@ -869,7 +869,7 @@ export default function Wizard(inputProps) {
 			setStep('TYPE');
 		};
 
-		return <Error onAbort={handleAbort} onHelp={handleHelp('error')} />;
+		return <Error onAbort={handleAbort} onHelp={handleHelp('error')} onNext={handleNext} />;
 	} else if ($step === 'ABORT') {
 		const nchannels = props.restreamer.ListChannels().length;
 
