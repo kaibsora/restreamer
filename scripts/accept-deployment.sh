@@ -286,6 +286,16 @@ if [[ -n "${report_file}" ]]; then
         --format '{{.Config.Image}}' "${container}")"
     container_image_id="$(docker container inspect \
         --format '{{.Image}}' "${container}")"
+    container_repo_digests="$(docker image inspect \
+        --format '{{json .RepoDigests}}' "${container_image_id}")"
+    container_labels="$(docker image inspect \
+        --format '{{json .Config.Labels}}' "${container_image_id}")"
+    if [[ "${container_repo_digests}" == null ]]; then
+        container_repo_digests='[]'
+    fi
+    if [[ "${container_labels}" == null ]]; then
+        container_labels='{}'
+    fi
     generated_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
     if (( failed == 0 )); then
         report_passed=true
@@ -299,6 +309,8 @@ if [[ -n "${report_file}" ]]; then
         printf '  "container":"%s",\n' "$(json_escape "${container}")"
         printf '  "container_image":"%s",\n' "$(json_escape "${container_image}")"
         printf '  "container_image_id":"%s",\n' "$(json_escape "${container_image_id}")"
+        printf '  "container_repo_digests":%s,\n' "${container_repo_digests}"
+        printf '  "container_labels":%s,\n' "${container_labels}"
         printf '  "base_url":"%s",\n' \
             "$(json_escape "$(redact_source "${base_url}")")"
         printf '  "hardware_verification_enabled":%s,\n' "${verify_hardware}"

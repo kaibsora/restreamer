@@ -197,8 +197,9 @@ ACCEPT_HARDWARE_BACKENDS=vaapi,qsv \
 The acceptance command requires each source to produce its first decoded frame in
 under one second, then keeps every source decoding concurrently for ten seconds. It
 fails as a group if any source misses the startup limit, stalls, or falls below the
-configured minimum decode rate. The optional JSON report records the container image,
-per-camera timings, decoded-frame counts, and credential-redacted source URLs. Adjust
+configured minimum decode rate. The optional JSON report records the container tag,
+immutable repository digests, OCI source labels, per-camera timings, decoded-frame
+counts, and credential-redacted source URLs. Adjust
 the sustained window and floor with `ACCEPT_SAMPLE_SECONDS` and
 `ACCEPT_MIN_SAMPLE_FPS`. Override `ACCEPT_MAX_FIRST_FRAME_MS` only when documenting an
 intentional deployment requirement, not when the camera is feeling contemplative.

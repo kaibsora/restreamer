@@ -49,6 +49,20 @@ RUN rm -rf core import ffmigrate && \
 
 FROM ${FFMPEG_IMAGE}
 
+ARG RESTREAMER_COMMIT=unknown
+ARG RESTREAMER_BRANCH=local
+ARG RESTREAMER_BUILD_DATE=1970-01-01T00:00:00Z
+
+LABEL org.opencontainers.image.title="Restreamer" \
+      org.opencontainers.image.description="Unified Restreamer application with hardware-accelerated FFmpeg" \
+      org.opencontainers.image.source="https://github.com/kaibsora/restreamer" \
+      org.opencontainers.image.documentation="https://github.com/kaibsora/restreamer#readme" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.version="${RESTREAMER_COMMIT}" \
+      org.opencontainers.image.revision="${RESTREAMER_COMMIT}" \
+      org.opencontainers.image.created="${RESTREAMER_BUILD_DATE}" \
+      io.restreamer.repository.branch="${RESTREAMER_BRANCH}"
+
 COPY --from=core-builder /src/core/core /core/bin/core
 COPY --from=core-builder /src/core/import /core/bin/import
 COPY --from=core-builder /src/core/ffmigrate /core/bin/ffmigrate

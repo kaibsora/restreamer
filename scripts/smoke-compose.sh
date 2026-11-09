@@ -83,6 +83,25 @@ if [[ -n "${SMOKE_EXPECTED_COMMIT:-}${SMOKE_EXPECTED_BRANCH:-}${SMOKE_EXPECTED_B
     printf '%s\n' 'Validated embedded Restreamer build identity.'
 fi
 
+image_id=$(docker container inspect restreamer --format '{{.Image}}')
+image_source=$(docker image inspect "${image_id}" \
+    --format '{{index .Config.Labels "org.opencontainers.image.source"}}')
+[[ "${image_source}" == 'https://github.com/kaibsora/restreamer' ]]
+if [[ -n "${SMOKE_EXPECTED_COMMIT:-}" ]]; then
+    image_revision=$(docker image inspect "${image_id}" \
+        --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')
+    image_version=$(docker image inspect "${image_id}" \
+        --format '{{index .Config.Labels "org.opencontainers.image.version"}}')
+    [[ "${image_revision}" == "${SMOKE_EXPECTED_COMMIT}" ]]
+    [[ "${image_version}" == "${SMOKE_EXPECTED_COMMIT}" ]]
+fi
+if [[ -n "${SMOKE_EXPECTED_BRANCH:-}" ]]; then
+    image_branch=$(docker image inspect "${image_id}" \
+        --format '{{index .Config.Labels "io.restreamer.repository.branch"}}')
+    [[ "${image_branch}" == "${SMOKE_EXPECTED_BRANCH}" ]]
+fi
+printf '%s\n' 'Validated Restreamer OCI image identity.'
+
 health_status='starting'
 for _ in $(seq 1 20); do
     health_status=$(docker container inspect restreamer \
@@ -512,6 +531,16 @@ grep -F '"passed":true' "${acceptance_report}" >/dev/null
 grep -F "\"camera_count\":${#relay_paths[@]}" "${acceptance_report}" >/dev/null
 grep -F '"decoded_frames":' "${acceptance_report}" >/dev/null
 grep -F '"required_hardware_backends":[]' "${acceptance_report}" >/dev/null
+grep -F '"container_repo_digests":' "${acceptance_report}" >/dev/null
+grep -F '"container_labels":' "${acceptance_report}" >/dev/null
+if [[ -n "${SMOKE_EXPECTED_COMMIT:-}" ]]; then
+    grep -F "\"org.opencontainers.image.revision\":\"${SMOKE_EXPECTED_COMMIT}\"" \
+        "${acceptance_report}" >/dev/null
+fi
+if [[ -n "${SMOKE_EXPECTED_BRANCH:-}" ]]; then
+    grep -F "\"io.restreamer.repository.branch\":\"${SMOKE_EXPECTED_BRANCH}\"" \
+        "${acceptance_report}" >/dev/null
+fi
 
 printf 'Validated %s concurrent RTSP/WHEP paths, including SRT ingest, below %sms first-frame readback.\n' \
     "${#relay_paths[@]}" "${max_first_frame_ms}"

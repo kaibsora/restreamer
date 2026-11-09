@@ -106,9 +106,10 @@ then sustains every decode concurrently for ten seconds. Set
 accelerator expected on the target host. Use
 `ACCEPT_MAX_FIRST_FRAME_MS`, `ACCEPT_PROBE_TIMEOUT_SECONDS`,
 `ACCEPT_SAMPLE_SECONDS`, and `ACCEPT_MIN_SAMPLE_FPS` to define the acceptance limits.
-The optional JSON report records reproducible evidence without exposing URL
-credentials; console output continues to number cameras instead of helpfully donating
-passwords to CI logs.
+The optional JSON report records the container tag, immutable repository digests, OCI
+source labels, and reproducible camera evidence without exposing URL credentials;
+console output continues to number cameras instead of helpfully donating passwords to
+CI logs.
 
 Startup and sustained decoding are software-path checks, not glass-to-glass latency
 measurements. Record a visible millisecond clock at the camera and dashboard, or use
