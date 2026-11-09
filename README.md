@@ -169,6 +169,10 @@ physical measurement at each printer dashboard.
 See [deploy/README.md](deploy/README.md) for device mapping, WebRTC connectivity,
 Crowsnest, Moonraker, and low-latency camera topology.
 
+See [docs/api-process-control.md](docs/api-process-control.md) to list, start, stop,
+restart, and inspect individual ingests or publications through the authenticated
+REST API. This is the resource-control path for installations with many cameras.
+
 ## Camera and latency model
 
 LAN monitoring and public viewing use separate delivery planes:
@@ -308,6 +312,7 @@ automation of the wrong result.
 - `components/ffmpeg`: FFmpeg source build and Restreamer patches
 - `deploy`: Compose, MediaMTX, camera, and GPU deployment assets
 - `docs/architecture.md`: system architecture and release policy
+- `docs/api-process-control.md`: authenticated ingest and publication controls
 - `.github/workflows`: image build and publication automation
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development and upstream synchronization.

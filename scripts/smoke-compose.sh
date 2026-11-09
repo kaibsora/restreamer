@@ -120,6 +120,68 @@ grep -F '<title>Restreamer</title>' <<<"${ui_redirect_html}" >/dev/null
 
 docker exec restreamer restreamer-verify-ffmpeg
 
+api_process_id='restreamer-smoke:api-control'
+curl --fail --silent --show-error \
+    --request POST \
+    --header 'Content-Type: application/json' \
+    --data @- \
+    http://127.0.0.1:8080/api/v3/process >/dev/null <<'JSON'
+{
+  "id": "restreamer-smoke:api-control",
+  "type": "ffmpeg",
+  "input": [{
+    "id": "video",
+    "address": "testsrc2=size=160x90:rate=5",
+    "options": ["-f", "lavfi", "-re"]
+  }],
+  "output": [{
+    "id": "null",
+    "address": "-",
+    "options": ["-map", "0:v:0", "-c:v", "copy", "-f", "null"]
+  }],
+  "autostart": false,
+  "reconnect": false
+}
+JSON
+
+process_command() {
+    command=$1
+    curl --fail --silent --show-error \
+        --request PUT \
+        --header 'Content-Type: application/json' \
+        --data "{\"command\":\"${command}\"}" \
+        "http://127.0.0.1:8080/api/v3/process/${api_process_id}/command" \
+        >/dev/null
+}
+
+wait_for_process_state() {
+    expected_order=$1
+    expected_exec=$2
+
+    for _ in $(seq 1 20); do
+        process_state=$(curl --fail --silent --show-error \
+            "http://127.0.0.1:8080/api/v3/process/${api_process_id}/state")
+        if grep -F "\"order\":\"${expected_order}\"" <<<"${process_state}" >/dev/null &&
+            grep -F "\"exec\":\"${expected_exec}\"" <<<"${process_state}" >/dev/null; then
+            return 0
+        fi
+        sleep 0.25
+    done
+
+    printf 'API process did not reach order=%s exec=%s. Last state: %s\n' \
+        "${expected_order}" "${expected_exec}" "${process_state}" >&2
+    return 1
+}
+
+process_command start
+wait_for_process_state start running
+process_command stop
+wait_for_process_state stop finished
+curl --fail --silent --show-error \
+    --request DELETE \
+    "http://127.0.0.1:8080/api/v3/process/${api_process_id}" >/dev/null
+printf '%s\n' 'Validated API start and stop control for an FFmpeg process.'
+
 for camera in $(seq 1 "${camera_count}"); do
     docker exec --detach restreamer \
         ffmpeg -hide_banner -loglevel error -re \

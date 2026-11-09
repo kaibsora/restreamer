@@ -7,6 +7,10 @@
 -   Discover container-mapped `/dev/videoN` devices even when `v4l2-ctl` cannot
     describe them, addressing USB capture-device discovery failures
     ([#890](https://github.com/datarhei/restreamer/issues/890)).
+-   Document and integration-test API control of individual ingest and publication
+    processes, addressing multi-camera resource-control questions
+    ([#907](https://github.com/datarhei/restreamer/issues/907),
+    [#930](https://github.com/datarhei/restreamer/issues/930)).
 
 ### UI
 
