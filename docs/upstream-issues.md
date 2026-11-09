@@ -17,11 +17,12 @@ physical GPU claims remain pending until a real device completes the hardware ga
 | [#930: start and stop through the API](https://github.com/datarhei/restreamer/issues/930) and [#907: enable or disable a publication](https://github.com/datarhei/restreamer/issues/907) | Documents and exercises authenticated process list, start, stop, and restart operations. | `30fafd30`, `docs/api-process-control.md`, compose smoke gate |
 | [#938: no silent-audio settings](https://github.com/datarhei/restreamer/issues/938) and [#954: wizard creates two video mappings](https://github.com/datarhei/restreamer/issues/954) | Preserves the generated `anullsrc` input and maps it as audio. | `135ba16c`, `f680cc94`, wizard regression tests |
 | [#943: passthrough frame-rate mode fails](https://github.com/datarhei/restreamer/issues/943) | Omits output `-r` for passthrough and VFR modes while retaining it for CFR and legacy FFmpeg. | `f75b1144`, tests across all exposed encoders |
-| [#946: overlay channel logo and name](https://github.com/datarhei/restreamer/issues/946) | Restores output logo overlays and preserves branding assets during channel migration. | `bace594e`, `f78ad046`, UI and compose smoke tests |
+| [#845](https://github.com/datarhei/restreamer/issues/845), [#847](https://github.com/datarhei/restreamer/issues/847), and [#912](https://github.com/datarhei/restreamer/issues/912): player logo does not appear | Restores the configured logo in the public Video.js player and preserves the branding asset during channel migration. This is a browser overlay, not a watermark burned into transcoded video. | `bace594e`, `f78ad046`, UI and compose smoke tests |
 | [#950: snapshot returns file-not-found](https://github.com/datarhei/restreamer/issues/950) | Covers snapshot process creation, file production, and cleanup through the Core API. | `b178f484`, managed snapshot lifecycle gate |
 | [#955: migrate selected channels](https://github.com/datarhei/restreamer/issues/955) | Adds versioned single-channel export/import with ID remapping, asset transfer, and rollback. | `d67d3da6`, UI migration tests |
 | [#957: API fails behind IIS](https://github.com/datarhei/restreamer/issues/957) | Documents complete-site IIS routing alongside NGINX and Caddy examples. | `5aa6f750`, `docs/reverse-proxy.md` |
 | [#958: 25 MiB loop-file upload limit](https://github.com/datarhei/restreamer/issues/958) | Streams audio and video loop uploads instead of buffering them into a browser-held array. | `ee4b04f2`, UI upload tests |
+| [#966: RTMP simple handshake returns the wrong S2 payload](https://github.com/datarhei/restreamer/issues/966) | Generates an independent server S1 challenge and echoes the client C1 payload in S2, matching the simple-handshake protocol expected by strict librtmp clients. | `33989d32`, `rtmp.TestSimpleHandshakeEchoesC1InS2` |
 
 ## Implemented, awaiting physical acceptance
 
@@ -31,6 +32,12 @@ physical GPU claims remain pending until a real device completes the hardware ga
 | [#945: AV1 on VA-API](https://github.com/datarhei/restreamer/issues/945) | AV1 VA-API is compiled, exposed in the UI, and checked in the FFmpeg contract. | A real AV1-capable VA-API device completing `accept-hardware.yml`. |
 | [#890: USB capture cards do not work](https://github.com/datarhei/restreamer/issues/890) and [#918: USB grabber problem](https://github.com/datarhei/restreamer/issues/918) | V4L2 discovery fallback, device mapping, and synthetic multi-camera paths are covered. | Representative USB capture devices tested through the deployed container. |
 | [#934: reduce default player delay](https://github.com/datarhei/restreamer/issues/934), [#942: high LAN SRT latency](https://github.com/datarhei/restreamer/issues/942), and [#974: high latency](https://github.com/datarhei/restreamer/issues/974) | MediaMTX RTSP/WHEP relay topology and concurrent sub-second first-frame gates are included. | Glass-to-glass measurements on the final cameras, network, browsers, and printer dashboards. |
+
+## Confirmed requests not yet implemented
+
+| Upstream report | Requested behavior | Current state |
+| --- | --- | --- |
+| [#946: overlay channel logo and name](https://github.com/datarhei/restreamer/issues/946) and [#982: custom hardcoded watermark](https://github.com/datarhei/restreamer/issues/982) | Burn a configurable image, channel name, or external text into every transcoded output and relay. | The public player can display a logo in the browser, but no FFmpeg output-filter implementation or configuration UI exists yet. Player branding must not be presented as evidence for an encoded watermark. |
 
 The manual hardware workflow records the pulled repository digest and uploads its
 full report as a retained Actions artifact. A backend moves out of the pending table
