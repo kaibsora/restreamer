@@ -14,8 +14,10 @@
 
 ### UI
 
--   Expose the compiled AV1 VA-API encoder in the UI for supported Intel and AMD
-    GPUs ([#945](https://github.com/datarhei/restreamer/issues/945)).
+-   Expose the compiled AV1 VA-API, NVENC, Quick Sync, and Vulkan encoders in the
+    UI, along with HEVC NVENC and VP9 Quick Sync. Supported Intel and AMD systems
+    can now select AV1 VA-API directly
+    ([#945](https://github.com/datarhei/restreamer/issues/945)).
 -   Restore player logo overlays by synchronizing the vendored overlay plugin with
     Video.js 8 and correct image load handling
     ([#912](https://github.com/datarhei/restreamer/issues/912)).

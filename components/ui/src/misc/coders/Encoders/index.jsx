@@ -12,6 +12,7 @@ import * as X264 from './video/h264_libx264';
 import * as X265 from './video/hevc_libx265';
 import * as H264VideoToolbox from './video/h264_videotoolbox';
 import * as H264NVENC from './video/h264_nvenc';
+import * as HEVCNVENC from './video/hevc_nvenc';
 import * as H264OMX from './video/h264_omx';
 import * as H264V4L2M2M from './video/h264_v4l2m2m';
 import * as H264VAAPI from './video/h264_vaapi';
@@ -22,12 +23,16 @@ import * as HEVCQSV from './video/hevc_qsv';
 import * as HEVCVulkan from './video/hevc_vulkan';
 import * as HEVCVideoToolbox from './video/hevc_videotoolbox';
 import * as VP9VAAPI from './video/vp9_vaapi';
+import * as VP9QSV from './video/vp9_qsv';
 import * as VideoCopy from './video/copy';
 import * as VideoNone from './video/none';
 import * as VideoRaw from './video/rawvideo';
 import * as VP9 from './video/vp9_libvpx';
 import * as AV1Rav1e from './video/av1_librav1e';
+import * as AV1NVENC from './video/av1_nvenc';
+import * as AV1QSV from './video/av1_qsv';
 import * as AV1VAAPI from './video/av1_vaapi';
+import * as AV1Vulkan from './video/av1_vulkan';
 
 class Registry {
 	constructor(type) {
@@ -138,14 +143,19 @@ videoRegistry.Register(H264VAAPI);
 videoRegistry.Register(H264QSV);
 videoRegistry.Register(H264Vulkan);
 videoRegistry.Register(X265);
+videoRegistry.Register(HEVCNVENC);
 videoRegistry.Register(HEVCVAAPI);
 videoRegistry.Register(HEVCQSV);
 videoRegistry.Register(HEVCVulkan);
 videoRegistry.Register(HEVCVideoToolbox);
 videoRegistry.Register(VP9VAAPI);
+videoRegistry.Register(VP9QSV);
 videoRegistry.Register(VP9);
 videoRegistry.Register(AV1Rav1e);
+videoRegistry.Register(AV1NVENC);
+videoRegistry.Register(AV1QSV);
 videoRegistry.Register(AV1VAAPI);
+videoRegistry.Register(AV1Vulkan);
 videoRegistry.Register(VideoRaw);
 
 export { audioRegistry as Audio, videoRegistry as Video };

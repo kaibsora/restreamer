@@ -52,7 +52,8 @@ function createHardwareEncoder(config) {
 			local.push('-preset:v', settings.preset);
 		}
 
-		local.push(...config.localOptions);
+		const localOptions = typeof config.localOptions === 'function' ? config.localOptions(settings) : config.localOptions;
+		local.push(...localOptions);
 
 		return {
 			global: config.globalOptions(settings),

@@ -54,9 +54,10 @@ four repositories to agree on what year it is.
 The image is designed for multi-camera 3D-printer monitoring and contains one FFmpeg
 build with:
 
-- NVIDIA CUDA, NVDEC, and NVENC;
-- Intel VA-API and Quick Sync through oneVPL;
-- AMD VA-API and Vulkan Video through Mesa;
+- NVIDIA CUDA, NVDEC, and NVENC for H.264, HEVC, and AV1;
+- Intel VA-API and Quick Sync through oneVPL, with H.264, HEVC, VP9, and AV1
+  encoders exposed when supported by the GPU;
+- AMD VA-API and Vulkan Video through Mesa, including AV1 on capable hardware;
 - V4L2 devices, RTSP, RTMP, SRT, HLS, and WebRTC delivery through MediaMTX;
 - Restreamer's JSON progress and HLS sequence patches.
 
