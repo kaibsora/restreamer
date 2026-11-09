@@ -15,6 +15,14 @@ replace `Origin` or `Referer` with the private upstream address. Those headers d
 the public browser origin and falsifying them can break authentication, CORS, and HLS
 session accounting.
 
+Restreamer uses `X-Forwarded-For` only when the immediate peer is loopback,
+link-local, or on a private network. It then walks the chain from the nearest proxy
+back to the first untrusted address. This lets the HLS viewer ignore list operate on
+the real client instead of treating every viewer as the Traefik, NGINX, or Caddy
+container, while a public client cannot become `127.0.0.1` by writing a particularly
+optimistic request header. Keep the proxy-to-Restreamer hop on the private Docker or
+LAN network and overwrite/append `X-Forwarded-For` as shown below.
+
 ## NGINX
 
 The following server blocks redirect clear-text requests and proxy a dedicated HTTPS

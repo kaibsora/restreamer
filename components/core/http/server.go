@@ -157,6 +157,14 @@ type filesystem struct {
 	middleware echo.MiddlewareFunc
 }
 
+func clientIPExtractor() echo.IPExtractor {
+	// Walk X-Forwarded-For from the server back toward the client, trusting only
+	// loopback, link-local, and private-network hops. This supports the usual
+	// container/LAN reverse proxy without allowing a public client to spoof the
+	// address used by access limits, logs, and HLS viewer accounting.
+	return echo.ExtractIPFromXFFHeader()
+}
+
 func NewServer(config Config) (Server, error) {
 	s := &server{
 		logger:        config.Logger,
@@ -331,6 +339,7 @@ func NewServer(config Config) (Server, error) {
 	}
 
 	s.router = echo.New()
+	s.router.IPExtractor = clientIPExtractor()
 	s.router.HTTPErrorHandler = errorhandler.HTTPErrorHandler
 	s.router.Validator = validator.New()
 	s.router.Use(s.middleware.log)

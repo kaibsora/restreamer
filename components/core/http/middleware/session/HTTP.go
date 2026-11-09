@@ -2,7 +2,6 @@ package session
 
 import (
 	"io"
-	"net"
 	"net/http"
 
 	"github.com/datarhei/core/v16/session"
@@ -47,10 +46,7 @@ func NewHTTPWithConfig(config HTTPConfig) echo.MiddlewareFunc {
 			req := c.Request()
 			res := c.Response()
 
-			host, _, err := net.SplitHostPort(req.RemoteAddr)
-			if err != nil {
-				host = ""
-			}
+			host := c.RealIP()
 
 			reader := req.Body
 			r := &fakeReader{

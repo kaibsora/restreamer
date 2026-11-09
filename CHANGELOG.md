@@ -22,6 +22,10 @@
 
 ### Core
 
+-   Resolve viewer and HTTP session addresses through trusted private reverse-proxy
+    hops, preserving real-client ignore-list behavior without trusting forged public
+    `X-Forwarded-For` headers
+    ([#856](https://github.com/datarhei/restreamer/issues/856)).
 -   Discover container-mapped `/dev/videoN` devices even when `v4l2-ctl` cannot
     describe them, addressing USB capture-device discovery failures
     ([#890](https://github.com/datarhei/restreamer/issues/890)).
