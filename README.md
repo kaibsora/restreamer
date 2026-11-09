@@ -203,6 +203,20 @@ See [docs/api-process-control.md](docs/api-process-control.md) to list, start, s
 restart, and inspect individual ingests or publications through the authenticated
 REST API. This is the resource-control path for installations with many cameras.
 
+### Large loop-file uploads
+
+Audio and video loop sources no longer have an arbitrary browser-side 25 MiB limit.
+The UI sends the selected `File` directly to Core, which streams it into disk storage
+instead of first duplicating the entire file into an `ArrayBuffer`. Available disk
+space and `CORE_STORAGE_DISK_MAX_SIZE_MBYTES` are therefore the application-side
+limits. Image, logo, and poster uploads retain their smaller safety limits.
+
+If a large upload fails only through a reverse proxy, increase that proxy's request
+body and timeout limits or perform the upload through the LAN address. Restreamer
+cannot overrule a proxy that rejects the request before it reaches the container;
+HTTP remains stubbornly committed to causality. This behavior addresses
+[upstream issue #958](https://github.com/datarhei/restreamer/issues/958).
+
 ## Camera and latency model
 
 LAN monitoring and public viewing use separate delivery planes:

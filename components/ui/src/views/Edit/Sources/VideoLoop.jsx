@@ -18,7 +18,7 @@ import { withDefaults } from '../../../utils/props';
 
 const imageTypes = [
 	{ mimetype: 'image/*', extension: 'image', maxSize: 2 * 1024 * 1024 },
-	{ mimetype: 'video/*', extension: 'video', maxSize: 25 * 1024 * 1024 },
+	{ mimetype: 'video/*', extension: 'video', maxSize: 0 },
 ];
 
 const useStyles = makeStyles((theme) => ({

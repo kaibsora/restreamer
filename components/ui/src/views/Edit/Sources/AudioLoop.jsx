@@ -16,7 +16,7 @@ import FormInlineButton from '../../../misc/FormInlineButton';
 import UploadButton from '../../../misc/UploadButton';
 import { withDefaults } from '../../../utils/props';
 
-const imageTypes = [{ mimetype: 'audio/*', extension: 'audio', maxSize: 25 * 1024 * 1024 }];
+const imageTypes = [{ mimetype: 'audio/*', extension: 'audio', maxSize: 0 }];
 
 const useStyles = makeStyles((theme) => ({
 	gridContainer: {
