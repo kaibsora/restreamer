@@ -44,6 +44,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   FFMPEG_IMAGE_NAME: ${{ github.repository_owner }}/restreamer-ffmpeg
+  MAX_UNIFIED_IMAGE_BYTES: 1500000000
 
 jobs:
   quality:
@@ -253,7 +254,7 @@ jobs:
           push: true
           build-args: |
             BUILD_IMAGE=nvidia/cuda:12.9.1-devel-ubuntu24.04
-            DEPLOY_IMAGE=nvidia/cuda:12.9.1-runtime-ubuntu24.04
+            DEPLOY_IMAGE=ubuntu:24.04
             BUILD_DATE=${{ github.run_id }}
             BUILD_COMMIT=${{ github.sha }}
             FFNVCODEC_VERSION=12.2.72.0
@@ -320,6 +321,22 @@ jobs:
           tags: restreamer-smoke:local
           cache-from: type=gha,scope=restreamer-unified
           cache-to: type=gha,mode=max,scope=restreamer-unified
+
+      - name: Enforce unified image size budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          image_size="$(docker image inspect \
+            restreamer-smoke:local --format '{{.Size}}')"
+          if ! [[ "${image_size}" =~ ^[0-9]+$ ]]; then
+            echo "Docker returned an invalid image size: ${image_size}" >&2
+            exit 1
+          fi
+          if (( image_size > MAX_UNIFIED_IMAGE_BYTES )); then
+            echo "Unified image is ${image_size} bytes; budget is ${MAX_UNIFIED_IMAGE_BYTES}." >&2
+            exit 1
+          fi
+          echo "Unified image is ${image_size} bytes (budget: ${MAX_UNIFIED_IMAGE_BYTES})."
 
       - name: Smoke test unified camera stack
         shell: bash

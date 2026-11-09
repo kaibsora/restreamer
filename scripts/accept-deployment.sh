@@ -14,7 +14,7 @@ usage() {
     cat >&2 <<'EOF'
 Usage: scripts/accept-deployment.sh SOURCE [SOURCE ...]
 
-Probe real camera sources concurrently through the running Restreamer container.
+Probe camera sources concurrently through the running Restreamer container.
 Supported sources:
   rtsp://host/path       RTSP camera or relay
   http[s]://host/path    HTTP camera stream
@@ -299,7 +299,7 @@ if (( failed != 0 )); then
     exit 1
 fi
 
-printf 'Validated %s real camera source(s) concurrently below %sms first-frame readback.\n' \
+printf 'Validated %s camera source(s) concurrently below %sms first-frame readback.\n' \
     "${camera_index}" "${max_first_frame_ms}"
 printf 'Each source also sustained at least %s FPS for %ss.\n' \
     "${min_sample_fps}" "${sample_seconds}"

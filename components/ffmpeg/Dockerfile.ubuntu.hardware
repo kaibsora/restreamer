@@ -1,5 +1,9 @@
 ARG BUILD_IMAGE=nvidia/cuda:12.9.1-devel-ubuntu24.04
-ARG DEPLOY_IMAGE=nvidia/cuda:12.9.1-runtime-ubuntu24.04
+# NVENC/NVDEC load the host driver libraries supplied by NVIDIA Container
+# Toolkit. FFmpeg isn't linked to CUDA's multi-gigabyte compute runtime, so a
+# plain Ubuntu deploy stage retains GPU support without shipping unused cuBLAS,
+# cuSPARSE, NCCL, and NPP packages.
+ARG DEPLOY_IMAGE=ubuntu:24.04
 
 FROM $BUILD_IMAGE AS builder
 
