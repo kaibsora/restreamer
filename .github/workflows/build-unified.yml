@@ -324,6 +324,22 @@ jobs:
             type=raw,value=ffmpeg-${{ needs.version.outputs.ffmpeg }}
             type=sha
 
+      - name: Generate build identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! [[ "${GITHUB_SHA}" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid Git commit supplied by Actions: ${GITHUB_SHA}" >&2
+            exit 1
+          fi
+          build_date="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          {
+            echo "commit=${GITHUB_SHA}"
+            echo "branch=${GITHUB_REF_NAME}"
+            echo "build_date=${build_date}"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Build unified image for validation
         uses: docker/build-push-action@v7
         with:
@@ -335,6 +351,9 @@ jobs:
           build-args: |
             FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
             RUN_TESTS=false
+            RESTREAMER_COMMIT=${{ steps.identity.outputs.commit }}
+            RESTREAMER_BRANCH=${{ steps.identity.outputs.branch }}
+            RESTREAMER_BUILD_DATE=${{ steps.identity.outputs.build_date }}
           tags: restreamer-smoke:local
           cache-from: type=gha,scope=restreamer-unified
           cache-to: type=gha,mode=max,scope=restreamer-unified
@@ -359,6 +378,9 @@ jobs:
         shell: bash
         env:
           RESTREAMER_IMAGE: restreamer-smoke:local
+          SMOKE_EXPECTED_COMMIT: ${{ steps.identity.outputs.commit }}
+          SMOKE_EXPECTED_BRANCH: ${{ steps.identity.outputs.branch }}
+          SMOKE_EXPECTED_BUILD_DATE: ${{ steps.identity.outputs.build_date }}
         run: |
           scripts/smoke-compose.sh
 
@@ -373,6 +395,9 @@ jobs:
           build-args: |
             FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
             RUN_TESTS=false
+            RESTREAMER_COMMIT=${{ steps.identity.outputs.commit }}
+            RESTREAMER_BRANCH=${{ steps.identity.outputs.branch }}
+            RESTREAMER_BUILD_DATE=${{ steps.identity.outputs.build_date }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=restreamer-unified

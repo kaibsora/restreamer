@@ -30,6 +30,13 @@ if docker container inspect restreamer >/dev/null 2>&1 ||
     exit 1
 fi
 
+MSYS_NO_PATHCONV=1 docker run --rm --entrypoint /bin/sh "${restreamer_image}" -c '
+    for binary in /core/bin/core /core/bin/import /core/bin/ffmigrate; do
+        test -f "${binary}" && test -x "${binary}" || exit 1
+    done
+'
+printf '%s\n' 'Validated executable Core application binaries.'
+
 cleanup() {
     status=$?
     trap - EXIT
@@ -58,6 +65,23 @@ for _ in $(seq 1 30); do
     sleep 1
 done
 [[ "${ready}" == "true" ]]
+
+about_json=$(curl --fail --silent --show-error http://127.0.0.1:8080/api)
+if [[ -n "${SMOKE_EXPECTED_COMMIT:-}" ]]; then
+    grep -F "\"repository_commit\":\"${SMOKE_EXPECTED_COMMIT}\"" \
+        <<<"${about_json}" >/dev/null
+fi
+if [[ -n "${SMOKE_EXPECTED_BRANCH:-}" ]]; then
+    grep -F "\"repository_branch\":\"${SMOKE_EXPECTED_BRANCH}\"" \
+        <<<"${about_json}" >/dev/null
+fi
+if [[ -n "${SMOKE_EXPECTED_BUILD_DATE:-}" ]]; then
+    grep -F "\"build_date\":\"${SMOKE_EXPECTED_BUILD_DATE}\"" \
+        <<<"${about_json}" >/dev/null
+fi
+if [[ -n "${SMOKE_EXPECTED_COMMIT:-}${SMOKE_EXPECTED_BRANCH:-}${SMOKE_EXPECTED_BUILD_DATE:-}" ]]; then
+    printf '%s\n' 'Validated embedded Restreamer build identity.'
+fi
 
 health_status='starting'
 for _ in $(seq 1 20); do

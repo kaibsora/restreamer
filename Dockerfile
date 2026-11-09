@@ -27,16 +27,23 @@ ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT
 ARG RUN_TESTS
+ARG RESTREAMER_COMMIT=unknown
+ARG RESTREAMER_BRANCH=local
+ARG RESTREAMER_BUILD_DATE=1970-01-01T00:00:00Z
 ENV GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT}
 WORKDIR /src/core
 RUN apk add --no-cache git make
 COPY components/core/ ./
-RUN case "${RUN_TESTS}" in \
+RUN rm -rf core import ffmigrate && \
+    case "${RUN_TESTS}" in \
       true) go test ./... && go vet ./... ;; \
       false) ;; \
       *) echo "RUN_TESTS must be true or false, got ${RUN_TESTS}" >&2; exit 64 ;; \
     esac && \
-    make release && \
+    make release \
+      COMMIT="${RESTREAMER_COMMIT}" \
+      BRANCH="${RESTREAMER_BRANCH}" \
+      BUILD="${RESTREAMER_BUILD_DATE}" && \
     make import && \
     make ffmigrate
 

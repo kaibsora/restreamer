@@ -5,6 +5,10 @@
 - Keep every input source available with current and future FFmpeg majors. The
   inherited compatibility declarations stopped at FFmpeg 6 even though this fork
   intentionally tracks FFmpeg master.
+- Embed the exact unified-repository commit, branch, and build timestamp in Core's
+  existing `/api` version response, and verify that identity in the image smoke test.
+- Build Core executables from clean output paths and assert their file type and
+  execute bits before starting the Compose smoke stack.
 - Fail hardware acceptance early with daemon-side ARC/DinD GPU preflight evidence
   and document the device/runtime wiring required by dedicated GPU runner scale sets.
 
