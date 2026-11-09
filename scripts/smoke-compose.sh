@@ -267,6 +267,134 @@ fi
 wait_for_process_state start running "${srt_process_id}"
 printf '%s\n' 'Validated an SRT publisher through the Core media server.'
 
+snapshot_source_process_id='restreamer-smoke:snapshot-source'
+curl --fail --silent --show-error \
+    --request POST \
+    --header 'Content-Type: application/json' \
+    --data @- \
+    http://127.0.0.1:8080/api/v3/process >/dev/null <<'JSON'
+{
+  "id": "restreamer-smoke:snapshot-source",
+  "type": "ffmpeg",
+  "reference": "restreamer-smoke:snapshot-source",
+  "input": [{
+    "id": "lavfi",
+    "address": "testsrc2=size=320x180:rate=15",
+    "options": ["-re", "-f", "lavfi"]
+  }],
+  "output": [{
+    "id": "hls",
+    "address": "{memfs}/ci-snapshot-source.m3u8",
+    "options": [
+      "-c:v", "libx264",
+      "-preset", "ultrafast",
+      "-tune", "zerolatency",
+      "-g", "15",
+      "-f", "hls",
+      "-hls_time", "1",
+      "-hls_list_size", "3",
+      "-hls_segment_filename", "{memfs}/ci-snapshot-source_%03d.ts",
+      "-method", "PUT"
+    ],
+    "cleanup": [{
+      "pattern": "memfs:/ci-snapshot-source*",
+      "purge_on_delete": true
+    }]
+  }],
+  "autostart": true,
+  "reconnect": true,
+  "reconnect_delay_seconds": 1,
+  "stale_timeout_seconds": 10
+}
+JSON
+
+snapshot_source_ready=false
+for _ in $(seq 1 30); do
+    if curl --fail --silent \
+        http://127.0.0.1:8080/memfs/ci-snapshot-source.m3u8 \
+        | grep -F '#EXTM3U' >/dev/null; then
+        snapshot_source_ready=true
+        break
+    fi
+    sleep 0.5
+done
+if [[ "${snapshot_source_ready}" != true ]]; then
+    printf '%s\n' 'The managed HLS source for snapshot validation was not ready.' >&2
+    exit 1
+fi
+
+snapshot_process_id='restreamer-smoke:snapshot'
+snapshot_path='ci-snapshot.jpg'
+curl --fail --silent --show-error \
+    --request POST \
+    --header 'Content-Type: application/json' \
+    --data @- \
+    http://127.0.0.1:8080/api/v3/process >/dev/null <<'JSON'
+{
+  "id": "restreamer-smoke:snapshot",
+  "type": "ffmpeg",
+  "reference": "restreamer-smoke:snapshot",
+  "input": [{
+    "id": "hls",
+    "address": "{memfs}/ci-snapshot-source.m3u8",
+    "options": []
+  }],
+  "output": [{
+    "id": "snapshot",
+    "address": "{memfs}/ci-snapshot.jpg",
+    "options": ["-vframes", "1", "-f", "image2", "-update", "1"],
+    "cleanup": [{
+      "pattern": "memfs:/ci-snapshot.jpg",
+      "purge_on_delete": true
+    }]
+  }],
+  "autostart": true,
+  "reconnect": true,
+  "reconnect_delay_seconds": 1,
+  "stale_timeout_seconds": 30
+}
+JSON
+
+snapshot_ready=false
+snapshot_info=''
+# Stream curl into the Linux container instead of redirecting its binary output
+# to /dev/null. Windows curl exits 23 for that redirect under Git Bash.
+for _ in $(seq 1 20); do
+    if snapshot_info=$(curl --fail --silent \
+        "http://127.0.0.1:8080/memfs/${snapshot_path}" \
+        | docker exec --interactive restreamer \
+            ffprobe -hide_banner -v error \
+            -select_streams v:0 \
+            -show_entries stream=codec_name,width,height \
+            -of csv=p=0 pipe:0 2>/dev/null) &&
+        grep -Fx 'mjpeg,320,180' <<<"${snapshot_info}" >/dev/null; then
+        snapshot_ready=true
+        break
+    fi
+    sleep 0.5
+done
+if [[ "${snapshot_ready}" != true ]]; then
+    printf 'A valid snapshot was not available at /memfs/%s.\n' \
+        "${snapshot_path}" >&2
+    curl --fail --silent --show-error \
+        "http://127.0.0.1:8080/api/v3/process/${snapshot_process_id}/report" \
+        >&2 || true
+    printf '\n' >&2
+    exit 1
+fi
+curl --fail --silent --show-error --request DELETE \
+    "http://127.0.0.1:8080/api/v3/process/${snapshot_process_id}" >/dev/null
+curl --fail --silent --show-error --request DELETE \
+    "http://127.0.0.1:8080/api/v3/process/${snapshot_source_process_id}" >/dev/null
+if curl --fail --silent \
+    "http://127.0.0.1:8080/memfs/${snapshot_path}" \
+    | cat >/dev/null; then
+    printf 'Snapshot cleanup left /memfs/%s behind.\n' \
+        "${snapshot_path}" >&2
+    exit 1
+fi
+printf '%s\n' 'Validated managed HLS snapshot creation, retrieval, and cleanup.'
+
 for camera in $(seq 1 "${camera_count}"); do
     docker exec --detach restreamer \
         ffmpeg -hide_banner -loglevel error -re \

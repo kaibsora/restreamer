@@ -26,6 +26,9 @@
     processes, addressing multi-camera resource-control questions
     ([#907](https://github.com/datarhei/restreamer/issues/907),
     [#930](https://github.com/datarhei/restreamer/issues/930)).
+-   Integration-test managed HLS snapshot generation, JPEG validity, public
+    `/memfs` retrieval, and cleanup to prevent thumbnail regressions
+    ([#950](https://github.com/datarhei/restreamer/issues/950)).
 
 ### UI
 
