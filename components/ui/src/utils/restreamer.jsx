@@ -1243,7 +1243,8 @@ class Restreamer {
 		}
 
 		try {
-			return [createChannelBundle(channel, processes), null];
+			const assets = await this._exportChannelAssets(channelid, processes);
+			return [createChannelBundle(channel, processes, assets), null];
 		} catch (error) {
 			return [null, { message: error.message }];
 		}
@@ -1258,21 +1259,46 @@ class Restreamer {
 		}
 
 		const created = [];
+		const uploadedAssets = [];
+		for (const asset of imported.assets) {
+			try {
+				const binary = Uint8Array.from(atob(asset.data), (character) => character.charCodeAt(0));
+				const [, err] = await this._call(
+					this.api.DataPutFile,
+					asset.path,
+					new Blob([binary], { type: asset.content_type || 'application/octet-stream' }),
+				);
+				if (err !== null) {
+					throw new Error(err.message);
+				}
+				uploadedAssets.push(asset.path);
+			} catch (error) {
+				for (const path of uploadedAssets.reverse()) {
+					await this._deleteAsset(path);
+				}
+				return ['', { message: `Failed to import asset "${asset.path}": ${error.message}` }];
+			}
+		}
+
+		const rollback = async () => {
+			for (const id of created.reverse()) {
+				await this._deleteProcess(id);
+			}
+			for (const path of uploadedAssets.reverse()) {
+				await this._deleteAsset(path);
+			}
+		};
 		for (const process of imported.processes) {
 			const config = { ...process.config, autostart: false };
 			const [, err] = await this._upsertProcess(process.id, config);
 			if (err !== null) {
-				for (const id of created.reverse()) {
-					await this._deleteProcess(id);
-				}
+				await rollback();
 				return ['', { message: `Failed to import process "${process.id}": ${err.message}` }];
 			}
 			created.push(process.id);
 
 			if ((await this._setProcessMetadata(process.id, process.metadata)) === false) {
-				for (const id of created.reverse()) {
-					await this._deleteProcess(id);
-				}
+				await rollback();
 				return ['', { message: `Failed to import metadata for "${process.id}"` }];
 			}
 		}
@@ -1283,9 +1309,7 @@ class Restreamer {
 			}
 			const [, err] = await this._upsertProcess(process.id, process.config);
 			if (err !== null) {
-				for (const id of created.reverse()) {
-					await this._deleteProcess(id);
-				}
+				await rollback();
 				return ['', { message: `Failed to restore process "${process.id}": ${err.message}` }];
 			}
 		}
@@ -3362,6 +3386,66 @@ class Restreamer {
 		}
 
 		return val;
+	}
+
+	async _getAsset(remotePath) {
+		const [val, err] = await this._call(this.api.DataGetFileBlob, remotePath);
+		if (err !== null) {
+			return null;
+		}
+
+		return val;
+	}
+
+	async _exportChannelAssets(channelid, processes) {
+		const prefix = `/channels/${channelid}/`;
+		const referenced = new Set();
+		const findReferences = (value) => {
+			if (typeof value === 'string' && value.startsWith(prefix) && /\/(logo|poster)\.(gif|jpe?g|png|svg)$/i.test(value)) {
+				referenced.add(value);
+			} else if (Array.isArray(value)) {
+				value.forEach(findReferences);
+			} else if (value !== null && typeof value === 'object') {
+				Object.values(value).forEach(findReferences);
+			}
+		};
+		processes.forEach(findReferences);
+
+		const available = new Set(await this._listAssets(`${prefix}*`));
+		for (const path of referenced) {
+			if (!available.has(path)) {
+				throw new Error(`Referenced channel asset "${path}" does not exist`);
+			}
+		}
+		const contentTypes = {
+			gif: 'image/gif',
+			jpg: 'image/jpeg',
+			jpeg: 'image/jpeg',
+			png: 'image/png',
+			svg: 'image/svg+xml',
+		};
+		const paths = [...referenced];
+		const assets = [];
+		for (const path of paths) {
+			const data = await this._getAsset(path);
+			if (data === null) {
+				throw new Error(`Failed to read channel asset "${path}"`);
+			}
+
+			const bytes = new Uint8Array(await data.arrayBuffer());
+			let binary = '';
+			for (let offset = 0; offset < bytes.length; offset += 32768) {
+				binary += String.fromCharCode(...bytes.subarray(offset, offset + 32768));
+			}
+			assets.push({
+				path,
+				content_type: contentTypes[path.split('.').pop().toLowerCase()],
+				encoding: 'base64',
+				data: btoa(binary),
+			});
+		}
+
+		return assets;
 	}
 
 	async _listAssets(remotePathPattern) {

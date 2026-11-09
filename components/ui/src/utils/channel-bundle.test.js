@@ -22,15 +22,43 @@ const process = (id, extra = {}) => ({
 
 describe('channel bundles', () => {
 	it('exports a versioned bundle containing only portable process data', () => {
-		const bundle = createChannelBundle({ channelid: oldChannel, name: 'Printer One' }, [process(ingestId), process(egressId)], '2026-11-09T12:00:00.000Z');
+		const bundle = createChannelBundle(
+			{ channelid: oldChannel, name: 'Printer One' },
+			[process(ingestId), process(egressId)],
+			[],
+			'2026-11-09T12:00:00.000Z',
+		);
 
 		expect(bundle).toMatchObject({
 			type: 'restreamer-channel-bundle',
-			version: 1,
+			version: 2,
 			exported_at: '2026-11-09T12:00:00.000Z',
 			channel: { id: oldChannel, name: 'Printer One' },
 		});
 		expect(bundle.processes[0]).not.toHaveProperty('state');
+	});
+
+	it('remaps binary-safe channel assets and accepts legacy version 1 bundles', () => {
+		const path = `/channels/${oldChannel}/logo.png`;
+		const bundle = createChannelBundle(
+			{ channelid: oldChannel, name: 'Printer One' },
+			[process(ingestId)],
+			[{ path, content_type: 'image/png', encoding: 'base64', data: 'AAEC' }],
+		);
+		const imported = prepareChannelImport(bundle, () => newChannel);
+
+		expect(imported.assets).toEqual([{ path: `/channels/${newChannel}/logo.png`, content_type: 'image/png', encoding: 'base64', data: 'AAEC' }]);
+
+		const legacy = { ...bundle, version: 1 };
+		delete legacy.assets;
+		expect(prepareChannelImport(legacy, () => newChannel).assets).toEqual([]);
+	});
+
+	it('rejects assets outside the channel directory', () => {
+		const bundle = createChannelBundle({ channelid: oldChannel, name: 'Printer One' }, [process(ingestId)]);
+		bundle.assets.push({ path: '/channels/another/logo.png', encoding: 'base64', data: 'AAEC' });
+
+		expect(() => validateBundle(bundle)).toThrow('invalid channel asset path');
 	});
 
 	it('remaps channel and process IDs everywhere on import', () => {

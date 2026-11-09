@@ -229,8 +229,11 @@ whole bundle and its metadata have been accepted; a partial failure is rolled ba
 
 Treat the exported file like a secret. Camera URLs, publication endpoints, tokens,
 and passwords present in the process configuration remain in the bundle so the
-imported channel can work. Custom uploaded poster, logo, video-loop, and audio-loop
-files are not yet embedded and must be copied or uploaded separately. This provides
+imported channel can work. Uploaded poster and logo images are embedded using
+binary-safe encoding and restored under the remapped channel ID. Video-loop and
+audio-loop files are deliberately excluded because turning a multi-gigabyte media
+file into browser-held JSON would be less “migration” and more “denial of service
+with extra steps”; copy or upload those files separately. This provides
 the selected-channel migration requested in
 [upstream issue #955](https://github.com/datarhei/restreamer/issues/955) without
 requiring a raw copy of the entire Core database—because “just transplant the

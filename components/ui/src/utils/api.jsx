@@ -147,7 +147,9 @@ class API {
 			return res;
 		}
 
-		if (isJSON === true) {
+		if (options.expect === 'blob') {
+			res.val = await response.blob();
+		} else if (isJSON === true) {
 			res.val = await response.json();
 		} else {
 			res.val = await response.text();
@@ -288,6 +290,12 @@ class API {
 
 	async DataGetFile(path) {
 		return await this._GET('/v3/fs/disk' + path);
+	}
+
+	async DataGetFileBlob(path) {
+		return await this._call('GET', '/v3/fs/disk' + path, {
+			expect: 'blob',
+		});
 	}
 
 	async DataListFiles(pathPattern) {

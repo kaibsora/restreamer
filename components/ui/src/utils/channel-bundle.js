@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
 const BUNDLE_TYPE = 'restreamer-channel-bundle';
-const BUNDLE_VERSION = 1;
+const BUNDLE_VERSION = 2;
+const SUPPORTED_BUNDLE_VERSIONS = new Set([1, BUNDLE_VERSION]);
+const MAX_ASSET_BYTES = 1024 * 1024;
+const MAX_TOTAL_ASSET_BYTES = 2 * MAX_ASSET_BYTES;
 const INGEST_PREFIX = 'restreamer-ui:ingest:';
 const EGRESS_PATTERN = /^restreamer-ui:egress:([0-9a-z]+):[0-9a-f-]+$/;
 
@@ -33,8 +36,60 @@ const validateProcess = (process) => {
 	}
 };
 
+const validateAssets = (bundle) => {
+	if (bundle.version === 1 && bundle.assets === undefined) {
+		return;
+	}
+
+	if (!Array.isArray(bundle.assets)) {
+		throw new Error('The bundle contains an invalid asset list');
+	}
+
+	const prefix = `/channels/${bundle.channel.id}/`;
+	const paths = new Set();
+	let totalBytes = 0;
+	for (const asset of bundle.assets) {
+		if (!isObject(asset) || typeof asset.path !== 'string' || !asset.path.startsWith(prefix)) {
+			throw new Error('The bundle contains an invalid channel asset path');
+		}
+
+		const name = asset.path.substring(prefix.length);
+		if (!/^(logo|poster)\.(gif|jpe?g|png|svg)$/i.test(name) || name.includes('..')) {
+			throw new Error(`The bundle contains unsupported channel asset "${name}"`);
+		}
+
+		if (paths.has(asset.path)) {
+			throw new Error(`The bundle contains duplicate asset "${asset.path}"`);
+		}
+		paths.add(asset.path);
+
+		if (
+			asset.encoding !== 'base64' ||
+			typeof asset.data !== 'string' ||
+			asset.data.length === 0 ||
+			asset.data.length % 4 !== 0 ||
+			!/^[A-Za-z0-9+/]*={0,2}$/.test(asset.data)
+		) {
+			throw new Error(`The bundle contains invalid data for asset "${name}"`);
+		}
+		if (asset.content_type !== undefined && (typeof asset.content_type !== 'string' || !/^image\/(gif|jpeg|png|svg\+xml)$/.test(asset.content_type))) {
+			throw new Error(`The bundle contains an invalid content type for asset "${name}"`);
+		}
+
+		const bytes = Math.floor((asset.data.length * 3) / 4) - (asset.data.endsWith('==') ? 2 : asset.data.endsWith('=') ? 1 : 0);
+		if (bytes > MAX_ASSET_BYTES) {
+			throw new Error(`The channel asset "${name}" is larger than 1 MB`);
+		}
+		totalBytes += bytes;
+	}
+
+	if (totalBytes > MAX_TOTAL_ASSET_BYTES) {
+		throw new Error('The channel assets are larger than 2 MB in total');
+	}
+};
+
 const validateBundle = (bundle) => {
-	if (!isObject(bundle) || bundle.type !== BUNDLE_TYPE || bundle.version !== BUNDLE_VERSION) {
+	if (!isObject(bundle) || bundle.type !== BUNDLE_TYPE || !SUPPORTED_BUNDLE_VERSIONS.has(bundle.version)) {
 		throw new Error('This is not a supported Restreamer channel bundle');
 	}
 
@@ -49,6 +104,8 @@ const validateBundle = (bundle) => {
 	for (const process of bundle.processes) {
 		validateProcess(process);
 	}
+
+	validateAssets(bundle);
 
 	const ingestId = `${INGEST_PREFIX}${bundle.channel.id}`;
 	if (!bundle.processes.some((process) => process.id === ingestId && process.config.reference === bundle.channel.id)) {
@@ -71,7 +128,7 @@ const validateBundle = (bundle) => {
 	}
 };
 
-const createChannelBundle = (channel, processes, exportedAt = new Date().toISOString()) => {
+const createChannelBundle = (channel, processes, assets = [], exportedAt = new Date().toISOString()) => {
 	const bundle = {
 		type: BUNDLE_TYPE,
 		version: BUNDLE_VERSION,
@@ -85,6 +142,7 @@ const createChannelBundle = (channel, processes, exportedAt = new Date().toISOSt
 			config: process.config,
 			metadata: process.metadata || {},
 		})),
+		assets,
 	};
 
 	validateBundle(bundle);
@@ -123,6 +181,10 @@ const prepareChannelImport = (bundle, makeUuid = uuidv4) => {
 			metadata: rewriteStrings(process.metadata, replacements),
 		};
 	});
+	const assets = (bundle.assets || []).map((asset) => ({
+		...asset,
+		path: rewriteStrings(asset.path, [[oldChannelId, newChannelId]]),
+	}));
 
 	return {
 		channel: {
@@ -130,6 +192,7 @@ const prepareChannelImport = (bundle, makeUuid = uuidv4) => {
 			name: bundle.channel.name,
 		},
 		processes,
+		assets,
 	};
 };
 
