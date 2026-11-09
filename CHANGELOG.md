@@ -29,6 +29,9 @@
 
 ### UI
 
+-   Add selected-channel JSON export and import with validation, collision-free ID
+    remapping, safe process startup, and rollback on partial imports
+    ([#955](https://github.com/datarhei/restreamer/issues/955)).
 -   Create and AAC-encode a real `anullsrc` input when the setup wizard selects
     silence for a camera without audio, instead of mapping the video stream twice
     ([#938](https://github.com/datarhei/restreamer/issues/938),

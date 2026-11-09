@@ -6,6 +6,8 @@ import { useTheme } from '@mui/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AddIcon from '@mui/icons-material/Add';
+import DownloadIcon from '@mui/icons-material/Download';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import CloseIcon from '@mui/icons-material/Close';
@@ -332,6 +334,14 @@ export default function ChannelList(inputProps) {
 		setPos(0);
 	};
 
+	const handleImport = (event) => {
+		const file = event.target.files.length === 0 ? null : event.target.files[0];
+		if (file !== null) {
+			props.onImport(file);
+		}
+		event.target.value = null;
+	};
+
 	return (
 		<React.Fragment>
 			<SwipeableDrawer
@@ -360,6 +370,26 @@ export default function ChannelList(inputProps) {
 									<Typography variant="h2">Channels</Typography>
 								</Stack>
 								<Stack direction="row" spacing={1} justifyContent="flex-end" className={classes.drawerButtons}>
+									<IconButton
+										color="inherit"
+										size="large"
+										title="Export selected channel"
+										aria-label="Export selected channel"
+										disabled={!props.channelid}
+										onClick={() => props.onExport(props.channelid)}
+									>
+										<DownloadIcon />
+									</IconButton>
+									<IconButton
+										component="label"
+										color="inherit"
+										size="large"
+										title="Import channel bundle"
+										aria-label="Import channel bundle"
+									>
+										<UploadFileIcon />
+										<input type="file" accept="application/json,.json" hidden onChange={handleImport} />
+									</IconButton>
 									<IconButton color="inherit" size="large" onClick={handleAddChannelDialog}>
 										<AddIcon />
 									</IconButton>
@@ -451,6 +481,8 @@ const ChannelListDefaultProps = {
 	onClose: () => {},
 	onClick: (channelid) => {},
 	onAdd: (name) => {},
+	onExport: (channelid) => {},
+	onImport: (file) => {},
 	onState: (channelids) => {
 		const states = {};
 		for (let channelid of channelids) {

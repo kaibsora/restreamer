@@ -217,6 +217,25 @@ See [docs/api-process-control.md](docs/api-process-control.md) to list, start, s
 restart, and inspect individual ingests or publications through the authenticated
 REST API. This is the resource-control path for installations with many cameras.
 
+### Move or duplicate a channel
+
+Open the channel drawer and select the channel to move. The download button exports
+its ingest, snapshot worker, publications, and Restreamer metadata as a versioned
+JSON bundle. On the destination instance, use the upload button in the same drawer
+to import it. Every channel and process ID is remapped, so the bundle can also be
+imported more than once on one instance to create independent copies. Processes are
+created with autostart disabled and only restored to their saved state after the
+whole bundle and its metadata have been accepted; a partial failure is rolled back.
+
+Treat the exported file like a secret. Camera URLs, publication endpoints, tokens,
+and passwords present in the process configuration remain in the bundle so the
+imported channel can work. Custom uploaded poster, logo, video-loop, and audio-loop
+files are not yet embedded and must be copied or uploaded separately. This provides
+the selected-channel migration requested in
+[upstream issue #955](https://github.com/datarhei/restreamer/issues/955) without
+requiring a raw copy of the entire Core database—because “just transplant the
+database” is less a migration plan than a hostage situation.
+
 See [docs/reverse-proxy.md](docs/reverse-proxy.md) for TLS termination and complete
 NGINX, Caddy, and IIS routing examples.
 

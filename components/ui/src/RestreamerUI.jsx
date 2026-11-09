@@ -419,6 +419,53 @@ export default function RestreamerUI(inputProps) {
 		document.location.hash = `#/${channelid}/edit/wizard`;
 	};
 
+	const handleExportChannel = async (channelid) => {
+		const [bundle, err] = await restreamer.current.ExportChannel(channelid);
+		if (err !== null) {
+			notify('error', 'channel:export', `Channel export failed: ${err.message}`);
+			return;
+		}
+
+		const channel = restreamer.current.GetChannel(channelid);
+		const safeName = (channel.name || 'channel').replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'channel';
+		const url = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }));
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = `${safeName}.restreamer-channel.json`;
+		link.click();
+		URL.revokeObjectURL(url);
+		notify('success', 'channel:export', `Channel "${channel.name}" exported. The bundle can contain camera and publication credentials.`);
+	};
+
+	const handleImportChannel = async (file) => {
+		if (file.size > 5 * 1024 * 1024) {
+			notify('error', 'channel:import', 'Channel import failed: the bundle is larger than 5 MB');
+			return;
+		}
+
+		let bundle;
+		try {
+			bundle = JSON.parse(await file.text());
+		} catch (error) {
+			notify('error', 'channel:import', `Channel import failed: ${error.message}`);
+			return;
+		}
+
+		const [channelid, err] = await restreamer.current.ImportChannel(bundle);
+		if (err !== null) {
+			notify('error', 'channel:import', `Channel import failed: ${err.message}`);
+			return;
+		}
+
+		setChannelList({
+			open: false,
+			channelid,
+			channels: restreamer.current.ListChannels(),
+		});
+		document.location.hash = `#/${channelid}`;
+		notify('success', 'channel:import', 'Channel imported with new IDs');
+	};
+
 	const handleStateChannel = async (channelids) => {
 		const processes = await restreamer.current.ListProcesses(['state'], channelids);
 		const states = {};
@@ -551,6 +598,8 @@ export default function RestreamerUI(inputProps) {
 						onClose={handleCloseChannelList}
 						onClick={handleSelectChannel}
 						onAdd={handleAddChannel}
+						onExport={handleExportChannel}
+						onImport={handleImportChannel}
 						onState={handleStateChannel}
 					/>
 				)}

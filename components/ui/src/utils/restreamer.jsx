@@ -15,6 +15,7 @@ import * as Version from '../version';
 import API from './api';
 import { anonymize } from './anonymizer';
 import { normalizeRTMPApp } from './rtmp';
+import { createChannelBundle, prepareChannelImport } from './channel-bundle';
 
 class Restreamer {
 	constructor(address) {
@@ -1220,6 +1221,81 @@ class Restreamer {
 		});
 
 		return channelid;
+	}
+
+	async ExportChannel(channelid) {
+		const channel = this.GetChannel(channelid);
+		if (channel === null || channel.available === false) {
+			return [null, { message: 'The channel has no saved ingest process' }];
+		}
+
+		const ids = [channel.id, `${channel.id}_snapshot`, ...channel.egresses];
+		const processes = [];
+		for (const id of ids) {
+			const process = await this._getProcess(id, ['config', 'metadata']);
+			if (process === null) {
+				if (id === `${channel.id}_snapshot`) {
+					continue;
+				}
+				return [null, { message: `Failed to read process "${id}"` }];
+			}
+			processes.push(process);
+		}
+
+		try {
+			return [createChannelBundle(channel, processes), null];
+		} catch (error) {
+			return [null, { message: error.message }];
+		}
+	}
+
+	async ImportChannel(bundle) {
+		let imported;
+		try {
+			imported = prepareChannelImport(bundle);
+		} catch (error) {
+			return ['', { message: error.message }];
+		}
+
+		const created = [];
+		for (const process of imported.processes) {
+			const config = { ...process.config, autostart: false };
+			const [, err] = await this._upsertProcess(process.id, config);
+			if (err !== null) {
+				for (const id of created.reverse()) {
+					await this._deleteProcess(id);
+				}
+				return ['', { message: `Failed to import process "${process.id}": ${err.message}` }];
+			}
+			created.push(process.id);
+
+			if ((await this._setProcessMetadata(process.id, process.metadata)) === false) {
+				for (const id of created.reverse()) {
+					await this._deleteProcess(id);
+				}
+				return ['', { message: `Failed to import metadata for "${process.id}"` }];
+			}
+		}
+
+		for (const process of imported.processes) {
+			if (process.config.autostart !== true) {
+				continue;
+			}
+			const [, err] = await this._upsertProcess(process.id, process.config);
+			if (err !== null) {
+				for (const id of created.reverse()) {
+					await this._deleteProcess(id);
+				}
+				return ['', { message: `Failed to restore process "${process.id}": ${err.message}` }];
+			}
+		}
+
+		await this._discoverChannels();
+		this.SelectChannel(imported.channel.id);
+		await this.UpdatePlayer(imported.channel.id);
+		await this.UpdatePlayersite();
+
+		return [imported.channel.id, null];
 	}
 
 	async DeleteChannel(channelid) {
