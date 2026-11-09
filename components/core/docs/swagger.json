@@ -4794,6 +4794,7 @@
     },
     "securityDefinitions": {
         "ApiKeyAuth": {
+            "description": "Paste the JWT access token. Swagger UI adds the Bearer scheme automatically.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

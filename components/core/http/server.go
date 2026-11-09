@@ -14,7 +14,7 @@
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @description Paste the JWT access token. Swagger UI adds the Bearer scheme automatically.
 
 // @securityDefinitions.apikey ApiRefreshKeyAuth
 // @in header
@@ -439,7 +439,7 @@ func (s *server) setRoutes() {
 	// Swagger API documentation router group
 	doc := s.router.Group("/api/swagger/*")
 	doc.Use(gzipMiddleware)
-	doc.GET("", echoSwagger.WrapHandler)
+	doc.GET("", echoSwagger.EchoWrapHandler(echoSwagger.AutoBearerAuth(true)))
 
 	// Mount filesystems
 	for _, filesystem := range s.filesystems {

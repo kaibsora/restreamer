@@ -22,6 +22,9 @@
 
 ### Core
 
+-   Make Swagger UI automatically add the required `Bearer` scheme when a raw JWT
+    is pasted into API authorization, while preserving explicitly supplied schemes
+    ([#851](https://github.com/datarhei/restreamer/issues/851)).
 -   Resolve viewer and HTTP session addresses through trusted private reverse-proxy
     hops, preserving real-client ignore-list behavior without trusting forged public
     `X-Forwarded-For` headers

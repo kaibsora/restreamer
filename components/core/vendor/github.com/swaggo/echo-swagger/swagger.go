@@ -22,6 +22,7 @@ type Config struct {
 	DeepLinking          bool
 	PersistAuthorization bool
 	SyntaxHighlight      bool
+	AutoBearerAuth       bool
 
 	// The information for OAuth2 integration, if any.
 	OAuth *OAuthConfig
@@ -87,6 +88,15 @@ func InstanceName(instanceName string) func(*Config) {
 func PersistAuthorization(persistAuthorization bool) func(*Config) {
 	return func(c *Config) {
 		c.PersistAuthorization = persistAuthorization
+	}
+}
+
+// AutoBearerAuth prefixes raw Authorization values entered for Swagger API-key
+// security definitions with "Bearer ". Existing authentication schemes, such as
+// Bearer and Basic, are left unchanged.
+func AutoBearerAuth(autoBearerAuth bool) func(*Config) {
+	return func(c *Config) {
+		c.AutoBearerAuth = autoBearerAuth
 	}
 }
 
@@ -282,6 +292,20 @@ window.onload = function() {
     deepLinking: {{.DeepLinking}},
     docExpansion: "{{.DocExpansion}}",
     persistAuthorization: {{.PersistAuthorization}},
+	{{if .AutoBearerAuth}}
+	requestInterceptor: function(request) {
+	  const headerName = Object.keys(request.headers || {}).find(
+	    (name) => name.toLowerCase() === "authorization"
+	  )
+	  if (headerName) {
+	    const authorization = String(request.headers[headerName] || "").trim()
+	    if (authorization && !/^[A-Za-z][A-Za-z0-9+.-]*\s+/.test(authorization)) {
+	      request.headers[headerName] = "Bearer " + authorization
+	    }
+	  }
+	  return request
+	},
+	{{end}}
     dom_id: "#{{.DomID}}",
     validatorUrl: null,
     presets: [

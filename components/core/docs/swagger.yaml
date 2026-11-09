@@ -3253,6 +3253,7 @@ paths:
       summary: Retrieve profiling data from the application
 securityDefinitions:
   ApiKeyAuth:
+    description: Paste the JWT access token. Swagger UI adds the Bearer scheme automatically.
     in: header
     name: Authorization
     type: apiKey

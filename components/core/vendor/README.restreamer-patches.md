@@ -15,3 +15,15 @@ Joy4's old simple-handshake server copied `S2` from `C2` before the client had s
 data and echoes `C1` in `S2`, matching the upstream fix and strict librtmp clients.
 `rtmp.TestSimpleHandshakeEchoesC1InS2` exercises the vendored server over an actual
 in-memory connection and will fail if vendoring discards the patch.
+
+## echo-swagger automatic Bearer authentication
+
+- File: `github.com/swaggo/echo-swagger/swagger.go`
+- Restreamer issue: `datarhei/restreamer#851`
+
+Swagger 2 represents Bearer authentication as an `apiKey` in the `Authorization`
+header, so Swagger UI otherwise sends a pasted JWT without the required `Bearer`
+scheme. The `AutoBearerAuth` option installs a request interceptor that prefixes raw
+tokens while preserving explicit `Bearer`, `Basic`, and other authentication schemes.
+`http.TestSwaggerAutoBearerAuth` protects both the opt-in behavior and the default
+upstream behavior so a future dependency refresh cannot silently remove the fix.
