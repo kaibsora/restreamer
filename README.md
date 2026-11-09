@@ -381,6 +381,33 @@ do not expose GPUs. Store the labels as a JSON array, just like the build workfl
 for example `["restreamer-linux", "linux", "x64"]`. Do not add `self-hosted` to an
 ARC label set.
 
+Scheduling the runner pod on a GPU node is necessary, but it does not give the
+nested Docker daemon a GPU by osmosis. The hardware workflow first uses a tiny
+Alpine container to verify access from the daemon's namespace, before downloading
+the much larger Restreamer image. A failed preflight is retained as
+`hardware-runner.txt` and identifies the missing layer.
+
+For VA-API, Quick Sync, and DRM-backed Vulkan on ARC DinD runners:
+
+1. select a GPU node for the runner pod and apply any required toleration;
+2. define a `/dev/dri` `hostPath` volume with type `Directory`;
+3. mount that volume at `/dev/dri` in the **dind** container; and
+4. keep the dind container privileged so its Docker daemon can map render nodes.
+
+Mounting `/dev/dri` only in the `runner` container cannot work: the Docker CLI is
+the client, while the daemon in `dind` resolves `--device`. GitHub's generated DinD
+PodSpec must be copied into the scale-set values and customized after removing
+`containerMode`, as described in the
+[official ARC container-mode documentation](https://docs.github.com/en/actions/how-tos/manage-runners/use-actions-runner-controller/deploy-runner-scale-sets#customizing-container-modes).
+
+For NVIDIA runners, the dind container must request a GPU, contain the NVIDIA
+Container Toolkit, and configure its nested Docker daemon to recognize the NVIDIA
+runtime. NVIDIA documents the required `nvidia-ctk runtime configure
+--runtime=docker` setup in the
+[Container Toolkit installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-docker).
+The ordinary build scale set does not need any of this hardware access; use a
+dedicated scale set through `RESTREAMER_HARDWARE_RUNNER_LABELS` when practical.
+
 GitHub Container Registry packages are not guaranteed to become public merely
 because their source repository is public. The `restreamer` and
 `restreamer-ffmpeg` packages are connected to this repository and public. If either

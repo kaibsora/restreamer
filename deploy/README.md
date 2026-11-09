@@ -79,6 +79,13 @@ uses the `restreamer-linux` scale set by default, never the unsupported ARC
 as a 30-day artifact. Configure `RESTREAMER_HARDWARE_RUNNER_LABELS` as a JSON label
 array when GPU jobs need a dedicated ARC scale set.
 
+The workflow's first container is a small daemon-side preflight. On an ARC DinD
+runner, `/dev/dri` must be a hostPath mounted into the privileged **dind** container,
+not merely into the runner container. NVIDIA runners additionally need the GPU
+resource assigned to dind and its nested Docker daemon configured with NVIDIA
+Container Toolkit. See the repository README's ARC section before blaming FFmpeg;
+it cannot encode on hardware the daemon has carefully hidden from it.
+
 Validate all real camera inputs concurrently from the same network and device
 namespace used by Restreamer:
 

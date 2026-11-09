@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fail hardware acceptance early with daemon-side ARC/DinD GPU preflight evidence
+  and document the device/runtime wiring required by dedicated GPU runner scale sets.
+
 ### Deployment and FFmpeg
 
 -   Add an on-demand ARC hardware-acceptance workflow that records the immutable
