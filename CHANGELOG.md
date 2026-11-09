@@ -17,6 +17,9 @@
 -   Restore player logo overlays by synchronizing the vendored overlay plugin with
     Video.js 8 and correct image load handling
     ([#912](https://github.com/datarhei/restreamer/issues/912)).
+-   Stop combining output `-r` with non-CFR frame-rate modes, allowing V4L2 and
+    other camera sources to use passthrough or variable frame timing
+    ([#943](https://github.com/datarhei/restreamer/issues/943)).
 
 ## 2.12.0
 

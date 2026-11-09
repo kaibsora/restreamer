@@ -9,6 +9,7 @@ import Select from '../../../Select';
 import Video from '../../settings/Video';
 import Helper from '../../helper';
 import { withDefaults } from '../../../../utils/props';
+import { addFramerateOptions } from './framerate';
 
 function init(initialState) {
 	const state = {
@@ -40,13 +41,13 @@ function createMapping(settings, stream, skills) {
 		`${settings.bitrate}k`,
 		'-bufsize:v',
 		`${settings.bitrate}k`,
-		'-r',
-		`${settings.fps}`,
 		'-sc_threshold',
 		'0',
 		'-pix_fmt',
 		'yuv420p',
 	];
+
+	addFramerateOptions(local, settings, skills);
 
 	if (settings.gop !== 'auto') {
 		local.push(
@@ -55,10 +56,6 @@ function createMapping(settings, stream, skills) {
 			'-keyint_min',
 			`${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`,
 		);
-	}
-
-	if (skills.ffmpeg.version_major >= 5) {
-		local.push('-fps_mode', `${settings.fps_mode}`);
 	}
 
 	if (settings.profile !== 'auto') {
@@ -196,8 +193,8 @@ function summarize(settings) {
 	return `${name}, ${settings.bitrate} kbit/s, ${settings.fps} FPS, Preset: ${settings.preset}, Profile: ${settings.profile}`;
 }
 
-function defaults(stream, skills) {
-	const settings = init({});
+function defaults(stream, skills, initialSettings = {}) {
+	const settings = init(initialSettings);
 
 	return {
 		settings: settings,

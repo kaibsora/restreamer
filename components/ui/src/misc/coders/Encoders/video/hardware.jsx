@@ -10,6 +10,7 @@ import TextField from '../../../TextField';
 import Video from '../../settings/Video';
 import Helper from '../../helper';
 import { withDefaults } from '../../../../utils/props';
+import { addFramerateOptions } from './framerate';
 
 function createHardwareEncoder(config) {
 	function init(initialState) {
@@ -37,11 +38,11 @@ function createHardwareEncoder(config) {
 			`${settings.bitrate}k`,
 			'-bufsize:v',
 			`${settings.bitrate}k`,
-			'-r',
-			`${settings.fps}`,
 			'-bf',
 			'0',
 		];
+
+		addFramerateOptions(local, settings, skills);
 
 		if (settings.gop !== 'auto') {
 			local.push('-g', `${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`);
@@ -49,10 +50,6 @@ function createHardwareEncoder(config) {
 
 		if (config.presets && settings.preset !== '') {
 			local.push('-preset:v', settings.preset);
-		}
-
-		if (skills.ffmpeg.version_major >= 5) {
-			local.push('-fps_mode', settings.fps_mode);
 		}
 
 		local.push(...config.localOptions);
@@ -149,8 +146,8 @@ function createHardwareEncoder(config) {
 		return `${config.name}, ${settings.bitrate} kbit/s, ${settings.fps} FPS, Device: ${settings.device}`;
 	}
 
-	function defaults(stream, skills) {
-		const settings = init({});
+	function defaults(stream, skills, initialSettings = {}) {
+		const settings = init(initialSettings);
 
 		return {
 			settings: settings,

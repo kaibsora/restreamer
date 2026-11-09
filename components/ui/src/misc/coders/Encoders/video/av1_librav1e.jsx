@@ -11,6 +11,7 @@ import Select from '../../../Select';
 import Video from '../../settings/Video';
 import Helper from '../../helper';
 import { withDefaults } from '../../../../utils/props';
+import { addFramerateOptions } from './framerate';
 
 function init(initialState) {
 	const state = {
@@ -43,8 +44,6 @@ function createMapping(settings, stream, skills) {
 		`${settings.bitrate}k`,
 		'-bufsize:v',
 		`${settings.bitrate}k`,
-		'-r',
-		`${settings.fps}`,
 		'-pix_fmt',
 		'yuv420p',
 		'-qp',
@@ -59,6 +58,8 @@ function createMapping(settings, stream, skills) {
 		`${settings.tile_columns}`,
 	];
 
+	addFramerateOptions(local, settings, skills);
+
 	if (settings.params.length !== 0) {
 		local.push('-rav1e-params', `${settings.params}`);
 	}
@@ -70,10 +71,6 @@ function createMapping(settings, stream, skills) {
 			'-keyint_min',
 			`${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`,
 		);
-	}
-
-	if (skills.ffmpeg.version_major >= 5) {
-		local.push('-fps_mode', `${settings.fps_mode}`);
 	}
 
 	const mapping = {
@@ -247,8 +244,8 @@ function summarize(settings) {
 	return `${name}, ${settings.bitrate} kbit/s, ${settings.fps} FPS, Speed: ${settings.speed}, QP: ${settings.qp}`;
 }
 
-function defaults(stream, skills) {
-	const settings = init({});
+function defaults(stream, skills, initialSettings = {}) {
+	const settings = init(initialSettings);
 
 	return {
 		settings: settings,
