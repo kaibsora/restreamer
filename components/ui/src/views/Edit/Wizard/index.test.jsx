@@ -510,8 +510,17 @@ test('wizard: network source error', async () => {
 });
 
 test('wizard: network source video h264', async () => {
+	const upserts = [];
+	const savingRestreamer = {
+		...restreamer,
+		UpsertIngest: (_channelid, global, inputs, outputs, control) => {
+			upserts.push({ global, inputs, outputs, control });
+			return [{}, null];
+		},
+	};
+
 	await act(async () => {
-		render(<Wizard restreamer={restreamer} />, {}, '/wizard/test', '/wizard/:channelid');
+		render(<Wizard restreamer={savingRestreamer} />, {}, '/wizard/test', '/wizard/:channelid');
 	});
 
 	// Choose network source
@@ -546,6 +555,32 @@ test('wizard: network source video h264', async () => {
 	expect(screen.queryByText(/The video source doesn't provide any compatible audio stream./)).toBeInTheDocument();
 	expect(screen.queryByText(/Silence Audio/)).toBeInTheDocument();
 	expect(screen.queryByText(/No audio/)).toBeInTheDocument();
+	expect(screen.queryByLabelText('Silence Audio')).toBeChecked();
+
+	// Keep the suggested silence track and save the complete process.
+	button = screen.getByRole('button', { name: 'Next' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	button = screen.getByRole('button', { name: 'Next' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	button = screen.getByRole('button', { name: 'Save' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	expect(upserts).toHaveLength(1);
+	expect(upserts[0].inputs).toHaveLength(2);
+	expect(upserts[0].inputs[1].address).toBe('anullsrc=r=44100:cl=stereo');
+
+	const options = upserts[0].outputs[0].options;
+	const mapTargets = options.filter((_, index) => options[index - 1] === '-map');
+	expect(mapTargets).toEqual(['0:0', '1:0']);
+	expect(options[options.indexOf('-codec:a') + 1]).toBe('aac');
 });
 
 test('wizard: network source video non-h264', async () => {

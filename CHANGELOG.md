@@ -14,6 +14,10 @@
 
 ### UI
 
+-   Create and AAC-encode a real `anullsrc` input when the setup wizard selects
+    silence for a camera without audio, instead of mapping the video stream twice
+    ([#938](https://github.com/datarhei/restreamer/issues/938),
+    [#954](https://github.com/datarhei/restreamer/issues/954)).
 -   Normalize YouTube audio timestamps by forcing AAC re-encoding at 128 kbit/s,
     preventing the distortion and stuttering reported with long-running AAC
     passthrough streams
