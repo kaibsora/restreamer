@@ -5,12 +5,15 @@ import * as AV1VAAPI from './av1_vaapi';
 import * as AV1Vulkan from './av1_vulkan';
 import * as H264Libx264 from './h264_libx264';
 import * as H264QSV from './h264_qsv';
+import * as H264VAAPI from './h264_vaapi';
 import * as H264V4L2M2M from './h264_v4l2m2m';
 import * as H264Vulkan from './h264_vulkan';
 import * as HEVCLibx265 from './hevc_libx265';
 import * as HEVCNVENC from './hevc_nvenc';
+import * as HEVCVAAPI from './hevc_vaapi';
 import * as VP9Libvpx from './vp9_libvpx';
 import * as VP9QSV from './vp9_qsv';
+import * as VP9VAAPI from './vp9_vaapi';
 
 const modernSkills = { ffmpeg: { version_major: 9 } };
 
@@ -26,8 +29,11 @@ const encoders = [
 	['hevc_nvenc', HEVCNVENC],
 	['h264_v4l2m2m', H264V4L2M2M],
 	['h264_qsv', H264QSV],
+	['h264_vaapi', H264VAAPI],
 	['h264_vulkan', H264Vulkan],
 	['vp9_qsv', VP9QSV],
+	['hevc_vaapi', HEVCVAAPI],
+	['vp9_vaapi', VP9VAAPI],
 ];
 
 function optionValue(options, name) {

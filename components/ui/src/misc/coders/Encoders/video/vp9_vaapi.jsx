@@ -10,12 +10,15 @@ import Select from '../../../Select';
 import Video from '../../settings/Video';
 import Helper from '../../helper';
 import { withDefaults } from '../../../../utils/props';
+import { addFramerateOptions } from './framerate';
 
 function init(initialState) {
 	const state = {
 		bitrate: '4096',
 		fps: '25',
-		gop: '2',
+		gop: '1',
+		fps_mode: 'cfr',
+		device: '/dev/dri/renderD128',
 		profile: '0',
 		rc_mode: '1',
 		quality: '-1',
@@ -34,7 +37,7 @@ function createMapping(settings, stream, skills) {
 	const filter = [];
 
 	// https://trac.ffmpeg.org/wiki/Hardware/VAAPI
-	global.push(['-vaapi_device', '/dev/dri/renderD128']);
+	global.push(['-vaapi_device', settings.device]);
 
 	local.push(
 		'-codec:v',
@@ -51,9 +54,11 @@ function createMapping(settings, stream, skills) {
 		`${settings.bitrate}k`,
 		'-bufsize',
 		`${settings.bitrate}k`,
-		'-r',
-		`${settings.fps}`,
+		'-bf',
+		'0',
 	);
+
+	addFramerateOptions(local, settings, skills);
 
 	if (settings.gop !== 'auto') {
 		local.push('-g', `${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`);
@@ -138,6 +143,9 @@ function Coder(inputProps) {
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={12}>
+				<TextField variant="outlined" fullWidth label={<Trans>Hardware device</Trans>} type="text" value={settings.device} onChange={update('device')} />
+			</Grid>
+			<Grid item xs={12}>
 				<RateControl value={settings.rc_mode} onChange={update('rc_mode')} />
 			</Grid>
 			<Grid item xs={12} md={6}>
@@ -155,6 +163,11 @@ function Coder(inputProps) {
 			<Grid item xs={6}>
 				<Profile value={settings.profile} onChange={update('profile')} />
 			</Grid>
+			{skills.ffmpeg.version_major >= 5 && (
+				<Grid item xs={12}>
+					<Video.FpsMode value={settings.fps_mode} onChange={update('fps_mode')} />
+				</Grid>
+			)}
 		</Grid>
 	);
 }
@@ -173,11 +186,11 @@ const type = 'video';
 const hwaccel = true;
 
 function summarize(settings) {
-	return `${name}, ${settings.bitrate} kbit/s, ${settings.fps} FPS, Profile: ${settings.profile}`;
+	return `${name}, ${settings.bitrate} kbit/s, ${settings.fps} FPS, Profile: ${settings.profile}, Device: ${settings.device}`;
 }
 
-function defaults(stream, skills) {
-	const settings = init({});
+function defaults(stream, skills, initialSettings = {}) {
+	const settings = init(initialSettings);
 
 	return {
 		settings: settings,

@@ -162,6 +162,9 @@ docker exec restreamer restreamer-hardware-report --verify --require vulkan
 
 For multi-GPU Vulkan hosts, select the FFmpeg device index with
 `RESTREAMER_VULKAN_DEVICE` on the container.
+VA-API and Quick Sync encoder forms expose their DRM render node directly; select
+`/dev/dri/renderD129` (or the appropriate mapped node) when the intended Intel/AMD
+GPU is not `renderD128`.
 
 Then probe the real USB and IP-camera sources concurrently from inside the running
 container:

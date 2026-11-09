@@ -27,6 +27,11 @@
     UI, along with HEVC NVENC and VP9 Quick Sync. Supported Intel and AMD systems
     can now select AV1 VA-API directly
     ([#945](https://github.com/datarhei/restreamer/issues/945)).
+-   Allow H.264, HEVC, and VP9 VA-API profiles to select their DRM render node,
+    and use one-second GOP, zero B-frame, and modern frame-rate defaults for
+    low-latency Intel/AMD encoding
+    ([#657](https://github.com/datarhei/restreamer/issues/657),
+    [#943](https://github.com/datarhei/restreamer/issues/943)).
 -   Restore player logo overlays by synchronizing the vendored overlay plugin with
     Video.js 8 and correct image load handling
     ([#912](https://github.com/datarhei/restreamer/issues/912)).

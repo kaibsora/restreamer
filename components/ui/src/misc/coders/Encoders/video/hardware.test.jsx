@@ -3,11 +3,14 @@ import * as AV1QSV from './av1_qsv';
 import * as AV1VAAPI from './av1_vaapi';
 import * as AV1Vulkan from './av1_vulkan';
 import * as H264QSV from './h264_qsv';
+import * as H264VAAPI from './h264_vaapi';
 import * as HEVCNVENC from './hevc_nvenc';
 import * as HEVCQSV from './hevc_qsv';
+import * as HEVCVAAPI from './hevc_vaapi';
 import * as H264Vulkan from './h264_vulkan';
 import * as HEVCVulkan from './hevc_vulkan';
 import * as VP9QSV from './vp9_qsv';
+import * as VP9VAAPI from './vp9_vaapi';
 import { Video } from '../index';
 
 const skills = { ffmpeg: { version_major: 8 } };
@@ -17,8 +20,11 @@ test.each([
 	['av1_qsv', AV1QSV],
 	['av1_vaapi', AV1VAAPI],
 	['av1_vulkan', AV1Vulkan],
+	['h264_vaapi', H264VAAPI],
 	['hevc_nvenc', HEVCNVENC],
+	['hevc_vaapi', HEVCVAAPI],
 	['vp9_qsv', VP9QSV],
+	['vp9_vaapi', VP9VAAPI],
 ])('%s is available through the video encoder registry', (coder, service) => {
 	expect(Video.Get(coder)).toBe(service);
 });
@@ -60,6 +66,18 @@ test('AV1 VA-API binds to the selected DRM render node and main profile', () => 
 
 	expect(mapping.global).toContainEqual(['-vaapi_device', '/dev/dri/renderD129']);
 	expect(mapping.local).toEqual(expect.arrayContaining(['-codec:v', 'av1_vaapi', '-profile:v', 'main']));
+});
+
+test.each([
+	[H264VAAPI, 'h264_vaapi'],
+	[HEVCVAAPI, 'hevc_vaapi'],
+	[VP9VAAPI, 'vp9_vaapi'],
+])('$coder binds to the selected VA-API render node with low-latency defaults', (service, coder) => {
+	const { settings, mapping } = service.defaults({}, skills, { device: '/dev/dri/renderD129' });
+
+	expect(settings.gop).toBe('1');
+	expect(mapping.global).toContainEqual(['-vaapi_device', '/dev/dri/renderD129']);
+	expect(mapping.local).toEqual(expect.arrayContaining(['-codec:v', coder, '-bf', '0', '-fps_mode', 'cfr']));
 });
 
 test.each([
