@@ -60,6 +60,32 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+function preserveChannelOnProgressMiss(channel, previous, progress) {
+	if (progress.valid === true || channel?.available !== true) {
+		return null;
+	}
+
+	// A state request can fail briefly while Core is busy or the network recovers.
+	// The channel configuration still exists, so replacing the player with the
+	// setup screen would only unmount it and reset playback/audio state.
+	if (previous.ready === true) {
+		return previous;
+	}
+
+	return {
+		...previous,
+		ready: true,
+		valid: true,
+		state: 'error',
+		progress: {
+			...progress,
+			valid: true,
+			state: 'error',
+			error: 'Temporarily unable to retrieve stream state.',
+		},
+	};
+}
+
 export default function Main(inputProps) {
 	const props = withDefaults(inputProps, MainDefaultProps);
 	const classes = useStyles();
@@ -85,8 +111,8 @@ export default function Main(inputProps) {
 		open: false,
 		data: '',
 	});
-	const [$config, setConfig] = React.useState(null);
 	const [$invalid, setInvalid] = React.useState(false);
+	const updateBusy = React.useRef(false);
 
 	useInterval(async () => {
 		await update();
@@ -107,9 +133,6 @@ export default function Main(inputProps) {
 	}, [navigate, $invalid]);
 
 	const load = async () => {
-		const config = props.restreamer.ConfigActive();
-		setConfig(config);
-
 		const metadata = await props.restreamer.GetIngestMetadata(_channelid);
 		setMetadata({
 			...$metadata,
@@ -120,55 +143,74 @@ export default function Main(inputProps) {
 	};
 
 	const update = async () => {
-		const channelid = props.restreamer.SelectChannel(_channelid);
-		if (channelid === '' || channelid !== _channelid) {
-			setInvalid(true);
+		if (updateBusy.current === true) {
 			return;
 		}
 
-		const progress = await props.restreamer.GetIngestProgress(_channelid);
+		updateBusy.current = true;
 
-		const state = {
-			...$state,
-			ready: true,
-			valid: progress.valid,
-			progress: progress,
-			state: progress.state,
-		};
+		try {
+			const channelid = props.restreamer.SelectChannel(_channelid);
+			if (channelid === '' || channelid !== _channelid) {
+				setInvalid(true);
+				return;
+			}
 
-		if (state.state === 'connecting') {
-			if (state.onConnect === null) {
-				state.onConnect = async () => {
-					await props.restreamer.StopIngestSnapshot(_channelid);
-					await props.restreamer.StartIngestSnapshot(_channelid);
-				};
+			const progress = await props.restreamer.GetIngestProgress(_channelid);
+			const channel = props.restreamer.GetChannel(_channelid);
+			const preserved = preserveChannelOnProgressMiss(channel, $state, progress);
+			if (preserved !== null) {
+				if (preserved !== $state) {
+					setState(preserved);
+				}
+				return;
 			}
-		} else if (state.state === 'connected') {
-			if (state.onConnect !== null && typeof state.onConnect === 'function') {
-				const onConnect = state.onConnect;
-				setTimeout(async () => {
-					await onConnect();
-				}, 100);
-				state.onConnect = null;
+
+			const state = {
+				...$state,
+				ready: true,
+				valid: progress.valid,
+				progress: progress,
+				state: progress.state,
+			};
+
+			if (state.state === 'connecting') {
+				if (state.onConnect === null) {
+					state.onConnect = async () => {
+						await props.restreamer.StopIngestSnapshot(_channelid);
+						await props.restreamer.StartIngestSnapshot(_channelid);
+					};
+				}
+			} else if (state.state === 'connected') {
+				if (state.onConnect !== null && typeof state.onConnect === 'function') {
+					const onConnect = state.onConnect;
+					setTimeout(async () => {
+						await onConnect();
+					}, 100);
+					state.onConnect = null;
+				}
 			}
+
+			const config = props.restreamer.ConfigActive();
+			if ($metadata.control.rtmp.enable) {
+				if (!config.source.network.rtmp.enabled) {
+					state.state = 'error';
+					state.progress.error = 'RTMP server is not enabled, but required.';
+				}
+			} else if ($metadata.control.srt.enable) {
+				if (!config.source.network.srt.enabled) {
+					state.state = 'error';
+					state.progress.error = 'SRT server is not enabled, but required.';
+				}
+			}
+
+			setState({
+				...$state,
+				...state,
+			});
+		} finally {
+			updateBusy.current = false;
 		}
-
-		if ($metadata.control.rtmp.enable) {
-			if (!$config.source.network.rtmp.enabled) {
-				state.state = 'error';
-				state.progress.error = 'RTMP server is not enabled, but required.';
-			}
-		} else if ($metadata.control.srt.enable) {
-			if (!$config.source.network.srt.enabled) {
-				state.state = 'error';
-				state.progress.error = 'SRT server is not enabled, but required.';
-			}
-		}
-
-		setState({
-			...$state,
-			...state,
-		});
 	};
 
 	const connect = async () => {
@@ -485,3 +527,5 @@ export default function Main(inputProps) {
 const MainDefaultProps = {
 	restreamer: null,
 };
+
+export { preserveChannelOnProgressMiss };
