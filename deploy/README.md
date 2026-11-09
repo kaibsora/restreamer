@@ -221,6 +221,31 @@ Moonraker stores the URL and Mainsail consumes it; neither Moonraker nor Crowsne
 proxies the video. Crowsnest can continue handling locally attached cameras while
 Mainsail displays either source.
 
+### RTP/MPEG-TS multicast output
+
+For receivers that require an RTP-wrapped MPEG transport stream, add an **MPEG-TS**
+publication and select **RTP/MPEG-TS** as its protocol. Enter only the destination
+host and port, for example:
+
+```text
+239.255.0.1:5001
+```
+
+The publication uses FFmpeg's `rtp_mpegts` muxer and produces this destination by
+default:
+
+```text
+rtp://239.255.0.1:5001?pkt_size=1316&ttl=1
+```
+
+Packet size and multicast TTL are available under **Advanced settings**. A TTL of
+one confines multicast traffic to the local subnet unless deliberately increased.
+The RTP mode also inserts available video codec headers at keyframes. For H.264
+receivers that may join after a stream starts, use a one-second GOP and avoid B-frames
+so the next independently decodable frame is never far away. UDP and TCP MPEG-TS
+publications keep using the ordinary `mpegts` muxer; existing saved publications are
+not silently converted into RTP.
+
 The RTSP, RTP, RTCP, WebRTC HTTP, and WebRTC ICE ports are intended for the trusted
 LAN. Do not publish them through the public reverse proxy without authentication and
 firewall rules. Public viewers should continue using Restreamer's authenticated HLS

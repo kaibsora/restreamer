@@ -24,8 +24,11 @@ license=$(ffmpeg -hide_banner -L 2>&1)
 hwaccels=$(ffmpeg -hide_banner -hwaccels 2>&1)
 encoders=$(ffmpeg -hide_banner -encoders 2>&1)
 filters=$(ffmpeg -hide_banner -filters 2>&1)
+muxers=$(ffmpeg -hide_banner -muxers 2>&1)
+output_protocols=$(ffmpeg -hide_banner -protocols 2>&1 | sed -n '/^Output:/,$p')
 full_help=$(ffmpeg -hide_banner -h full 2>&1)
 hls_help=$(ffmpeg -hide_banner -h muxer=hls 2>&1)
+rtp_mpegts_help=$(ffmpeg -hide_banner -h muxer=rtp_mpegts 2>&1)
 
 require_pattern "$ffmpeg_version" '^ffmpeg version [0-9]'
 require_pattern "$ffprobe_version" '^ffprobe version [0-9]'
@@ -49,6 +52,10 @@ require_pattern "$encoders" '[[:space:]]aac[[:space:]]+AAC'
 for filter in overlay_vulkan scale_vulkan transpose_vulkan; do
     require_pattern "$filters" "[[:space:]]${filter}[[:space:]]"
 done
+
+require_pattern "$muxers" '[[:space:]]E[[:space:]]+rtp_mpegts[[:space:]]'
+require_fixed_line "$output_protocols" '  rtp'
+require_pattern "$rtp_mpegts_help" 'RTP/mpegts output format'
 
 require_pattern "$full_help" '^-jsonstats[[:space:]]'
 require_pattern "$hls_help" '[[:space:]]adjust_sequence[[:space:]]'

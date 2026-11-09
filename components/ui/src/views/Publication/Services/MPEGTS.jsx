@@ -46,8 +46,8 @@ const author = {
 };
 const category = 'universal';
 const requires = {
-	protocols: ['udp', 'tcp'],
-	formats: ['mpegts'],
+	protocols: ['udp', 'tcp', 'rtp'],
+	formats: ['mpegts', 'rtp_mpegts'],
 	codecs: {
 		audio: ['aac', 'mp3'],
 		video: ['h264', 'hevc', 'vp9', 'av1'],
@@ -58,11 +58,27 @@ function ServiceIcon(props) {
 	return <FontAwesomeIcon icon={faTools} style={{ color: '#39B54A' }} {...props} />;
 }
 
+const rtpDefaults = {
+	pkt_size: '1316',
+	ttl: '1',
+};
+
+function applyRtpDefaults(params) {
+	for (const [key, value] of Object.entries(rtpDefaults)) {
+		if (String(params[key] ?? '').length === 0) {
+			params[key] = value;
+		}
+	}
+
+	return params;
+}
+
 function init(settings) {
 	const initSettings = {
 		protocol: 'udp://',
 		address: '',
 		options: {},
+		params: {},
 		...settings,
 	};
 
@@ -88,8 +104,77 @@ function init(settings) {
 		tables_version: '0',
 		...initSettings.options,
 	};
+	initSettings.params = {
+		pkt_size: '',
+		ttl: '',
+		...initSettings.params,
+	};
+
+	if (initSettings.protocol === 'rtp://') {
+		applyRtpDefaults(initSettings.params);
+	}
 
 	return initSettings;
+}
+
+function createOutput(settings) {
+	const muxer = settings.protocol === 'rtp://' ? 'rtp_mpegts' : 'mpegts';
+	const options = [];
+
+	if (muxer === 'rtp_mpegts') {
+		options.push('-bsf:v', 'dump_extra');
+	}
+	options.push('-f', muxer);
+
+	for (let key in settings.options) {
+		if (settings.options[key].length === 0) {
+			continue;
+		}
+		if (['service_provider', 'service_name'].includes(key)) {
+			options.push('-metadata', key + '="' + String(settings.options[key]) + '"');
+		} else if (key === 'mpegts_service_type' && settings.options.mpegts_service_type === 'hex_value') {
+			if (settings.options.mpegts_service_type_hex_value.length !== 0) {
+				options.push('-mpegts_service_type', String(settings.options.mpegts_service_type_hex_value));
+			}
+		} else if (key === 'mpegts_service_type_hex_value') {
+			continue;
+		} else if (['mpegts_m2ts_mode', 'mpegts_copyts', 'omit_video_pes_length'].includes(key)) {
+			if (settings.options[key]) {
+				options.push('-' + key, '1');
+			} else {
+				options.push('-' + key, '-1');
+			}
+		} else if (key === 'mpegts_flags') {
+			let flags = '';
+
+			settings.options[key].forEach((flag) => {
+				flags += '+' + flag;
+			});
+
+			options.push('-mpegts_flags', String(flags));
+		} else {
+			options.push('-' + key, String(settings.options[key]));
+		}
+	}
+
+	const params = [];
+	if (['udp://', 'rtp://'].includes(settings.protocol)) {
+		for (let key in settings.params) {
+			if (String(settings.params[key]).length !== 0) {
+				params.push(key + '=' + encodeURIComponent(settings.params[key]));
+			}
+		}
+	}
+
+	let address = settings.protocol + settings.address;
+	if (params.length !== 0) {
+		address += (address.includes('?') ? '&' : '?') + params.join('&');
+	}
+
+	return {
+		address,
+		options,
+	};
 }
 
 function Service(inputProps) {
@@ -105,8 +190,13 @@ function Service(inputProps) {
 			} else {
 				settings.options[what] = value;
 			}
+		} else if (what in settings.params) {
+			settings.params[what] = value;
 		} else {
 			settings[what] = value;
+			if (what === 'protocol' && value === 'rtp://') {
+				applyRtpDefaults(settings.params);
+			}
 		}
 
 		const output = createOutput(settings);
@@ -114,59 +204,14 @@ function Service(inputProps) {
 		props.onChange([output], settings);
 	};
 
-	const createOutput = (settings) => {
-		const options = ['-f', 'mpegts'];
-
-		for (let key in settings.options) {
-			if (settings.options[key].length === 0) {
-				continue;
-			}
-			if (['service_provider', 'service_name'].includes(key)) {
-				options.push('-metadata', key + '="' + String(settings.options[key]) + '"');
-			} else if (key === 'mpegts_service_type' && settings.options.mpegts_service_type === 'hex_value') {
-				if (settings.options.mpegts_service_type_hex_value.length !== 0) {
-					options.push('-mpegts_service_type', String(settings.options.mpegts_service_type_hex_value));
-				}
-			} else if (key === 'mpegts_service_type_hex_value') {
-				continue;
-			} else if (['mpegts_m2ts_mode', 'mpegts_copyts', 'omit_video_pes_length'].includes(key)) {
-				if (settings.options[key]) {
-					options.push('-' + key, '1');
-				} else {
-					options.push('-' + key, '-1');
-				}
-			} else if (key === 'mpegts_flags') {
-				let flags = '';
-
-				settings.options[key].forEach((flag) => {
-					flags += '+' + flag;
-				});
-
-				options.push('-mpegts_flags', String(flags));
-			} else {
-				options.push('-' + key, String(settings.options[key]));
-			}
-		}
-
-		const output = {
-			address: settings.protocol + settings.address,
-			options: options,
-		};
-
-		return output;
-	};
-
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={12} md={3}>
-				<TextField
-					variant="outlined"
-					fullWidth
-					type="url"
-					label={<Trans>Protocol</Trans>}
-					value={settings.protocol}
-					onChange={handleChange('protocol')}
-				/>
+				<Select label={<Trans>Protocol</Trans>} value={settings.protocol} onChange={handleChange('protocol')}>
+					<MenuItem value="udp://">UDP</MenuItem>
+					<MenuItem value="rtp://">RTP/MPEG-TS</MenuItem>
+					<MenuItem value="tcp://">TCP</MenuItem>
+				</Select>
 			</Grid>
 			<Grid item xs={12} md={9}>
 				<TextField variant="outlined" fullWidth type="url" label={<Trans>Address</Trans>} value={settings.address} onChange={handleChange('address')} />
@@ -180,6 +225,40 @@ function Service(inputProps) {
 					</AccordionSummary>
 					<AccordionDetails>
 						<Grid container spacing={2}>
+							{['udp://', 'rtp://'].includes(settings.protocol) && (
+								<>
+									<Grid item xs={12} md={6}>
+										<TextField
+											variant="outlined"
+											fullWidth
+											type="number"
+											inputProps={{
+												min: 1,
+												max: 65507,
+												step: 1,
+											}}
+											label="pkt_size"
+											value={settings.params.pkt_size}
+											onChange={handleChange('pkt_size')}
+										/>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<TextField
+											variant="outlined"
+											fullWidth
+											type="number"
+											inputProps={{
+												min: 0,
+												max: 255,
+												step: 1,
+											}}
+											label="ttl"
+											value={settings.params.ttl}
+											onChange={handleChange('ttl')}
+										/>
+									</Grid>
+								</>
+							)}
 							<Grid item xs={12} md={6}>
 								<TextField
 									variant="outlined"
@@ -325,7 +404,7 @@ function Service(inputProps) {
 									fullWidth
 									type="text"
 									label="pcr_period"
-									value={settings.pcr_period}
+									value={settings.options.pcr_period}
 									onChange={handleChange('pcr_period')}
 								/>
 							</Grid>
@@ -335,7 +414,7 @@ function Service(inputProps) {
 									fullWidth
 									type="text"
 									label="pat_period"
-									value={settings.pat_period}
+									value={settings.options.pat_period}
 									onChange={handleChange('pat_period')}
 								/>
 							</Grid>
@@ -345,7 +424,7 @@ function Service(inputProps) {
 									fullWidth
 									type="text"
 									label="sdt_period"
-									value={settings.sdt_period}
+									value={settings.options.sdt_period}
 									onChange={handleChange('sdt_period')}
 								/>
 							</Grid>
@@ -355,7 +434,7 @@ function Service(inputProps) {
 									fullWidth
 									type="text"
 									label="tables_version"
-									value={settings.tables_version}
+									value={settings.options.tables_version}
 									onChange={handleChange('tables_version')}
 								/>
 							</Grid>
@@ -386,4 +465,4 @@ const ServiceDefaultProps = {
 	onChange: function (output, settings) {},
 };
 
-export { id, name, version, stream_key_link, description, image_copyright, author, category, requires, ServiceIcon as icon, Service as component };
+export { id, name, version, stream_key_link, description, image_copyright, author, category, requires, init, createOutput, ServiceIcon as icon, Service as component };
