@@ -79,6 +79,7 @@ jobs:
           done < <(git ls-files -z '*.sh')
           scripts/test-hardware-report.sh
           scripts/test-accept-relays.sh
+          scripts/test-resolve-ffmpeg-version.sh
 
       - name: Test and build UI
         if: matrix.suite == 'ui'
@@ -150,6 +151,7 @@ jobs:
         id: resolve
         env:
           REQUESTED_VERSION: ${{ inputs.ffmpeg_version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
