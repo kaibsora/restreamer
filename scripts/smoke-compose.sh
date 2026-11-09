@@ -212,9 +212,6 @@ probe_camera() {
     grep -Fx 'width=320' <<<"${stream_info}" >/dev/null
     grep -Fx 'height=180' <<<"${stream_info}" >/dev/null
     grep -Fx 'r_frame_rate=15/1' <<<"${stream_info}" >/dev/null
-
-    curl --fail --silent --show-error \
-        "http://127.0.0.1:8889/ci-camera-${camera}" >/dev/null
 }
 
 probe_pids=()
@@ -262,17 +259,16 @@ for read_pid in "${read_pids[@]}"; do
 done
 
 acceptance_report="$(mktemp "${TMPDIR:-/tmp}/restreamer-acceptance.XXXXXX.json")"
-acceptance_sources=()
+acceptance_paths=()
 for camera in $(seq 1 "${camera_count}"); do
-    acceptance_sources+=("rtsp://mediamtx:8554/ci-camera-${camera}")
+    acceptance_paths+=("ci-camera-${camera}")
 done
 
-ACCEPT_VERIFY_HARDWARE=false \
 ACCEPT_MAX_FIRST_FRAME_MS="${max_first_frame_ms}" \
 ACCEPT_SAMPLE_SECONDS="${accept_sample_seconds}" \
 ACCEPT_MIN_SAMPLE_FPS=10 \
-ACCEPT_REPORT_FILE="${acceptance_report}" \
-    scripts/accept-deployment.sh "${acceptance_sources[@]}"
+ACCEPT_RELAY_REPORT_FILE="${acceptance_report}" \
+    scripts/accept-relays.sh "${acceptance_paths[@]}"
 
 grep -F '"passed":true' "${acceptance_report}" >/dev/null
 grep -F "\"camera_count\":${camera_count}" "${acceptance_report}" >/dev/null

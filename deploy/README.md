@@ -137,6 +137,22 @@ rtsp://RESTREAMER_LAN_IP:8554/printer-one
 http://RESTREAMER_LAN_IP:8889/printer-one
 ```
 
+After creating the Restreamer publications, validate the exact named paths that the
+printer dashboards will consume:
+
+```sh
+ACCEPT_RELAY_REPORT_FILE=restreamer-relays.json \
+  scripts/accept-relays.sh printer-one printer-two
+```
+
+The command checks every WebRTC player endpoint from the deployment host and decodes
+every corresponding RTSP stream concurrently from inside the Restreamer container.
+The RTSP checks inherit `ACCEPT_MAX_FIRST_FRAME_MS`, `ACCEPT_SAMPLE_SECONDS`, and
+`ACCEPT_MIN_SAMPLE_FPS`; the defaults require a first frame below one second and a
+ten-second sustained decode. If MediaMTX is not using the Compose defaults, set
+`RESTREAMER_MEDIAMTX_RTSP_BASE` to the RTSP URL visible inside Restreamer and
+`RESTREAMER_MEDIAMTX_WEBRTC_BASE` to the HTTP(S) URL visible to Mainsail clients.
+
 For Mainsail/Moonraker, configure the WebRTC endpoint rather than handing a browser
 an RTSP URL it cannot play:
 

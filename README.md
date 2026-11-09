@@ -178,6 +178,19 @@ the sustained window and floor with `ACCEPT_SAMPLE_SECONDS` and
 `ACCEPT_MIN_SAMPLE_FPS`. Override `ACCEPT_MAX_FIRST_FRAME_MS` only when documenting an
 intentional deployment requirement, not when the camera is feeling contemplative.
 
+Once Restreamer is publishing named outputs to MediaMTX, verify the paths used by the
+printer dashboards as a separate gate:
+
+```sh
+ACCEPT_RELAY_REPORT_FILE=restreamer-relays.json \
+  scripts/accept-relays.sh printer-one printer-two
+```
+
+This checks each WebRTC endpoint from the deployment host and concurrently applies
+the same sub-second first-frame and sustained-decode checks to every RTSP publication
+from inside the Restreamer container. A green input test with an empty output path is,
+after all, just a very efficient surveillance system for nobody.
+
 This gate measures connection startup and sustained decoding from the container's
 network/device namespace. It does not measure photon-to-display delay. Final
 glass-to-glass acceptance still requires a visible millisecond clock or equivalent

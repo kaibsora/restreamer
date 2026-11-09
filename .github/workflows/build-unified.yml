@@ -78,6 +78,7 @@ jobs:
             bash -n "${script}"
           done < <(git ls-files -z '*.sh')
           scripts/test-hardware-report.sh
+          scripts/test-accept-relays.sh
 
       - name: Test and build UI
         if: matrix.suite == 'ui'
