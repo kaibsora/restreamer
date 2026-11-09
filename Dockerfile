@@ -50,9 +50,12 @@ COPY --from=ui-builder /src/ui/build /core/ui
 COPY run.sh /core/bin/run.sh
 COPY ui-root /core/ui-root
 COPY scripts/hardware-report.sh /usr/local/bin/restreamer-hardware-report
+COPY scripts/healthcheck.sh /usr/local/bin/restreamer-healthcheck
 
 RUN mkdir -p /core/config /core/data && \
-    chmod +x /core/bin/run.sh /usr/local/bin/restreamer-hardware-report && \
+    chmod +x /core/bin/run.sh \
+      /usr/local/bin/restreamer-hardware-report \
+      /usr/local/bin/restreamer-healthcheck && \
     ffmpeg -hide_banner -buildconf
 
 ENV CORE_CONFIGFILE=/core/config/config.json \
@@ -62,5 +65,6 @@ ENV CORE_CONFIGFILE=/core/config/config.json \
 
 EXPOSE 8080/tcp 8181/tcp 1935/tcp 1936/tcp 6000/udp
 VOLUME ["/core/data", "/core/config"]
+HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=3 CMD ["/usr/local/bin/restreamer-healthcheck"]
 ENTRYPOINT ["/core/bin/run.sh"]
 WORKDIR /core

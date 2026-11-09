@@ -105,6 +105,11 @@ docker compose -f deploy/compose.yaml up -d
 Open `http://HOST:8080/ui/`. Persistent configuration and data are stored in named
 Docker volumes.
 
+For public access, terminate TLS at a dedicated reverse-proxy hostname and forward
+the complete site—not a `/restreamer/` subpath—to port 8080. The NGINX, Caddy, and IIS
+examples in [the reverse-proxy guide](docs/reverse-proxy.md) preserve the host and
+browser origin correctly, redirect HTTP to HTTPS, and cover large media uploads.
+
 For Intel or AMD hardware acceleration:
 
 ```sh
@@ -203,6 +208,9 @@ Crowsnest, Moonraker, and low-latency camera topology.
 See [docs/api-process-control.md](docs/api-process-control.md) to list, start, stop,
 restart, and inspect individual ingests or publications through the authenticated
 REST API. This is the resource-control path for installations with many cameras.
+
+See [docs/reverse-proxy.md](docs/reverse-proxy.md) for TLS termination and complete
+NGINX, Caddy, and IIS routing examples.
 
 ### Large loop-file uploads
 

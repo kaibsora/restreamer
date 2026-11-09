@@ -38,6 +38,12 @@
 
 ### Deployment
 
+-   Add a built-in Docker health check for the unauthenticated Core `/ping`
+    endpoint and validate it in the unified camera-stack smoke test.
+-   Document root-host reverse proxying, HTTPS redirects, large uploads, and
+    correct origin forwarding for NGINX, Caddy, and IIS
+    ([#957](https://github.com/datarhei/restreamer/issues/957),
+    [#981](https://github.com/datarhei/restreamer/issues/981)).
 -   Allow deployment acceptance to require specific NVENC, VA-API, Quick Sync,
     or Vulkan backends so one working GPU cannot mask a missing target runtime.
 

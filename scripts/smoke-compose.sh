@@ -59,6 +59,26 @@ for _ in $(seq 1 30); do
 done
 [[ "${ready}" == "true" ]]
 
+health_status='starting'
+for _ in $(seq 1 20); do
+    health_status=$(docker container inspect restreamer \
+        --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}missing{{end}}')
+    if [[ "${health_status}" == 'healthy' ]]; then
+        break
+    fi
+    if [[ "${health_status}" == 'unhealthy' || "${health_status}" == 'missing' ]]; then
+        break
+    fi
+    sleep 1
+done
+if [[ "${health_status}" != 'healthy' ]]; then
+    printf 'Restreamer container health is %s, expected healthy.\n' \
+        "${health_status}" >&2
+    exit 1
+fi
+docker exec restreamer restreamer-healthcheck
+printf '%s\n' 'Validated the built-in Restreamer container health check.'
+
 for path in / /ui/ /api; do
     curl --fail --silent --show-error "http://127.0.0.1:8080${path}" >/dev/null
 done
