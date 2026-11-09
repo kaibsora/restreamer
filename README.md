@@ -345,6 +345,20 @@ Fork pull requests are not executed on these runners. A public repository handin
 unreviewed fork code a Docker socket would be an unusually efficient way to donate
 the server to strangers. Same-repository pull requests continue to run normally.
 
+`.github/workflows/accept-hardware.yml` is the manual runtime gate for a GPU-backed
+ARC runner. Select `vaapi`, `qsv`, `nvenc`, or `vulkan`; the job pulls the requested
+unified image, records its immutable repository digest, maps `/dev/dri` or requests
+the NVIDIA container runtime as appropriate, and requires that backend to encode a
+real frame. Its 30-day artifact contains the image identity and complete hardware
+report, turning “the encoder is listed” into evidence that a driver accepted work.
+
+The hardware workflow uses `RESTREAMER_HARDWARE_RUNNER_LABELS` when defined, then
+falls back to `RESTREAMER_RUNNER_LABELS` and finally `restreamer-linux`. Point the
+hardware-specific variable at a GPU-enabled ARC scale set if the ordinary builders
+do not expose GPUs. Store the labels as a JSON array, just like the build workflow;
+for example `["restreamer-linux", "linux", "x64"]`. Do not add `self-hosted` to an
+ARC label set.
+
 GitHub Container Registry packages are not guaranteed to become public merely
 because their source repository is public. The `restreamer` and
 `restreamer-ffmpeg` packages are connected to this repository and public. If either

@@ -72,6 +72,13 @@ runtime reached the container. A successful `--verify` additionally proves the
 runtime accepted an encode. Those are separate facts, despite decades of GPU software
 trying to make them feel like one exciting mystery.
 
+For a GPU exposed to an Actions Runner Controller scale set, dispatch the
+**Accept Restreamer hardware** workflow and select the required backend. The workflow
+uses the `restreamer-linux` scale set by default, never the unsupported ARC
+`self-hosted` label, and retains the immutable image digest plus active-encode output
+as a 30-day artifact. Configure `RESTREAMER_HARDWARE_RUNNER_LABELS` as a JSON label
+array when GPU jobs need a dedicated ARC scale set.
+
 Validate all real camera inputs concurrently from the same network and device
 namespace used by Restreamer:
 

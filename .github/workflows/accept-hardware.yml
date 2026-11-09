@@ -1,0 +1,156 @@
+name: Accept Restreamer hardware
+
+run-name: Hardware acceptance / ${{ inputs.backend }} / ${{ inputs.image }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      backend:
+        description: Hardware encoder runtime that must complete a real encode
+        required: true
+        default: vaapi
+        type: choice
+        options:
+          - vaapi
+          - qsv
+          - nvenc
+          - vulkan
+      image:
+        description: Unified Restreamer image to verify
+        required: true
+        default: ghcr.io/kaibsora/restreamer:latest
+        type: string
+      render_device:
+        description: Optional DRM render node for VA-API or Quick Sync
+        required: false
+        default: ""
+        type: string
+      vulkan_device:
+        description: FFmpeg Vulkan device index
+        required: false
+        default: "0"
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  accept:
+    # ARC uses its scale-set name or configured labels directly; it does not
+    # require the conventional self-hosted label.
+    runs-on: ${{ fromJSON(vars.RESTREAMER_HARDWARE_RUNNER_LABELS || vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate self-hosted runner
+        run: scripts/verify-self-hosted-runner.sh
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image and record immutable identity
+        id: image
+        env:
+          IMAGE: ${{ inputs.image }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull "${IMAGE}"
+          image_id="$(docker image inspect "${IMAGE}" --format '{{.Id}}')"
+          repo_digest="$(docker image inspect "${IMAGE}" --format '{{join .RepoDigests "\n"}}' | sed -n '1p')"
+          if [[ -z "${repo_digest}" ]]; then
+            echo "The pulled image has no repository digest: ${IMAGE}" >&2
+            exit 1
+          fi
+          printf 'Image: %s\nImage ID: %s\nRepository digest: %s\n' \
+            "${IMAGE}" "${image_id}" "${repo_digest}" | tee hardware-image.txt
+          echo "repo_digest=${repo_digest}" >> "${GITHUB_OUTPUT}"
+
+      - name: Verify active hardware encode
+        env:
+          BACKEND: ${{ inputs.backend }}
+          IMAGE: ${{ inputs.image }}
+          RENDER_DEVICE: ${{ inputs.render_device }}
+          VULKAN_DEVICE: ${{ inputs.vulkan_device }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker_args=(--rm)
+          environment_args=()
+          case "${BACKEND}" in
+            nvenc)
+              docker_args+=(--gpus all)
+              ;;
+            vaapi|qsv|vulkan)
+              if [[ ! -d /dev/dri ]]; then
+                echo "Runner does not expose /dev/dri; ${BACKEND} cannot be verified." >&2
+                exit 1
+              fi
+              docker_args+=(--device /dev/dri:/dev/dri)
+              ;;
+            *)
+              echo "Unsupported backend: ${BACKEND}" >&2
+              exit 64
+              ;;
+          esac
+
+          if [[ -n "${RENDER_DEVICE}" ]]; then
+            case "${RENDER_DEVICE}" in
+              /dev/dri/renderD[0-9]*) ;;
+              *)
+                echo "render_device must be a /dev/dri/renderD* node." >&2
+                exit 64
+                ;;
+            esac
+            environment_args+=(
+              --env "RESTREAMER_VAAPI_DEVICE=${RENDER_DEVICE}"
+              --env "RESTREAMER_QSV_DEVICE=${RENDER_DEVICE}"
+            )
+          fi
+
+          if ! [[ "${VULKAN_DEVICE}" =~ ^[0-9]+$ ]]; then
+            echo "vulkan_device must be a non-negative integer." >&2
+            exit 64
+          fi
+          environment_args+=(--env "RESTREAMER_VULKAN_DEVICE=${VULKAN_DEVICE}")
+
+          {
+            cat hardware-image.txt
+            printf 'Runner: %s\nBackend: %s\n' "${RUNNER_NAME}" "${BACKEND}"
+            docker run "${docker_args[@]}" "${environment_args[@]}" \
+              --entrypoint /usr/local/bin/restreamer-hardware-report \
+              "${IMAGE}" --verify --require "${BACKEND}"
+          } 2>&1 | tee hardware-acceptance.txt
+
+      - name: Publish hardware evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hardware-${{ inputs.backend }}-${{ github.run_id }}
+          path: |
+            hardware-image.txt
+            hardware-acceptance.txt
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Summarize acceptance
+        if: success()
+        env:
+          BACKEND: ${{ inputs.backend }}
+          REPO_DIGEST: ${{ steps.image.outputs.repo_digest }}
+        shell: bash
+        run: |
+          {
+            echo "## Hardware acceptance passed"
+            echo
+            echo "- Backend: \`${BACKEND}\`"
+            echo "- Image: \`${REPO_DIGEST}\`"
+            echo "- Evidence artifact: \`hardware-${BACKEND}-${GITHUB_RUN_ID}\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
