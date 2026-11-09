@@ -1,5 +1,13 @@
 # Restreamer
 
+## Unreleased
+
+### Core
+
+-   Discover container-mapped `/dev/videoN` devices even when `v4l2-ctl` cannot
+    describe them, addressing USB capture-device discovery failures
+    ([#890](https://github.com/datarhei/restreamer/issues/890)).
+
 ## 2.12.0
 
 ### UI v1.13.0 > v1.14.0

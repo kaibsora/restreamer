@@ -3,23 +3,63 @@ package skills
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 // DevicesV4L returns a list of available V4L devices
 func DevicesV4L() ([]HWDevice, error) {
-	buf := bytes.NewBuffer(nil)
-
 	cmd := exec.Command("v4l2-ctl", "--list-devices")
 	cmd.Env = []string{}
-	cmd.Stdout = buf
-	cmd.Run()
+	output, commandErr := cmd.Output()
 
-	devices := parseV4LDevices(buf)
+	devices := parseV4LDevices(bytes.NewBuffer(output))
+	paths, globErr := filepath.Glob("/dev/video*")
+	if globErr == nil {
+		devices = addV4LDevicePaths(devices, paths)
+	}
 
-	return devices, nil
+	if len(devices) != 0 {
+		return devices, nil
+	}
+
+	if commandErr != nil {
+		return devices, fmt.Errorf("list V4L devices: %w", commandErr)
+	}
+
+	return devices, globErr
+}
+
+func addV4LDevicePaths(devices []HWDevice, paths []string) []HWDevice {
+	reDevice := regexp.MustCompile(`^video[0-9]+$`)
+	known := make(map[string]struct{}, len(devices))
+
+	for _, device := range devices {
+		known[device.Id] = struct{}{}
+	}
+
+	for _, path := range paths {
+		path = filepath.Clean(path)
+		name := filepath.Base(path)
+		if !reDevice.MatchString(name) {
+			continue
+		}
+		if _, ok := known[path]; ok {
+			continue
+		}
+
+		devices = append(devices, HWDevice{
+			Id:    path,
+			Name:  "Video device " + name,
+			Media: "video",
+		})
+		known[path] = struct{}{}
+	}
+
+	return devices
 }
 
 func parseV4LDevices(data *bytes.Buffer) []HWDevice {

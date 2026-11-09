@@ -1,0 +1,6 @@
+services:
+  restreamer:
+    devices:
+      # A harmless character device exercises V4L2 fallback discovery without
+      # requiring a physical USB camera on every CI runner.
+      - /dev/null:/dev/video99

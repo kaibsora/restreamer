@@ -6,7 +6,12 @@ restreamer_image="${RESTREAMER_IMAGE:-restreamer-smoke:local}"
 camera_count="${SMOKE_CAMERA_COUNT:-4}"
 max_first_frame_ms="${SMOKE_MAX_FIRST_FRAME_MS:-1000}"
 accept_sample_seconds="${SMOKE_ACCEPT_SAMPLE_SECONDS:-2}"
-compose=(docker compose --project-name "${project_name}" --file deploy/compose.yaml)
+compose=(
+    docker compose
+    --project-name "${project_name}"
+    --file deploy/compose.yaml
+    --file deploy/compose.smoke.yaml
+)
 acceptance_report=''
 
 if [[ ! "${camera_count}" =~ ^[1-9][0-9]*$ ]]; then
@@ -54,9 +59,13 @@ for _ in $(seq 1 30); do
 done
 [[ "${ready}" == "true" ]]
 
-for path in / /ui/ /api /api/v3/skills; do
+for path in / /ui/ /api; do
     curl --fail --silent --show-error "http://127.0.0.1:8080${path}" >/dev/null
 done
+
+skills_json=$(curl --fail --silent --show-error http://127.0.0.1:8080/api/v3/skills)
+grep -F '/dev/video99' <<<"${skills_json}" >/dev/null
+printf '%s\n' 'Validated fallback discovery for a container-mapped V4L2 device.'
 
 ui_html=$(curl --fail --silent --show-error http://127.0.0.1:8080/ui/)
 grep -F '<title>Restreamer</title>' <<<"${ui_html}" >/dev/null
