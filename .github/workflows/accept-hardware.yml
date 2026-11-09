@@ -89,10 +89,9 @@ jobs:
               docker_args+=(--gpus all)
               ;;
             vaapi|qsv|vulkan)
-              if [[ ! -d /dev/dri ]]; then
-                echo "Runner does not expose /dev/dri; ${BACKEND} cannot be verified." >&2
-                exit 1
-              fi
+              # Device paths are resolved by the Docker daemon. In ARC DinD
+              # deployments the runner and daemon can have different mounts,
+              # so checking /dev/dri in this client container is misleading.
               docker_args+=(--device /dev/dri:/dev/dri)
               ;;
             *)
