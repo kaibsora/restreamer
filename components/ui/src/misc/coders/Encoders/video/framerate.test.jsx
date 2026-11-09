@@ -1,4 +1,5 @@
 import * as AV1Rav1e from './av1_librav1e';
+import * as AV1VAAPI from './av1_vaapi';
 import * as H264Libx264 from './h264_libx264';
 import * as H264QSV from './h264_qsv';
 import * as H264V4L2M2M from './h264_v4l2m2m';
@@ -13,6 +14,7 @@ const encoders = [
 	['libx265', HEVCLibx265],
 	['libvpx-vp9', VP9Libvpx],
 	['librav1e', AV1Rav1e],
+	['av1_vaapi', AV1VAAPI],
 	['h264_v4l2m2m', H264V4L2M2M],
 	['h264_qsv', H264QSV],
 	['h264_vulkan', H264Vulkan],
