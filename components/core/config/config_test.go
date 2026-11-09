@@ -69,6 +69,7 @@ func TestValidateDefault(t *testing.T) {
 	require.NoError(t, err)
 
 	cfg := New(fs)
+	require.False(t, cfg.CheckForUpdates, "legacy update telemetry must remain disabled by default")
 
 	cfg.Validate(true)
 

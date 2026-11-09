@@ -9,7 +9,6 @@ import Snackbar from '@mui/material/Snackbar';
 
 import { NotifyProvider } from './contexts/Notify';
 import * as auth0 from './utils/auth0';
-import useInterval from './hooks/useInterval';
 import ChannelList from './misc/ChannelList';
 import Footer from './Footer';
 import I18n from './I18n';
@@ -56,7 +55,6 @@ export default function RestreamerUI(inputProps) {
 		compatibility: { compatible: false },
 		ingest: false,
 		password: false,
-		updates: false,
 		service: false,
 	});
 	const [$ready, setReady] = React.useState(false);
@@ -88,13 +86,6 @@ export default function RestreamerUI(inputProps) {
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	useInterval(() => {
-		setState({
-			...$state,
-			updates: restreamer.current.HasUpdates(),
-		});
-	}, 1000 * 60);
 
 	const notify = (severity, type, message) => {
 		setSnack({
@@ -159,7 +150,6 @@ export default function RestreamerUI(inputProps) {
 			compatibility: restreamer.current.Compatibility(),
 			ingest: restreamer.current.HasIngest(),
 			password: restreamer.current.Auths().length === 0 && !restreamer.current.ConfigOverrides('api.auth.enable'),
-			updates: restreamer.current.HasUpdates(),
 			service: restreamer.current.HasService(),
 		});
 
@@ -558,7 +548,6 @@ export default function RestreamerUI(inputProps) {
 							expand={expand}
 							showPlayersite={$state.ingest}
 							showSettings={$state.compatibility.compatible}
-							hasUpdates={$state.updates}
 							hasService={$state.service}
 							onChannel={handleChannelList}
 							onPlayersite={handlePlayersite}

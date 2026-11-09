@@ -22,6 +22,10 @@
 
 ### Core
 
+-   Remove the legacy datarhei update checker and its periodic instance telemetry.
+    The deprecated `update_check`/`CORE_UPDATE_CHECK` setting remains readable for
+    configuration compatibility but no longer causes outbound requests
+    ([#869](https://github.com/datarhei/restreamer/issues/869)).
 -   Make Swagger UI automatically add the required `Bearer` scheme when a raw JWT
     is pasted into API authorization, while preserving explicitly supplied schemes
     ([#851](https://github.com/datarhei/restreamer/issues/851)).
@@ -42,6 +46,9 @@
 
 ### UI
 
+-   Remove the browser-side datarhei update request and the misleading update and
+    anonymous-metrics controls. Fork updates are published as immutable GHCR image
+    tags until this project establishes its own release-version contract.
 -   Keep the live player mounted when a transient Core state poll fails, avoiding
     setup-screen flashes and playback/audio resets, and serialize the one-second
     state poll to prevent out-of-order updates

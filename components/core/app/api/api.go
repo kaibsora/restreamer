@@ -39,7 +39,6 @@ import (
 	"github.com/datarhei/core/v16/service"
 	"github.com/datarhei/core/v16/session"
 	"github.com/datarhei/core/v16/srt"
-	"github.com/datarhei/core/v16/update"
 
 	"github.com/caddyserver/certmagic"
 	"go.uber.org/zap"
@@ -81,7 +80,6 @@ type api struct {
 	mainserver    *gohttp.Server
 	sidecarserver *gohttp.Server
 	httpjwt       jwt.JWT
-	update        update.Checker
 	replacer      replace.Replacer
 
 	errorChan chan error
@@ -734,23 +732,6 @@ func (a *api) start() error {
 		a.service = s
 	}
 
-	if cfg.CheckForUpdates {
-		s, err := update.New(update.Config{
-			ID:      cfg.ID,
-			Name:    app.Name,
-			Version: app.Version.String(),
-			Arch:    app.Arch,
-			Monitor: a.metrics,
-			Logger:  a.log.logger.core.WithComponent("Update"),
-		})
-
-		if err != nil {
-			return fmt.Errorf("unable to create update checker: %w", err)
-		}
-
-		a.update = s
-	}
-
 	if cfg.Storage.Disk.Cache.Enable {
 		cache, err := cache.NewLRUCache(cache.LRUConfig{
 			TTL:             time.Duration(cfg.Storage.Disk.Cache.TTL) * time.Second,
@@ -1265,11 +1246,6 @@ func (a *api) start() error {
 		a.service.Start()
 	}
 
-	// Start the update checker
-	if a.update != nil {
-		a.update.Start()
-	}
-
 	a.state = "running"
 
 	return nil
@@ -1301,11 +1277,6 @@ func (a *api) stop() {
 	// Stop JWT authentication
 	if a.httpjwt != nil {
 		a.httpjwt.ClearValidators()
-	}
-
-	if a.update != nil {
-		a.update.Stop()
-		a.update = nil
 	}
 
 	if a.service != nil {

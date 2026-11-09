@@ -39,7 +39,6 @@ import TabPanel from '../misc/TabPanel';
 import TabsVerticalGrid from '../misc/TabsVerticalGrid';
 import Textarea from '../misc/Textarea';
 import TextField from '../misc/TextField';
-import useInterval from '../hooks/useInterval';
 import { withDefaults } from '../utils/props';
 import { normalizeRTMPAppConfig } from '../utils/rtmp';
 
@@ -50,18 +49,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const configValues = {
-	update_check: {
-		tab: 'general',
-		set: (config, value) => {
-			config.update_check = !config.update_check;
-		},
-		unset: (config) => {
-			delete config.update_check;
-		},
-		validate: (config) => {
-			return null;
-		},
-	},
 	id: {
 		tab: 'service',
 		set: (config, value) => {
@@ -715,10 +702,6 @@ export default function Settings(inputProps) {
 		service: false,
 	});
 	const [$expert, setExpert] = React.useState(props.restreamer.IsExpert());
-	const [$updates, setUpdates] = React.useState({
-		has: props.restreamer.HasUpdates(),
-		want: props.restreamer.CheckForUpdates(),
-	});
 	const [$tab, setTab] = React.useState(_tab ? _tab : 'general');
 	const [$tabs, setTabs] = React.useState({
 		general: { errors: false, messages: [] }, // messages is an array of objects: {configvalue: '', error: ''}
@@ -758,13 +741,6 @@ export default function Settings(inputProps) {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	useInterval(() => {
-		setUpdates({
-			...$updates,
-			has: props.restreamer.HasUpdates(),
-		});
-	}, 1000 * 2);
 
 	const load = async () => {
 		setReloadKey(props.restreamer.CreatedAt().toISOString());
@@ -826,14 +802,6 @@ export default function Settings(inputProps) {
 	const handleExpertMode = () => {
 		props.restreamer.SetExpert(!$expert);
 		setExpert(!$expert);
-	};
-
-	const handleCheckForUpdates = () => {
-		props.restreamer.SetCheckForUpdates(!$updates.want);
-		setUpdates({
-			...$updates,
-			want: !$updates.want,
-		});
 	};
 
 	const handleChange = (what) => (event) => {
@@ -1267,33 +1235,6 @@ export default function Settings(inputProps) {
 										<ErrorBox messages={$tabs.general.messages} />
 									</Grid>
 								)}
-								<Grid item xs={12}>
-									<Checkbox label={<Trans>Check for updates</Trans>} checked={$updates.want} onChange={handleCheckForUpdates} />
-									{$updates.has === true && (
-										<BoxText color="success">
-											<Typography variant="inherit" color="inherit" width="100%">
-												<Link
-													color="inherit"
-													style={{ textDecoration: 'underline', cursor: 'pointer' }}
-													onClick={handleHelp('update-link')}
-													target="_blank"
-												>
-													<Trans>There are updates available. Here you get more information.</Trans>
-												</Link>
-											</Typography>
-										</BoxText>
-									)}
-								</Grid>
-								<Grid item xs={12}>
-									<Checkbox
-										label={<Trans>Send anonymous metrics (helps us for future development)</Trans>}
-										checked={config.update_check}
-										disabled={env('update_check')}
-										onChange={handleChange('update_check')}
-									/>
-									{env('update_check') && <Env />}
-									<ErrorBox configvalue="update_check" messages={$tabs.general.messages} />
-								</Grid>
 								<Grid item xs={12}>
 									<Checkbox label={<Trans>Expert mode</Trans>} checked={$expert} onChange={handleExpertMode} />
 								</Grid>

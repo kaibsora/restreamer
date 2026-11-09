@@ -86,6 +86,12 @@ Versioned images are also available as `ffmpeg-VERSION`; for example,
 GitHub Container Registry. Local builds remain useful when changing the source or
 testing a release before publication.
 
+The fork does not contact datarhei's update service or send instance telemetry.
+Until the project defines and publishes its own versioned releases, watch the
+repository or use immutable `sha-*` and `ffmpeg-git-*` GHCR tags to track updates.
+The legacy `update_check` configuration key and `CORE_UPDATE_CHECK` environment
+variable are accepted only for compatibility and have no effect.
+
 ## Quick start
 
 Requirements:

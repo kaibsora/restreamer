@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { jwtDecode } from 'jwt-decode';
 import Handlebars from 'handlebars/dist/cjs/handlebars';
 import SemverSatisfies from 'semver/functions/satisfies';
-import SemverGt from 'semver/functions/gt';
-import SemverGte from 'semver/functions/gte';
 import SemverMajor from 'semver/functions/major';
 import SemverMinor from 'semver/functions/minor';
 
@@ -59,11 +57,7 @@ class Restreamer {
 
 		this.refreshToken = null;
 
-		this.updates = null;
-		this.hasUpdates = false;
 		this.hasService = false;
-
-		this._checkForUpdates();
 	}
 
 	_initAbout(initialAbout) {
@@ -2928,112 +2922,8 @@ class Restreamer {
 		Storage.Set('expert', !!value);
 	}
 
-	// Check for Updates
-
-	CheckForUpdates() {
-		return Storage.Get('updates') === 'true';
-	}
-
-	SetCheckForUpdates(value) {
-		Storage.Set('updates', !!value);
-
-		this._checkForUpdates();
-	}
-
-	HasUpdates() {
-		if (!this.CheckForUpdates()) {
-			return false;
-		}
-
-		return this.hasUpdates;
-	}
-
 	HasService() {
 		return this.hasService;
-	}
-
-	async _checkForUpdates() {
-		if (Storage.Get('updates') !== 'false') {
-			Storage.Set('updates', true);
-		}
-
-		clearTimeout(this.updates);
-
-		if (!this.CheckForUpdates()) {
-			return;
-		}
-
-		(async () => {
-			let response = null;
-
-			try {
-				response = await fetch('https://service.datarhei.com/api/v1/app_version', {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						app_version: Version.UI,
-					}),
-				});
-			} catch (err) {
-				return;
-			}
-
-			const contentType = response.headers.get('Content-Type');
-			let isJSON = false;
-
-			if (contentType != null) {
-				isJSON = contentType.indexOf('application/json') !== -1;
-			}
-
-			if (isJSON === false) {
-				return;
-			}
-
-			if (response.ok === false) {
-				return;
-			}
-
-			const value = {
-				latest_version: Version.UI,
-				...(await response.json()),
-			};
-
-			const findVersion = (name) => {
-				const matches = name.match(/v(\d+\.\d+\.\d+)\s*$/);
-				if (matches === null) {
-					return '0.0.0';
-				}
-
-				return matches[1];
-			};
-
-			const currentVersion = findVersion(Version.UI);
-			const announcedVersion = findVersion(value.latest_version);
-
-			if (currentVersion !== '0.0.0') {
-				if (SemverGt(announcedVersion, currentVersion)) {
-					this.hasUpdates = true;
-				} else {
-					this.hasUpdates = false;
-				}
-			}
-
-			const serviceVersion = findVersion(value.service_version);
-			if (SemverGte(serviceVersion, '1.0.0')) {
-				this.hasService = true;
-			} else {
-				this.hasService = false;
-			}
-		})();
-
-		this.updates = setTimeout(
-			() => {
-				this._checkForUpdates();
-			},
-			1000 * 60 * 60,
-		);
 	}
 
 	// Private system related function

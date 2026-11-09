@@ -56,19 +56,6 @@ const useStyles = makeStyles((theme) => ({
 				backgroundColor: theme.palette.background.box_default,
 			},
 		},
-		'& .headerFabHighlight': {
-			height: 60,
-			width: 60,
-			marginLeft: '1em',
-			boxShadow: 'unset',
-			border: `3px solid ${theme.palette.secondary.main}`,
-			'& .fabIcon': {
-				fontSize: 30,
-			},
-			'&:hover': {
-				backgroundColor: theme.palette.background.box_default,
-			},
-		},
 		'& .headerLeft': {
 			fontSize: '3.5rem',
 			fontWeight: 300,
@@ -115,9 +102,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	aboutImage: {
 		paddingLeft: '1em',
-	},
-	colorHighlight: {
-		color: `${theme.palette.secondary.main}!important`,
 	},
 }));
 
@@ -247,7 +231,7 @@ function HeaderMenu(inputProps) {
 				<Fab className="headerFab" color="primary" onClick={props.onChannel}>
 					<VideocamIcon className="fabIcon" />
 				</Fab>
-				<Fab className={props.hasUpdates ? 'headerFabHighlight' : 'headerFab'} color="primary" onClick={handleMenuOpen}>
+				<Fab className="headerFab" color="primary" onClick={handleMenuOpen}>
 					<MenuOpenIcon className="fabIcon" />
 				</Fab>
 				<StyledMenu anchorEl={$anchorEl} open={$anchorEl !== null} onClose={handleMenuClose} onClick={handleMenuClose} disableScrollLock>
@@ -273,7 +257,7 @@ function HeaderMenu(inputProps) {
 					{props.showSettings === true && (
 						<MenuItem onClick={props.onSettings}>
 							<ListItemIcon>
-								<Settings fontSize="small" className={props.hasUpdates ? classes.colorHighlight : ''} />
+								<Settings fontSize="small" />
 							</ListItemIcon>
 							<Trans>System</Trans>
 						</MenuItem>
@@ -359,7 +343,6 @@ const HeaderMenuDefaultProps = {
 	expand: false,
 	showPlayersite: false,
 	showSettings: false,
-	hasUpdates: false,
 	hasService: false,
 };
 
