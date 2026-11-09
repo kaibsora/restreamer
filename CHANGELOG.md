@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Keep every input source available with current and future FFmpeg majors. The
+  inherited compatibility declarations stopped at FFmpeg 6 even though this fork
+  intentionally tracks FFmpeg master.
 - Fail hardware acceptance early with daemon-side ARC/DinD GPU preflight evidence
   and document the device/runtime wiring required by dedicated GPU runner scale sets.
 
