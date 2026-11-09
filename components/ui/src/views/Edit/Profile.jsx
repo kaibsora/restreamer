@@ -20,6 +20,7 @@ import SourceSelect from './SourceSelect';
 import StreamSelect from './StreamSelect';
 
 import FilterSelect from '../../misc/FilterSelect';
+import * as Filters from '../../misc/filters';
 import { withDefaults } from '../../utils/props';
 
 export default function Profile(inputProps) {
@@ -53,6 +54,7 @@ export default function Profile(inputProps) {
 	});
 	const [$activeStep, setActiveStep] = React.useState(props.startWith === 'audio' ? 1 : 0);
 	const [$ready, setReady] = React.useState(false);
+	const [$storing, setStoring] = React.useState(false);
 
 	React.useEffect(() => {
 		(async () => {
@@ -243,7 +245,32 @@ export default function Profile(inputProps) {
 		});
 	};
 
-	const handleDone = () => {
+	const handleDone = async () => {
+		const watermark = $profile.video.filter.settings.watermark;
+		const watermarkText = typeof watermark?.settings?.text === 'string' ? watermark.settings.text : '';
+		if (watermark?.settings?.enabled && watermarkText.trim().length !== 0) {
+			setStoring(true);
+			try {
+				const path = await handleStore(
+					'watermark.txt',
+					new Blob([watermarkText], {
+						type: 'text/plain;charset=utf-8',
+					}),
+				);
+				if (!path) {
+					return;
+				}
+
+				watermark.settings.text_path = path;
+				const service = Filters.Video.Get('watermark');
+				watermark.graph = service.createGraph(watermark.settings, {
+					decoder: $profile.video.decoder.coder,
+				});
+			} finally {
+				setStoring(false);
+			}
+		}
+
 		const sources = M.cleanupSources($sources);
 		const profile = M.cleanupProfile($profile);
 
@@ -582,6 +609,7 @@ export default function Profile(inputProps) {
 													type="video"
 													profile={$profile.video}
 													availableFilters={props.skills.filter}
+													onStore={handleStore}
 													onChange={handleFilter('video')}
 												/>
 											</Grid>
@@ -764,7 +792,7 @@ export default function Profile(inputProps) {
 								<Button
 									variant="outlined"
 									color="primary"
-									disabled={$profile.custom.selected === true && $audioProbe.status !== 'success'}
+									disabled={$storing || ($profile.custom.selected === true && $audioProbe.status !== 'success')}
 									onClick={handleDone}
 								>
 									<Trans>Finish</Trans>
@@ -774,7 +802,7 @@ export default function Profile(inputProps) {
 					/>
 				</React.Fragment>
 			)}
-			<Backdrop open={$videoProbe.probing || $audioProbe.probing || $skillsRefresh}>
+			<Backdrop open={$videoProbe.probing || $audioProbe.probing || $skillsRefresh || $storing}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
 			<ProbeModal open={$probeModal.open} onClose={handleProbeLogModal('none')} data={$probeModal.data} />

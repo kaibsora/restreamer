@@ -170,6 +170,7 @@ RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   v4l-utils \
   vainfo \
   vulkan-tools \
+  fonts-dejavu-core \
   fbset \
   libasound2t64 \
   libdrm2 \

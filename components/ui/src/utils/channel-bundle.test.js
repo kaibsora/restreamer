@@ -40,14 +40,21 @@ describe('channel bundles', () => {
 
 	it('remaps binary-safe channel assets and accepts legacy version 1 bundles', () => {
 		const path = `/channels/${oldChannel}/logo.png`;
+		const watermarkPath = `/channels/${oldChannel}/watermark.txt`;
 		const bundle = createChannelBundle(
 			{ channelid: oldChannel, name: 'Printer One' },
 			[process(ingestId)],
-			[{ path, content_type: 'image/png', encoding: 'base64', data: 'AAEC' }],
+			[
+				{ path, content_type: 'image/png', encoding: 'base64', data: 'AAEC' },
+				{ path: watermarkPath, content_type: 'text/plain;charset=utf-8', encoding: 'base64', data: 'VGVzdA==' },
+			],
 		);
 		const imported = prepareChannelImport(bundle, () => newChannel);
 
-		expect(imported.assets).toEqual([{ path: `/channels/${newChannel}/logo.png`, content_type: 'image/png', encoding: 'base64', data: 'AAEC' }]);
+		expect(imported.assets).toEqual([
+			{ path: `/channels/${newChannel}/logo.png`, content_type: 'image/png', encoding: 'base64', data: 'AAEC' },
+			{ path: `/channels/${newChannel}/watermark.txt`, content_type: 'text/plain;charset=utf-8', encoding: 'base64', data: 'VGVzdA==' },
+		]);
 
 		const legacy = { ...bundle, version: 1 };
 		delete legacy.assets;

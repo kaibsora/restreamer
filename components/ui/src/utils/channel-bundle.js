@@ -4,7 +4,7 @@ const BUNDLE_TYPE = 'restreamer-channel-bundle';
 const BUNDLE_VERSION = 2;
 const SUPPORTED_BUNDLE_VERSIONS = new Set([1, BUNDLE_VERSION]);
 const MAX_ASSET_BYTES = 1024 * 1024;
-const MAX_TOTAL_ASSET_BYTES = 2 * MAX_ASSET_BYTES;
+const MAX_TOTAL_ASSET_BYTES = 3 * MAX_ASSET_BYTES;
 const INGEST_PREFIX = 'restreamer-ui:ingest:';
 const EGRESS_PATTERN = /^restreamer-ui:egress:([0-9a-z]+):[0-9a-f-]+$/;
 
@@ -54,7 +54,7 @@ const validateAssets = (bundle) => {
 		}
 
 		const name = asset.path.substring(prefix.length);
-		if (!/^(logo|poster)\.(gif|jpe?g|png|svg)$/i.test(name) || name.includes('..')) {
+		if (!/^(?:(?:logo|poster)\.(?:gif|jpe?g|png|svg)|watermark\.(?:jpe?g|png|txt))$/i.test(name) || name.includes('..')) {
 			throw new Error(`The bundle contains unsupported channel asset "${name}"`);
 		}
 
@@ -72,7 +72,10 @@ const validateAssets = (bundle) => {
 		) {
 			throw new Error(`The bundle contains invalid data for asset "${name}"`);
 		}
-		if (asset.content_type !== undefined && (typeof asset.content_type !== 'string' || !/^image\/(gif|jpeg|png|svg\+xml)$/.test(asset.content_type))) {
+		if (
+			asset.content_type !== undefined &&
+			(typeof asset.content_type !== 'string' || !/^(?:image\/(?:gif|jpeg|png|svg\+xml)|text\/plain(?:;charset=utf-8)?)$/.test(asset.content_type))
+		) {
 			throw new Error(`The bundle contains an invalid content type for asset "${name}"`);
 		}
 
@@ -84,7 +87,7 @@ const validateAssets = (bundle) => {
 	}
 
 	if (totalBytes > MAX_TOTAL_ASSET_BYTES) {
-		throw new Error('The channel assets are larger than 2 MB in total');
+		throw new Error('The channel assets are larger than 3 MB in total');
 	}
 };
 

@@ -53,6 +53,26 @@ describe('Restreamer channel migration', () => {
 		expect(assets).toEqual([{ path: logoPath, content_type: 'image/png', encoding: 'base64', data: 'AAEC' }]);
 	});
 
+	it('exports referenced watermark image and text assets', async () => {
+		const restreamer = Object.create(Restreamer.prototype);
+		const imagePath = `/channels/${channelId}/watermark.png`;
+		const textPath = `/channels/${channelId}/watermark.txt`;
+		const processWithWatermark = {
+			...savedProcess,
+			metadata: { profiles: [{ video: { filter: { settings: { watermark: { settings: { image: imagePath, text_path: textPath } } } } } }] },
+		};
+		restreamer._listAssets = async () => [imagePath, textPath];
+		restreamer._getAsset = async (path) =>
+			path.endsWith('.txt') ? new Blob(['Printer One'], { type: 'text/plain' }) : new Blob([new Uint8Array([0, 1, 2])], { type: 'image/png' });
+
+		const assets = await restreamer._exportChannelAssets(channelId, [processWithWatermark]);
+
+		expect(assets.map((asset) => [asset.path, asset.content_type])).toEqual([
+			[imagePath, 'image/png'],
+			[textPath, 'text/plain;charset=utf-8'],
+		]);
+	});
+
 	it('creates processes stopped, restores autostart, and refreshes the UI', async () => {
 		const restreamer = Object.create(Restreamer.prototype);
 		const updates = [];

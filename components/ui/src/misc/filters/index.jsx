@@ -11,6 +11,7 @@ import * as Scale from './video/Scale';
 import * as Transpose from './video/Transpose';
 import * as HFlip from './video/HFlip';
 import * as VFlip from './video/VFlip';
+import * as Watermark from './video/Watermark';
 
 // Register filters type: audio/video
 class Registry {
@@ -54,6 +55,9 @@ audioRegistry.Register(Loudnorm);
 
 // Video Filters
 const videoRegistry = new Registry('video');
+// Watermark owns the initial labelled filtergraph input. Keep it first so the
+// ordinary single-input filters can be appended to its output.
+videoRegistry.Register(Watermark);
 videoRegistry.Register(Bwdif);
 videoRegistry.Register(Framerate);
 videoRegistry.Register(Scale);

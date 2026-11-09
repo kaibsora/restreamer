@@ -49,9 +49,11 @@ for codec in av1 h264 hevc; do
 done
 require_pattern "$encoders" '[[:space:]]aac[[:space:]]+AAC'
 
-for filter in overlay_vulkan scale_vulkan transpose_vulkan; do
+for filter in overlay_vulkan scale_vulkan transpose_vulkan movie overlay scale format colorchannelmixer setpts drawtext; do
     require_pattern "$filters" "[[:space:]]${filter}[[:space:]]"
 done
+
+test -r /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf || fail 'missing DejaVu Sans runtime font'
 
 require_pattern "$muxers" '[[:space:]]E[[:space:]]+rtp_mpegts[[:space:]]'
 require_fixed_line "$output_protocols" '  rtp'

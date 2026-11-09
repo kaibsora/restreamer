@@ -3291,7 +3291,11 @@ class Restreamer {
 		const prefix = `/channels/${channelid}/`;
 		const referenced = new Set();
 		const findReferences = (value) => {
-			if (typeof value === 'string' && value.startsWith(prefix) && /\/(logo|poster)\.(gif|jpe?g|png|svg)$/i.test(value)) {
+			if (
+				typeof value === 'string' &&
+				value.startsWith(prefix) &&
+				/\/(?:(?:logo|poster)\.(?:gif|jpe?g|png|svg)|watermark\.(?:jpe?g|png|txt))$/i.test(value)
+			) {
 				referenced.add(value);
 			} else if (Array.isArray(value)) {
 				value.forEach(findReferences);
@@ -3313,6 +3317,7 @@ class Restreamer {
 			jpeg: 'image/jpeg',
 			png: 'image/png',
 			svg: 'image/svg+xml',
+			txt: 'text/plain;charset=utf-8',
 		};
 		const paths = [...referenced];
 		const assets = [];

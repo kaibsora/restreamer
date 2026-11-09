@@ -64,43 +64,47 @@ export default function FilterSelect(inputProps) {
 	}
 
 	// Checks the state of hwaccel (gpu encoding)
-	let encoderRegistry = null;
 	let hwaccel = false;
 	if (props.type === 'video') {
-		encoderRegistry = Encoders.Video;
-		for (let encoder of encoderRegistry.List()) {
-			if (encoder.codec === props.profile.encoder.coder && encoder.hwaccel) {
-				hwaccel = true;
-			}
-		}
+		const encoder = Encoders.Video.Get(props.profile.encoder.coder);
+		hwaccel = encoder?.hwaccel === true;
 	}
 
 	// Creates filter components
-	let filterSettings = [];
-	if (!hwaccel) {
-		for (let c of filterRegistry.List()) {
-			// Checks FFmpeg skills (filter is available)
-			if (props.availableFilters.includes(c.filter)) {
-				const Settings = c.component;
+	const filterSettings = [];
+	for (let c of filterRegistry.List()) {
+		if (hwaccel && c.hwaccel !== true) {
+			continue;
+		}
 
-				if (!(c.filter in profile.filter.settings)) {
-					profile.filter.settings[c.filter] = c.defaults();
-				} else {
-					profile.filter.settings[c.filter] = {
-						...c.defaults(),
-						...profile.filter.settings[c.filter],
-					};
-				}
+		const requiredFilters = c.filters || [c.filter];
+		// Checks FFmpeg skills (all filters used by this component are available)
+		if (requiredFilters.every((filter) => props.availableFilters.includes(filter))) {
+			const Settings = c.component;
 
-				filterSettings.push(
-					<Settings key={c.filter} settings={profile.filter.settings[c.filter].settings} onChange={handleFilterSettingsChange(c.filter)} />,
-				);
+			if (!(c.filter in profile.filter.settings)) {
+				profile.filter.settings[c.filter] = c.defaults();
+			} else {
+				profile.filter.settings[c.filter] = {
+					...c.defaults(),
+					...profile.filter.settings[c.filter],
+				};
 			}
+
+			filterSettings.push(
+				<Settings
+					key={c.filter}
+					settings={profile.filter.settings[c.filter].settings}
+					profile={profile}
+					onStore={props.onStore}
+					onChange={handleFilterSettingsChange(c.filter)}
+				/>,
+			);
 		}
 	}
 
 	// No suitable filter found
-	if (filterSettings === null && !hwaccel) {
+	if (filterSettings.length === 0) {
 		return (
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
@@ -110,10 +114,6 @@ export default function FilterSelect(inputProps) {
 				</Grid>
 			</Grid>
 		);
-
-		// hwaccel requires further settings
-	} else if (hwaccel) {
-		return false;
 	}
 
 	return (
@@ -132,5 +132,8 @@ const FilterSelectDefaultProps = {
 	type: '',
 	profile: {},
 	availableFilters: [],
+	onStore: async function () {
+		return '';
+	},
 	onChange: function (filter, automatic) {},
 };

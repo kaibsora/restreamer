@@ -251,6 +251,33 @@ the selected-channel migration requested in
 requiring a raw copy of the entire Core database—because “just transplant the
 database” is less a migration plan than a hostage situation.
 
+### Burn a logo or channel name into video
+
+In **Edit → Video settings**, select a video encoder instead of stream copy and
+enable **Burn logo or text into the encoded video** under the filter settings.
+Upload a PNG or JPEG, choose its position, pixel width, opacity, and edge margin,
+and optionally enter a channel name or other text with independent position, size,
+color, and background controls. The text is stored as a UTF-8 channel asset rather
+than interpolated into an FFmpeg command, so punctuation and non-Latin names do not
+become accidental filter syntax.
+
+Branding is applied to the ingest's encoded frames. HLS, RTMP, SRT, RTSP,
+RTP/MPEG-TS, and MediaMTX publications derived from that ingest therefore receive
+the same pixels; this is not the separate logo drawn by the public browser player.
+The logo and text assets are persistent under `/core/data`, are included in channel
+export/import bundles, and are remapped with the destination channel ID.
+
+Hardware encoders remain available. The image/text composition happens before the
+encoder-specific VA-API, QSV, NVENC, or Vulkan upload stage, so a single UI path
+works across the unified image instead of maintaining four subtly incompatible
+versions of “put this PNG in the corner.” Branding necessarily requires
+transcoding; FFmpeg cannot alter pixels while also copying those same pixels
+unchanged, despite the occasional feature request for precisely that act of magic.
+
+This implements the encoded branding requested in
+[upstream issue #946](https://github.com/datarhei/restreamer/issues/946) and
+[upstream issue #982](https://github.com/datarhei/restreamer/issues/982).
+
 See [docs/reverse-proxy.md](docs/reverse-proxy.md) for TLS termination and complete
 NGINX, Caddy, and IIS routing examples.
 
