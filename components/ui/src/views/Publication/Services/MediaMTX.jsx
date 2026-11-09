@@ -118,10 +118,18 @@ function createClientUrls(inputSettings) {
 	};
 }
 
-function init(settings, metadata = {}) {
+function init(settings, metadata = {}, pathPrefix = '', explicitDefaultPath = '') {
+	const prefix = String(pathPrefix || '')
+		.trim()
+		.replace(/^\/+|\/+$/g, '');
+	const channelPath = slugifyPath(metadata.name);
+	const generatedPath =
+		prefix.length === 0 ? channelPath : `${prefix}/${channelPath}`;
+	const defaultPath = explicitDefaultPath || generatedPath;
+
 	return {
 		server: 'rtsp://mediamtx:8554',
-		path: slugifyPath(metadata.name),
+		path: defaultPath,
 		transport: 'tcp',
 		client_host: defaultClientHost(),
 		...settings,
@@ -160,7 +168,12 @@ function createOutput(inputSettings) {
 
 function Service(inputProps) {
 	const props = withDefaults(inputProps, ServiceDefaultProps);
-	const settings = init(props.settings, props.metadata);
+	const settings = init(
+		props.settings,
+		props.metadata,
+		props.pathPrefix,
+		props.defaultPath,
+	);
 
 	React.useEffect(() => {
 		props.onChange([createOutput(settings)], settings);
@@ -189,13 +202,27 @@ function Service(inputProps) {
 				/>
 			</Grid>
 			<Grid item xs={12} md={4}>
-				<TextField
-					variant="outlined"
-					fullWidth
-					label={<Trans>Stream path</Trans>}
-					value={settings.path}
-					onChange={handleChange('path')}
-				/>
+				{props.pathOptions.length === 0 ? (
+					<TextField
+						variant="outlined"
+						fullWidth
+						label={<Trans>Stream path</Trans>}
+						value={settings.path}
+						onChange={handleChange('path')}
+					/>
+				) : (
+					<Select
+						label={<Trans>Stream slot</Trans>}
+						value={settings.path}
+						onChange={handleChange('path')}
+					>
+						{props.pathOptions.map((path) => (
+							<MenuItem key={path} value={path}>
+								{path}
+							</MenuItem>
+						))}
+					</Select>
+				)}
 			</Grid>
 			<Grid item xs={12}>
 				<Select
@@ -255,6 +282,9 @@ const ServiceDefaultProps = {
 	settings: {},
 	skills: {},
 	metadata: {},
+	pathPrefix: '',
+	defaultPath: '',
+	pathOptions: [],
 	streams: [],
 	onChange: function (output, settings) {},
 };

@@ -305,6 +305,23 @@ regression starts with valid AAC timestamps, freezes them after packet 25, and p
 that later packets remain readable. This addresses the failure reported in
 [upstream issue #952](https://github.com/datarhei/restreamer/issues/952).
 
+### Keep LAN viewers connected while a camera is offline
+
+Add a **MediaMTX resilient LAN relay** publication when a printer dashboard should
+remain connected during camera or ingest outages. The preset publishes video-only
+H.264 to one of 16 explicit `resilient/01` through `resilient/16` slots. MediaMTX
+supplies an offline slate before the publisher arrives, swaps to live video without
+disconnecting existing readers, and restores the slate when the publisher stops.
+The camera-stack smoke test holds one reader open through that complete
+offline/live/offline sequence and requires it to decode both sources.
+
+The separate resilient preset deliberately removes audio because MediaMTX requires
+the live publisher and fallback stream to expose the same tracks. Ordinary LAN relay
+publications continue to support AAC or Opus. See the
+[deployment guide](deploy/README.md#keep-a-dashboard-stream-available-while-its-camera-is-offline)
+for paths and limitations. This addresses the fallback behavior requested in
+[upstream issue #965](https://github.com/datarhei/restreamer/issues/965).
+
 ### Disable the public landing page
 
 Open **Publication website → General**, clear **Publish public landing page**, and

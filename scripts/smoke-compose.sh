@@ -13,6 +13,7 @@ compose=(
     --file deploy/compose.smoke.yaml
 )
 acceptance_report=''
+fallback_log=''
 
 if [[ ! "${camera_count}" =~ ^[1-9][0-9]*$ ]]; then
     printf 'SMOKE_CAMERA_COUNT must be a positive integer, got %q.\n' "${camera_count}" >&2
@@ -42,6 +43,9 @@ cleanup() {
     trap - EXIT
     if [[ -n "${acceptance_report}" ]]; then
         rm -f -- "${acceptance_report}"
+    fi
+    if [[ -n "${fallback_log}" ]]; then
+        rm -f -- "${fallback_log}"
     fi
     if [[ ${status} -ne 0 ]]; then
         "${compose[@]}" logs --no-color --tail 100 || true
@@ -437,6 +441,32 @@ if curl --fail --silent \
     exit 1
 fi
 printf '%s\n' 'Validated managed HLS snapshot creation, retrieval, and cleanup.'
+
+fallback_path='resilient/16'
+fallback_log="$(mktemp "${TMPDIR:-/tmp}/restreamer-fallback.XXXXXX.log")"
+docker exec restreamer \
+    timeout 15 ffmpeg -hide_banner -loglevel info \
+    -rtsp_transport tcp -i "rtsp://mediamtx:8554/${fallback_path}" \
+    -t 8 -an -vf showinfo -f null - >"${fallback_log}" 2>&1 &
+fallback_reader_pid=$!
+
+sleep 1
+docker exec restreamer \
+    ffmpeg -hide_banner -loglevel error -re \
+    -f lavfi -i 'testsrc2=size=320x180:rate=15' -t 3 \
+    -an -c:v libx264 -preset ultrafast -tune zerolatency \
+    -g 15 -keyint_min 15 -sc_threshold 0 -bf 0 \
+    -f rtsp -rtsp_transport tcp -muxdelay 0 -pkt_size 1200 \
+    "rtsp://mediamtx:8554/${fallback_path}"
+
+if ! wait "${fallback_reader_pid}"; then
+    printf '%s\n' 'The resilient MediaMTX reader disconnected during a publisher transition.' >&2
+    cat "${fallback_log}" >&2
+    exit 1
+fi
+grep -F 's:1920x1080' "${fallback_log}" >/dev/null
+grep -F 's:320x180' "${fallback_log}" >/dev/null
+printf '%s\n' 'Validated one persistent reader across offline slate, live publisher, and offline recovery.'
 
 for camera in $(seq 1 "${camera_count}"); do
     docker exec --detach restreamer \

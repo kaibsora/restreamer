@@ -30,6 +30,28 @@ pathDefaults:
   sourceOnDemand: false
 
 paths:
+  # alwaysAvailable is forbidden on regex paths, so resilient publishers use
+  # an explicit pool. YAML aliases keep all slots on the same track contract.
+  "resilient/01": &resilient_path
+    alwaysAvailable: true
+    alwaysAvailableTracks:
+      - codec: H264
+  "resilient/02": *resilient_path
+  "resilient/03": *resilient_path
+  "resilient/04": *resilient_path
+  "resilient/05": *resilient_path
+  "resilient/06": *resilient_path
+  "resilient/07": *resilient_path
+  "resilient/08": *resilient_path
+  "resilient/09": *resilient_path
+  "resilient/10": *resilient_path
+  "resilient/11": *resilient_path
+  "resilient/12": *resilient_path
+  "resilient/13": *resilient_path
+  "resilient/14": *resilient_path
+  "resilient/15": *resilient_path
+  "resilient/16": *resilient_path
+
   all_others:
 
   # An IP camera can be relayed without a Restreamer process:

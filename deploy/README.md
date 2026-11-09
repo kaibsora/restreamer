@@ -176,6 +176,32 @@ RTSP over TCP for a reliable wired LAN and also permits UDP where minimum delay
 matters more than packet-loss recovery. The generic RTSP publication remains
 available for non-MediaMTX servers and unusual protocol tuning.
 
+### Keep a dashboard stream available while its camera is offline
+
+Choose **MediaMTX resilient LAN relay** instead of the ordinary relay when a printer
+dashboard must keep receiving video while its camera, ingest, or Restreamer process
+reconnects. Select a unique slot for every publication from the 16 explicitly
+configured resilient paths, for example:
+
+```text
+rtsp://mediamtx:8554/resilient/01
+```
+
+MediaMTX immediately serves its built-in H.264 offline slate on that path, replaces
+it with the live publisher when Restreamer connects, and returns to the slate when
+the publisher leaves. Existing readers remain connected across both transitions.
+The Compose smoke gate holds one RTSP reader open and requires it to decode both the
+1920x1080 slate and a 320x180 live test publisher before switching back.
+
+The resilient preset intentionally removes audio. MediaMTX requires an arriving
+publisher to have exactly the track layout declared for its offline stream; an
+H.264-only fallback cannot be replaced by H.264 plus AAC or Opus. The ordinary
+**MediaMTX LAN relay** remains available when audio is required. Maintaining two
+honest presets is preferable to one checkbox that produces a valid-looking URL and
+a rejected publisher—configuration already has enough opportunities for theatre.
+MediaMTX also forbids `alwaysAvailable` on wildcard paths, which is why these are
+explicit numbered slots rather than arbitrary channel-name paths.
+
 Other LAN clients can read each stream directly:
 
 ```text
