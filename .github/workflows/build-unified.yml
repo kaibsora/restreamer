@@ -43,7 +43,11 @@ concurrency:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  FFMPEG_IMAGE_NAME: ${{ github.repository_owner }}/restreamer-ffmpeg
+  # Keep the immutable FFmpeg build stages in the same GHCR package as the
+  # unified image. This repository already owns that package's Actions access,
+  # avoiding a second package-level permission grant for an internal stage.
+  FFMPEG_IMAGE_NAME: ${{ github.repository }}
+  FFMPEG_TAG_PREFIX: ffmpeg-hardware
   MAX_UNIFIED_IMAGE_BYTES: 1500000000
 
 jobs:
@@ -171,7 +175,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          image="${REGISTRY}/${FFMPEG_IMAGE_NAME}:hardware-${FFMPEG_VERSION}"
+          image="${REGISTRY}/${FFMPEG_IMAGE_NAME}:${FFMPEG_TAG_PREFIX}-${FFMPEG_VERSION}"
           if docker manifest inspect "${image}" >/dev/null 2>&1; then
             digest="$(docker buildx imagetools inspect \
               "${image}" --format '{{.Manifest.Digest}}')"
@@ -276,8 +280,8 @@ jobs:
             BUILD_COMMIT=${{ github.sha }}
             FFMPEG_VERSION=${{ needs.version.outputs.ffmpeg }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:hardware-${{ needs.version.outputs.ffmpeg }}
-            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:hardware-latest
+            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:${{ env.FFMPEG_TAG_PREFIX }}-${{ needs.version.outputs.ffmpeg }}
+            ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:${{ env.FFMPEG_TAG_PREFIX }}-latest
           cache-from: type=gha,scope=ffmpeg-hardware
           cache-to: type=gha,mode=max,scope=ffmpeg-hardware
           provenance: mode=max

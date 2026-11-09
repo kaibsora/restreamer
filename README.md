@@ -420,8 +420,8 @@ photons remain unwilling to participate in GitHub Actions.
 
 `.github/workflows/build-unified.yml` supports manual, source-triggered, and daily
 FFmpeg source checks. A scheduled run stops before the expensive image builds when
-the resolved `hardware-git-SHA` tag already exists; manual runs and relevant source
-pushes still force a rebuild. It:
+the resolved `ffmpeg-hardware-git-SHA` tag already exists; manual runs and relevant
+source pushes still force a rebuild. It:
 
 1. resolves FFmpeg's current development commit unless another source is supplied;
 2. builds the redistributable hardware FFmpeg image;
@@ -505,12 +505,12 @@ The ordinary build scale set does not need any of this hardware access; use a
 dedicated scale set through `RESTREAMER_HARDWARE_RUNNER_LABELS` when practical.
 
 GitHub Container Registry packages are not guaranteed to become public merely
-because their source repository is public. The `restreamer` and
-`restreamer-ffmpeg` packages are connected to this repository and public. If either
-package is recreated, restore that repository connection, grant Actions write
-access, and set package visibility to public. Otherwise the lovingly automated
-public image will require authentication, which is a rather avant-garde
-interpretation of “anyone can use it.”
+because their source repository is public. The workflow stores both the final image
+and its immutable `ffmpeg-hardware-*` build-stage tags in the single `restreamer`
+package connected to this repository. If that package is recreated, restore the
+repository connection, grant Actions write access, and set package visibility to
+public. Otherwise the lovingly automated public image will require authentication,
+which is a rather avant-garde interpretation of “anyone can use it.”
 
 Pull requests run the quality gates without publishing images. The two inherited
 bundle workflows were removed because they built external datarhei components with
@@ -518,12 +518,13 @@ obsolete FFmpeg images and attempted to publish to the upstream Docker Hub accou
 One repository now has one release pipeline, a concept CI systems traditionally
 survive without emotional distress.
 
-The workflow resolves the published FFmpeg image to an immutable digest before it
+The workflow resolves the published FFmpeg stage to an immutable digest before it
 builds Restreamer. Ordinary Core, UI, and deployment changes reuse that digest
 instead of recompiling FFmpeg. FFmpeg is rebuilt when its source or build inputs
 change, when a scheduled check discovers a new upstream commit, or when a manual
 workflow run requests a build. Scheduled checks become clean no-ops when the current
-commit is already published.
+commit is already published. Keeping the stage in the final image's package avoids
+a second GHCR permission boundary without weakening digest pinning.
 
 An upstream FFmpeg commit that no longer accepts the Restreamer patches is expected
 to fail loudly. Silently publishing an unpatched binary would be impressively tidy

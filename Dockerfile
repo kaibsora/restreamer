@@ -2,7 +2,7 @@
 
 ARG NODE_IMAGE=node:24-alpine3.22
 ARG GOLANG_IMAGE=golang:1.26-alpine3.23
-ARG FFMPEG_IMAGE=ghcr.io/kaibsora/restreamer-ffmpeg:hardware-latest
+ARG FFMPEG_IMAGE=ghcr.io/kaibsora/restreamer:ffmpeg-hardware-latest
 ARG YARN_VERSION=1.22.22
 ARG RUN_TESTS=true
 

@@ -57,7 +57,9 @@ the buffered public HLS delivery plane.
 The unified workflow resolves FFmpeg's current `master` commit on scheduled and
 manual builds, builds the patched hardware image first, then pins the final
 Restreamer build to the resulting immutable digest. Each source image is tagged with
-the full Git commit (`hardware-git-SHA`), so a moving branch never produces a moving
-artifact. `stable` and exact numbered releases remain available for reproduction and
-rollback. Patch drift is expected to fail loudly in CI so it can be rebased and
-reviewed instead of silently publishing an unpatched binary.
+the full Git commit (`ffmpeg-hardware-git-SHA`) inside the same GHCR package as the
+unified image, so a moving branch never produces a moving artifact and no second
+package permission grant is required. `stable` and exact numbered releases remain
+available for reproduction and rollback. Patch drift is expected to fail loudly in
+CI so it can be rebased and reviewed instead of silently publishing an unpatched
+binary.
