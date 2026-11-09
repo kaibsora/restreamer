@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Deployment documentation
+    url: https://github.com/kaibsora/restreamer/tree/2.x/deploy
+    about: Review camera, GPU, MediaMTX, Crowsnest, and low-latency deployment guidance.
+  - name: Original datarhei project
+    url: https://github.com/datarhei/restreamer
+    about: Historical upstream source; report defects in this fork here, not upstream.

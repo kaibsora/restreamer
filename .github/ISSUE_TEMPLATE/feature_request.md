@@ -1,23 +1,29 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: ''
+about: Propose a use-case-driven change
+title: "[Feature] "
 labels: feature
-assignees: ''
-
+assignees: ""
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## Use case
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+Describe the problem to solve, who encounters it, and the current workaround.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## Proposed behavior
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+Describe the smallest observable behavior that would solve the problem.
 
-## Business inquiries
-**We provide support for commercial requirements with professional support, agile software development, and consulting.** If you have a commercial request, be it a bug or a feature enhancement, please contact us directly at support@datarhei.com.
+## Alternatives
+
+Describe alternatives you considered and why they do not fit.
+
+## Media and hardware impact
+
+Explain whether this changes codecs, transports, GPU support, latency, container
+permissions, camera compatibility, or public-facing network exposure.
+
+## Additional context
+
+Link relevant upstream Restreamer or FFmpeg issues and documentation when available.
+Do not include credentials, private camera URLs, stream keys, or tokens.

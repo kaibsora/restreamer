@@ -1,7 +1,60 @@
-# How to contribute
+# Contributing
 
-Before you start developing, please start a discussion or open an issue. In principle, 
-pull requests are very welcome. However, contributing to the `datarhei Restreamer` is 
-currently sometimes tricky. We know this and are working on official guidelines to understand the code structures better.
+This repository is an independent, experimental continuation of datarhei
+Restreamer. Report defects caused by this fork in
+[`kaibsora/restreamer`](https://github.com/kaibsora/restreamer/issues), not in the
+original projects. The upstream maintainers did not volunteer to debug our
+renovation.
 
-If you have any questions, you can also send us an email at support@datarhei.com.
+## Before opening an issue
+
+Use an immutable `ghcr.io/kaibsora/restreamer:sha-*` image when possible and include:
+
+- the complete image tag and repository digest;
+- output from `docker exec restreamer restreamer-hardware-report`;
+- host OS, architecture, Docker version, GPU model, and host driver version;
+- camera type, transport, codec, resolution, frame rate, and relevant URL with
+  credentials and tokens removed;
+- the generated FFmpeg command and the first relevant error block from the process
+  log;
+- whether the failure occurs through the LAN address, reverse proxy, or both.
+
+Never publish camera passwords, stream keys, access tokens, exported channel bundles,
+or complete configuration files without redacting them. A beautifully detailed bug
+report is less useful after it also becomes a credential-distribution service.
+
+For latency reports, distinguish connection startup, transport latency, and physical
+glass-to-glass delay. Include the measurement method and whether the stream is copied
+or transcoded. “It feels slow” is valid frustration but regrettably not a unit.
+
+## Development
+
+The maintained source lives in one repository:
+
+- `components/core` — Go backend and process manager;
+- `components/ui` — React administration and player UI;
+- `components/ffmpeg` — FFmpeg build, verification, and Restreamer patches;
+- `deploy` — Compose and MediaMTX deployment assets;
+- `scripts` — release and acceptance gates.
+
+Keep changes scoped and add a regression test for every reproducible defect. Before
+submitting a pull request, run the checks relevant to the files you changed. The
+GitHub workflow runs the complete UI, Core, configuration, image, and camera-stack
+gates on the private ARC runners.
+
+Do not commit generated UI build output, local Core binaries, camera media, secrets,
+or Docker credentials. Pull requests from forks are intentionally not executed on
+the private runners because unreviewed code plus a Docker socket is not a CI design;
+it is an incident report waiting for a timestamp.
+
+## Upstream provenance
+
+Preserve original copyright notices and component history. When fixing an inherited
+problem, reference the applicable `datarhei/restreamer`, `datarhei/restreamer-ui`,
+`datarhei/core`, or `datarhei/ffmpeg` issue in the commit or pull request. Update
+[`docs/upstream-issues.md`](docs/upstream-issues.md) only after a test or runtime gate
+provides evidence for the claimed status.
+
+Synchronization from the original repositories must be reviewed component by
+component. Do not replace the unified tree wholesale: this fork contains build,
+hardware, latency, migration, and security changes that do not exist upstream.

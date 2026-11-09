@@ -1,32 +1,28 @@
 ---
 name: Help wanted or question
-about: Get help and ask questions
-title: ''
+about: Ask a deployment or usage question
+title: "[Question] "
 labels: help wanted, question
-assignees: ''
-
+assignees: ""
 ---
 
-**Subject of the issue**
-Describe your issue here.
+## Question
 
-**Your environment**
-Explain your setup so we can better understand what's going on.
+Describe the outcome you are trying to achieve and where you are stuck.
 
-**Files**
-Add the Restreamer [Process-Report](https://www.youtube.com/watch?v=mZMGrweFCsM), the  [Publication-Service Process-Report](https://youtu.be/7z95qnafzLo) or a list of relevant files for this issue. This will help us navigate the project and explain where to start. 
+## Image and environment
 
-**Steps to reproduce**
-Tell us how to reproduce this issue. 
+- Image tag and repository digest:
+- Host OS and architecture:
+- Docker Engine and Compose versions:
+- GPU/camera hardware and host drivers:
+- Direct LAN, reverse proxy, or both:
 
-**Awesome** ⭐⭐⭐⭐⭐
-If the Restreamer has problems processing your video signals, it would be constructive if you send us this origin stream by mail with the GitHub issue number to support@datarhei.com. This way, we can better see why the Restreamer is not working correctly.
+## What you tried
 
-**Expected behavior**
-Tell us what should happen
+Include the commands or settings used, the actual result, and relevant logs. Run
+`docker exec restreamer restreamer-hardware-report` and include its output when the
+question involves FFmpeg or acceleration.
 
-**Actual behavior**
-Tell us what happens instead
-
-## Business inquiries
-**We provide support for commercial requirements with professional support, agile software development, and consulting.** If you have a commercial request, be it a bug or a feature enhancement, please contact us directly at support@datarhei.com.
+Remove passwords, private camera URLs, stream keys, tokens, and exported channel
+bundles before posting.

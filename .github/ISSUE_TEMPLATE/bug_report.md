@@ -1,41 +1,44 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
+about: Report a reproducible defect in this fork
+title: "[Bug] "
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Image identity
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+- Image tag:
+- Repository digest:
+- Output of `docker exec restreamer restreamer-hardware-report`:
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Environment
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+- Host OS and architecture:
+- Docker Engine and Compose versions:
+- GPU model, host driver, and container runtime:
+- Camera/source type, codec, resolution, and frame rate:
+- Browser/client and version:
+- Direct LAN, reverse proxy, or both:
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## Reproduction
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+1.
+2.
+3.
 
-**Additional context**
-Add any other context about the problem here.
+## Expected behavior
 
-## Business inquiries
-**We provide support for commercial requirements with professional support, agile software development, and consulting.** If you have a commercial request, be it a bug or a feature enhancement, please contact us directly at support@datarhei.com.
+Describe what should happen.
+
+## Actual behavior
+
+Describe what happens and include the generated FFmpeg command plus the first relevant
+error block. Remove passwords, camera URLs containing credentials, stream keys, and
+tokens before posting.
+
+## Additional context
+
+For latency reports, include the measurement method and say whether the stream is
+copied or transcoded. Attach screenshots or short, credential-free samples only when
+they materially help reproduce the problem.

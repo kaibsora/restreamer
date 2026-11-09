@@ -67,9 +67,9 @@ trying to make that distinction feel unnecessarily mysterious.
 
 ## Current technical status
 
-The last published unified image builds and boots successfully with FFmpeg 9.0.2;
-new builds track FFmpeg's current development branch by immutable commit. The build
-gate verifies the expected hardware APIs, encoders, filters, license, and Restreamer
+Published unified images build and boot with an immutable FFmpeg source revision;
+scheduled and manual builds track FFmpeg's current development branch by commit. The
+build gate verifies the expected hardware APIs, encoders, filters, license, and Restreamer
 patches before an image can be published. Physical-device throughput and
 glass-to-glass latency have not been validated across the target Linux hosts and
 cameras. Treat all published images as pre-release test artifacts until that hardware
@@ -85,6 +85,11 @@ Versioned images are also available as `ffmpeg-VERSION`; for example,
 `ghcr.io/kaibsora/restreamer:ffmpeg-9.0.2`. Both tags are anonymously pullable from
 GitHub Container Registry. Local builds remain useful when changing the source or
 testing a release before publication.
+
+For reproducible testing, prefer the immutable `sha-*` tag shown by the successful
+build workflow instead of `latest`. The running Core API reports the repository
+commit, branch, and build date embedded in the image, so a bug report can identify
+the executable rather than describing it as “whatever latest meant on Tuesday.”
 
 The fork does not contact datarhei's update service or send instance telemetry.
 Until the project defines and publishes its own versioned releases, watch the
@@ -450,6 +455,8 @@ automation of the wrong result.
 - `.github/workflows`: image build and publication automation
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development and upstream synchronization.
+The [upstream issue ledger](docs/upstream-issues.md) records inherited reports that
+this fork has fixed, covered, or intentionally left pending real-hardware evidence.
 
 ## License and provenance
 
