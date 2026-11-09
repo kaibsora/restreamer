@@ -6,6 +6,7 @@ import { t } from '@lingui/core/macro';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import Checkbox from '../../Checkbox';
 import SelectCustom from '../../../misc/SelectCustom';
 import { withDefaults } from '../../../utils/props';
 
@@ -17,6 +18,7 @@ function init(initialState) {
 		channels: '2',
 		layout: 'stereo',
 		sampling: '44100',
+		compensate: true,
 		...initialState,
 	};
 
@@ -37,6 +39,14 @@ function createGraph(settings) {
 
 	if (layout !== 'inherit') {
 		mapping.push(`ochl=${layout}`);
+	}
+
+	if (settings.compensate) {
+		// Keep independently clocked live audio aligned with its timestamps. A
+		// 1000-sample/second ceiling corrects ordinary capture-device drift while
+		// preventing an invalid clock from changing the audio rate without bound.
+		mapping.push('async=1000');
+		mapping.push('first_pts=0');
 	}
 
 	if (mapping.length === 0) {
@@ -161,7 +171,7 @@ function Filter(inputProps) {
 	};
 
 	const update = (what) => (event) => {
-		const value = event.target.value;
+		const value = what === 'compensate' ? !settings.compensate : event.target.value;
 
 		const newSettings = {
 			...settings,
@@ -201,6 +211,18 @@ function Filter(inputProps) {
 			<Grid item xs={12}>
 				<Layout value={settings.layout} onChange={update('layout')} allowInherit />
 			</Grid>
+			<Grid item xs={12}>
+				<Checkbox
+					label={<Trans>Correct live audio clock drift</Trans>}
+					checked={settings.compensate}
+					onChange={update('compensate')}
+				/>
+				<Typography variant="caption" display="block">
+					<Trans>
+						Stretch or trim audio slightly to follow capture timestamps and prevent independently clocked USB audio and video from drifting apart.
+					</Trans>
+				</Typography>
+			</Grid>
 		</React.Fragment>
 	);
 }
@@ -216,7 +238,8 @@ const type = 'audio';
 const hwaccel = false;
 
 function summarize(settings) {
-	return `${name} (${settings.layout}, ${settings.sampling}Hz)`;
+	settings = init(settings);
+	return `${name} (${settings.layout}, ${settings.sampling}Hz${settings.compensate ? ', clock sync' : ''})`;
 }
 
 function defaults() {
@@ -228,4 +251,4 @@ function defaults() {
 	};
 }
 
-export { name, filter, type, hwaccel, summarize, defaults, createGraph, Filter as component };
+export { name, filter, type, hwaccel, summarize, defaults, createGraph, init, Filter as component };

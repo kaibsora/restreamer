@@ -49,9 +49,26 @@ for codec in av1 h264 hevc; do
 done
 require_pattern "$encoders" '[[:space:]]aac[[:space:]]+AAC'
 
-for filter in overlay_vulkan scale_vulkan transpose_vulkan movie overlay scale format colorchannelmixer setpts drawtext; do
+for filter in overlay_vulkan scale_vulkan transpose_vulkan movie overlay scale format colorchannelmixer setpts drawtext aresample; do
     require_pattern "$filters" "[[:space:]]${filter}[[:space:]]"
 done
+
+# Prove that the runtime resampler can compensate a drifting live clock. Merely
+# listing aresample is not enough: a broken libswresample linkage can still leave
+# us with a very confidently advertised checkbox that does nothing.
+audio_clock_test=$(mktemp -d)
+trap 'rm -rf "$audio_clock_test"' EXIT HUP INT TERM
+ffmpeg -hide_banner -loglevel error \
+    -f lavfi -i 'sine=frequency=1000:sample_rate=48000:duration=10' \
+    -af 'asetpts=PTS*1.01,aresample=async=1000:first_pts=0' \
+    -c:a pcm_s16le "$audio_clock_test/compensated.wav" 2>/dev/null
+audio_clock_duration=$(ffprobe -v error -show_entries format=duration \
+    -of default=nw=1:nk=1 "$audio_clock_test/compensated.wav")
+awk -v duration="$audio_clock_duration" \
+    'BEGIN { exit !(duration > 10.05 && duration < 10.15) }' || \
+    fail "aresample clock compensation produced ${audio_clock_duration}s instead of approximately 10.09s"
+rm -rf "$audio_clock_test"
+trap - EXIT HUP INT TERM
 
 test -r /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf || fail 'missing DejaVu Sans runtime font'
 

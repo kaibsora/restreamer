@@ -278,6 +278,22 @@ This implements the encoded branding requested in
 [upstream issue #946](https://github.com/datarhei/restreamer/issues/946) and
 [upstream issue #982](https://github.com/datarhei/restreamer/issues/982).
 
+### Keep USB capture audio synchronized
+
+Encoded audio enables **Correct live audio clock drift** in the resample filter by
+default. FFmpeg then stretches, trims, or pads a bounded number of samples so audio
+follows its capture timestamps. This prevents the independent oscillators in a USB
+video device and ALSA audio device from gradually turning a synchronized stream into
+an accidental dubbed film. Disable the option only when a source supplies unsuitable
+timestamps; stream-copy audio cannot be filtered and therefore cannot be corrected.
+
+The image build executes a deliberately skewed audio clock and verifies that the
+resampler changes the output sample duration to follow it. Physical acceptance still
+requires a long-running USB capture on the target host because synthetic timestamps
+cannot certify a particular capture card, kernel driver, or oscillator. This addresses
+the software-side drift reported in
+[upstream issue #936](https://github.com/datarhei/restreamer/issues/936).
+
 ### Disable the public landing page
 
 Open **Publication website → General**, clear **Publish public landing page**, and
