@@ -342,7 +342,8 @@ pushes still force a rebuild. It:
 1. resolves FFmpeg's current development commit unless another source is supplied;
 2. builds the redistributable hardware FFmpeg image;
 3. fails if required hardware support or Restreamer patches disappear;
-4. rejects high or critical production dependency vulnerabilities;
+4. rejects high or critical UI production advisories and unreviewed reachable Go
+   vulnerabilities;
 5. runs the Core tests and vet checks plus all UI tests;
 6. validates the Compose and MediaMTX deployment configuration;
 7. pins the unified build to the FFmpeg image digest;

@@ -98,8 +98,8 @@ jobs:
           set -euo pipefail
           docker run --rm \
             --volume "${PWD}/components/core:/src:ro" \
-            golang:1.25-alpine3.22 \
-            sh -c 'cp -R /src /tmp/core && cd /tmp/core && apk add --no-cache git >/dev/null && go test ./... && go vet ./...'
+            golang:1.26-alpine3.23 \
+            sh -c 'cp -R /src /tmp/core && cd /tmp/core && apk add --no-cache bash git >/dev/null && go test ./... && go vet ./... && ./scripts/check-vulnerabilities.sh'
 
       - name: Validate Compose configuration
         if: matrix.suite == 'configuration'

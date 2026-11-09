@@ -9,21 +9,23 @@ const (
 )
 
 type OperationDefinition struct {
+	Description         string
 	Operation           Operation
 	Name                string
 	VariableDefinitions VariableDefinitionList
 	Directives          DirectiveList
 	SelectionSet        SelectionSet
-	Position            *Position `dump:"-"`
+	Position            *Position `dump:"-" json:"-"`
 	Comment             *CommentGroup
 }
 
 type VariableDefinition struct {
+	Description  string
 	Variable     string
 	Type         *Type
 	DefaultValue *Value
 	Directives   DirectiveList
-	Position     *Position `dump:"-"`
+	Position     *Position `dump:"-" json:"-"`
 	Comment      *CommentGroup
 
 	// Requires validation

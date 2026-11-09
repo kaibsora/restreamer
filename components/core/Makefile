@@ -40,7 +40,7 @@ fmt:
 
 ## vulncheck: Check for known vulnerabilities in dependencies
 vulncheck:
-	govulncheck ./...
+	./scripts/check-vulnerabilities.sh
 
 ## update: Update dependencies
 update:

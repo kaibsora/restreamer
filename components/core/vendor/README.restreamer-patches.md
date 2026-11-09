@@ -2,7 +2,7 @@
 
 The Core module vendors dependencies so release builds remain reproducible. The
 following fixes are intentionally applied after `go mod vendor` and must be retained
-until Core advances to a Joy4 revision that contains them.
+until Core advances to dependency revisions that contain them.
 
 ## Joy4 simple RTMP handshake
 
