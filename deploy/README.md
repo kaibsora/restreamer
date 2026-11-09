@@ -118,7 +118,10 @@ can still be ingested through its direct HTTP stream URL.
 ### Publish back to the printer dashboard
 
 The deployment includes MediaMTX as the LAN-facing real-time origin. In Restreamer,
-add an RTSP publication for each camera and use a unique destination such as:
+add the **MediaMTX LAN relay** publication for each camera. The preset selects H.264,
+generates a safe path from the channel name, and uses the bundled sidecar at
+`rtsp://mediamtx:8554` with zero mux delay. Give every camera a unique stream path,
+such as:
 
 ```text
 rtsp://mediamtx:8554/printer-one
@@ -126,9 +129,11 @@ rtsp://mediamtx:8554/printer-two
 ```
 
 Prefer stream copy when the camera already emits browser-compatible H.264. If it
-must be encoded, select a low-latency hardware encoder, a one-second GOP, no B-frames,
-and RTSP over TCP for a reliable wired LAN or UDP where minimum delay matters more
-than packet-loss recovery.
+must be encoded, select a low-latency hardware encoder; the unified hardware presets
+default to a one-second GOP and no B-frames. The MediaMTX publication defaults to
+RTSP over TCP for a reliable wired LAN and also permits UDP where minimum delay
+matters more than packet-loss recovery. The generic RTSP publication remains
+available for non-MediaMTX servers and unusual protocol tuning.
 
 Other LAN clients can read each stream directly:
 

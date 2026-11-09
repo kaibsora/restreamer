@@ -14,6 +14,8 @@
 
 ### UI
 
+-   Add a dedicated MediaMTX LAN relay publication with safe channel-derived paths,
+    H.264 compatibility, and low-latency RTSP defaults for printer dashboards.
 -   Expose the compiled AV1 VA-API, NVENC, Quick Sync, and Vulkan encoders in the
     UI, along with HEVC NVENC and VP9 Quick Sync. Supported Intel and AMD systems
     can now select AV1 VA-API directly
