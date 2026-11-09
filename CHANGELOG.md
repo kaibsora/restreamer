@@ -68,6 +68,9 @@
     render nodes during active hardware acceptance.
 -   Validate the MediaMTX WHEP discovery endpoint used by Mainsail for every
     named printer relay instead of accepting an HTML player page alone.
+-   Exercise a real SRT publisher, Core SRT ingest, managed FFmpeg process, and
+    MediaMTX RTSP/WHEP relay in the sub-second camera-stack gate
+    ([#942](https://github.com/datarhei/restreamer/issues/942)).
 
 ## 2.12.0
 

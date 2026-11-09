@@ -104,6 +104,22 @@ noticing the photons they never observed.
 
 ## LAN RTSP and WebRTC
 
+### SRT ingest is not the player
+
+SRT can keep contribution latency low between OBS, another encoder, and Restreamer,
+but it does not determine how the resulting stream is viewed. Restreamer's public
+player uses segmented HLS and deliberately buffers; selecting SRT as the input does
+not make that HLS player sub-second. Protocol names are useful, but sadly not magic
+spells.
+
+For low-latency LAN viewing, ingest the SRT publisher as usual, then add a
+**MediaMTX LAN relay** publication and give Mainsail or another browser the displayed
+WebRTC URL. Native clients may use the corresponding RTSP URL. Keep the source GOP at
+one second or shorter and avoid B-frames when the encoder allows it. The automated
+camera-stack test exercises this complete SRT-to-Core-to-MediaMTX path and requires
+first-frame RTSP readback below one second, covering the topology reported in
+[upstream issue #942](https://github.com/datarhei/restreamer/issues/942).
+
 ### Ingest from Crowsnest or an IP camera
 
 Crowsnest does not consume an arbitrary RTSP stream. In `camera-streamer` mode it can

@@ -1,5 +1,9 @@
 services:
   restreamer:
+    environment:
+      # Exercise Core's real SRT server and placeholder expansion in addition to
+      # the direct MediaMTX publishers used for concurrent-load testing.
+      CORE_SRT_ENABLE: "true"
     devices:
       # A harmless character device exercises V4L2 fallback discovery without
       # requiring a physical USB camera on every CI runner.

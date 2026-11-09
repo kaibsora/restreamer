@@ -287,11 +287,13 @@ Run the complete Restreamer and MediaMTX camera-stack smoke test:
 RESTREAMER_IMAGE=restreamer:local scripts/smoke-compose.sh
 ```
 
-The gate publishes four independent H.264 camera feeds by default, probes every RTSP
-path and WebRTC endpoint concurrently, and requires every first decoded RTSP frame to
-arrive in under one second. The all-intra synthetic sources deliberately remove camera
-GOP delay so the test measures container, relay, and client startup overhead. Override
-the load or threshold with `SMOKE_CAMERA_COUNT` and `SMOKE_MAX_FIRST_FRAME_MS`.
+The gate publishes four independent H.264 camera feeds by default, sends another feed
+through Core's SRT server and a managed FFmpeg relay, probes every resulting RTSP and
+WebRTC endpoint concurrently, and requires every first decoded RTSP frame to arrive in
+under one second. The all-intra synthetic sources deliberately remove camera GOP delay
+so the test measures container, transport, relay, and client startup overhead. Override
+the direct-camera load or threshold with `SMOKE_CAMERA_COUNT` and
+`SMOKE_MAX_FIRST_FRAME_MS`.
 
 This is a repeatable software-path latency gate, not a substitute for glass-to-glass
 measurement with the final camera, encoder settings, network, and display. Apparently

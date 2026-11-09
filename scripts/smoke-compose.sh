@@ -177,10 +177,11 @@ process_command() {
 wait_for_process_state() {
     expected_order=$1
     expected_exec=$2
+    process_id=${3:-${api_process_id}}
 
     for _ in $(seq 1 20); do
         process_state=$(curl --fail --silent --show-error \
-            "http://127.0.0.1:8080/api/v3/process/${api_process_id}/state")
+            "http://127.0.0.1:8080/api/v3/process/${process_id}/state")
         if grep -F "\"order\":\"${expected_order}\"" <<<"${process_state}" >/dev/null &&
             grep -F "\"exec\":\"${expected_exec}\"" <<<"${process_state}" >/dev/null; then
             return 0
@@ -188,8 +189,9 @@ wait_for_process_state() {
         sleep 0.25
     done
 
-    printf 'API process did not reach order=%s exec=%s. Last state: %s\n' \
-        "${expected_order}" "${expected_exec}" "${process_state}" >&2
+    printf 'API process %s did not reach order=%s exec=%s. Last state: %s\n' \
+        "${process_id}" "${expected_order}" "${expected_exec}" \
+        "${process_state}" >&2
     return 1
 }
 
@@ -202,6 +204,69 @@ curl --fail --silent --show-error \
     "http://127.0.0.1:8080/api/v3/process/${api_process_id}" >/dev/null
 printf '%s\n' 'Validated API start and stop control for an FFmpeg process.'
 
+srt_process_id='restreamer-smoke:srt-relay'
+srt_relay_path='ci-srt'
+curl --fail --silent --show-error \
+    --request POST \
+    --header 'Content-Type: application/json' \
+    --data @- \
+    http://127.0.0.1:8080/api/v3/process >/dev/null <<'JSON'
+{
+  "id": "restreamer-smoke:srt-relay",
+  "type": "ffmpeg",
+  "reference": "restreamer-smoke:srt-relay",
+  "input": [{
+    "id": "srt",
+    "address": "{srt,name=ci-srt.stream,mode=request}",
+    "options": [
+      "-fflags", "nobuffer",
+      "-flags", "low_delay",
+      "-analyzeduration", "0",
+      "-probesize", "32"
+    ]
+  }],
+  "output": [{
+    "id": "rtsp",
+    "address": "rtsp://mediamtx:8554/ci-srt",
+    "options": [
+      "-map", "0:v:0",
+      "-c:v", "copy",
+      "-f", "rtsp",
+      "-rtsp_transport", "tcp",
+      "-muxdelay", "0"
+    ]
+  }],
+  "autostart": true,
+  "reconnect": true,
+  "reconnect_delay_seconds": 1,
+  "stale_timeout_seconds": 10
+}
+JSON
+
+docker exec --detach restreamer \
+    ffmpeg -hide_banner -loglevel error -re \
+    -f lavfi -i "testsrc2=size=320x180:rate=15" \
+    -an -c:v libx264 -preset ultrafast -tune zerolatency \
+    -g 1 -keyint_min 1 -sc_threshold 0 -bf 0 \
+    -f mpegts \
+    "srt://127.0.0.1:6000?mode=caller&transtype=live&latency=20000&streamid=ci-srt.stream,mode:publish"
+
+srt_publisher_ready=false
+for _ in $(seq 1 20); do
+    if curl --fail --silent --show-error http://127.0.0.1:8080/api/v3/srt \
+        | grep -F 'ci-srt.stream' >/dev/null; then
+        srt_publisher_ready=true
+        break
+    fi
+    sleep 0.5
+done
+if [[ "${srt_publisher_ready}" != true ]]; then
+    printf '%s\n' 'Core did not expose the synthetic SRT publisher.' >&2
+    exit 1
+fi
+wait_for_process_state start running "${srt_process_id}"
+printf '%s\n' 'Validated an SRT publisher through the Core media server.'
+
 for camera in $(seq 1 "${camera_count}"); do
     docker exec --detach restreamer \
         ffmpeg -hide_banner -loglevel error -re \
@@ -212,8 +277,13 @@ for camera in $(seq 1 "${camera_count}"); do
         "rtsp://mediamtx:8554/ci-camera-${camera}"
 done
 
-probe_camera() {
-    camera=$1
+relay_paths=("${srt_relay_path}")
+for camera in $(seq 1 "${camera_count}"); do
+    relay_paths+=("ci-camera-${camera}")
+done
+
+probe_relay_path() {
+    relay_path=$1
     stream_info=''
 
     for _ in $(seq 1 15); do
@@ -222,7 +292,7 @@ probe_camera() {
             -select_streams v:0 \
             -show_entries stream=codec_name,width,height,r_frame_rate \
             -of default=noprint_wrappers=1 \
-            "rtsp://mediamtx:8554/ci-camera-${camera}" 2>/dev/null); then
+            "rtsp://mediamtx:8554/${relay_path}" 2>/dev/null); then
             break
         fi
         sleep 1
@@ -235,8 +305,8 @@ probe_camera() {
 }
 
 probe_pids=()
-for camera in $(seq 1 "${camera_count}"); do
-    probe_camera "${camera}" &
+for relay_path in "${relay_paths[@]}"; do
+    probe_relay_path "${relay_path}" &
     probe_pids+=("$!")
 done
 for probe_pid in "${probe_pids[@]}"; do
@@ -244,34 +314,34 @@ for probe_pid in "${probe_pids[@]}"; do
 done
 
 read_first_frame() {
-    camera=$1
+    relay_path=$1
     started_ms=$(date +%s%3N)
 
     if ! read_error=$(docker exec restreamer \
         timeout 5 ffmpeg -hide_banner -loglevel error \
             -rtsp_transport tcp -fflags nobuffer -flags low_delay -avioflags direct \
             -analyzeduration 0 -probesize 32 \
-            -i "rtsp://mediamtx:8554/ci-camera-${camera}" \
+            -i "rtsp://mediamtx:8554/${relay_path}" \
             -map 0:v:0 -frames:v 1 -f null - 2>&1 >/dev/null); then
-        printf 'Camera %s did not produce a decoded frame:\n%s\n' \
-            "${camera}" "${read_error}" >&2
+        printf 'Relay %s did not produce a decoded frame:\n%s\n' \
+            "${relay_path}" "${read_error}" >&2
         return 1
     fi
 
     finished_ms=$(date +%s%3N)
     elapsed_ms=$((finished_ms - started_ms))
     if (( elapsed_ms >= max_first_frame_ms )); then
-        printf 'Camera %s first-frame readback took %sms (limit: %sms).\n' \
-            "${camera}" "${elapsed_ms}" "${max_first_frame_ms}" >&2
+        printf 'Relay %s first-frame readback took %sms (limit: %sms).\n' \
+            "${relay_path}" "${elapsed_ms}" "${max_first_frame_ms}" >&2
         return 1
     fi
 
-    printf 'Camera %s first-frame readback: %sms\n' "${camera}" "${elapsed_ms}"
+    printf 'Relay %s first-frame readback: %sms\n' "${relay_path}" "${elapsed_ms}"
 }
 
 read_pids=()
-for camera in $(seq 1 "${camera_count}"); do
-    read_first_frame "${camera}" &
+for relay_path in "${relay_paths[@]}"; do
+    read_first_frame "${relay_path}" &
     read_pids+=("$!")
 done
 for read_pid in "${read_pids[@]}"; do
@@ -279,22 +349,18 @@ for read_pid in "${read_pids[@]}"; do
 done
 
 acceptance_report="$(mktemp "${TMPDIR:-/tmp}/restreamer-acceptance.XXXXXX.json")"
-acceptance_paths=()
-for camera in $(seq 1 "${camera_count}"); do
-    acceptance_paths+=("ci-camera-${camera}")
-done
 
 ACCEPT_MAX_FIRST_FRAME_MS="${max_first_frame_ms}" \
 ACCEPT_SAMPLE_SECONDS="${accept_sample_seconds}" \
 ACCEPT_MIN_SAMPLE_FPS=10 \
 ACCEPT_RELAY_REPORT_FILE="${acceptance_report}" \
-    scripts/accept-relays.sh "${acceptance_paths[@]}"
+    scripts/accept-relays.sh "${relay_paths[@]}"
 
 grep -F '"passed":true' "${acceptance_report}" >/dev/null
-grep -F "\"camera_count\":${camera_count}" "${acceptance_report}" >/dev/null
+grep -F "\"camera_count\":${#relay_paths[@]}" "${acceptance_report}" >/dev/null
 grep -F '"decoded_frames":' "${acceptance_report}" >/dev/null
 grep -F '"required_hardware_backends":[]' "${acceptance_report}" >/dev/null
 
-printf 'Validated %s concurrent RTSP camera paths and WHEP endpoints below %sms first-frame readback.\n' \
-    "${camera_count}" "${max_first_frame_ms}"
+printf 'Validated %s concurrent RTSP/WHEP paths, including SRT ingest, below %sms first-frame readback.\n' \
+    "${#relay_paths[@]}" "${max_first_frame_ms}"
 printf '%s\n' 'Unified Restreamer + MediaMTX camera-stack smoke test passed.'
