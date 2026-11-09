@@ -11,8 +11,9 @@ import { withDefaults } from '../../../utils/props';
 
 const id = 'instagram';
 const name = 'Instagram';
-const version = '1.1';
+const version = '1.2';
 const stream_key_link = 'https://about.instagram.com/blog/tips-and-tricks/instagram-live-producer';
+const default_server = 'rtmps://live-upload.instagram.com:443/rtmp/';
 const description = (
 	<Trans>
 		Live-Streaming to Instagram Live RTMP Service.
@@ -45,6 +46,7 @@ function ServiceIcon(props) {
 
 function init(settings) {
 	const initSettings = {
+		server: default_server,
 		key: '',
 		service_instafeed: false,
 		service_yellowduck: false,
@@ -52,6 +54,16 @@ function init(settings) {
 	};
 
 	return initSettings;
+}
+
+function createOutput(settings) {
+	const server = settings.server.trim().replace(/\/+$/, '');
+	const key = settings.key.trim().replace(/^\/+/, '');
+
+	return {
+		address: server.length === 0 ? '' : server + (key.length === 0 ? '/' : '/' + key),
+		options: ['-f', 'flv'],
+	};
 }
 
 function Service(inputProps) {
@@ -68,24 +80,32 @@ function Service(inputProps) {
 		props.onChange([output], settings);
 	};
 
-	const createOutput = (settings) => {
-		const output = {
-			address: 'http://instagram.com:443/rtmp/' + settings.key,
-			options: ['-f', 'flv'],
-		};
-
-		return output;
-	};
-
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={12} md={9}>
-				<TextField variant="outlined" fullWidth label={<Trans>Stream key</Trans>} placeholder="IG-10101942686003993-0-AbyaAF64MLbaxSBJ" value={settings.key} onChange={handleChange('key')} />
+				<TextField
+					variant="outlined"
+					fullWidth
+					type="url"
+					label={<Trans>Server URL</Trans>}
+					value={settings.server}
+					onChange={handleChange('server')}
+				/>
 			</Grid>
 			<Grid item xs={12} md={3}>
 				<FormInlineButton target="blank" href={stream_key_link} component="a">
 					<Trans>GET</Trans>
 				</FormInlineButton>
+			</Grid>
+			<Grid item xs={12}>
+				<TextField
+					variant="outlined"
+					fullWidth
+					label={<Trans>Stream key</Trans>}
+					placeholder="IG-10101942686003993-0-AbyaAF64MLbaxSBJ"
+					value={settings.key}
+					onChange={handleChange('key')}
+				/>
 			</Grid>
 		</Grid>
 	);
@@ -99,4 +119,4 @@ const ServiceDefaultProps = {
 	onChange: function (output, settings) {},
 };
 
-export { id, name, version, stream_key_link, description, image_copyright, author, category, requires, ServiceIcon as icon, Service as component };
+export { id, name, version, stream_key_link, description, image_copyright, author, category, requires, createOutput, ServiceIcon as icon, Service as component };
