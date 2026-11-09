@@ -74,11 +74,13 @@ export default function Audio(inputProps) {
 									<Grid item xs={12}>
 										<FormControlLabel value="video" control={<Radio />} label={i18n._(t`Audio from device`)} />
 									</Grid>
-									<Grid item xs={12}>
-										<Select label={<Trans>Stream</Trans>} value={props.stream} onChange={props.onAudioStreamChange}>
-											{props.streamList}
-										</Select>
-									</Grid>
+									{props.source === 'video' && (
+										<Grid item xs={12}>
+											<Select label={<Trans>Stream</Trans>} value={props.stream} onChange={props.onAudioStreamChange}>
+												{props.streamList}
+											</Select>
+										</Grid>
+									)}
 								</React.Fragment>
 							)}
 							{props.deviceList.length !== 0 && (

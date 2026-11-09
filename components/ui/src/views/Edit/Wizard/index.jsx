@@ -373,6 +373,7 @@ export default function Wizard(inputProps) {
 		handleNext = () => {
 			const streams = $sources.video.streams;
 			const videoprofile = $profile.video;
+			const custom = $profile.custom;
 
 			const encoder = Encoders.Video.Get(videoprofile.encoder.coder);
 			let defaults = encoder.defaults({}, $skills);
@@ -388,6 +389,8 @@ export default function Wizard(inputProps) {
 
 			const audioprofile = $profile.audio;
 			audioprofile.source = -1;
+			custom.selected = false;
+			custom.stream = -1;
 
 			// set default for first video audio track
 			for (let s of streams) {
@@ -397,6 +400,7 @@ export default function Wizard(inputProps) {
 
 				audioprofile.source = 0;
 				audioprofile.stream = s.stream;
+				custom.stream = s.stream;
 
 				break;
 			}
@@ -404,6 +408,8 @@ export default function Wizard(inputProps) {
 			// set default for silence audio track if the video doesn't have an audio track
 			if (audioprofile.source === -1) {
 				audioprofile.source = 1;
+				custom.selected = true;
+				custom.stream = -2;
 
 				const fullSource = FullSources.Get('virtualaudio');
 				const source = $sources.audio;
@@ -425,6 +431,7 @@ export default function Wizard(inputProps) {
 			setProfile({
 				...$profile,
 				audio: audioprofile,
+				custom: custom,
 				video: profile,
 			});
 
@@ -599,14 +606,19 @@ export default function Wizard(inputProps) {
 			const value = event.target.value;
 
 			const profile = $profile.audio;
+			const custom = $profile.custom;
 			let source = null;
 
 			if (value === 'video') {
 				profile.source = 0;
+				custom.selected = false;
+				custom.stream = profile.stream;
 
 				source = null;
 			} else if (value === 'alsa') {
 				profile.source = 1;
+				custom.selected = true;
+				custom.stream = -2;
 
 				// The first ALSA device is selected by default
 				let address = '';
@@ -626,6 +638,8 @@ export default function Wizard(inputProps) {
 				source.inputs = fullSource.func.createInputs(source.settings);
 			} else if (value === 'silence') {
 				profile.source = 1;
+				custom.selected = true;
+				custom.stream = -2;
 
 				source = M.initSource('audio', null);
 
@@ -640,6 +654,9 @@ export default function Wizard(inputProps) {
 				source.inputs = fullSource.func.createInputs(source.settings);
 			} else {
 				profile.source = -1;
+				profile.stream = -1;
+				custom.selected = false;
+				custom.stream = -1;
 
 				source = null;
 			}
@@ -652,6 +669,7 @@ export default function Wizard(inputProps) {
 			setProfile({
 				...$profile,
 				audio: profile,
+				custom: custom,
 			});
 		};
 

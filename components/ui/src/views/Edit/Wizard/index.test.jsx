@@ -680,8 +680,17 @@ test('wizard: network source audio non-aac', async () => {
 });
 
 test('wizard: network source silence audio', async () => {
+	const upserts = [];
+	const savingRestreamer = {
+		...restreamer,
+		UpsertIngest: (_channelid, global, inputs, outputs, control) => {
+			upserts.push({ global, inputs, outputs, control });
+			return [{}, null];
+		},
+	};
+
 	await act(async () => {
-		render(<Wizard restreamer={restreamer} />, {}, '/wizard/test', '/wizard/:channelid');
+		render(<Wizard restreamer={savingRestreamer} />, {}, '/wizard/test', '/wizard/:channelid');
 	});
 
 	// Choose network source
@@ -737,6 +746,27 @@ test('wizard: network source silence audio', async () => {
 	});
 
 	expect(screen.queryByText(/Metadata/)).toBeInTheDocument();
+
+	// Confirm metadata and license so the generated FFmpeg process is saved.
+	button = screen.getByRole('button', { name: 'Next' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	button = screen.getByRole('button', { name: 'Save' });
+	await act(async () => {
+		fireEvent.click(button);
+	});
+
+	expect(upserts).toHaveLength(1);
+	expect(upserts[0].inputs).toHaveLength(2);
+	expect(upserts[0].inputs[0].address).toBe('rtsp://127.0.0.1/live/h264-aac');
+	expect(upserts[0].inputs[1].address).toBe('anullsrc=r=44100:cl=stereo');
+	expect(upserts[0].outputs).toHaveLength(1);
+
+	const options = upserts[0].outputs[0].options;
+	const mapTargets = options.filter((_, index) => options[index - 1] === '-map');
+	expect(mapTargets).toEqual(['0:0', '1:0']);
 });
 
 test('wizard: network source no audio', async () => {
