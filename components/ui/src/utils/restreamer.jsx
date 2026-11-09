@@ -14,6 +14,7 @@ import * as Storage from './storage';
 import * as Version from '../version';
 import API from './api';
 import { anonymize } from './anonymizer';
+import { normalizeRTMPApp } from './rtmp';
 
 class Restreamer {
 	constructor(address) {
@@ -856,23 +857,7 @@ class Restreamer {
 		config.source.network.rtmp.secure = val.config.rtmp.enable_tls;
 		config.source.network.rtmp.token = encodeURIComponent(val.config.rtmp.token);
 
-		// Sanity check on the RTMP app
-		let app = val.config.rtmp.app;
-		const re = new RegExp('/+', 'g');
-		app = app.replace(re, '/');
-		if (app !== '/') {
-			if (app[app.length - 1] === '/') {
-				app = app.substring(0, app.length - 2);
-			}
-
-			if (app[0] !== '/') {
-				app = '/' + app;
-			}
-		} else {
-			app = '';
-		}
-
-		config.source.network.rtmp.app = app;
+		config.source.network.rtmp.app = normalizeRTMPApp(val.config.rtmp.app);
 		config.source.network.rtmp.host = config.hostname;
 
 		// This is used for FFmpeg to access the RTMP stream. If the RTMP server is bound to a

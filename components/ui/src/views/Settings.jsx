@@ -41,6 +41,7 @@ import Textarea from '../misc/Textarea';
 import TextField from '../misc/TextField';
 import useInterval from '../hooks/useInterval';
 import { withDefaults } from '../utils/props';
+import { normalizeRTMPAppConfig } from '../utils/rtmp';
 
 const useStyles = makeStyles((theme) => ({
 	inlineEnv: {
@@ -954,7 +955,7 @@ export default function Settings(inputProps) {
 			config.tls.address = ':' + config.tls.address;
 			config.rtmp.address = ':' + config.rtmp.address;
 			config.rtmp.address_tls = ':' + config.rtmp.address_tls;
-			config.rtmp.app = !config.rtmp.app.startsWith('/') ? '/' + config.rtmp.app : config.rtmp.app;
+			config.rtmp.app = normalizeRTMPAppConfig(config.rtmp.app);
 			config.srt.address = ':' + config.srt.address;
 
 			if (config.tls.auto === true) {

@@ -20,6 +20,8 @@
 -   Stop combining output `-r` with non-CFR frame-rate modes, allowing V4L2 and
     other camera sources to use passthrough or variable frame timing
     ([#943](https://github.com/datarhei/restreamer/issues/943)).
+-   Preserve the complete RTMP application name when normalizing leading and
+    trailing slashes ([#825](https://github.com/datarhei/restreamer/issues/825)).
 
 ## 2.12.0
 
