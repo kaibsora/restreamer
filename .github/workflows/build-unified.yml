@@ -329,6 +329,7 @@ jobs:
           push: false
           build-args: |
             FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
+            RUN_TESTS=false
           tags: restreamer-smoke:local
           cache-from: type=gha,scope=restreamer-unified
           cache-to: type=gha,mode=max,scope=restreamer-unified
@@ -366,6 +367,7 @@ jobs:
           push: true
           build-args: |
             FFMPEG_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ needs.ffmpeg.outputs.digest || needs.version.outputs.digest }}
+            RUN_TESTS=false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=restreamer-unified

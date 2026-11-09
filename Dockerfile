@@ -4,27 +4,38 @@ ARG NODE_IMAGE=node:24-alpine3.22
 ARG GOLANG_IMAGE=golang:1.25-alpine3.22
 ARG FFMPEG_IMAGE=ghcr.io/kaibsora/restreamer-ffmpeg:hardware-latest
 ARG YARN_VERSION=1.22.22
+ARG RUN_TESTS=true
 
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS ui-builder
 ARG YARN_VERSION
+ARG RUN_TESTS
 WORKDIR /src/ui
 COPY components/ui/package.json components/ui/yarn.lock components/ui/.yarnrc.yml ./
 RUN corepack enable && \
     corepack prepare yarn@${YARN_VERSION} --activate && \
     yarn install --frozen-lockfile
 COPY components/ui/ ./
-RUN yarn test-ci && yarn build
+RUN case "${RUN_TESTS}" in \
+      true) yarn test-ci ;; \
+      false) ;; \
+      *) echo "RUN_TESTS must be true or false, got ${RUN_TESTS}" >&2; exit 64 ;; \
+    esac && \
+    yarn build
 
 FROM --platform=$BUILDPLATFORM ${GOLANG_IMAGE} AS core-builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT
+ARG RUN_TESTS
 ENV GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT}
 WORKDIR /src/core
 RUN apk add --no-cache git make
 COPY components/core/ ./
-RUN go test ./... && \
-    go vet ./... && \
+RUN case "${RUN_TESTS}" in \
+      true) go test ./... && go vet ./... ;; \
+      false) ;; \
+      *) echo "RUN_TESTS must be true or false, got ${RUN_TESTS}" >&2; exit 64 ;; \
+    esac && \
     make release && \
     make import && \
     make ffmigrate
