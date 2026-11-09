@@ -51,6 +51,8 @@
     [#981](https://github.com/datarhei/restreamer/issues/981)).
 -   Allow deployment acceptance to require specific NVENC, VA-API, Quick Sync,
     or Vulkan backends so one working GPU cannot mask a missing target runtime.
+-   Allow multi-GPU deployments to target explicit VA-API and Quick Sync DRM
+    render nodes during active hardware acceptance.
 
 ## 2.12.0
 

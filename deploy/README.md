@@ -61,6 +61,10 @@ requirement also enables active verification, so a different working GPU cannot
 camouflage the missing one.
 For a Vulkan GPU that is not FFmpeg device `0`, set
 `RESTREAMER_VULKAN_DEVICE=<index>` in the Restreamer service environment.
+On multi-GPU VA-API/Quick Sync hosts, set `RESTREAMER_VAAPI_DEVICE` and
+`RESTREAMER_QSV_DEVICE` to the intended mapped DRM nodes. The report still lists
+every usable node, but active verification targets those selections instead of
+quietly certifying the first GPU returned by the kernel.
 
 An encoder appearing in `ffmpeg -encoders` proves it was compiled. Successful
 `vainfo`, `vulkaninfo`, or `nvidia-smi` output proves that the corresponding host

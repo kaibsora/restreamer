@@ -22,6 +22,9 @@ case " $* " in
     *' -c:v h264_nvenc '*)
         [ "${FAKE_NVENC_FAIL:-false}" != true ]
         ;;
+    *' -c:v h264_vaapi '*|*' -c:v h264_qsv '*)
+        [ -z "${FAKE_FFMPEG_LOG:-}" ] || printf '%s\n' "$*" >>"${FAKE_FFMPEG_LOG}"
+        ;;
     *)
         exit 1
         ;;
@@ -33,22 +36,71 @@ cat >"${fixture_root}/bin/nvidia-smi" <<'EOF'
 printf '%s\n' 'NVIDIA-SMI test runtime'
 EOF
 
-for command in vainfo vulkaninfo; do
-    cat >"${fixture_root}/bin/${command}" <<'EOF'
+cat >"${fixture_root}/bin/vainfo" <<'EOF'
+#!/bin/sh
+case "$*" in
+    *renderD128*) printf '%s\n' 'Mesa Gallium driver AMD Radeon test runtime' ;;
+    *renderD129*) printf '%s\n' 'Intel iHD test runtime' ;;
+    *) exit 1 ;;
+esac
+EOF
+
+cat >"${fixture_root}/bin/vulkaninfo" <<'EOF'
 #!/bin/sh
 exit 1
 EOF
-done
 
 chmod +x "${fixture_root}/bin/"*
 
 test_path="${fixture_root}/bin:/usr/bin:/bin"
+
+mkdir -p "${fixture_root}/dri"
+touch "${fixture_root}/dri/renderD128" "${fixture_root}/dri/renderD129"
 
 output="$(PATH="${test_path}" \
     "${repository_root}/scripts/hardware-report.sh" \
     --verify --require nvenc)"
 grep -F 'PASS: NVIDIA NVENC encoded a test frame.' <<<"${output}" >/dev/null
 grep -F 'Required hardware backends passed: nvenc' <<<"${output}" >/dev/null
+
+ffmpeg_log="${fixture_root}/ffmpeg.log"
+output="$(PATH="${test_path}" \
+    FAKE_FFMPEG_LOG="${ffmpeg_log}" \
+    RESTREAMER_VAAPI_DEVICE="${fixture_root}/dri/renderD128" \
+    RESTREAMER_QSV_DEVICE="${fixture_root}/dri/renderD129" \
+    "${repository_root}/scripts/hardware-report.sh" \
+    --verify --require vaapi --require qsv)"
+grep -F "Selected VA-API render device: ${fixture_root}/dri/renderD128" \
+    <<<"${output}" >/dev/null
+grep -F "Selected Quick Sync render device: ${fixture_root}/dri/renderD129" \
+    <<<"${output}" >/dev/null
+grep -F "PASS: VA-API (${fixture_root}/dri/renderD128) encoded a test frame." \
+    <<<"${output}" >/dev/null
+grep -F "PASS: Intel Quick Sync (${fixture_root}/dri/renderD129) encoded a test frame." \
+    <<<"${output}" >/dev/null
+grep -F "vaapi=va:${fixture_root}/dri/renderD128" "${ffmpeg_log}" >/dev/null
+grep -F "vaapi=va:${fixture_root}/dri/renderD129" "${ffmpeg_log}" >/dev/null
+
+output="$(PATH="${test_path}" \
+    FAKE_FFMPEG_LOG="${ffmpeg_log}" \
+    RESTREAMER_VAAPI_DEVICE="${fixture_root}/dri/missing" \
+    RESTREAMER_QSV_DEVICE="${fixture_root}/dri/renderD129" \
+    "${repository_root}/scripts/hardware-report.sh" \
+    --verify --require qsv 2>"${fixture_root}/independent-qsv")"
+grep -F "PASS: Intel Quick Sync (${fixture_root}/dri/renderD129) encoded a test frame." \
+    <<<"${output}" >/dev/null
+grep -F 'Configured VA-API render device is unavailable' \
+    "${fixture_root}/independent-qsv" >/dev/null
+
+if PATH="${test_path}" \
+    RESTREAMER_VAAPI_DEVICE="${fixture_root}/dri/missing" \
+    "${repository_root}/scripts/hardware-report.sh" \
+    --verify --require vaapi >"${fixture_root}/missing-vaapi" 2>&1; then
+    printf '%s\n' 'Expected a missing configured VA-API device to fail.' >&2
+    exit 1
+fi
+grep -F 'Configured VA-API render device is unavailable' \
+    "${fixture_root}/missing-vaapi" >/dev/null
 
 if PATH="${test_path}" "${repository_root}/scripts/hardware-report.sh" \
     --verify --require qsv >"${fixture_root}/missing" 2>&1; then

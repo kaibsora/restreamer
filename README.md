@@ -165,6 +165,10 @@ For multi-GPU Vulkan hosts, select the FFmpeg device index with
 VA-API and Quick Sync encoder forms expose their DRM render node directly; select
 `/dev/dri/renderD129` (or the appropriate mapped node) when the intended Intel/AMD
 GPU is not `renderD128`.
+For automated acceptance on a multi-GPU host, set `RESTREAMER_VAAPI_DEVICE` and/or
+`RESTREAMER_QSV_DEVICE` on the container to the same mapped render nodes. The
+hardware report enumerates all usable nodes but verifies the configured devices,
+preventing an unrelated GPU from donating a misleading green check.
 
 Then probe the real USB and IP-camera sources concurrently from inside the running
 container:

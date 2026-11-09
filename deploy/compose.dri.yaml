@@ -5,3 +5,7 @@ services:
     group_add:
       - "${RENDER_GID:-109}"
       - "${VIDEO_GID:-44}"
+    environment:
+      RESTREAMER_VAAPI_DEVICE: "${RESTREAMER_VAAPI_DEVICE:-}"
+      RESTREAMER_QSV_DEVICE: "${RESTREAMER_QSV_DEVICE:-}"
+      RESTREAMER_VULKAN_DEVICE: "${RESTREAMER_VULKAN_DEVICE:-0}"

@@ -4,6 +4,7 @@ set -eu
 usage() {
     echo "Usage: restreamer-hardware-report [--verify] [--require BACKEND]..." >&2
     echo "Backends: nvenc, vaapi, qsv, vulkan" >&2
+    echo "Device overrides: RESTREAMER_VAAPI_DEVICE, RESTREAMER_QSV_DEVICE, RESTREAMER_VULKAN_DEVICE" >&2
     exit 64
 }
 
@@ -39,9 +40,11 @@ workdir="$(mktemp -d)"
 trap 'rm -rf "${workdir}"' EXIT INT TERM
 
 render_device=''
-va_info=''
+qsv_render_device=''
 vulkan_info=''
 nvidia_info=''
+configured_vaapi_device="${RESTREAMER_VAAPI_DEVICE:-}"
+configured_qsv_device="${RESTREAMER_QSV_DEVICE:-}"
 
 echo "== FFmpeg =="
 ffmpeg -hide_banner -version | head -n 3
@@ -67,17 +70,65 @@ done
 if command -v vainfo >/dev/null 2>&1; then
     echo
     echo "== VA-API runtime =="
-    for device in /dev/dri/renderD*; do
-        [ -e "${device}" ] || continue
-        if vainfo --display drm --device "${device}" >"${workdir}/vainfo" 2>&1; then
-            render_device="${device}"
-            va_info="$(cat "${workdir}/vainfo")"
-            printf 'Render device: %s\n%s\n' "${render_device}" "${va_info}"
-            break
+
+    # Explicit selections are included even when they live outside /dev/dri so
+    # the verifier remains testable and works with unusual bind-mount paths.
+    {
+        for device in /dev/dri/renderD*; do
+            [ -e "${device}" ] && printf '%s\n' "${device}"
+        done
+        [ -z "${configured_vaapi_device}" ] || printf '%s\n' "${configured_vaapi_device}"
+        [ -z "${configured_qsv_device}" ] || printf '%s\n' "${configured_qsv_device}"
+    } | awk '!seen[$0]++' >"${workdir}/render-devices"
+
+    device_index=0
+    while IFS= read -r device; do
+        [ -n "${device}" ] || continue
+        device_index=$((device_index + 1))
+        device_info="${workdir}/vainfo-${device_index}"
+
+        if [ ! -e "${device}" ]; then
+            printf 'Configured render device does not exist: %s\n' "${device}" >&2
+            continue
         fi
-    done
+
+        if vainfo --display drm --device "${device}" >"${device_info}" 2>&1; then
+            info="$(cat "${device_info}")"
+            printf 'Render device: %s\n%s\n' "${device}" "${info}"
+
+            if [ -z "${render_device}" ] && \
+                { [ -z "${configured_vaapi_device}" ] || [ "${device}" = "${configured_vaapi_device}" ]; }; then
+                render_device="${device}"
+            fi
+
+            if printf '%s\n' "${info}" | grep -Eqi 'Intel|iHD|i965'; then
+                if [ -z "${qsv_render_device}" ] && \
+                    { [ -z "${configured_qsv_device}" ] || [ "${device}" = "${configured_qsv_device}" ]; }; then
+                    qsv_render_device="${device}"
+                fi
+            fi
+        else
+            printf 'Unusable VA-API render device: %s\n' "${device}" >&2
+            sed 's/^/  /' "${device_info}" >&2
+        fi
+    done <"${workdir}/render-devices"
+
     if [ -z "${render_device}" ]; then
-        echo "No usable VA-API render device detected."
+        if [ -n "${configured_vaapi_device}" ]; then
+            printf 'Configured VA-API render device is unavailable: %s\n' \
+                "${configured_vaapi_device}" >&2
+        else
+            echo "No usable VA-API render device detected."
+        fi
+    else
+        printf 'Selected VA-API render device: %s\n' "${render_device}"
+    fi
+
+    if [ -n "${qsv_render_device}" ]; then
+        printf 'Selected Quick Sync render device: %s\n' "${qsv_render_device}"
+    elif [ -n "${configured_qsv_device}" ]; then
+        printf 'Configured Quick Sync render device is unavailable or not Intel: %s\n' \
+            "${configured_qsv_device}" >&2
     fi
 fi
 
@@ -146,17 +197,17 @@ if [ -n "${render_device}" ]; then
         -init_hw_device "vaapi=va:${render_device}" -filter_hw_device va \
         -f lavfi -i color=size=128x72:rate=1 \
         -vf format=nv12,hwupload -frames:v 1 -c:v h264_vaapi -f null -
+fi
 
-    if printf '%s\n' "${va_info}" | grep -Eqi 'Intel|iHD|i965'; then
-        detected_qsv=true
-        verify_encoder "Intel Quick Sync (${render_device})" \
-            ffmpeg -hide_banner -loglevel error \
-            -init_hw_device "vaapi=va:${render_device}" \
-            -init_hw_device qsv=qsv@va -filter_hw_device qsv \
-            -f lavfi -i color=size=128x72:rate=1 \
-            -vf format=nv12,hwupload=extra_hw_frames=64 \
-            -frames:v 1 -c:v h264_qsv -f null -
-    fi
+if [ -n "${qsv_render_device}" ]; then
+    detected_qsv=true
+    verify_encoder "Intel Quick Sync (${qsv_render_device})" \
+        ffmpeg -hide_banner -loglevel error \
+        -init_hw_device "vaapi=va:${qsv_render_device}" \
+        -init_hw_device qsv=qsv@va -filter_hw_device qsv \
+        -f lavfi -i color=size=128x72:rate=1 \
+        -vf format=nv12,hwupload=extra_hw_frames=64 \
+        -frames:v 1 -c:v h264_qsv -f null -
 fi
 
 if printf '%s\n' "${vulkan_info}" \
