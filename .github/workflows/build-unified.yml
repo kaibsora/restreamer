@@ -326,6 +326,9 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=ffmpeg-${{ needs.version.outputs.ffmpeg }}
             type=sha
+          labels: |
+            org.opencontainers.image.version=${{ github.sha }}
+            io.restreamer.repository.branch=${{ github.ref_name }}
 
       - name: Generate build identity
         id: identity
@@ -407,3 +410,35 @@ jobs:
           cache-to: type=gha,mode=max,scope=restreamer-unified
           provenance: mode=max
           sbom: true
+
+      - name: Verify published image by digest
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ steps.identity.outputs.commit }}
+          EXPECTED_BRANCH: ${{ steps.identity.outputs.branch }}
+          PUBLISHED_DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          if ! [[ "${PUBLISHED_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "Published image returned an invalid digest: ${PUBLISHED_DIGEST}" >&2
+            exit 1
+          fi
+
+          image="${REGISTRY}/${IMAGE_NAME}@${PUBLISHED_DIGEST}"
+          docker pull "${image}"
+
+          revision="$(docker image inspect "${image}" \
+            --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')"
+          version="$(docker image inspect "${image}" \
+            --format '{{index .Config.Labels "org.opencontainers.image.version"}}')"
+          branch="$(docker image inspect "${image}" \
+            --format '{{index .Config.Labels "io.restreamer.repository.branch"}}')"
+
+          [[ "${revision}" == "${EXPECTED_COMMIT}" ]]
+          [[ "${version}" == "${EXPECTED_COMMIT}" ]]
+          [[ "${branch}" == "${EXPECTED_BRANCH}" ]]
+
+          docker run --rm \
+            --entrypoint /usr/local/bin/restreamer-verify-ffmpeg \
+            "${image}"
+          echo "Verified published image ${image}."

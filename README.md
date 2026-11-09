@@ -432,7 +432,9 @@ source pushes still force a rebuild. It:
 6. validates the Compose and MediaMTX deployment configuration;
 7. pins the unified build to the FFmpeg image digest;
 8. boots and probes the application before publishing to GitHub Container Registry;
-9. emits provenance and an SBOM for both images.
+9. pulls the published digest back from GHCR and verifies its commit identity and
+   FFmpeg contract;
+10. emits provenance and an SBOM for both images.
 
 All jobs run on the Actions Runner Controller scale set named `restreamer-linux`.
 ARC schedules by scale-set name and does not add the conventional `self-hosted`
