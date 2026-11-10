@@ -82,6 +82,7 @@ jobs:
             bash -n "${script}"
           done < <(git ls-files -z '*.sh')
           scripts/test-hardware-report.sh
+          scripts/test-accept-hls-viewers.sh
           scripts/test-accept-relays.sh
           scripts/test-resolve-ffmpeg-version.sh
 

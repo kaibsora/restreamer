@@ -419,6 +419,19 @@ so the test measures container, transport, relay, and client startup overhead. O
 the direct-camera load or threshold with `SMOKE_CAMERA_COUNT` and
 `SMOKE_MAX_FIRST_FRAME_MS`.
 
+The same smoke gate opens 128 concurrent HLS viewer sessions, downloads a media
+segment for each, and requires Core to report all 128 as active. Run the reusable
+probe against an existing public HLS publication with:
+
+```sh
+scripts/accept-hls-viewers.sh https://restream.example.com/memfs/CHANNEL.m3u8 128
+```
+
+This covers the application-side session failure reported in
+[upstream issue #951](https://github.com/datarhei/restreamer/issues/951). It does not
+promise that a host or internet connection has `128 × stream bitrate` of egress
+capacity; use a media-aware CDN when origin bandwidth is the bottleneck.
+
 This is a repeatable software-path latency gate, not a substitute for glass-to-glass
 measurement with the final camera, encoder settings, network, and display. Apparently
 photons remain unwilling to participate in GitHub Actions.

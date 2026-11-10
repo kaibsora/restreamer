@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 project_name="${COMPOSE_PROJECT_NAME:-restreamer-integration-smoke}"
 restreamer_image="${RESTREAMER_IMAGE:-restreamer-smoke:local}"
 camera_count="${SMOKE_CAMERA_COUNT:-4}"
@@ -369,6 +370,22 @@ if [[ "${snapshot_source_ready}" != true ]]; then
     printf '%s\n' 'The managed HLS source for snapshot validation was not ready.' >&2
     exit 1
 fi
+
+hls_viewer_count=${SMOKE_HLS_VIEWERS:-128}
+ACCEPT_HLS_FORWARDED_FOR=198.51.100.42 \
+    "${repository_root}/scripts/accept-hls-viewers.sh" \
+    http://127.0.0.1:8080/memfs/ci-snapshot-source.m3u8 \
+    "${hls_viewer_count}"
+hls_active_json=$(curl --fail --silent --show-error \
+    'http://127.0.0.1:8080/api/v3/session/active?collectors=hls')
+hls_active_count=$(grep -o '"id":' <<<"${hls_active_json}" | wc -l | tr -d '[:space:]')
+if (( hls_active_count < hls_viewer_count )); then
+    printf 'Core tracked %s active HLS sessions after %s viewer probes. Response: %s\n' \
+        "${hls_active_count}" "${hls_viewer_count}" "${hls_active_json}" >&2
+    exit 1
+fi
+printf 'Core tracked %s concurrent HLS sessions without rejecting a viewer.\n' \
+    "${hls_active_count}"
 
 snapshot_process_id='restreamer-smoke:snapshot'
 snapshot_path='ci-snapshot.jpg'
