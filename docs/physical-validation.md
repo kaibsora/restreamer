@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-d57a8c6`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-606fb57`.
 
 Published image digest:
-`sha256:b10908b08fa5f87e7c8664f3beaf13aa5e0dd7ce354ee1eaeb9aabf96116c209`.
+`sha256:b589c3446cce245726273ce588495fe11366fc5c7e18961943f21d0b99f6056b`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -226,3 +226,39 @@ Local test containers and remote diagnostic files were removed.
 This candidate did **not** update `latest`. Maintainer physical acceptance,
 RC-1 promotion, final branding/documentation and the development-branch cutover
 remain pending under the [release plan](rc-1-release-plan.md).
+
+## Camera capture mode discovery and native H.264
+
+Image `sha-606fb57` enumerates V4L2 capture formats, frame sizes and frame intervals.
+It offers those choices before probing, with dependent size/frame-rate selections
+and an explicit H.264 stream-copy option. The post-probe Profile menu now describes
+verified tracks instead of implying that it lists every camera resolution.
+
+Both the native backend and the deployed authenticated API returned:
+
+| Camera | Format | Advertised sizes | Largest size |
+| --- | --- | ---: | --- |
+| Logitech 046d:0825 | YUYV / MJPEG | 19 / 19 | 1280x960 |
+| Sonix USB camera | MJPEG / YUYV | 5 / 5 | 1920x1080 |
+| Logitech C920 | YUYV | 19 | 2304x1536 |
+| Logitech C920 | H.264 / MJPEG | 17 / 17 | 1920x1080 |
+
+The C920 advertises H.264 frame rates of 30, 24, 20, 15, 10, 15/2 and 5 FPS at
+1920x1080. Fifteen-frame physical samples at 15 FPS passed native H.264 stream
+copy and decode at 640x480, 1280x720 and 1920x1080. Sample files were deleted.
+This confirms capture/decoding, not sustained throughput at every advertised
+rate or camera-to-display latency. Firmware/driver capability lists can differ
+between cameras sold under the same model name.
+
+The deployed browser wizard displayed all 17 H.264 sizes, accepted 1920x1080 at
+15 FPS, verified a 1920x1080 H.264 track and selected stream copy by default.
+That temporary channel was never saved. API checks confirmed authentication,
+non-camera path rejection and format-specific rate lists. All eight existing
+user processes remained after deployment and UI verification.
+
+All 305 UI tests, production build/catalog checks, full Core tests and vet,
+configuration checks, container smoke tests and published digest verification
+passed. Unit tests cover current ioctl layouts through synthetic enumeration,
+stepwise ranges, exact rational frame rates, dependent UI selections and failed
+H.264 fallback. The deployed digest matched GHCR; test containers, viewers and
+remote diagnostic files were removed. `latest` was not promoted.

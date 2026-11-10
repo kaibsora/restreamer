@@ -158,6 +158,13 @@ for persistence limitations and supported control types. Intel VA-API and Quick
 Sync have physical validation. **AMD and NVIDIA GPUs remain untested on physical
 hardware**, despite the included build support.
 
+Choose USB capture **Format → Size → Framerate** on the device-settings page.
+The choices come from that camera's driver, including native H.264 where available.
+The later Profile list shows the verified input track; use **Back** to change
+capture modes. Native H.264 can use stream copy to avoid re-encoding, while
+rotation and other video filters require a transcoding encoder. See
+[adding a camera](docs/usb-hotplug.md#adding-a-camera-in-the-ui).
+
 For fixed USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the
 container needs, and add the copied file as another Compose override. Do not use
 `--privileged` merely because a webcam exists; device permissions are not a séance.
