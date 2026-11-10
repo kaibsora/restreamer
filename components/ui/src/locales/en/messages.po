@@ -279,12 +279,20 @@ msgid "Automatic"
 msgstr "Automatic"
 
 #: src/misc/CameraCapture.jsx
+msgid "Automatic (camera default)"
+msgstr "Automatic (camera default)"
+
+#: src/misc/CameraCapture.jsx
 msgid "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 msgstr "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 
 #: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "Automatic cleanup of all media data"
+
+#: src/misc/CameraCapture.jsx
+msgid "Automatic uses the camera's default resolution, which may be lower than its maximum."
+msgstr "Automatic uses the camera's default resolution, which may be lower than its maximum."
 
 #: src/views/Publication/Player.jsx
 msgid "Autoplay"
@@ -420,6 +428,10 @@ msgstr "Cache time (Seconds)"
 msgid "Cache types"
 msgstr "Cache types"
 
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Camera capture settings"
+msgstr "Camera capture settings"
+
 #: src/misc/CameraControls.jsx
 msgid "Camera controls"
 msgstr "Camera controls"
@@ -441,16 +453,40 @@ msgid "Capture cursor"
 msgstr "Capture cursor"
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture framerate (FPS or auto)"
-msgstr "Capture framerate (FPS or auto)"
+msgid "Capture format"
+msgstr "Capture format"
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture size (WIDTHxHEIGHT or auto)"
-msgstr "Capture size (WIDTHxHEIGHT or auto)"
+msgid "Capture frame rate (FPS or auto)"
+msgstr "Capture frame rate (FPS or auto)"
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture frame rate (FPS)"
+msgstr "Capture frame rate (FPS)"
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture framerate (FPS or auto)"
+#~ msgstr "Capture framerate (FPS or auto)"
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution"
+msgstr "Capture resolution"
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution (WIDTHxHEIGHT or auto)"
+msgstr "Capture resolution (WIDTHxHEIGHT or auto)"
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture size (WIDTHxHEIGHT or auto)"
+#~ msgstr "Capture size (WIDTHxHEIGHT or auto)"
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
 msgstr "Center"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Change camera format, resolution or frame rate"
+msgstr "Change camera format, resolution or frame rate"
 
 #: src/misc/CameraControls.jsx
 msgid "Changes apply immediately to this physical camera, including other streams using it. The camera may reset them after unplugging or restarting."
@@ -476,6 +512,10 @@ msgstr "Channels"
 #: src/views/Publication/Add.jsx
 msgid "Check the requirements"
 msgstr "Check the requirements"
+
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Choose a format, then a resolution, then a frame rate. Next verifies this mode. The following page shows the detected video track and output encoder choices."
+msgstr "Choose a format, then a resolution, then a frame rate. Next verifies this mode. The following page shows the detected video track and output encoder choices."
 
 #: src/views/Edit/StreamSelect.jsx
 msgid "Choose a video stream"
@@ -790,6 +830,10 @@ msgstr "Description"
 #: src/views/Playersite.jsx
 msgid "Design"
 msgstr "Design"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Detected video track"
+msgstr "Detected video track"
 
 #: src/views/Edit/Sources/Framebuffer.jsx
 #: src/views/Edit/Wizard/Audio.jsx
@@ -1167,8 +1211,8 @@ msgid "For Stylesheets."
 msgstr "For Stylesheets."
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
-msgstr "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+#~ msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+#~ msgstr "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
@@ -1178,10 +1222,13 @@ msgstr "Force input framerate"
 msgid "Force key frames"
 msgstr "Force key frames"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "Format"
+
+#: src/misc/CameraCapture.jsx
+msgid "Formats come from the camera. The output encoder is selected separately after verification."
+msgstr "Formats come from the camera. The output encoder is selected separately after verification."
 
 #: src/misc/Progress.jsx
 #: src/views/Main/Progress.jsx
@@ -1200,7 +1247,6 @@ msgstr "Frame is passed through (Passthrough)"
 msgid "Framebuffer"
 msgstr "Framebuffer"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 #: src/misc/filters/video/Framerate.jsx
 #: src/views/Edit/Sources/Network.jsx
@@ -2174,7 +2220,6 @@ msgstr "Processing & Control"
 #: src/misc/coders/Encoders/video/hevc_videotoolbox.jsx
 #: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 #: src/misc/coders/settings/Video.jsx
-#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Profile"
 msgstr "Profile"
 
@@ -2548,8 +2593,12 @@ msgid "Segmentation"
 msgstr "Segmentation"
 
 #: src/misc/CameraCapture.jsx
-msgid "Select a capture size to list its advertised frame rates."
-msgstr "Select a capture size to list its advertised frame rates."
+msgid "Select a capture resolution to list the frame rates available for that format and resolution."
+msgstr "Select a capture resolution to list the frame rates available for that format and resolution."
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Select a capture size to list its advertised frame rates."
+#~ msgstr "Select a capture size to list its advertised frame rates."
 
 #: src/views/Edit/Sources/ALSA.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
@@ -2721,7 +2770,6 @@ msgstr "Sine"
 msgid "Sitename"
 msgstr "Sitename"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "Size"
@@ -3083,6 +3131,10 @@ msgstr "The source doesn't provide any video streams. Please check the <0>probe 
 msgid "The source doesn't provide any video streams. Please check the device."
 msgstr "The source doesn't provide any video streams. Please check the device."
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "The source is compatible. Select a video track found during verification."
+msgstr "The source is compatible. Select a video track found during verification."
+
 #: src/misc/controls/SRT.jsx
 msgid "The SRT output requires the SRT Server."
 msgstr "The SRT output requires the SRT Server."
@@ -3096,8 +3148,8 @@ msgstr "The video source doesn't provide any compatible audio stream. <0>Silence
 #~ msgstr "The video source is compatible. Select the desired resolution:"
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "The video source is compatible. Select the detected video track:"
-msgstr "The video source is compatible. Select the detected video track:"
+#~ msgid "The video source is compatible. Select the detected video track:"
+#~ msgstr "The video source is compatible. Select the detected video track:"
 
 #: src/views/Settings.jsx
 #~ msgid "There are updates available. Here you get more information."
@@ -3179,6 +3231,14 @@ msgstr "This license allows reusers to distribute, remix, adapt, and build upon 
 #: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
 msgstr "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+#~ msgid "This list shows tracks in the selected capture mode, not every format or resolution the camera supports."
+#~ msgstr "This list shows tracks in the selected capture mode, not every format or resolution the camera supports."
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "This list shows tracks in the selected capture mode, not every format or resolution the source supports."
+msgstr "This list shows tracks in the selected capture mode, not every format or resolution the source supports."
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."

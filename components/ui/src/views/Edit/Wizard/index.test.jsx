@@ -346,7 +346,7 @@ test('wizard: rtmp source video h264-aac', async () => {
 		fireEvent.click(button);
 	});
 
-	expect(screen.queryByText(/The video source is compatible. Select the detected video track:/)).toBeInTheDocument();
+	expect(screen.queryByText(/The source is compatible. Select a video track found during verification./)).toBeInTheDocument();
 	expect(screen.queryByText(/Your stream needs to be encoded. Choose the desired encoder:/)).not.toBeInTheDocument();
 
 	// Select suggested video stream
@@ -408,7 +408,7 @@ test('wizard: srt source video h264-aac', async () => {
 		fireEvent.click(button);
 	});
 
-	expect(screen.queryByText(/The video source is compatible. Select the detected video track:/)).toBeInTheDocument();
+	expect(screen.queryByText(/The source is compatible. Select a video track found during verification./)).toBeInTheDocument();
 	expect(screen.queryByText(/Your stream needs to be encoded. Choose the desired encoder:/)).not.toBeInTheDocument();
 
 	// Select suggested video stream
@@ -541,7 +541,7 @@ test('wizard: network source video h264', async () => {
 		fireEvent.click(button);
 	});
 
-	expect(screen.queryByText(/The video source is compatible. Select the detected video track:/)).toBeInTheDocument();
+	expect(screen.queryByText(/The source is compatible. Select a video track found during verification./)).toBeInTheDocument();
 	expect(screen.queryByText(/Your stream needs to be encoded. Choose the desired encoder:/)).not.toBeInTheDocument();
 
 	// Select suggested video stream
@@ -606,7 +606,7 @@ test('wizard: network source video non-h264', async () => {
 		fireEvent.click(button);
 	});
 
-	expect(screen.queryByText(/The video source is compatible. Select the detected video track:/)).toBeInTheDocument();
+	expect(screen.queryByText(/The source is compatible. Select a video track found during verification./)).toBeInTheDocument();
 	expect(screen.queryByText(/Your stream needs to be encoded. Choose the desired encoder:/)).toBeInTheDocument();
 
 	// Select suggested video stream

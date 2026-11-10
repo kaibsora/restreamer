@@ -534,6 +534,7 @@ export default function Wizard(inputProps) {
 		// STEP 4 - Video Profile Selection
 		return (
 			<VideoProfile
+				cameraCapture={$sources.video.type === 'video4linux2'}
 				onAbort={handleAbort}
 				onHelp={handleHelp('video-result')}
 				onPassthroughChange={(event) => handleEncoderChange({target:{value:event.target.checked ? 'copy' : encoders[0]?.coder || 'none'}})}

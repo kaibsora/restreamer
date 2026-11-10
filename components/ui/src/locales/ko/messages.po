@@ -279,12 +279,20 @@ msgid "Automatic"
 msgstr ""
 
 #: src/misc/CameraCapture.jsx
+msgid "Automatic (camera default)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
 msgid "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 msgstr ""
 
 #: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "모든 미디어 데이터를 자동으로 청소합니다."
+
+#: src/misc/CameraCapture.jsx
+msgid "Automatic uses the camera's default resolution, which may be lower than its maximum."
+msgstr ""
 
 #: src/views/Publication/Player.jsx
 msgid "Autoplay"
@@ -420,6 +428,10 @@ msgstr "캐시 시간 (초)"
 msgid "Cache types"
 msgstr "캐시 유형"
 
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Camera capture settings"
+msgstr ""
+
 #: src/misc/CameraControls.jsx
 msgid "Camera controls"
 msgstr ""
@@ -441,15 +453,39 @@ msgid "Capture cursor"
 msgstr "커서 캡쳐"
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture framerate (FPS or auto)"
+msgid "Capture format"
 msgstr ""
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture size (WIDTHxHEIGHT or auto)"
+msgid "Capture frame rate (FPS or auto)"
 msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture frame rate (FPS)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture framerate (FPS or auto)"
+#~ msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution (WIDTHxHEIGHT or auto)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture size (WIDTHxHEIGHT or auto)"
+#~ msgstr ""
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
+msgstr ""
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Change camera format, resolution or frame rate"
 msgstr ""
 
 #: src/misc/CameraControls.jsx
@@ -476,6 +512,10 @@ msgstr "채널"
 #: src/views/Publication/Add.jsx
 msgid "Check the requirements"
 msgstr "요구사항 확인"
+
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Choose a format, then a resolution, then a frame rate. Next verifies this mode. The following page shows the detected video track and output encoder choices."
+msgstr ""
 
 #: src/views/Edit/StreamSelect.jsx
 msgid "Choose a video stream"
@@ -790,6 +830,10 @@ msgstr "설명"
 #: src/views/Playersite.jsx
 msgid "Design"
 msgstr "디자인"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Detected video track"
+msgstr ""
 
 #: src/views/Edit/Sources/Framebuffer.jsx
 #: src/views/Edit/Wizard/Audio.jsx
@@ -1167,8 +1211,8 @@ msgid "For Stylesheets."
 msgstr "스타일시트를 입력합니다."
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
-msgstr ""
+#~ msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+#~ msgstr ""
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
@@ -1178,10 +1222,13 @@ msgstr "입력 프레임률 고정"
 msgid "Force key frames"
 msgstr "키 프레임 강제"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "형식"
+
+#: src/misc/CameraCapture.jsx
+msgid "Formats come from the camera. The output encoder is selected separately after verification."
+msgstr ""
 
 #: src/misc/Progress.jsx
 #: src/views/Main/Progress.jsx
@@ -1200,7 +1247,6 @@ msgstr "프레임을 그대로 사용합니다 (Passthrogh)"
 msgid "Framebuffer"
 msgstr "프레임버퍼"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 #: src/misc/filters/video/Framerate.jsx
 #: src/views/Edit/Sources/Network.jsx
@@ -2174,7 +2220,6 @@ msgstr "프로세싱과 조절"
 #: src/misc/coders/Encoders/video/hevc_videotoolbox.jsx
 #: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 #: src/misc/coders/settings/Video.jsx
-#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Profile"
 msgstr "프로파일"
 
@@ -2548,8 +2593,12 @@ msgid "Segmentation"
 msgstr "조각화"
 
 #: src/misc/CameraCapture.jsx
-msgid "Select a capture size to list its advertised frame rates."
+msgid "Select a capture resolution to list the frame rates available for that format and resolution."
 msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Select a capture size to list its advertised frame rates."
+#~ msgstr ""
 
 #: src/views/Edit/Sources/ALSA.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
@@ -2721,7 +2770,6 @@ msgstr "사인파"
 msgid "Sitename"
 msgstr "사이트 이름"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "크기"
@@ -3083,6 +3131,10 @@ msgstr "이 원본에는 영상이 포함되지 않았습니다. <0>확인 결�
 msgid "The source doesn't provide any video streams. Please check the device."
 msgstr "이 원본에는 영상이 포함되지 않았습니다. 장치를 점검해주세요."
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "The source is compatible. Select a video track found during verification."
+msgstr ""
+
 #: src/misc/controls/SRT.jsx
 msgid "The SRT output requires the SRT Server."
 msgstr "SRT 송출을 위해 SRT 서버가 필요합니다."
@@ -3096,8 +3148,8 @@ msgstr "이 비디오 원본은 호환되는 소리 스트림을 제공하지 �
 #~ msgstr "호환되는 영상 스트림입니다. 원하는 해상도를 선택해주세요:"
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "The video source is compatible. Select the detected video track:"
-msgstr ""
+#~ msgid "The video source is compatible. Select the detected video track:"
+#~ msgstr ""
 
 #: src/views/Settings.jsx
 #~ msgid "There are updates available. Here you get more information."
@@ -3179,6 +3231,14 @@ msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면
 #: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
 msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면 복제, 배포, 전시, 공연 및 공중송신(포맷 변경도 포함), 리믹스, 변형, 2차적 저작물의 작성이 가능합니다. 영리목적으로도 이용이 가능합니다. 생성된 리믹스, 변형, 2차적 저작물에는 원저작물과 동일한 라이선스를 적용해야 합니다."
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+#~ msgid "This list shows tracks in the selected capture mode, not every format or resolution the camera supports."
+#~ msgstr ""
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "This list shows tracks in the selected capture mode, not every format or resolution the source supports."
+msgstr ""
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."

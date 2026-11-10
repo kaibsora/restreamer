@@ -77,6 +77,7 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 				)}
 				<Grid item xs={12}>
 					<Video.Format
+						label={<Trans>Capture format</Trans>}
 						value={settings.format}
 						onChange={update('format')}
 						allowAuto
@@ -85,6 +86,7 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 				</Grid>
 				<Grid item xs={12}>
 					<Video.Size
+						label={<Trans>Capture resolution</Trans>}
 						value={settings.size}
 						onChange={update('size')}
 						allowAuto
@@ -93,6 +95,7 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 				</Grid>
 				<Grid item xs={12}>
 					<Video.Framerate
+						label={<Trans>Capture frame rate (FPS)</Trans>}
 						value={settings.framerate}
 						onChange={update('framerate')}
 						allowAuto
@@ -117,7 +120,7 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 		<>
 			<Grid item xs={12}>
 				<Select
-					label={<Trans>Format</Trans>}
+					label={<Trans>Capture format</Trans>}
 					value={settings.format}
 					onChange={update('format')}
 				>
@@ -140,6 +143,12 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 						</MenuItem>
 					)}
 				</Select>
+				<Typography variant="caption" display="block">
+					<Trans>
+						Formats come from the camera. The output encoder is
+						selected separately after verification.
+					</Trans>
+				</Typography>
 				{settings.format === 'auto' && (
 					<Typography variant="caption">
 						<Trans>
@@ -152,12 +161,12 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 			<Grid item xs={12}>
 				{sizes.length ? (
 					<Select
-						label={<Trans>Size</Trans>}
+						label={<Trans>Capture resolution</Trans>}
 						value={settings.size}
 						onChange={update('size')}
 					>
 						<MenuItem value="auto">
-							<Trans>Automatic</Trans>
+							<Trans>Automatic (camera default)</Trans>
 						</MenuItem>
 						{sizes.map((mode) => (
 							<MenuItem
@@ -178,11 +187,21 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 					<TextField
 						fullWidth
 						label={
-							<Trans>Capture size (WIDTHxHEIGHT or auto)</Trans>
+							<Trans>
+								Capture resolution (WIDTHxHEIGHT or auto)
+							</Trans>
 						}
 						value={settings.size}
 						onChange={update('size')}
 					/>
+				)}
+				{settings.size === 'auto' && (
+					<Typography variant="caption" display="block">
+						<Trans>
+							Automatic uses the camera's default resolution,
+							which may be lower than its maximum.
+						</Trans>
+					</Typography>
 				)}
 				{format?.size_range && (
 					<Typography variant="caption">
@@ -200,12 +219,12 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 			<Grid item xs={12}>
 				{rates.length ? (
 					<Select
-						label={<Trans>Framerate</Trans>}
+						label={<Trans>Capture frame rate (FPS)</Trans>}
 						value={settings.framerate}
 						onChange={update('framerate')}
 					>
 						<MenuItem value="auto">
-							<Trans>Automatic</Trans>
+							<Trans>Automatic (camera default)</Trans>
 						</MenuItem>
 						{rates.map((rate) => (
 							<MenuItem key={rate} value={rate}>
@@ -223,7 +242,7 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 				) : (
 					<TextField
 						fullWidth
-						label={<Trans>Capture framerate (FPS or auto)</Trans>}
+						label={<Trans>Capture frame rate (FPS or auto)</Trans>}
 						value={settings.framerate}
 						onChange={update('framerate')}
 					/>
@@ -231,8 +250,8 @@ function Capture({ device, settings, onChange, restreamer, refreshKey = 0 }) {
 				{settings.size === 'auto' && (
 					<Typography variant="caption">
 						<Trans>
-							Select a capture size to list its advertised frame
-							rates.
+							Select a capture resolution to list the frame rates
+							available for that format and resolution.
 						</Trans>
 					</Typography>
 				)}

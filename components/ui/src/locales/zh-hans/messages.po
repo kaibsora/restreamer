@@ -279,12 +279,20 @@ msgid "Automatic"
 msgstr ""
 
 #: src/misc/CameraCapture.jsx
+msgid "Automatic (camera default)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
 msgid "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 msgstr ""
 
 #: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "自动清理所有媒体数据"
+
+#: src/misc/CameraCapture.jsx
+msgid "Automatic uses the camera's default resolution, which may be lower than its maximum."
+msgstr ""
 
 #: src/views/Publication/Player.jsx
 msgid "Autoplay"
@@ -420,6 +428,10 @@ msgstr "缓存时间（秒）"
 msgid "Cache types"
 msgstr "缓存类型"
 
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Camera capture settings"
+msgstr ""
+
 #: src/misc/CameraControls.jsx
 msgid "Camera controls"
 msgstr ""
@@ -441,15 +453,39 @@ msgid "Capture cursor"
 msgstr "捕获指针"
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture framerate (FPS or auto)"
+msgid "Capture format"
 msgstr ""
 
 #: src/misc/CameraCapture.jsx
-msgid "Capture size (WIDTHxHEIGHT or auto)"
+msgid "Capture frame rate (FPS or auto)"
 msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture frame rate (FPS)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture framerate (FPS or auto)"
+#~ msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture resolution (WIDTHxHEIGHT or auto)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Capture size (WIDTHxHEIGHT or auto)"
+#~ msgstr ""
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
+msgstr ""
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Change camera format, resolution or frame rate"
 msgstr ""
 
 #: src/misc/CameraControls.jsx
@@ -476,6 +512,10 @@ msgstr "频道"
 #: src/views/Publication/Add.jsx
 msgid "Check the requirements"
 msgstr "检查"
+
+#: src/views/Edit/Wizard/Sources/V4L.jsx
+msgid "Choose a format, then a resolution, then a frame rate. Next verifies this mode. The following page shows the detected video track and output encoder choices."
+msgstr ""
 
 #: src/views/Edit/StreamSelect.jsx
 msgid "Choose a video stream"
@@ -790,6 +830,10 @@ msgstr "描述"
 #: src/views/Playersite.jsx
 msgid "Design"
 msgstr "设计"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Detected video track"
+msgstr ""
 
 #: src/views/Edit/Sources/Framebuffer.jsx
 #: src/views/Edit/Wizard/Audio.jsx
@@ -1167,8 +1211,8 @@ msgid "For Stylesheets."
 msgstr "For Stylesheets."
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
-msgstr ""
+#~ msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+#~ msgstr ""
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
@@ -1178,10 +1222,13 @@ msgstr "强制输入帧率"
 msgid "Force key frames"
 msgstr "强制帧率"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "格式"
+
+#: src/misc/CameraCapture.jsx
+msgid "Formats come from the camera. The output encoder is selected separately after verification."
+msgstr ""
 
 #: src/misc/Progress.jsx
 #: src/views/Main/Progress.jsx
@@ -1200,7 +1247,6 @@ msgstr "帧直通（Passthrough）"
 msgid "Framebuffer"
 msgstr "帧缓冲"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 #: src/misc/filters/video/Framerate.jsx
 #: src/views/Edit/Sources/Network.jsx
@@ -2174,7 +2220,6 @@ msgstr "串流进程和控制"
 #: src/misc/coders/Encoders/video/hevc_videotoolbox.jsx
 #: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 #: src/misc/coders/settings/Video.jsx
-#: src/views/Edit/Wizard/VideoProfile.jsx
 msgid "Profile"
 msgstr "Profile"
 
@@ -2548,8 +2593,12 @@ msgid "Segmentation"
 msgstr "分片"
 
 #: src/misc/CameraCapture.jsx
-msgid "Select a capture size to list its advertised frame rates."
+msgid "Select a capture resolution to list the frame rates available for that format and resolution."
 msgstr ""
+
+#: src/misc/CameraCapture.jsx
+#~ msgid "Select a capture size to list its advertised frame rates."
+#~ msgstr ""
 
 #: src/views/Edit/Sources/ALSA.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
@@ -2721,7 +2770,6 @@ msgstr "波形"
 msgid "Sitename"
 msgstr "站点名称"
 
-#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "大小"
@@ -3083,6 +3131,10 @@ msgstr "媒体源没有提供视频流。请检查 <0>媒体头详情</0>。"
 msgid "The source doesn't provide any video streams. Please check the device."
 msgstr "媒体源没有提供视频流。请检查设备。"
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "The source is compatible. Select a video track found during verification."
+msgstr ""
+
 #: src/misc/controls/SRT.jsx
 msgid "The SRT output requires the SRT Server."
 msgstr "SRT 输出需要 SRT 服务器。"
@@ -3096,8 +3148,8 @@ msgstr "该视频源没有提供任何兼容的音频流。推荐<0>静音音频
 #~ msgstr "视频源不兼容。选择期望的解决方案："
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "The video source is compatible. Select the detected video track:"
-msgstr ""
+#~ msgid "The video source is compatible. Select the detected video track:"
+#~ msgstr ""
 
 #: src/views/Settings.jsx
 #~ msgid "There are updates available. Here you get more information."
@@ -3179,6 +3231,14 @@ msgstr "该许可证允许再利用者以任何媒体或格式分发、重新混
 #: src/misc/controls/License/index.jsx
 msgid "This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms."
 msgstr "该许可证允许再利用者以任何媒体或格式分发、重新混合、改编和构建材料，只要注明创作者的署名即可。该许可证允许用于商业用途。如果您重新混合、改编或构建这些材料，您必须根据相同的条款许可修改后的材料。"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+#~ msgid "This list shows tracks in the selected capture mode, not every format or resolution the camera supports."
+#~ msgstr ""
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "This list shows tracks in the selected capture mode, not every format or resolution the source supports."
+msgstr ""
 
 #: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."

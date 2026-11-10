@@ -149,6 +149,18 @@ function Source(inputProps) {
 					<Trans>Refresh</Trans>
 				</Button>
 			</Grid>
+			<Grid item xs={12}>
+				<Typography variant="h3">
+					<Trans>Camera capture settings</Trans>
+				</Typography>
+				<Typography>
+					<Trans>
+						Choose a format, then a resolution, then a frame rate.
+						Next verifies this mode. The following page shows the
+						detected video track and output encoder choices.
+					</Trans>
+				</Typography>
+			</Grid>
 			<CameraCapture
 				device={settings.device}
 				settings={settings}

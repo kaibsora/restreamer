@@ -31,27 +31,39 @@ export default function VideoProfile(inputProps) {
 				<Grid item xs={12}>
 					<Typography>
 						<Trans>
-							The video source is compatible. Select the detected
-							video track:
+							The source is compatible. Select a video track found
+							during verification.
 						</Trans>
 					</Typography>
 					<Typography variant="caption">
 						<Trans>
-							For USB cameras, use Back to change the capture
-							format, resolution or frame rate. This list shows
-							the verified input tracks.
+							This list shows tracks in the selected capture mode,
+							not every format or resolution the source supports.
 						</Trans>
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
 					<Select
-						label={<Trans>Profile</Trans>}
+						label={<Trans>Detected video track</Trans>}
 						value={props.stream}
 						onChange={props.onStreamChange}
 					>
 						{props.streamList}
 					</Select>
 				</Grid>
+				{props.cameraCapture && (
+					<Grid item xs={12}>
+						<Button
+							variant="outlined"
+							fullWidth
+							onClick={props.onBack}
+						>
+							<Trans>
+								Change camera format, resolution or frame rate
+							</Trans>
+						</Button>
+					</Grid>
+				)}
 				{props.compatible && (
 					<Grid item xs={12}>
 						<FormControlLabel
@@ -158,6 +170,7 @@ const VideoProfileDefaultProps = {
 	onBack: () => {},
 	onNext: () => {},
 	compatible: false,
+	cameraCapture: false,
 	onStreamChange: () => {},
 	streamList: [],
 	stream: 0,
