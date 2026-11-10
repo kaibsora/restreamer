@@ -214,6 +214,10 @@ msgstr "App"
 msgid "Application"
 msgstr "Application"
 
+#: src/misc/CameraControls.jsx
+msgid "Apply"
+msgstr "Apply"
+
 #: src/views/Edit/Wizard/Abort.jsx
 msgid "Are you sure you want to abort the wizard?"
 msgstr "Are you sure you want to abort the wizard?"
@@ -411,6 +415,10 @@ msgstr "Cache time (Seconds)"
 msgid "Cache types"
 msgstr "Cache types"
 
+#: src/misc/CameraControls.jsx
+msgid "Camera controls"
+msgstr "Camera controls"
+
 #: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Capture buffer"
 msgstr "Capture buffer"
@@ -426,6 +434,10 @@ msgstr "Capture cursor"
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
 msgstr "Center"
+
+#: src/misc/CameraControls.jsx
+msgid "Changes apply immediately to this physical camera, including other streams using it. The camera may reset them after unplugging or restarting."
+msgstr "Changes apply immediately to this physical camera, including other streams using it. The camera may reset them after unplugging or restarting."
 
 #. placeholder {0}: $data.meta.name
 #: src/views/Edit/index.jsx
@@ -768,6 +780,7 @@ msgstr "Design"
 msgid "Device"
 msgstr "Device"
 
+#: src/misc/CameraControls.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
 msgid "Disabled"
 msgstr "Disabled"
@@ -930,6 +943,7 @@ msgstr "Enable snapshots"
 msgid "Enable SRT server ..."
 msgstr "Enable SRT server ..."
 
+#: src/misc/CameraControls.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
 msgid "Enabled"
 msgstr "Enabled"
@@ -1832,6 +1846,7 @@ msgid "Noise"
 msgstr "Noise"
 
 #: src/misc/filters/video/Scale.jsx
+#: src/misc/filters/video/Transpose.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
 #: src/views/Edit/Summary.jsx
 #: src/views/Edit/Wizard/Sources/AVFoundation.jsx
@@ -2223,6 +2238,14 @@ msgstr "rav1e Parameters"
 msgid "Read input at native speed"
 msgstr "Read input at native speed"
 
+#: src/misc/CameraControls.jsx
+msgid "Read-only, unavailable in the current camera mode, or unsupported control type."
+msgstr "Read-only, unavailable in the current camera mode, or unsupported control type."
+
+#: src/misc/CameraControls.jsx
+msgid "Reading camera controls..."
+msgstr "Reading camera controls..."
+
 #: src/views/Edit/Sources/Network.jsx
 msgid "Receive Mode"
 msgstr "Receive Mode"
@@ -2262,6 +2285,10 @@ msgstr "Reconnecting to Restreamer Core failed."
 #: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Refresh"
 msgstr "Refresh"
+
+#: src/misc/CameraControls.jsx
+msgid "Refresh controls"
+msgstr "Refresh controls"
 
 #: src/views/Publication/Services/Livepush.jsx
 #: src/views/Publication/Services/PicartoTv.jsx
@@ -2352,6 +2379,10 @@ msgstr "RGB test pattern"
 msgid "Rotate"
 msgstr "Rotate"
 
+#: src/misc/filters/video/Transpose.jsx
+msgid "Rotates the encoded video for the player and every publication. Requires video transcoding; save the source settings to apply."
+msgstr "Rotates the encoded video for the player and every publication. Requires video transcoding; save the source settings to apply."
+
 #: src/views/Main/index.jsx
 #: src/views/Settings.jsx
 msgid "RTMP"
@@ -2406,6 +2437,10 @@ msgstr "RTSP"
 #: src/views/Edit/Sources/VirtualVideo.jsx
 msgid "Rule"
 msgstr "Rule"
+
+#: src/misc/CameraControls.jsx
+msgid "Run"
+msgstr "Run"
 
 #: src/misc/coders/settings/Audio.jsx
 #: src/misc/filters/audio/Resample.jsx
@@ -3036,6 +3071,10 @@ msgstr "There were some errors in the settings. Settings not saved."
 #: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "There's no login method available."
+
+#: src/misc/CameraControls.jsx
+msgid "This camera reports no adjustable controls."
+msgstr "This camera reports no adjustable controls."
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "This changes the encoded frames and therefore requires video transcoding. The branding is inherited by every publication and relay."

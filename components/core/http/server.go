@@ -558,6 +558,8 @@ func (s *server) setRoutesV3(v3 *echo.Group) {
 	if s.v3handler.restream != nil {
 		v3.GET("/skills", s.v3handler.restream.Skills)
 		v3.GET("/skills/reload", s.v3handler.restream.ReloadSkills)
+		v3.GET("/camera/controls", s.v3handler.restream.CameraControls)
+		v3.PUT("/camera/controls", s.v3handler.restream.SetCameraControl)
 
 		v3.GET("/process", s.v3handler.restream.GetAll)
 		v3.GET("/process/:id", s.v3handler.restream.Get)

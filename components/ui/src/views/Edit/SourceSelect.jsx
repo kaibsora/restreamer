@@ -96,6 +96,7 @@ export default function SourceSelect(inputProps) {
 		if (SemverSatisfies(props.skills.ffmpeg.version, s.ffversion)) {
 			sourceControl = (
 				<Component
+					restreamer={props.restreamer}
 					knownDevices={props.skills.sources[$source]}
 					skills={props.skills}
 					config={config[$source]}

@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import * as S from '../../Sources/V4L';
 import Select from '../../../../misc/Select';
 import Video from '../../../../misc/coders/settings/Video';
+import CameraControls from '../../../../misc/CameraControls';
 import { withDefaults } from '../../../../utils/props';
 
 function initSettings(initialSettings, knownDevices) {
@@ -129,6 +130,9 @@ function Source(inputProps) {
 			</Grid>
 			<Grid item xs={12}>
 				<Video.Framerate value={settings.framerate} onChange={update('framerate')} allowAuto allowCustom />
+			</Grid>
+			<Grid item xs={12}>
+				<CameraControls device={settings.device} restreamer={props.restreamer} />
 			</Grid>
 		</React.Fragment>
 	);

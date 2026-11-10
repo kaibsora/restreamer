@@ -3,6 +3,7 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
 import Select from '../../Select';
 import { withDefaults } from '../../../utils/props';
@@ -29,7 +30,10 @@ function createGraph(settings) {
 			mapping.push('transpose=dir=clock:passthrough=none');
 			break;
 		case '180':
-			mapping.push('transpose=dir=clock:passthrough=none', 'transpose=dir=clock:passthrough=none');
+			mapping.push(
+				'transpose=dir=clock:passthrough=none',
+				'transpose=dir=clock:passthrough=none',
+			);
 			break;
 		case '270':
 			mapping.push('transpose=dir=cclock:passthrough=none');
@@ -45,8 +49,14 @@ function createGraph(settings) {
 function Rotate(inputProps) {
 	const props = withDefaults(inputProps, RotateDefaultProps);
 	return (
-		<Select label={<Trans>Rotate</Trans>} value={props.value} onChange={props.onChange}>
-			<MenuItem value="none">None</MenuItem>
+		<Select
+			label={<Trans>Rotate</Trans>}
+			value={props.value}
+			onChange={props.onChange}
+		>
+			<MenuItem value="none">
+				<Trans>None</Trans>
+			</MenuItem>
 			<MenuItem value="90">90°</MenuItem>
 			<MenuItem value="180">180°</MenuItem>
 			<MenuItem value="270">270°</MenuItem>
@@ -89,7 +99,18 @@ function Filter(inputProps) {
 
 	return (
 		<Grid item xs={12}>
-			<Rotate value={settings.value} onChange={update('value')} allowCustom />
+			<Rotate
+				value={settings.value}
+				onChange={update('value')}
+				allowCustom
+			/>
+			<Typography variant="caption">
+				<Trans>
+					Rotates the encoded video for the player and every
+					publication. Requires video transcoding; save the source
+					settings to apply.
+				</Trans>
+			</Typography>
 		</Grid>
 	);
 }
@@ -102,7 +123,8 @@ const FilterDefaultProps = {
 const filter = 'transpose';
 const name = 'Transpose';
 const type = 'video';
-const hwaccel = false;
+// Rotation runs on decoded system-memory frames before the encoder upload.
+const hwaccel = true;
 
 function summarize(settings) {
 	return `${name} (${settings.value}° clockwise)`;
@@ -117,4 +139,13 @@ function defaults() {
 	};
 }
 
-export { name, filter, type, hwaccel, summarize, defaults, createGraph, Filter as component };
+export {
+	name,
+	filter,
+	type,
+	hwaccel,
+	summarize,
+	defaults,
+	createGraph,
+	Filter as component,
+};

@@ -522,6 +522,7 @@ export default function Profile(inputProps) {
 						<Grid item xs={12}>
 							<SourceSelect
 								type="video"
+								restreamer={props.restreamer}
 								skills={props.skills}
 								source={$sources.video}
 								config={props.config}

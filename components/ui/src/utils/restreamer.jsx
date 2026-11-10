@@ -680,6 +680,14 @@ class Restreamer {
 		return JSON.parse(JSON.stringify(this.skills));
 	}
 
+	async CameraControls(device) {
+		return await this._call(this.api.CameraControls, device);
+	}
+
+	async SetCameraControl(device, id, value) {
+		return await this._call(this.api.SetCameraControl, device, id, value);
+	}
+
 	async RefreshSkills() {
 		const [, err] = await this._call(this.api.SkillsReload);
 		if (err !== null) {

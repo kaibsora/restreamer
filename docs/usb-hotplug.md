@@ -56,6 +56,45 @@ For existing sources, Core checks the running FFmpeg binary's option scope and
 omits input `-thread_queue_size` only when FFmpeg advertises it as output-only.
 Stored source settings and output queue options are preserved.
 
+## Camera controls and rotation
+
+In either USB source editor, expand **Camera controls** to read the selected
+camera's V4L2 controls. The panel queries the device on demand, without polling
+or running another service. Available controls depend on the camera: brightness,
+contrast, white balance, exposure, focus or zoom appear only if the driver
+advertises them. Device-provided names and menu entries are shown as reported
+by the kernel; the surrounding UI is localized.
+
+Adjust a value and click its **Apply** button. Values are validated against the
+driver's range, step, and available menu indices. Changes immediately affect
+the physical camera and every application using it; closing or cancelling the
+source editor does not undo a hardware change. Automatic modes may make manual
+controls inactive. The panel refreshes all values and availability after each
+write. Use **Refresh controls** after another application changes the camera or
+after reconnecting it. These controls do not restart the stream.
+
+Camera firmware may reset controls after a restart or USB reconnection. This
+version does not persist and reapply them. Integer, boolean, menu, integer-menu,
+bitmask and button controls are supported; string, 64-bit and compound/payload
+controls are displayed as unsupported and cannot be edited. No host helper,
+`v4l2-ctl`, privileged mode or extra device permissions are needed beyond capture
+access. API access uses the ordinary authenticated Core API:
+
+- `GET /api/v3/camera/controls?device=/dev/video0`
+- `PUT /api/v3/camera/controls` with JSON `{"device":"/dev/video0","id":9963776,"value":128}`
+
+Stable `/dev/v4l/by-id/` and `/dev/v4l/by-path/` aliases are also accepted. Only
+V4L2 capture character devices (major 81) can be opened. The ordinary Core
+authentication configuration applies; do not expose an unauthenticated admin API.
+
+For image orientation, use **Rotate** in the advanced source editor's video
+filter settings after selecting a transcoding encoder. The choices are no
+rotation, 90, 180 and 270 degrees clockwise. Rotation changes the encoded frames,
+so the browser player and all publications receive the same orientation. It
+works before the Intel VA-API/QSV encoder conversion/upload, and remains visible
+when hardware encoding is selected. Save the source settings to apply rotation.
+Stream-copy mode cannot rotate frames. NVIDIA/AMD hardware paths remain untested.
+
 Inspect synchronization through the ordinary container logs:
 
 ```sh

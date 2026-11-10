@@ -227,6 +227,18 @@ class API {
 		});
 	}
 
+	async CameraControls(device) {
+		return await this._call('GET', '/v3/camera/controls?device=' + encodeURIComponent(device), { expect: 'json' });
+	}
+
+	async SetCameraControl(device, id, value) {
+		return await this._PUT('/v3/camera/controls', {
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ device, id, value }),
+			expect: 'json',
+		});
+	}
+
 	async Config(type) {
 		return await this._GET('/v3/config', {
 			expect: 'json',

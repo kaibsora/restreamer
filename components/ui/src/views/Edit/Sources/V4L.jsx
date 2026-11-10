@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormInlineButton from '../../../misc/FormInlineButton';
 import SelectCustom from '../../../misc/SelectCustom';
 import Video from '../../../misc/coders/settings/Video';
+import CameraControls from '../../../misc/CameraControls';
 import { withDefaults } from '../../../utils/props';
 
 const useStyles = makeStyles((theme) => ({
@@ -133,6 +134,9 @@ function Source(inputProps) {
 				<FormInlineButton onClick={handleProbe}>
 					<Trans>Probe</Trans>
 				</FormInlineButton>
+			</Grid>
+			<Grid item xs={12}>
+				<CameraControls device={createInputs(settings)[0].address} restreamer={props.restreamer} />
 			</Grid>
 		</Grid>
 	);

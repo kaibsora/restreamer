@@ -670,6 +670,13 @@ const createInputsOutputs = (sources, profiles, requireVideo = true) => {
 
 		if (profile.video.encoder.coder !== 'copy' && (profile.video.filter.graph.length !== 0 || profile.video.encoder.mapping.filter.length !== 0)) {
 			let filter = profile.video.filter.graph;
+			// Generic NVDEC returns CUDA frames. Rotation is a software filter and
+			// must run before the encoder upload, just like the watermark stage.
+			if (profile.video.decoder.coder === 'nvdec' && filter.includes('transpose=') && !filter.includes('hwdownload')) {
+				filter = filter.includes('[in]')
+					? '[in]hwdownload,format=nv12[rotation_input];' + filter.replaceAll('[in]', '[rotation_input]')
+					: 'hwdownload,format=nv12,' + filter;
+			}
 			if (profile.video.encoder.mapping.filter.length !== 0) {
 				if (filter.length !== 0) {
 					filter += ',';

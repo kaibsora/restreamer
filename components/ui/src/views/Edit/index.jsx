@@ -465,6 +465,7 @@ export default function Edit(inputProps) {
 								/>
 							) : (
 								<Profile
+									restreamer={props.restreamer}
 									skills={$skills}
 									sources={$data.sources}
 									profile={$data.profiles[0]}

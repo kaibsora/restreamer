@@ -356,6 +356,7 @@ export default function Wizard(inputProps) {
 			>
 				<Component
 					knownDevices={$skills.sources[s.type]}
+					restreamer={props.restreamer}
 					config={$config.source[s.type]}
 					settings={$sources.video.settings}
 					skills={$skills}
