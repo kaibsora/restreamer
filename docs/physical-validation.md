@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-4e8000f`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-dd1d09f`.
 
 Published image digest:
-`sha256:aac6a28d3c81f24093587d9faadb5611a812885cb96bc8ef6a431b0cf8bf40c9`.
+`sha256:6113490a248ae17d928f80a8741093ec39fd195adce8d7a7c7f043ebabd49cb2`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -285,9 +285,18 @@ A cold-start browser test found a separate player issue: an initial missing
 playlist could leave playback stuck after the camera began publishing valid
 media. A timed retry replaces the previous single immediate reload. Unit tests
 cover repeated network failures, deduplication, successful metadata, disposal,
-decode-error exclusion and preservation of a manually paused player. The UI
-test suite now contains 314 passing tests. Physical cold-start verification of
-that additional change is recorded below when its image is deployed.
+decode-error exclusion and preservation of a manually paused player. Recovery
+keeps an original source snapshot and passes a fresh copy on every retry;
+Video.js clearing its error during loadstart does not cancel a pending retry.
+The UI test suite now contains 318 passing tests.
+
+The revised UI was staged temporarily on the physical test container before
+publishing its image. A fresh browser was opened before starting the stopped
+C920 after a container restart. Two initial HLS network failures were followed
+by automatic 1920x1080 playback, without a page refresh. Playback time advanced
+from 34.7 to 67.0 seconds with readyState 4. All five then-listed segments
+returned HTTP 200, including segments older than 24 seconds. The viewer was
+closed and the camera restored to its original stopped order.
 
 These changes do not shorten the camera's native keyframe interval. HLS startup
 and latency remain affected by its long GOP. The initial timestamp warnings in
