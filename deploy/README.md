@@ -209,6 +209,11 @@ rtsp://RESTREAMER_LAN_IP:8554/printer-one
 http://RESTREAMER_LAN_IP:8889/printer-one
 ```
 
+Frigate can consume the same RTSP publication, either directly or through its
+bundled go2rtc restream. See the [Frigate integration guide](../docs/frigate.md) for
+current YAML, H.265-to-H.264 transcoding, resilient-path limitations, and an
+acceptance checklist.
+
 After creating the Restreamer publications, validate the exact named paths that the
 printer dashboards will consume:
 

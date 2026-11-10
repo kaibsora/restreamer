@@ -322,6 +322,13 @@ publications continue to support AAC or Opus. See the
 for paths and limitations. This addresses the fallback behavior requested in
 [upstream issue #965](https://github.com/datarhei/restreamer/issues/965).
 
+Frigate users can point its bundled go2rtc relay at the same MediaMTX RTSP path,
+allowing one Restreamer H.265-to-H.264 transcode to feed detection, recording, and
+live view. The [Frigate integration guide](docs/frigate.md) includes current Frigate
+YAML, direct-input alternatives, validation commands, and the video-only limitation
+of resilient paths. This documents the deployment requested in
+[upstream issue #906](https://github.com/datarhei/restreamer/issues/906).
+
 ### Disable the public landing page
 
 Open **Publication website → General**, clear **Publish public landing page**, and
