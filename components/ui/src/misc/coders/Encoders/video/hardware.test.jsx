@@ -30,7 +30,7 @@ test.each([
 });
 
 test.each([
-	[H264QSV, 'h264_qsv', ['format=nv12', 'hwupload=extra_hw_frames=16']],
+	[H264QSV, 'h264_qsv', ['format=nv12']],
 	[HEVCQSV, 'hevc_qsv', ['format=nv12', 'hwupload=extra_hw_frames=16']],
 	[H264Vulkan, 'h264_vulkan', ['format=nv12', 'hwupload=extra_hw_frames=16']],
 	[HEVCVulkan, 'hevc_vulkan', ['format=nv12', 'hwupload=extra_hw_frames=16']],
@@ -51,8 +51,16 @@ test.each([
 test('QSV binds to the selected DRM render node', () => {
 	const { mapping } = H264QSV.defaults({}, skills);
 
-	expect(mapping.global).toContainEqual(['-init_hw_device', 'qsv=restreamer_qsv:hw,child_device=/dev/dri/renderD128']);
+	expect(mapping.global).toContainEqual(['-init_hw_device', 'vaapi=restreamer_vaapi:/dev/dri/renderD128']);
+	expect(mapping.global).toContainEqual(['-init_hw_device', 'qsv=restreamer_qsv@restreamer_vaapi']);
 	expect(mapping.local).toEqual(expect.arrayContaining(['-async_depth', '1']));
+	expect(mapping.local).toEqual(expect.arrayContaining(['-low_power', '1']));
+});
+
+test('QSV preserves an explicit full-power encoder selection', () => {
+	const { mapping } = H264QSV.defaults({}, skills, { low_power: '0' });
+	expect(mapping.local).toEqual(expect.arrayContaining(['-low_power', '0']));
+	expect(mapping.filter).toEqual(['format=nv12']);
 });
 
 test('Vulkan binds to the selected Vulkan device', () => {

@@ -21,6 +21,7 @@ function createHardwareEncoder(config) {
 			fps_mode: 'cfr',
 			preset: config.defaultPreset || '',
 			device: config.defaultDevice,
+			...(config.lowPower ? { low_power: '1' } : {}),
 			...initialState,
 		};
 	}
@@ -125,6 +126,15 @@ function createHardwareEncoder(config) {
 				{config.presets && (
 					<Grid item xs={12} md={6}>
 						<Preset value={settings.preset} onChange={update('preset')} />
+					</Grid>
+				)}
+				{config.lowPower && (
+					<Grid item xs={12} md={6}>
+						<Select label={<Trans>Low-power encoding</Trans>} value={settings.low_power} onChange={update('low_power')}>
+							<MenuItem value="-1"><Trans>Automatic</Trans></MenuItem>
+							<MenuItem value="1"><Trans>Enabled</Trans></MenuItem>
+							<MenuItem value="0"><Trans>Disabled</Trans></MenuItem>
+						</Select>
 					</Grid>
 				)}
 				{skills.ffmpeg.version_major >= 5 && (

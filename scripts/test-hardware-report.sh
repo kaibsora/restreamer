@@ -47,6 +47,10 @@ EOF
 
 cat >"${fixture_root}/bin/vulkaninfo" <<'EOF'
 #!/bin/sh
+if [ "${FAKE_VULKAN_NO_ENCODE:-false}" = true ]; then
+    printf '%s\n' 'PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU'
+    exit 0
+fi
 exit 1
 EOF
 
@@ -62,6 +66,16 @@ output="$(PATH="${test_path}" \
     --verify --require nvenc)"
 grep -F 'PASS: NVIDIA NVENC encoded a test frame.' <<<"${output}" >/dev/null
 grep -F 'Required hardware backends passed: nvenc' <<<"${output}" >/dev/null
+
+output="$(PATH="${test_path}" FAKE_VULKAN_NO_ENCODE=true \
+    "${repository_root}/scripts/hardware-report.sh" --verify --require nvenc)"
+grep -F 'SKIP: Vulkan runtime does not advertise hardware video encoding.' <<<"${output}" >/dev/null
+if PATH="${test_path}" FAKE_VULKAN_NO_ENCODE=true \
+    "${repository_root}/scripts/hardware-report.sh" --require vulkan >"${fixture_root}/unsupported-vulkan" 2>&1; then
+    printf '%s\n' 'Expected a required unsupported Vulkan encoder to fail.' >&2
+    exit 1
+fi
+grep -F 'required hardware backend vulkan was not detected' "${fixture_root}/unsupported-vulkan" >/dev/null
 
 ffmpeg_log="${fixture_root}/ffmpeg.log"
 output="$(PATH="${test_path}" \

@@ -183,6 +183,8 @@ RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   libva2 \
   libva-drm2 \
   libvpl2 \
+  libmfx1 \
+  libmfx-gen1.2 \
   intel-media-va-driver \
   mesa-va-drivers \
   mesa-vulkan-drivers && \

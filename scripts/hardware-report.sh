@@ -205,13 +205,14 @@ if [ -n "${qsv_render_device}" ]; then
         ffmpeg -hide_banner -loglevel error \
         -init_hw_device "vaapi=va:${qsv_render_device}" \
         -init_hw_device qsv=qsv@va -filter_hw_device qsv \
-        -f lavfi -i color=size=128x72:rate=1 \
-        -vf format=nv12,hwupload=extra_hw_frames=64 \
-        -frames:v 1 -c:v h264_qsv -f null -
+        -f lavfi -i color=size=640x480:rate=30 \
+        -vf format=nv12 \
+        -frames:v 1 -c:v h264_qsv -low_power 1 -b:v 1000k -async_depth 1 -f null -
 fi
 
 if printf '%s\n' "${vulkan_info}" \
-    | grep -Eq 'PHYSICAL_DEVICE_TYPE_(DISCRETE|INTEGRATED)_GPU'; then
+    | grep -Eq 'PHYSICAL_DEVICE_TYPE_(DISCRETE|INTEGRATED)_GPU' &&
+    vulkaninfo 2>/dev/null | grep -F 'VK_KHR_video_encode_queue' >/dev/null; then
     detected_vulkan=true
     vulkan_device="${RESTREAMER_VULKAN_DEVICE:-0}"
     verify_encoder "Vulkan Video (device ${vulkan_device})" \
@@ -219,6 +220,8 @@ if printf '%s\n' "${vulkan_info}" \
         -init_hw_device "vulkan=vk:${vulkan_device}" -filter_hw_device vk \
         -f lavfi -i color=size=128x72:rate=1 \
         -vf format=nv12,hwupload -frames:v 1 -c:v h264_vulkan -f null -
+elif [ -n "${vulkan_info}" ]; then
+    echo 'SKIP: Vulkan runtime does not advertise hardware video encoding.'
 fi
 
 for backend in ${required_backends}; do
