@@ -1,10 +1,14 @@
 services:
   restreamer:
+    # CI tests the image built by the current workflow, not the deployment image.
+    image: "${RESTREAMER_SMOKE_IMAGE:-restreamer-smoke:local}"
     environment:
       # Exercise Core's real SRT server and placeholder expansion in addition to
       # the direct MediaMTX publishers used for concurrent-load testing.
       CORE_SRT_ENABLE: "true"
     devices:
+      # Replace the deployment's /dev/dri mapping on software-only CI runners.
+      - /dev/null:/dev/dri
       # A harmless character device exercises V4L2 fallback discovery without
       # requiring a physical USB camera on every CI runner.
       - /dev/null:/dev/video99

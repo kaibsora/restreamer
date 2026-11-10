@@ -114,7 +114,6 @@ jobs:
           docker compose \
             --env-file deploy/.env.example \
             --file deploy/compose.yaml \
-            --file deploy/compose.dri.yaml \
             --file deploy/compose.nvidia.yaml \
             --file deploy/compose.camera-example.yaml \
             --file deploy/compose.smoke.yaml \

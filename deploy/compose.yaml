@@ -1,6 +1,6 @@
 services:
   restreamer:
-    image: "${RESTREAMER_IMAGE:-ghcr.io/kaibsora/restreamer:latest}"
+    image: ghcr.io/kaibsora/restreamer:sha-5e66413
     container_name: restreamer
     restart: unless-stopped
     ports:
@@ -12,6 +12,15 @@ services:
     volumes:
       - restreamer-config:/core/config
       - restreamer-data:/core/data
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "${RENDER_GID:-109}"
+      - "${VIDEO_GID:-44}"
+    environment:
+      RESTREAMER_VAAPI_DEVICE: "${RESTREAMER_VAAPI_DEVICE:-}"
+      RESTREAMER_QSV_DEVICE: "${RESTREAMER_QSV_DEVICE:-}"
+      RESTREAMER_VULKAN_DEVICE: "${RESTREAMER_VULKAN_DEVICE:-0}"
 
   mediamtx:
     image: bluenviron/mediamtx:1.21.3

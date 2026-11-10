@@ -56,7 +56,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-export RESTREAMER_IMAGE="${restreamer_image}"
+export RESTREAMER_SMOKE_IMAGE="${restreamer_image}"
 export RESTREAMER_WEBRTC_HOSTS="${RESTREAMER_WEBRTC_HOSTS:-127.0.0.1}"
 
 "${compose[@]}" up --detach

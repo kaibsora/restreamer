@@ -122,12 +122,13 @@ the complete site—not a `/restreamer/` subpath—to port 8080. The NGINX, Cadd
 examples in [the reverse-proxy guide](docs/reverse-proxy.md) preserve the host and
 browser origin correctly, redirect HTTP to HTTPS, and cover large media uploads.
 
-For Intel or AMD hardware acceleration:
+The primary Compose file exposes `/dev/dri` for Intel or AMD hardware acceleration
+by default. Pass the host's actual group IDs when starting it:
 
 ```sh
 RENDER_GID="$(getent group render | cut -d: -f3)" \
 VIDEO_GID="$(getent group video | cut -d: -f3)" \
-docker compose -f deploy/compose.yaml -f deploy/compose.dri.yaml up -d
+docker compose -f deploy/compose.yaml up -d
 ```
 
 For NVIDIA hardware acceleration:

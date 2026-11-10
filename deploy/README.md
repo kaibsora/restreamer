@@ -6,20 +6,13 @@ Start the unified container without passing through a GPU:
 docker compose -f deploy/compose.yaml up -d
 ```
 
-To test an image built locally as `restreamer:local`:
-
-```sh
-RESTREAMER_IMAGE=restreamer:local \
-docker compose -f deploy/compose.yaml up -d
-```
-
-For Intel or AMD acceleration, expose the DRM render nodes and set the host's
-actual `video` and `render` group IDs:
+The primary Compose file exposes `/dev/dri` for Intel and AMD acceleration by
+default. Set the host's actual `video` and `render` group IDs before starting it:
 
 ```sh
 RENDER_GID="$(getent group render | cut -d: -f3)" \
 VIDEO_GID="$(getent group video | cut -d: -f3)" \
-docker compose -f deploy/compose.yaml -f deploy/compose.dri.yaml up -d
+docker compose -f deploy/compose.yaml up -d
 ```
 
 For NVIDIA acceleration, install NVIDIA Container Toolkit on the host and use:
