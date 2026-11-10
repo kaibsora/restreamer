@@ -9,6 +9,7 @@ import './video-js-skin-internal.min.css';
 import './video-js-skin-public.min.css';
 import 'videojs-overlay/dist/videojs-overlay.css';
 import { withDefaults } from '../../utils/props';
+import { installNetworkRecovery } from './network-recovery';
 
 export default function VideoJS(inputProps) {
 	const props = withDefaults(inputProps, VideoJSDefaultProps);
@@ -25,6 +26,7 @@ export default function VideoJS(inputProps) {
 			const player = (playerRef.current = videojs(videoElement, options, () => {
 				onReady && onReady(player);
 			}));
+			installNetworkRecovery(player);
 
 			// add internal/public skin style
 			if (props.type === 'videojs-public') {
