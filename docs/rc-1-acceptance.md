@@ -39,6 +39,11 @@ testing so they do not become permanent CPU consumers.
 - [ ] Test an external viewer through the reverse proxy, including video playback,
   TLS, correct published addresses and the required authentication/public-viewer
   boundaries. Public viewing may tolerate additional latency.
+- [ ] Leave native H.264 HLS playback running for several playlist cycles and
+  reopen it in a fresh browser tab. Check MPEG-TS and fMP4 HLS if both are used.
+  Long camera GOPs must not cause cleanup to delete referenced segments,
+  manifests or the persistent fMP4 initialization file. A successful FFmpeg
+  decode alone does not prove browser playback.
 - [ ] Check the printer dashboard's actual RTSP/MJPEG/player integration on the
   target printers; a working standalone RTSP player alone is insufficient.
 
