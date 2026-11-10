@@ -16,6 +16,7 @@ func TestCameraRejectsNonCameraPath(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/camera/controls?device=/etc/passwd", nil)
 	err := h.CameraControls(e.NewContext(req, httptest.NewRecorder()))
 	require.Error(t, err)
+	require.Error(t, h.CameraModes(e.NewContext(req, httptest.NewRecorder())))
 }
 
 func TestCameraControlRejectsInvalidValues(t *testing.T) {

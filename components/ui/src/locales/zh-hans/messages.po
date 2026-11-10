@@ -273,8 +273,13 @@ msgstr "权限"
 msgid "Auto"
 msgstr "自动"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
 msgid "Automatic"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 msgstr ""
 
 #: src/misc/controls/HLS.jsx
@@ -419,6 +424,10 @@ msgstr "缓存类型"
 msgid "Camera controls"
 msgstr ""
 
+#: src/misc/CameraCapture.jsx
+msgid "Camera modes could not be read. Manual capture settings remain available."
+msgstr ""
+
 #: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Capture buffer"
 msgstr "捕获缓冲区"
@@ -430,6 +439,14 @@ msgstr "捕获点击"
 #: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Capture cursor"
 msgstr "捕获指针"
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture framerate (FPS or auto)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture size (WIDTHxHEIGHT or auto)"
+msgstr ""
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
@@ -853,6 +870,14 @@ msgstr "文档"
 msgid "Draw a translucent background behind text"
 msgstr ""
 
+#: src/misc/CameraCapture.jsx
+msgid "Driver frame interval range (seconds):"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Driver size range:"
+msgstr ""
+
 #: src/misc/Progress.jsx
 msgid "Dup. frames"
 msgstr "重复帧"
@@ -1141,6 +1166,10 @@ msgstr "For Javascripts."
 msgid "For Stylesheets."
 msgstr "For Stylesheets."
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+msgstr ""
+
 #: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
 msgstr "强制输入帧率"
@@ -1149,6 +1178,7 @@ msgstr "强制输入帧率"
 msgid "Force key frames"
 msgstr "强制帧率"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "格式"
@@ -1170,6 +1200,7 @@ msgstr "帧直通（Passthrough）"
 msgid "Framebuffer"
 msgstr "帧缓冲"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 #: src/misc/filters/video/Framerate.jsx
 #: src/views/Edit/Sources/Network.jsx
@@ -1853,6 +1884,14 @@ msgstr "噪音"
 msgid "None"
 msgstr "无"
 
+#: src/misc/CameraCapture.jsx
+msgid "Not advertised by this camera"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Not advertised for this mode"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Notes"
 msgstr "说明"
@@ -2508,6 +2547,10 @@ msgstr "该值所示时间过后，片段将在下一个关键帧被剪切。推
 msgid "Segmentation"
 msgstr "分片"
 
+#: src/misc/CameraCapture.jsx
+msgid "Select a capture size to list its advertised frame rates."
+msgstr ""
+
 #: src/views/Edit/Sources/ALSA.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
 #: src/views/Edit/Sources/Framebuffer.jsx
@@ -2678,6 +2721,7 @@ msgstr "波形"
 msgid "Sitename"
 msgstr "站点名称"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "大小"
@@ -2759,6 +2803,10 @@ msgstr "start_at_zero"
 msgid "Statistics"
 msgstr "统计"
 
+#: src/misc/CameraCapture.jsx
+msgid "step:"
+msgstr ""
+
 #: src/misc/controls/HLS.jsx
 #: src/views/Settings.jsx
 msgid "Storage"
@@ -2772,6 +2820,10 @@ msgstr "将观众统计数据保存到硬盘。"
 #: src/views/Edit/Wizard/Audio.jsx
 msgid "Stream"
 msgstr "媒体流"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Stream copy avoids re-encoding. Rotation and other video filters require transcoding."
+msgstr ""
 
 #: src/views/Publication/Services/Wettercom.jsx
 msgid "Stream ID"
@@ -2905,6 +2957,10 @@ msgstr "可用的 FFmpeg 不支持任何一种要求的协议。"
 msgid "The bitrate of the audio stream."
 msgstr "音频流的比特率。"
 
+#: src/views/Edit/Wizard/probeSource.js
+msgid "The camera did not supply the requested capture format and resolution. Choose an advertised mode and verify again."
+msgstr ""
+
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The carrier frequency"
 msgstr "载波频率"
@@ -3036,8 +3092,12 @@ msgid "The video source doesn't provide any compatible audio stream. <0>Silence 
 msgstr "该视频源没有提供任何兼容的音频流。推荐<0>静音音频</0>。YouTube、Facebook 等服务要求有音频通道。"
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "The video source is compatible. Select the desired resolution:"
-msgstr "视频源不兼容。选择期望的解决方案："
+#~ msgid "The video source is compatible. Select the desired resolution:"
+#~ msgstr "视频源不兼容。选择期望的解决方案："
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "The video source is compatible. Select the detected video track:"
+msgstr ""
 
 #: src/views/Settings.jsx
 #~ msgid "There are updates available. Here you get more information."
@@ -3071,6 +3131,10 @@ msgstr "设置中有错误。设置未保存。"
 #: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "没有可用的登录方式。"
+
+#: src/misc/CameraCapture.jsx
+msgid "These are capture capabilities, not simultaneous video tracks. Verification checks the selected mode. H.264 can use stream copy; rotation and other video filters require transcoding."
+msgstr ""
 
 #: src/misc/CameraControls.jsx
 msgid "This camera reports no adjustable controls."
@@ -3391,6 +3455,10 @@ msgstr "在线时长"
 msgid "Use Auth0 for your running Restreamer Core. More <0>details</0>."
 msgstr "为你的 Restreamer Core 启用 Auth0。<0>查看更多详情</0>。"
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Use camera H.264 directly (stream copy)"
+msgstr ""
+
 #: src/views/Edit/index.jsx
 msgid "Use the wizard (<0/>) for a quick and easy setup, or edit (<1/>) the sources directly in custom mode."
 msgstr "使用向导 (<0/>) 快速设置，或者直接在自定义模式中编辑 (<1/>) 源。"
@@ -3527,6 +3595,10 @@ msgstr "白色"
 #: src/misc/coders/settings/Video.jsx
 msgid "Width"
 msgstr "宽度"
+
+#: src/misc/CameraCapture.jsx
+msgid "width/height steps:"
+msgstr ""
 
 #: src/views/Settings.jsx
 msgid "Write protection"

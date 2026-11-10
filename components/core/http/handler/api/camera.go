@@ -19,6 +19,14 @@ func (h *RestreamHandler) CameraControls(c echo.Context) error {
 	return c.JSON(http.StatusOK, controls)
 }
 
+func (h *RestreamHandler) CameraModes(c echo.Context) error {
+	formats, err := v4lcontrol.Modes(c.QueryParam("device"))
+	if err != nil {
+		return api.Err(http.StatusBadRequest, "Cannot read camera capture modes", "%s", err)
+	}
+	return c.JSON(http.StatusOK, formats)
+}
+
 func (h *RestreamHandler) SetCameraControl(c echo.Context) error {
 	var request struct {
 		Device string `json:"device"`

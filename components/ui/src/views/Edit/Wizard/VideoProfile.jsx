@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import Paper from '../../../misc/Paper';
 import PaperHeader from '../../../misc/PaperHeader';
@@ -15,45 +17,102 @@ export default function VideoProfile(inputProps) {
 	const props = withDefaults(inputProps, VideoProfileDefaultProps);
 	return (
 		<Paper xs={12} sm={9} md={6} marginBottom="6em" className="PaperM">
-			<PaperHeader spacing={2} variant="h1" title={<Trans>Video setup</Trans>} onAbort={props.onAbort} onHelp={props.onHelp} />
+			<PaperHeader
+				spacing={2}
+				variant="h1"
+				title={<Trans>Video setup</Trans>}
+				onAbort={props.onAbort}
+				onHelp={props.onHelp}
+			/>
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
 					<Divider />
 				</Grid>
 				<Grid item xs={12}>
 					<Typography>
-						<Trans>The video source is compatible. Select the desired resolution:</Trans>
+						<Trans>
+							The video source is compatible. Select the detected
+							video track:
+						</Trans>
+					</Typography>
+					<Typography variant="caption">
+						<Trans>
+							For USB cameras, use Back to change the capture
+							format, resolution or frame rate. This list shows
+							the verified input tracks.
+						</Trans>
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
-					<Select label={<Trans>Profile</Trans>} value={props.stream} onChange={props.onStreamChange}>
+					<Select
+						label={<Trans>Profile</Trans>}
+						value={props.stream}
+						onChange={props.onStreamChange}
+					>
 						{props.streamList}
 					</Select>
 				</Grid>
-				{props.compatible === false && (
+				{props.compatible && (
+					<Grid item xs={12}>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={props.encoder === 'copy'}
+									onChange={props.onPassthroughChange}
+								/>
+							}
+							label={
+								<Trans>
+									Use camera H.264 directly (stream copy)
+								</Trans>
+							}
+						/>
+						<Typography variant="caption">
+							<Trans>
+								Stream copy avoids re-encoding. Rotation and
+								other video filters require transcoding.
+							</Trans>
+						</Typography>
+					</Grid>
+				)}
+				{(props.compatible === false || props.encoder !== 'copy') && (
 					<React.Fragment>
 						{props.encodersList.length === 0 ? (
 							<Grid item xs={12}>
 								<Typography>
-									<Trans>Your stream needs to be encoded, but there's no suitable encoder available.</Trans>
+									<Trans>
+										Your stream needs to be encoded, but
+										there's no suitable encoder available.
+									</Trans>
 								</Typography>
 							</Grid>
 						) : (
 							<React.Fragment>
 								<Grid item xs={12}>
 									<Typography>
-										<Trans>Your stream needs to be encoded. Choose the desired encoder:</Trans>
+										<Trans>
+											Your stream needs to be encoded.
+											Choose the desired encoder:
+										</Trans>
 									</Typography>
 								</Grid>
 								{props.decodersList.length >= 2 && (
 									<Grid item xs={12}>
-										<Select label={<Trans>Decoder</Trans>} value={props.decoder} onChange={props.onDecoderChange}>
+										<Select
+											label={<Trans>Decoder</Trans>}
+											value={props.decoder}
+											onChange={props.onDecoderChange}
+										>
 											{props.decodersList}
 										</Select>
 									</Grid>
 								)}
 								<Grid item xs={12}>
-									<Select label={<Trans>Encoder</Trans>} value={props.encoder} onChange={props.onEncoderChange}>
+									<Select
+										label={<Trans>Encoder</Trans>}
+										value={props.encoder}
+										onChange={props.onEncoderChange}
+									>
 										{props.encodersList}
 									</Select>
 								</Grid>
@@ -65,7 +124,12 @@ export default function VideoProfile(inputProps) {
 					<Divider />
 				</Grid>
 				<Grid item xs={3}>
-					<Button variant="outlined" color="default" fullWidth onClick={props.onBack}>
+					<Button
+						variant="outlined"
+						color="default"
+						fullWidth
+						onClick={props.onBack}
+					>
 						<Trans>Back</Trans>
 					</Button>
 				</Grid>
@@ -74,7 +138,10 @@ export default function VideoProfile(inputProps) {
 						variant="outlined"
 						fullWidth
 						color="primary"
-						disabled={props.compatible === false && props.encodersList.length === 0}
+						disabled={
+							props.compatible === false &&
+							props.encodersList.length === 0
+						}
 						onClick={props.onNext}
 					>
 						<Trans>Next</Trans>
@@ -98,6 +165,7 @@ const VideoProfileDefaultProps = {
 	decodersList: [],
 	decoder: '',
 	onEncoderChange: () => {},
+	onPassthroughChange: () => {},
 	encodersList: [],
 	encoder: '',
 };

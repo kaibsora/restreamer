@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import * as S from '../../Sources/V4L';
 import Select from '../../../../misc/Select';
-import Video from '../../../../misc/coders/settings/Video';
+import CameraCapture from '../../../../misc/CameraCapture';
 import CameraControls from '../../../../misc/CameraControls';
 import { withDefaults } from '../../../../utils/props';
 
@@ -50,7 +50,11 @@ function initSettings(initialSettings, knownDevices) {
 }
 
 function initDevices(initialDevices) {
-	const devices = initialDevices.filter((device) => device.media === 'video' && !/bcm2835[-_]v4l2/.test(device.extra || ''));
+	const devices = initialDevices.filter(
+		(device) =>
+			device.media === 'video' &&
+			!/bcm2835[-_]v4l2/.test(device.extra || ''),
+	);
 
 	return devices;
 }
@@ -60,15 +64,22 @@ function Source(inputProps) {
 	const { i18n } = useLingui();
 	const settings = initSettings(props.settings, props.knownDevices);
 	const devices = initDevices(props.knownDevices);
+	const [refreshKey, setRefreshKey] = React.useState(0);
 
 	const handleChange = (newSettings) => {
 		newSettings = newSettings || settings;
 
-		props.onChange(S.id, newSettings, S.func.createInputs(newSettings), devices.length !== 0 ? true : false);
+		props.onChange(
+			S.id,
+			newSettings,
+			S.func.createInputs(newSettings),
+			devices.length !== 0 ? true : false,
+		);
 	};
 
 	const handleRefresh = () => {
 		props.onRefresh();
+		setRefreshKey((key) => key + 1);
 	};
 
 	const update = (what) => (event) => {
@@ -77,6 +88,13 @@ function Source(inputProps) {
 
 		if (what in newSettings) {
 			newSettings[what] = value;
+			if (what === 'device')
+				Object.assign(newSettings, {
+					format: 'auto',
+					size: 'auto',
+					framerate: 'auto',
+					auto_format: '',
+				});
 		}
 
 		handleChange(newSettings);
@@ -104,7 +122,11 @@ function Source(inputProps) {
 	}
 
 	const videoDevices = (
-		<Select label={<Trans>Video device</Trans>} value={settings.device} onChange={update('device')}>
+		<Select
+			label={<Trans>Video device</Trans>}
+			value={settings.device}
+			onChange={update('device')}
+		>
 			{options}
 		</Select>
 	);
@@ -118,21 +140,27 @@ function Source(inputProps) {
 			</Grid>
 			<Grid item xs={12}>
 				{videoDevices}
-				<Button size="small" startIcon={<RefreshIcon />} onClick={handleRefresh} sx={{ float: 'right' }}>
+				<Button
+					size="small"
+					startIcon={<RefreshIcon />}
+					onClick={handleRefresh}
+					sx={{ float: 'right' }}
+				>
 					<Trans>Refresh</Trans>
 				</Button>
 			</Grid>
+			<CameraCapture
+				device={settings.device}
+				settings={settings}
+				onChange={handleChange}
+				restreamer={props.restreamer}
+				refreshKey={refreshKey}
+			/>
 			<Grid item xs={12}>
-				<Video.Format value={settings.format} onChange={update('format')} allowAuto allowCustom />
-			</Grid>
-			<Grid item xs={12}>
-				<Video.Size value={settings.size} onChange={update('size')} allowAuto allowCustom />
-			</Grid>
-			<Grid item xs={12}>
-				<Video.Framerate value={settings.framerate} onChange={update('framerate')} allowAuto allowCustom />
-			</Grid>
-			<Grid item xs={12}>
-				<CameraControls device={settings.device} restreamer={props.restreamer} />
+				<CameraControls
+					device={settings.device}
+					restreamer={props.restreamer}
+				/>
 			</Grid>
 		</React.Fragment>
 	);
@@ -146,7 +174,9 @@ const SourceDefaultProps = {
 };
 
 function SourceIcon(props) {
-	return <FontAwesomeIcon icon={faUsb} style={{ color: '#FFF' }} {...props} />;
+	return (
+		<FontAwesomeIcon icon={faUsb} style={{ color: '#FFF' }} {...props} />
+	);
 }
 
 const id = 'video4linux2';
@@ -154,4 +184,12 @@ const type = 'video4linux2';
 const name = <Trans>Hardware device</Trans>;
 const capabilities = ['video'];
 
-export { id, type, name, capabilities, SourceIcon as icon, Source as component, initSettings };
+export {
+	id,
+	type,
+	name,
+	capabilities,
+	SourceIcon as icon,
+	Source as component,
+	initSettings,
+};

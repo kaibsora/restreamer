@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import FormInlineButton from '../../../misc/FormInlineButton';
 import SelectCustom from '../../../misc/SelectCustom';
-import Video from '../../../misc/coders/settings/Video';
+import CameraCapture from '../../../misc/CameraCapture';
 import CameraControls from '../../../misc/CameraControls';
 import { withDefaults } from '../../../utils/props';
 
@@ -40,16 +40,23 @@ const initSettings = (initialSettings) => {
 };
 
 const createInputs = (settings) => {
-	const address = settings.device === 'custom' || settings.device === 'none' ? settings.deviceCustom : settings.device;
+	const address =
+		settings.device === 'custom' || settings.device === 'none'
+			? settings.deviceCustom
+			: settings.device;
 	const input = {
 		address: address,
 		options: [],
 	};
 
 	input.options.push('-f', 'video4linux2');
-	if (settings.framerate !== 'auto') input.options.push('-framerate', '' + settings.framerate);
-	if (settings.size !== 'auto') input.options.push('-video_size', settings.size);
-	if (settings.format !== 'auto') input.options.push('-input_format', settings.format);
+	if (settings.framerate !== 'auto')
+		input.options.push('-framerate', '' + settings.framerate);
+	if (settings.size !== 'auto')
+		input.options.push('-video_size', settings.size);
+	const format =
+		settings.format === 'auto' ? settings.auto_format : settings.format;
+	if (format) input.options.push('-input_format', format);
 
 	return [input];
 };
@@ -59,12 +66,20 @@ function Source(inputProps) {
 	const classes = useStyles();
 	const { i18n } = useLingui();
 	const settings = initSettings(props.settings);
+	const [refreshKey, setRefreshKey] = React.useState(0);
 
 	const handleChange = (what) => (event) => {
 		let data = {};
 
 		if (['device', 'format', 'framerate', 'size'].includes(what)) {
 			data[what] = event.target.value;
+			if (what === 'device')
+				Object.assign(data, {
+					format: 'auto',
+					size: 'auto',
+					framerate: 'auto',
+					auto_format: '',
+				});
 		}
 
 		props.onChange({
@@ -75,13 +90,16 @@ function Source(inputProps) {
 
 	const handleRefresh = () => {
 		props.onRefresh();
+		setRefreshKey((key) => key + 1);
 	};
 
 	const handleProbe = () => {
 		props.onProbe(settings, createInputs(settings));
 	};
 
-	const filteredDevices = props.knownDevices.filter((device) => device.media === 'video');
+	const filteredDevices = props.knownDevices.filter(
+		(device) => device.media === 'video',
+	);
 	const options = filteredDevices.map((device) => {
 		return {
 			value: device.id,
@@ -101,7 +119,12 @@ function Source(inputProps) {
 	});
 
 	return (
-		<Grid container alignItems="flex-start" spacing={2} className={classes.gridContainer}>
+		<Grid
+			container
+			alignItems="flex-start"
+			spacing={2}
+			className={classes.gridContainer}
+		>
 			<Grid item xs={12}>
 				<Typography>
 					<Trans>Select a device:</Trans>
@@ -117,26 +140,32 @@ function Source(inputProps) {
 					variant="outlined"
 					allowCustom
 				/>
-				<Button size="small" startIcon={<RefreshIcon />} onClick={handleRefresh} sx={{ float: 'right' }}>
+				<Button
+					size="small"
+					startIcon={<RefreshIcon />}
+					onClick={handleRefresh}
+					sx={{ float: 'right' }}
+				>
 					<Trans>Refresh</Trans>
 				</Button>
 			</Grid>
-			<Grid item xs={12}>
-				<Video.Format value={settings.format} onChange={handleChange('format')} allowAuto allowCustom />
-			</Grid>
-			<Grid item xs={12}>
-				<Video.Framerate value={settings.framerate} onChange={handleChange('framerate')} allowAuto allowCustom />
-			</Grid>
-			<Grid item xs={12}>
-				<Video.Size value={settings.size} onChange={handleChange('size')} allowAuto allowCustom />
-			</Grid>
+			<CameraCapture
+				device={createInputs(settings)[0].address}
+				settings={settings}
+				onChange={props.onChange}
+				restreamer={props.restreamer}
+				refreshKey={refreshKey}
+			/>
 			<Grid item xs={12}>
 				<FormInlineButton onClick={handleProbe}>
 					<Trans>Probe</Trans>
 				</FormInlineButton>
 			</Grid>
 			<Grid item xs={12}>
-				<CameraControls device={createInputs(settings)[0].address} restreamer={props.restreamer} />
+				<CameraControls
+					device={createInputs(settings)[0].address}
+					restreamer={props.restreamer}
+				/>
 			</Grid>
 		</Grid>
 	);
@@ -151,7 +180,9 @@ const SourceDefaultProps = {
 };
 
 function SourceIcon(props) {
-	return <FontAwesomeIcon icon={faUsb} style={{ color: '#FFF' }} {...props} />;
+	return (
+		<FontAwesomeIcon icon={faUsb} style={{ color: '#FFF' }} {...props} />
+	);
 }
 
 const id = 'video4linux2';
@@ -164,4 +195,12 @@ const func = {
 	createInputs,
 };
 
-export { id, name, capabilities, ffversion, SourceIcon as icon, Source as component, func };
+export {
+	id,
+	name,
+	capabilities,
+	ffversion,
+	SourceIcon as icon,
+	Source as component,
+	func,
+};

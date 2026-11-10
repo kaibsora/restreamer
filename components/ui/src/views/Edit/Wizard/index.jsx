@@ -108,7 +108,7 @@ export default function Wizard(inputProps) {
 			status: 'none',
 		});
 
-		let { source: resolvedSource, res, err } = await probeSource((inputs) => props.restreamer.Probe(_channelid, inputs), source);
+		let { source: resolvedSource, res, err } = await probeSource((inputs) => props.restreamer.Probe(_channelid, inputs), source, props.restreamer.CameraModes ? (device) => props.restreamer.CameraModes(device) : null);
 		source = resolvedSource;
 		if (err !== null) {
 			res = {
@@ -536,6 +536,7 @@ export default function Wizard(inputProps) {
 			<VideoProfile
 				onAbort={handleAbort}
 				onHelp={handleHelp('video-result')}
+				onPassthroughChange={(event) => handleEncoderChange({target:{value:event.target.checked ? 'copy' : encoders[0]?.coder || 'none'}})}
 				onBack={handleBack}
 				onNext={handleNext}
 				compatible={compatible}

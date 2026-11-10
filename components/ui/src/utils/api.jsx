@@ -231,6 +231,10 @@ class API {
 		return await this._call('GET', '/v3/camera/controls?device=' + encodeURIComponent(device), { expect: 'json' });
 	}
 
+	async CameraModes(device) {
+		return await this._call('GET', '/v3/camera/modes?device=' + encodeURIComponent(device), { expect:'json' });
+	}
+
 	async SetCameraControl(device, id, value) {
 		return await this._PUT('/v3/camera/controls', {
 			headers: { 'Content-Type': 'application/json' },

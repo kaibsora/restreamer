@@ -44,12 +44,41 @@ Cameras without unique serial numbers can have ambiguous aliases.
 
 ## Adding a camera in the UI
 
-The USB wizard starts with automatic format, size, and frame rate. Verification
-prefers MJPEG when the camera supports it and saves the verified capture format;
-otherwise it falls back to the camera's automatic mode. Format, resolution, and
-frame rate can also be selected explicitly. For the tested Logitech C270 and
+The USB wizard starts with automatic format, size, and frame rate. Core queries
+the selected camera's advertised V4L2 formats, resolutions and frame intervals.
+Choose **Format**, then **Size**, then **Framerate** before verifying the source.
+The lists are device-specific: changing format resets size and frame rate, and
+changing size resets frame rate. The API preserves rational rates such as
+`30000/1001` and `15/2`, rather than rounding them to integers.
+
+Automatic capture prefers advertised camera H.264, then MJPEG. The wizard verifies
+the choice and saves the resolved capture format; if compressed verification
+fails it can fall back to native automatic capture. Automatic size uses the
+camera's negotiated default, not its largest resolution. For the tested Logitech C270 and
 Sonix USB cameras, MJPEG at 640x480 and 15 FPS works on both devices. Raw capture
 can use considerably more USB bandwidth and may negotiate a lower frame rate.
+
+The **Profile** list after verification shows detected input tracks, not every
+camera capture mode. It normally has one entry for a USB camera. Go **Back** to
+change capture size or format. Camera H.264 can use **stream copy** to avoid
+re-encoding; the wizard exposes that choice explicitly. Disable stream copy and
+choose an encoder if rotation or other video filters are needed.
+
+The physical C920 reports 17 H.264 sizes and 17 MJPEG sizes up to 1920x1080,
+plus 19 raw YUYV sizes up to 2304x1536. Native H.264 stream copy and decoding
+passed at 640x480, 1280x720 and 1920x1080 at 15 FPS. These are results for this
+attached camera/driver, not a promise that every camera model exposes the same
+hardware codec through V4L2.
+
+`GET /api/v3/camera/modes?device=/dev/video0` returns format-specific sizes and
+frame rates without starting capture or changing the active mode. The backend
+uses Linux's [format](https://docs.kernel.org/userspace-api/media/v4l/vidioc-enum-fmt.html),
+[size](https://docs.kernel.org/userspace-api/media/v4l/vidioc-enum-framesizes.html), and
+[frame-interval](https://docs.kernel.org/userspace-api/media/v4l/vidioc-enum-frameintervals.html)
+enumeration APIs. Continuous/stepwise ranges are displayed as ranges with manual
+input; unlisted combinations still need verification. If enumeration fails or
+is unavailable on an older backend, manual capture settings remain accessible.
+Formats without a supported FFmpeg input mapping are shown disabled.
 
 New USB sources omit input throttling and the obsolete input queue option.
 For existing sources, Core checks the running FFmpeg binary's option scope and

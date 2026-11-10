@@ -1,4 +1,5 @@
 import { probeSource } from './probeSource';
+import '../../../I18n';
 import { func as camera } from '../Sources/V4L';
 
 const automatic = () => {
@@ -38,4 +39,31 @@ test('an explicit capture format is probed once and preserved', async () => {
 	const result = await probeSource(probe, source);
 	expect(probe).toHaveBeenCalledTimes(1);
 	expect(result.source).toBe(source);
+});
+
+test('automatic capture prefers advertised camera H.264 and preserves the verified mode', async () => {
+	const source = automatic();
+	const probe = vi.fn().mockResolvedValue([{ streams: [{ type: 'video', codec: 'h264' }] }, null]);
+	const getModes = vi.fn().mockResolvedValue([[{ input_format: 'h264' }, { input_format: 'mjpeg' }], null]);
+	const result = await probeSource(probe, source, getModes);
+	expect(result.source.settings.format).toBe('h264');
+	expect(result.source.inputs[0].options).toContain('h264');
+	expect(probe).toHaveBeenCalledTimes(1);
+});
+
+test('a failed camera H.264 probe falls back to advertised MJPEG', async () => {
+	const probe = vi
+		.fn()
+		.mockResolvedValueOnce([{ streams: [] }, null])
+		.mockResolvedValueOnce([{ streams: [{ type: 'video', codec: 'mjpeg' }] }, null]);
+	const result = await probeSource(probe, automatic(), async () => [[{ input_format: 'h264' }, { input_format: 'mjpeg' }], null]);
+	expect(result.source.settings.format).toBe('mjpeg');
+});
+
+test('rejects a driver silently substituting another format or resolution', async () => {
+	const source = automatic();
+	source.settings = { ...source.settings, format: 'h264', size: '1920x1080' };
+	source.inputs = camera.createInputs(source.settings);
+	const result = await probeSource(async () => [{ streams: [{ type: 'video', codec: 'mjpeg', width: 640, height: 480 }] }, null], source);
+	expect(result.err.message).toContain('did not supply the requested');
 });

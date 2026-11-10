@@ -273,8 +273,13 @@ msgstr "Autorizzazione"
 msgid "Auto"
 msgstr "Auto"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
 msgid "Automatic"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Automatic capture prefers camera H.264, then MJPEG, when advertised and verified."
 msgstr ""
 
 #: src/misc/controls/HLS.jsx
@@ -419,6 +424,10 @@ msgstr "Tipi di cache"
 msgid "Camera controls"
 msgstr ""
 
+#: src/misc/CameraCapture.jsx
+msgid "Camera modes could not be read. Manual capture settings remain available."
+msgstr ""
+
 #: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "Capture buffer"
 msgstr "Buffer di cattura"
@@ -430,6 +439,14 @@ msgstr "Cattura i clic"
 #: src/views/Edit/Sources/AVFoundation.jsx
 msgid "Capture cursor"
 msgstr "Cattura del cursore"
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture framerate (FPS or auto)"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Capture size (WIDTHxHEIGHT or auto)"
+msgstr ""
 
 #: src/misc/filters/video/Watermark.jsx
 msgid "Center"
@@ -853,6 +870,14 @@ msgstr "Documentazione"
 msgid "Draw a translucent background behind text"
 msgstr ""
 
+#: src/misc/CameraCapture.jsx
+msgid "Driver frame interval range (seconds):"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Driver size range:"
+msgstr ""
+
 #: src/misc/Progress.jsx
 msgid "Dup. frames"
 msgstr "Telai duplicati"
@@ -1141,6 +1166,10 @@ msgstr "Per i Javascript."
 msgid "For Stylesheets."
 msgstr "Per i fogli di stile."
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "For USB cameras, use Back to change the capture format, resolution or frame rate. This list shows the verified input tracks."
+msgstr ""
+
 #: src/views/Edit/Sources/Network.jsx
 msgid "Force input framerate"
 msgstr "Forzare il framerate in ingresso"
@@ -1149,6 +1178,7 @@ msgstr "Forzare il framerate in ingresso"
 msgid "Force key frames"
 msgstr "Forzare i fotogrammi dei tasti"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Format"
 msgstr "Formato"
@@ -1170,6 +1200,7 @@ msgstr "Il frame viene fatto passare (Passthrough)"
 msgid "Framebuffer"
 msgstr "Framebuffer"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 #: src/misc/filters/video/Framerate.jsx
 #: src/views/Edit/Sources/Network.jsx
@@ -1853,6 +1884,14 @@ msgstr "Rumore"
 msgid "None"
 msgstr "Nessuno"
 
+#: src/misc/CameraCapture.jsx
+msgid "Not advertised by this camera"
+msgstr ""
+
+#: src/misc/CameraCapture.jsx
+msgid "Not advertised for this mode"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Notes"
 msgstr "Note"
@@ -2508,6 +2547,10 @@ msgstr "Il segmento verrà tagliato sul fotogramma chiave successivo, una volta 
 msgid "Segmentation"
 msgstr "Segmentazione"
 
+#: src/misc/CameraCapture.jsx
+msgid "Select a capture size to list its advertised frame rates."
+msgstr ""
+
 #: src/views/Edit/Sources/ALSA.jsx
 #: src/views/Edit/Sources/AVFoundation.jsx
 #: src/views/Edit/Sources/Framebuffer.jsx
@@ -2678,6 +2721,7 @@ msgstr "Seno"
 msgid "Sitename"
 msgstr "Nome del sito"
 
+#: src/misc/CameraCapture.jsx
 #: src/misc/coders/settings/Video.jsx
 msgid "Size"
 msgstr "Dimensione"
@@ -2759,6 +2803,10 @@ msgstr "start_at_zero"
 msgid "Statistics"
 msgstr "Statistiche"
 
+#: src/misc/CameraCapture.jsx
+msgid "step:"
+msgstr ""
+
 #: src/misc/controls/HLS.jsx
 #: src/views/Settings.jsx
 msgid "Storage"
@@ -2772,6 +2820,10 @@ msgstr "Memorizza le statistiche del visualizzatore sul disco."
 #: src/views/Edit/Wizard/Audio.jsx
 msgid "Stream"
 msgstr "Flusso"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Stream copy avoids re-encoding. Rotation and other video filters require transcoding."
+msgstr ""
 
 #: src/views/Publication/Services/Wettercom.jsx
 msgid "Stream ID"
@@ -2905,6 +2957,10 @@ msgstr "Il binario FFmpeg disponibile non supporta nessuno dei protocolli richie
 msgid "The bitrate of the audio stream."
 msgstr "Il bitrate del flusso audio."
 
+#: src/views/Edit/Wizard/probeSource.js
+msgid "The camera did not supply the requested capture format and resolution. Choose an advertised mode and verify again."
+msgstr ""
+
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The carrier frequency"
 msgstr "La frequenza portante"
@@ -3036,8 +3092,12 @@ msgid "The video source doesn't provide any compatible audio stream. <0>Silence 
 msgstr "La sorgente video non fornisce alcun flusso audio compatibile. Si raccomanda <0>Audio silenzioso</0>. I servizi come YouTube, Facebook & Co. richiedono un canale audio."
 
 #: src/views/Edit/Wizard/VideoProfile.jsx
-msgid "The video source is compatible. Select the desired resolution:"
-msgstr "La sorgente video è compatibile. Selezionare la risoluzione desiderata:"
+#~ msgid "The video source is compatible. Select the desired resolution:"
+#~ msgstr "La sorgente video è compatibile. Selezionare la risoluzione desiderata:"
+
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "The video source is compatible. Select the detected video track:"
+msgstr ""
 
 #: src/views/Settings.jsx
 #~ msgid "There are updates available. Here you get more information."
@@ -3071,6 +3131,10 @@ msgstr "Ci sono stati alcuni errori nelle impostazioni. Impostazioni non salvate
 #: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "Non c'è un metodo di accesso disponibile."
+
+#: src/misc/CameraCapture.jsx
+msgid "These are capture capabilities, not simultaneous video tracks. Verification checks the selected mode. H.264 can use stream copy; rotation and other video filters require transcoding."
+msgstr ""
 
 #: src/misc/CameraControls.jsx
 msgid "This camera reports no adjustable controls."
@@ -3391,6 +3455,10 @@ msgstr "Uptime"
 msgid "Use Auth0 for your running Restreamer Core. More <0>details</0>."
 msgstr "Utilizzi Auth0 per il suo Restreamer Core in esecuzione. Ulteriori <0>dettagli</0>."
 
+#: src/views/Edit/Wizard/VideoProfile.jsx
+msgid "Use camera H.264 directly (stream copy)"
+msgstr ""
+
 #: src/views/Edit/index.jsx
 msgid "Use the wizard (<0/>) for a quick and easy setup, or edit (<1/>) the sources directly in custom mode."
 msgstr "Utilizzi la procedura guidata (<0/>) per un'impostazione rapida e semplice, oppure modifichi (<1/>) le sorgenti direttamente in modalità personalizzata."
@@ -3527,6 +3595,10 @@ msgstr "bianco"
 #: src/misc/coders/settings/Video.jsx
 msgid "Width"
 msgstr "Larghezza"
+
+#: src/misc/CameraCapture.jsx
+msgid "width/height steps:"
+msgstr ""
 
 #: src/views/Settings.jsx
 msgid "Write protection"

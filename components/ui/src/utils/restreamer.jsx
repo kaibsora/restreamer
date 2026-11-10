@@ -684,6 +684,10 @@ class Restreamer {
 		return await this._call(this.api.CameraControls, device);
 	}
 
+	async CameraModes(device) {
+		return await this._call(this.api.CameraModes, device);
+	}
+
 	async SetCameraControl(device, id, value) {
 		return await this._call(this.api.SetCameraControl, device, id, value);
 	}
