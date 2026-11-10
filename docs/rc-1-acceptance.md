@@ -11,6 +11,11 @@ testing so they do not become permanent CPU consumers.
 
 - [ ] Add each USB camera through the wizard. Confirm MJPEG or a supported capture
   mode, resolution and frame rate; verify visible motion rather than a still image.
+- [ ] Try at least two driver-reported sizes and verify that frame-rate choices
+  follow the selected format/size. On the attached C920, test native H.264 and
+  **stream copy** at 720p or 1080p. The post-probe Profile list is the verified
+  input track, not the list of every capture resolution; change capture modes
+  using the preceding device-settings page.
 - [ ] Open **Camera controls** in the wizard and advanced editor. Change brightness,
   read the result, then restore it. Test an automatic/manual exposure or white
   balance mode; verify dependent controls become available/inactive appropriately.
