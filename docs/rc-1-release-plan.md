@@ -3,6 +3,7 @@
 Camera controls and encoded image rotation are being prepared for physical
 acceptance testing. Do not publish RC-1 or change the UI branding until the
 maintainer has tested and accepted the core features on physical hardware.
+Track that testing using the [physical acceptance checklist](rc-1-acceptance.md).
 
 After acceptance:
 
