@@ -78,11 +78,17 @@ glass-to-glass latency have not been validated across the target Linux hosts and
 cameras. Treat all published images as pre-release test artifacts until that hardware
 acceptance work is complete.
 
-The release workflow publishes the current image as:
+`latest` is the public image tag:
 
 ```text
 ghcr.io/kaibsora/restreamer:latest
 ```
+
+Candidate builds publish immutable `sha-*` and source-version tags. They do not
+automatically move `latest`: promotion requires the workflow's explicit manual
+`publish_latest` input after physical acceptance and is disabled on `development`.
+RC-1 acceptance and the planned branding/release transition are still pending;
+see the [release plan](docs/rc-1-release-plan.md).
 
 Versioned images are also available as `ffmpeg-VERSION`; for example,
 `ghcr.io/kaibsora/restreamer:ffmpeg-9.0.2`. Both tags are anonymously pullable from
@@ -143,6 +149,14 @@ docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d
 For USB cameras that need disconnect/reconnect support, use the optional
 [integrated Linux USB hot-plug support](docs/usb-hotplug.md). It updates camera devices inside
 the running container without recreating it after each camera change.
+
+USB source setup also exposes driver-reported **Camera controls**, including
+brightness, exposure and white balance where supported. Hardware changes apply
+immediately; software **Rotate** changes the encoded video after saving the
+source configuration. See [camera controls and rotation](docs/usb-hotplug.md#camera-controls-and-rotation)
+for persistence limitations and supported control types. Intel VA-API and Quick
+Sync have physical validation. **AMD and NVIDIA GPUs remain untested on physical
+hardware**, despite the included build support.
 
 For fixed USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the
 container needs, and add the copied file as another Compose override. Do not use
