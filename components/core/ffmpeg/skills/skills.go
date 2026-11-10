@@ -224,7 +224,9 @@ func filters(binary string) []Filter {
 func parseFilters(data []byte) []Filter {
 	filters := []Filter{}
 
-	re := regexp.MustCompile(`^\s[TSC.]{3} ([0-9A-Za-z_]+)\s+(?:.*?)\s+(.*)?$`)
+	// Recent FFmpeg removed the command-support column. Accept both the
+	// current two-column flags and the older three-column output.
+	re := regexp.MustCompile(`^\s+[TSC.]{2,3}\s+([0-9A-Za-z_]+)\s+\S+\s+(.*)$`)
 
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	scanner.Split(bufio.ScanLines)

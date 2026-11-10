@@ -203,6 +203,16 @@ for format in flv rtsp hls mpegts; do
 done
 printf '%s\n' 'Validated publication formats advertised by the Core skills API.'
 
+# A working FFmpeg binary is insufficient if capability parsing hides the UI
+# filters. Exercise the API response used by the source editor as well.
+for filter in transpose hflip vflip scale drawtext; do
+    if ! grep -E "\"id\":[[:space:]]*\"${filter}\"" <<<"${skills_json}" >/dev/null; then
+        printf 'Core skills API did not advertise required filter %s.\n' "${filter}" >&2
+        exit 1
+    fi
+done
+printf '%s\n' 'Validated rotation and video filters advertised by the Core skills API.'
+
 api_process_id='restreamer-smoke:api-control'
 curl --fail --silent --show-error \
     --request POST \
