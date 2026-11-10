@@ -18,6 +18,7 @@ Usage: scripts/accept-deployment.sh SOURCE [SOURCE ...]
 Probe camera sources concurrently through the running Restreamer container.
 Supported sources:
   rtsp://host/path       RTSP camera or relay
+  rtmp[s]://host/path    RTMP live camera or relay
   http[s]://host/path    HTTP camera stream
   v4l2:/dev/videoN      USB/V4L2 camera mapped into the container
 
@@ -125,7 +126,7 @@ json_escape() {
 redact_source() {
     local source=$1
     local redacted
-    if [[ "${source}" =~ ^(https?|rtsp)://[^/@]+@(.+)$ ]]; then
+    if [[ "${source}" =~ ^(https?|rtsps?|rtmps?)://[^/@]+@(.+)$ ]]; then
         redacted="${BASH_REMATCH[1]}://***@${BASH_REMATCH[2]}"
     else
         redacted=${source}
@@ -168,7 +169,7 @@ probe_source() {
     local input_args=()
 
     case "${source}" in
-        rtsp://*)
+        rtsp://*|rtsps://*)
             input_args=(
                 -rtsp_transport tcp
                 -fflags nobuffer
@@ -176,6 +177,17 @@ probe_source() {
                 -avioflags direct
                 -analyzeduration 0
                 -probesize 32
+                -i "${source}"
+            )
+            ;;
+        rtmp://*|rtmps://*)
+            input_args=(
+                -fflags nobuffer
+                -flags low_delay
+                -analyzeduration 0
+                -probesize 32768
+                -rtmp_live live
+                -rtmp_buffer 0
                 -i "${source}"
             )
             ;;
@@ -189,7 +201,7 @@ probe_source() {
             )
             ;;
         v4l2:/dev/video*)
-            input_args=(-f v4l2 -thread_queue_size 2 -i "${source#v4l2:}")
+            input_args=(-f v4l2 -i "${source#v4l2:}")
             ;;
         *)
             printf 'Camera %s has an unsupported source type.\n' "${index}" >&2

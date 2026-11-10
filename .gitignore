@@ -1,0 +1,3 @@
+# Python diagnostic tools
+__pycache__/
+*.py[cod]

@@ -145,6 +145,11 @@ can still be ingested through its direct HTTP stream URL.
 
 ### Publish back to the printer dashboard
 
+For measured RTSP/RTMP results and a camera/encoder-independent test procedure,
+see [low-latency validation](../docs/low-latency-validation.md). Ongoing frame age
+and first-frame startup are separate checks; neither alone establishes optical
+camera-to-display latency.
+
 The deployment includes MediaMTX as the LAN-facing real-time origin. In Restreamer,
 add the **MediaMTX LAN relay** publication for each camera. The preset selects H.264,
 generates a safe path from the channel name, and uses the bundled sidecar at

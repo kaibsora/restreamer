@@ -8,6 +8,9 @@ Published image digest:
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
 
+For repeatable protocol measurements and their limits, see
+[RTSP/RTMP delay validation](low-latency-validation.md).
+
 The validation host used an Intel UHD Graphics 630, a Logitech USB camera at
 640x480, and a Sonix USB camera at 1280x720. Both cameras used MJPEG capture
 at 15 FPS. Two additional FFmpeg virtual sources (test bars and Game of Life)
@@ -315,3 +318,66 @@ These changes do not shorten the camera's native keyframe interval. HLS startup
 and latency remain affected by its long GOP. The initial timestamp warnings in
 the camera's FFmpeg log were not evidence of the missing-file/player problems
 being resolved, and are not claimed as fixed by this repair.
+
+## RTSP and RTMP camera delivery, November 10, 2026
+
+The deployed `sha-dd1d09f` runtime was tested with all three attached cameras.
+The temporary capture profiles used driver-advertised MJPEG at 640x480/15 FPS,
+Intel VA-API H.264 at 2 Mbit/s, a seven-frame GOP, no B-frames and async depth 1.
+Each encoder published the same packets directly to RTSP and RTMP through tee;
+neither path read HLS. These were test profiles, not modifications to the saved
+user profiles or requirements imposed on other cameras/GPUs.
+
+RTSP used the deployed MediaMTX service. Core's RTMP server was disabled in the
+saved configuration, so a temporary MediaMTX RTMP receiver was used instead of
+enabling/reconfiguring it. The RTMP result validates publishing to that receiver,
+not the disabled Core RTMP-server feature or every third-party RTMP server.
+
+The camera frames carried a binary software-input timestamp with a magic byte
+and checksum. A decoder on the other LAN endpoint measured the timestamp after
+decoding. Publisher/receiver clock offset was calibrated over SSH; the concurrent
+run's conservative clock uncertainty was ±88 ms. This measures the pipeline from
+FFmpeg's software input timestamp through encoding, muxing, server, network and
+decoding. Sensor exposure, firmware/USB/driver buffering before that timestamp,
+and display scheduling are excluded. It is **not optical camera-to-display
+latency**.
+
+All three camera publishers and all six RTSP/TCP and RTMP decoders ran concurrently
+for 15 seconds. Each reader decoded 226 valid marked frames, with no checksum
+errors. First/last-half medians differed by at most 1 ms; no accumulating delay
+was observed during this bounded run.
+
+| Camera | RTSP/TCP median / p95 | RTMP median / p95 | First frame, RTSP / RTMP |
+| --- | ---: | ---: | ---: |
+| Sonix USB | 228 / 240 ms | 161 / 171 ms | 766 / 1157 ms |
+| Logitech 046d:0825 | 225 / 238 ms | 160 / 169 ms | 922 / 844 ms |
+| Logitech C920, transcoded | 228 / 240 ms | 161 / 171 ms | 891 / 828 ms |
+
+The largest p95 plus clock uncertainty was approximately 328 ms for RTSP and
+260 ms for RTMP, below one second for this tested pipeline. Startup includes the
+reader launch and protocol negotiation; the table shows that ongoing sub-second
+delivery does not guarantee a first frame below one second in every trial.
+Separate ten-second single-camera trials produced similar stable frame ages.
+The reusable acceptance helper also passed RTSP and RTMP startup/sustained decoding
+against real publications (294/1156 ms first-frame acquisition, then at least
+10 decoded FPS over three seconds, using an explicit two-second startup limit).
+
+The saved C920 native-H.264 capture input was also tested without transcoding.
+Two RTSP first-frame trials took 17.8 and 7.6 seconds. RTMP took 27.5 seconds in
+one trial; another reader timed out at 30 seconds. Its approximately 20-second
+GOP and the receiver's probing/keyframe behavior therefore prevent a sub-second
+startup claim for this passthrough configuration. Ongoing native-passthrough frame
+age was not measured with the burn-in marker, since adding that marker requires
+decoding/encoding. Use a shorter camera GOP where supported, or a short-GOP encoder
+when fast acquisition is required; do not silently force a camera-specific mode.
+
+RTSP/UDP did not deliver valid frames to the containerized LAN receiver in this
+test network, even with explicit client port mappings. No LAN UDP latency pass
+is claimed; routing/NAT/client port behavior needs a suitable receiver setup.
+RTSP/TCP and RTMP are the validated LAN paths above.
+
+All temporary Core processes, the RTMP receiver, LAN decoder container and
+diagnostic readers were removed. Fingerprints of all ten saved process configs
+and their original start/stop orders matched after every run. The HLS UI player,
+saved source/encoder settings and published image tag were unchanged. NVIDIA/AMD
+hardware and other camera modes still require their own physical validation.
