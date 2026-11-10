@@ -263,6 +263,23 @@ if [[ "${telemetry_ready}" != true ]]; then
 fi
 process_command stop
 wait_for_process_state stop finished
+# Exercise the entrypoint migration against a populated configuration volume.
+# Fresh-volume startup cannot detect a migrator rejecting saved FFmpeg versions.
+"${compose[@]}" restart restreamer
+restart_ready=false
+for _ in $(seq 1 30); do
+    if curl --fail --silent \
+        "http://127.0.0.1:8080/api/v3/process/${api_process_id}/config" >/dev/null; then
+        restart_ready=true
+        break
+    fi
+    sleep 1
+done
+if [[ "${restart_ready}" != true ]]; then
+    printf '%s\n' 'Restreamer failed to restart with a persisted process configuration.' >&2
+    exit 1
+fi
+printf '%s\n' 'Validated container restart with a persisted FFmpeg process.'
 curl --fail --silent --show-error \
     --request DELETE \
     "http://127.0.0.1:8080/api/v3/process/${api_process_id}" >/dev/null
