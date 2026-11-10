@@ -1863,6 +1863,13 @@ class Restreamer {
 			}
 		};
 		const hls_params_raw = getHLSParams(control.hls.lhls, control.hls.version);
+		// Apple HLS authoring guidance and FFmpeg both expect HEVC fragmented MP4
+		// samples to use the hvc1 tag rather than an anonymous numeric codec tag.
+		const hlsVideoCodecTag =
+			(control.hls.lhls || parseInt(control.hls.version) === 7) &&
+			outputs[0].video_codec === 'hevc'
+				? 'hvc1'
+				: null;
 
 		// 3.3 Use strftime for DiskFS
 		if (control.hls.storage && control.hls.storage === 'diskfs') {
@@ -1900,7 +1907,14 @@ class Restreamer {
 				output.options.push('-flags', '+global_header');
 			}
 
-			output.options.push('-tag:v', '7', '-tag:a', '10', '-f', 'tee');
+			output.options.push(
+				'-tag:v',
+				hlsVideoCodecTag || '7',
+				'-tag:a',
+				'10',
+				'-f',
+				'tee',
+			);
 			// ['f=hls:start_number=0...]address.m3u8
 			// use tee_muxer formatting
 			output.address =
@@ -1915,6 +1929,10 @@ class Restreamer {
 			// set flags
 			if (control.process.low_delay) {
 				output.options.push('-flags', '+low_delay');
+			}
+
+			if (hlsVideoCodecTag !== null) {
+				output.options.push('-tag:v', hlsVideoCodecTag);
 			}
 
 			output.options.push(...hls_params);

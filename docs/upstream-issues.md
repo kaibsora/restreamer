@@ -29,6 +29,7 @@ physical GPU claims remain pending until a real device completes the hardware ga
 | [#958: 25 MiB loop-file upload limit](https://github.com/datarhei/restreamer/issues/958) | Streams audio and video loop uploads instead of buffering them into a browser-held array. | `ee4b04f2`, UI upload tests |
 | [#965: fallback image or stream when an input stops](https://github.com/datarhei/restreamer/issues/965) | Adds 16 selectable video-only resilient MediaMTX paths with an H.264 offline slate and automatic live/offline switching that preserves connected readers. | `MediaMTXResilient.test.jsx`, MediaMTX configuration validation, offline/live/offline Compose smoke gate |
 | [#966: RTMP simple handshake returns the wrong S2 payload](https://github.com/datarhei/restreamer/issues/966) | Generates an independent server S1 challenge and echoes the client C1 payload in S2, matching the simple-handshake protocol expected by strict librtmp clients. | `33989d32`, `rtmp.TestSimpleHandshakeEchoesC1InS2` |
+| [#985: native H.265 player output is not tagged as hvc1](https://github.com/datarhei/restreamer/issues/985) | Carries the selected output codec into ingest command generation and marks HEVC fragmented-MP4 HLS as `hvc1` for direct and tee-muxed outputs without applying MP4 tags to MPEG-TS HLS. | `restreamer.hls.test.js`, executable HEVC HLS/tee contract, Compose smoke gate |
 
 ## Implemented, awaiting physical acceptance
 

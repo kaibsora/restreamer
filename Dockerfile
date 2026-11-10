@@ -72,11 +72,14 @@ COPY run.sh /core/bin/run.sh
 COPY ui-root /core/ui-root
 COPY scripts/hardware-report.sh /usr/local/bin/restreamer-hardware-report
 COPY scripts/healthcheck.sh /usr/local/bin/restreamer-healthcheck
+COPY scripts/verify-hevc-hls.sh /usr/local/bin/restreamer-verify-hevc-hls
 
 RUN mkdir -p /core/config /core/data && \
     chmod +x /core/bin/run.sh \
       /usr/local/bin/restreamer-hardware-report \
-      /usr/local/bin/restreamer-healthcheck && \
+      /usr/local/bin/restreamer-healthcheck \
+      /usr/local/bin/restreamer-verify-hevc-hls && \
+    /usr/local/bin/restreamer-verify-hevc-hls && \
     ffmpeg -hide_banner -buildconf
 
 ENV CORE_CONFIGFILE=/core/config/config.json \

@@ -358,6 +358,23 @@ cannot overrule a proxy that rejects the request before it reaches the container
 HTTP remains stubbornly committed to causality. This behavior addresses
 [upstream issue #958](https://github.com/datarhei/restreamer/issues/958).
 
+### Native HEVC HLS playback
+
+Select HLS version 7 when an ingest copies or encodes HEVC/H.265 for browser
+playback. Restreamer writes fragmented MP4 and marks the video sample entry as
+`hvc1`, matching
+[Apple's HEVC HLS authoring guidance](https://developer.apple.com/documentation/http-live-streaming/hls-authoring-specification-for-apple-devices/).
+The build and camera-stack gates inspect the generated init segment and also decode
+the simultaneous MPEG-TS tee output, because fixing one output by quietly breaking
+another would be an impressively unhelpful interpretation of compatibility.
+
+The browser and operating system must still provide an HEVC decoder. Codec support
+varies by browser, OS, hardware, and installed media components; use H.264 when broad
+client compatibility matters more than preserving an HEVC source. HLS versions 3
+and 6 remain MPEG-TS outputs and do not receive an MP4 codec tag. This addresses the
+container-tag failure reported in
+[upstream issue #985](https://github.com/datarhei/restreamer/issues/985).
+
 ## Camera and latency model
 
 LAN monitoring and public viewing use separate delivery planes:
@@ -402,6 +419,8 @@ Run the same FFmpeg contract used during releases:
 
 ```sh
 docker run --rm --entrypoint /usr/local/bin/restreamer-verify-ffmpeg \
+  restreamer:local
+docker run --rm --entrypoint /usr/local/bin/restreamer-verify-hevc-hls \
   restreamer:local
 ```
 

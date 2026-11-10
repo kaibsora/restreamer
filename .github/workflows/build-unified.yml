@@ -442,4 +442,7 @@ jobs:
           docker run --rm \
             --entrypoint /usr/local/bin/restreamer-verify-ffmpeg \
             "${image}"
+          docker run --rm \
+            --entrypoint /usr/local/bin/restreamer-verify-hevc-hls \
+            "${image}"
           echo "Verified published image ${image}."

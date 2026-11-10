@@ -644,6 +644,12 @@ const createInputsOutputs = (sources, profiles, requireVideo = true) => {
 		const source = sources[profile.video.source];
 		const stream = source.streams[profile.video.stream];
 		const input = source.inputs[stream.index];
+		let videoCodec = stream.codec;
+
+		if (profile.video.encoder.coder !== 'copy') {
+			const encoder = Coders.Video.Get(profile.video.encoder.coder);
+			videoCodec = encoder ? encoder.codec : '';
+		}
 
 		input.options = [...profile.video.decoder.mapping.local, ...input.options];
 
@@ -720,6 +726,7 @@ const createInputsOutputs = (sources, profiles, requireVideo = true) => {
 		outputs.push({
 			address: '',
 			options: options,
+			video_codec: videoCodec,
 		});
 	}
 

@@ -187,6 +187,7 @@ ui_redirect_html=$(curl --fail --location --silent --show-error \
 grep -F '<title>Restreamer</title>' <<<"${ui_redirect_html}" >/dev/null
 
 docker exec restreamer restreamer-verify-ffmpeg
+docker exec restreamer restreamer-verify-hevc-hls
 
 api_process_id='restreamer-smoke:api-control'
 curl --fail --silent --show-error \
