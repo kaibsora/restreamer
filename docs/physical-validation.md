@@ -298,6 +298,19 @@ from 34.7 to 67.0 seconds with readyState 4. All five then-listed segments
 returned HTTP 200, including segments older than 24 seconds. The viewer was
 closed and the camera restored to its original stopped order.
 
+The published `sha-dd1d09f` image repeated that cold-start check after recreation
+from GHCR, with no temporary UI overlay. Three initial playlist network errors
+recovered automatically; 1920x1080 playback time advanced from 22.0 to 81.1
+seconds with readyState 4. All four then-listed segments returned HTTP 200,
+including media older than the former expiry window. The running image's source
+revision and registry digest matched the published candidate. All ten user
+process configurations remained. The viewer and diagnostic files were removed,
+the C920's original stopped order was restored, and no test containers remained.
+
+The final workflow passed all 318 UI tests, production build/catalog checks,
+Core tests/vet, configuration validation, container smoke tests, image size
+checks and published-digest verification. `latest` was not promoted.
+
 These changes do not shorten the camera's native keyframe interval. HLS startup
 and latency remain affected by its long GOP. The initial timestamp warnings in
 the camera's FFmpeg log were not evidence of the missing-file/player problems
