@@ -62,7 +62,12 @@ def discover():
         caps = next((p.partition('=')[2] for p in props.splitlines() if p.startswith('ID_V4L_CAPABILITIES=')), '')
         if not stat.S_ISCHR(info.st_mode) or os.major(info.st_rdev) != 81 or ':capture:' not in caps:
             continue
-        result['devices'][Path(path).name] = {'major': 81, 'minor': os.minor(info.st_rdev), 'gid': info.st_gid}
+        result['devices'][Path(path).name] = {
+            'major': 81, 'minor': os.minor(info.st_rdev), 'gid': info.st_gid,
+            # A fast replug can reuse the same minor before the helper sees
+            # the removal. Refresh the container inode for the new host node.
+            'generation': '%s:%s' % (info.st_ino, info.st_ctime_ns),
+        }
     for path in sorted(glob.glob('/dev/v4l/by-id/*')):
         target = Path(os.path.realpath(path)).name
         if target in result['devices']:

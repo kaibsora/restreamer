@@ -25,6 +25,11 @@ class HotplugTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             helper.plan({'links': {'../../../etc/passwd': ''}}, {'devices': {}, 'links': {}})
 
+    def test_fast_replug_with_same_minor_refreshes_device_inode(self):
+        old = {'devices': {'video0': {'major': 81, 'minor': 0, 'gid': 44, 'generation': '100:1'}}, 'links': {}}
+        new = {'devices': {'video0': {'major': 81, 'minor': 0, 'gid': 44, 'generation': '101:2'}}, 'links': {}}
+        self.assertIn(['rm', '-f', '--', '/dev/video0'], helper.plan(old, new))
+
     def test_rejects_non_video_device_major(self):
         with self.assertRaises(ValueError):
             helper.plan({}, {'devices': {'video0': {'major': 8, 'minor': 0, 'gid': 44}}, 'links': {}})
