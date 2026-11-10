@@ -124,6 +124,25 @@ works before the Intel VA-API/QSV encoder conversion/upload, and remains visible
 when hardware encoding is selected. Save the source settings to apply rotation.
 Stream-copy mode cannot rotate frames. NVIDIA/AMD hardware paths remain untested.
 
+### Native H.264 keyframe intervals and HLS retention
+
+Stream copy preserves the camera's keyframe interval. The tested C920 produced
+roughly 20-second segments even with a two-second HLS target, because a new
+segment normally starts at a keyframe. HLS startup and playback latency can
+therefore be much higher than the configured target. Transcoding through an
+Intel encoder with a short GOP gives control over that interval; stream copy
+cannot shorten it. Use the local relay protocols for low-latency viewing and
+measure the actual camera-to-display delay on the intended clients.
+
+Cleanup retains the configured playlist window plus six spare segment files,
+rather than expiring media based on the requested segment duration. Active
+playlists and fMP4 initialization files have no age expiry; deleting the channel
+still purges its files. An unbounded playlist has no finite Core file-count cap.
+This prevents long camera GOPs from causing 404s for media still referenced by
+the playlist. Stopped channels retain their final window until channel deletion
+or other storage management. HTTP uploads do not use filesystem rename flags;
+atomic temporary-file replacement is used only for disk HLS output.
+
 Inspect synchronization through the ordinary container logs:
 
 ```sh
