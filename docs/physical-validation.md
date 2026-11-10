@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-027760a`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-cd54367`.
 
 Published image digest:
-`sha256:3ac0a5007ccbab959d8cc018bc399f643f031762257ff7c5cbab2a2d368bea4b`.
+`sha256:4d3ce78fdf70610bdcffa6d2f50d4e54e6f10c0eecef5592fe48df8c4aef78c2`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -120,3 +120,41 @@ FFmpeg was compiled from resolved upstream master commit
 `49a3b1f259e1c34033bf6cca4091a4cb07ebf90d`; its banner reports `8.0.git`.
 The source is pinned when the workflow starts; upstream can advance while a build
 and its physical checks run. The scheduled workflow resolves upstream again.
+
+## Integrated USB hot-plug verification
+
+Image `sha-cd54367` moves discovery and synchronization into Core. The test host's
+previous custom systemd timer/service and udev rule were disabled before testing.
+Both cameras were accessed through managed links into the read-only `/host/dev`
+mount, with `CAP_MKNOD` dropped and privileged mode disabled. Camera enumeration
+retained both friendly names and excluded metadata-only nodes.
+
+All four sources resumed after container restart, and all eight HLS/RTSP outputs
+decoded concurrently. First-frame RTSP acquisition in this run measured:
+
+| Source | First decoded frame |
+| --- | ---: |
+| Logitech USB | 806 ms |
+| Sonix USB | 783 ms |
+| Virtual test bars | 654 ms |
+| Virtual Game of Life | 932 ms |
+
+Targeted driver detach/reattach checks passed for both cameras. Core removed the
+stale private links and restored them on reconnection. Logitech recovered within
+6.3 seconds and Sonix within 4.4 seconds; each test preserved the container ID
+and kept the other three streams advancing. These are software driver detach
+tests, not physical cable-unplug tests. Optical latency remains unmeasured.
+
+The refreshed FFmpeg runtime also passed 50-frame H.264 QSV, HEVC QSV and HEVC
+VA-API encode/decode checks with MKNOD dropped. A temporary Core-managed QSV
+Game of Life stream decoded 75 frames over five seconds through both HLS and
+RTSP while the baseline sources ran; the temporary process was then removed.
+
+For reproducible feature validation this image uses the master snapshot
+`e79f6cd023e57847d898358f9e80a65200d94d44` built and verified during this work.
+Normal push and scheduled builds continue resolving current upstream master.
+
+After the obsolete host helper binary, custom udev rule, timer and service files
+were uninstalled, another Logitech driver detach/reattach recovered within 6.4
+seconds. The container remained healthy and unprivileged; `/host/dev` was mounted
+read-only and no Docker socket was mounted.

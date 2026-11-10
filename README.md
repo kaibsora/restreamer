@@ -467,11 +467,14 @@ photons remain unwilling to participate in GitHub Actions.
 
 `.github/workflows/build-unified.yml` supports manual, source-triggered, and daily
 FFmpeg source checks. A scheduled run stops before the expensive image builds when
-the resolved `ffmpeg-hardware-git-SHA` tag already exists; manual runs and relevant
-source pushes still force a rebuild. It:
+the resolved FFmpeg source and build-input fingerprint are already published.
+Manual runs also reuse a matching runtime by default; select `rebuild_ffmpeg` to
+force a fresh runtime build. Set `ffmpeg_version` to `git-<40-character-SHA>` when
+validating an application change against a fixed master snapshot. Normal push and
+scheduled runs continue resolving current master. It:
 
 1. resolves FFmpeg's current development commit unless another source is supplied;
-2. builds the redistributable hardware FFmpeg image;
+2. builds or reuses the matching redistributable hardware FFmpeg image;
 3. fails if required hardware support or Restreamer patches disappear;
 4. rejects high or critical UI production advisories and unreviewed reachable Go
    vulnerabilities;
