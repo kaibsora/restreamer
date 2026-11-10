@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-cd54367`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-ceeef31`.
 
 Published image digest:
-`sha256:4d3ce78fdf70610bdcffa6d2f50d4e54e6f10c0eecef5592fe48df8c4aef78c2`.
+`sha256:e48bc10e7dd480d533bfc96ecd64592a466622b4b493084e10669bf4a2690327`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -158,3 +158,26 @@ After the obsolete host helper binary, custom udev rule, timer and service files
 were uninstalled, another Logitech driver detach/reattach recovered within 6.4
 seconds. The container remained healthy and unprivileged; `/host/dev` was mounted
 read-only and no Docker socket was mounted.
+
+## USB source wizard verification
+
+Image `sha-ceeef31` fixes camera verification against the current FFmpeg runtime.
+The old wizard supplied input `-thread_queue_size`, which this binary now marks
+output-only, and forced NV12 at 1280x720/25 FPS. Core now detects the option's
+scope from the running binary and normalizes legacy input commands. The new
+wizard exposes capture controls and prefers supported MJPEG in automatic mode.
+
+Both the Logitech and Sonix cameras passed Core API probes for three cases:
+legacy input queue options, automatic MJPEG capture, and explicit MJPEG at
+640x480/15 FPS. Automatic MJPEG negotiated 640x480/30 FPS on both devices.
+The actual browser wizard also passed for each camera with all capture settings
+initially automatic, advancing to **The video source is compatible** and the
+640x480 MJPEG profile/encoder selection page. The temporary wizard channel was
+never saved. This verifies source setup, not a new end-to-end latency measurement.
+
+The build passed all 276 UI tests, the production UI build and dependency audit,
+the full Core tests and vet, configuration checks, container smoke tests, and
+published-image digest verification. The deployed digest matched GHCR. After
+verification, all four existing user processes remained, with no diagnostic
+processes left. Test browser tabs, local test containers/cache images, and remote
+diagnostic scripts were removed.
