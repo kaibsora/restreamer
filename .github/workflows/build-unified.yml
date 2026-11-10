@@ -7,6 +7,11 @@ on:
         description: "FFmpeg source: master, stable, exact release, or git-SHA (blank selects master)"
         required: false
         type: string
+      rebuild_ffmpeg:
+        description: "Rebuild FFmpeg even when the matching source and build inputs are already published"
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "23 6 * * *"
   push:
@@ -204,6 +209,7 @@ jobs:
           BEFORE_SHA: ${{ github.event.before }}
           EVENT_NAME: ${{ github.event_name }}
           PUBLISHED: ${{ steps.registry.outputs.published }}
+          FORCE_REBUILD: ${{ inputs.rebuild_ffmpeg }}
         shell: bash
         run: |
           set -euo pipefail
@@ -212,8 +218,10 @@ jobs:
 
           case "${EVENT_NAME}" in
             workflow_dispatch)
-              rebuild=true
-              reason="manual workflow request"
+              if [[ "${PUBLISHED}" != true || "${FORCE_REBUILD}" == true ]]; then
+                rebuild=true
+                reason="manual request needs a new or explicitly rebuilt runtime"
+              fi
               ;;
             schedule)
               if [[ "${PUBLISHED}" != true ]]; then
