@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-606fb57`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-4e8000f`.
 
 Published image digest:
-`sha256:b589c3446cce245726273ce588495fe11366fc5c7e18961943f21d0b99f6056b`.
+`sha256:aac6a28d3c81f24093587d9faadb5611a812885cb96bc8ef6a431b0cf8bf40c9`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -262,3 +262,34 @@ passed. Unit tests cover current ioctl layouts through synthetic enumeration,
 stepwise ranges, exact rational frame rates, dependent UI selections and failed
 H.264 fallback. The deployed digest matched GHCR; test containers, viewers and
 remote diagnostic files were removed. `latest` was not promoted.
+
+## Native H.264 HLS retention and browser startup
+
+The C920's saved 1920x1080 H.264 stream-copy channel produced approximately
+20-second segments. The previous cleanup policy expired files after 24 seconds,
+despite a six-segment playlist window. Older segments still listed in the
+playlist returned 404, and the master playlist could also expire between
+updates. Decoding a fresh segment with FFmpeg succeeded while the browser
+remained stuck, so that check alone was insufficient.
+
+Image `sha-8c214c4` retains segments by count and removes playlist age expiry.
+It also stops requesting filesystem temporary-file renames for HTTP HLS output.
+The existing C920 channel's saved cleanup rules and HTTP flags were migrated
+without changing capture, encoding or other channels. On the physical host,
+all six referenced segments returned HTTP 200, including segments older than
+the former expiry limit. After a browser refresh, the actual player displayed
+1920x1080 video with readyState 4 and advancing playback time. Ten existing
+process configurations were preserved.
+
+A cold-start browser test found a separate player issue: an initial missing
+playlist could leave playback stuck after the camera began publishing valid
+media. A timed retry replaces the previous single immediate reload. Unit tests
+cover repeated network failures, deduplication, successful metadata, disposal,
+decode-error exclusion and preservation of a manually paused player. The UI
+test suite now contains 314 passing tests. Physical cold-start verification of
+that additional change is recorded below when its image is deployed.
+
+These changes do not shorten the camera's native keyframe interval. HLS startup
+and latency remain affected by its long GOP. The initial timestamp warnings in
+the camera's FFmpeg log were not evidence of the missing-file/player problems
+being resolved, and are not claimed as fixed by this repair.

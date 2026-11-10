@@ -143,6 +143,12 @@ the playlist. Stopped channels retain their final window until channel deletion
 or other storage management. HTTP uploads do not use filesystem rename flags;
 atomic temporary-file replacement is used only for disk HLS output.
 
+The UI player retries network failures every five seconds while it is open.
+This lets a camera's first playlist become available after a long initial GOP
+without requiring a page refresh. Closing the player cancels pending retries.
+Decode errors are not retried as network failures. These retries do not shorten
+the camera's GOP or remove HLS latency.
+
 Inspect synchronization through the ordinary container logs:
 
 ```sh
