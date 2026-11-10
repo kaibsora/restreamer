@@ -86,8 +86,6 @@ jobs:
           scripts/test-accept-relays.sh
           scripts/test-resolve-ffmpeg-version.sh
           bash scripts/test-ffmpeg-build-inputs.sh
-          docker run --rm --volume "${PWD}:/src:ro" python:3.14-alpine \
-            python -m unittest discover -s /src/scripts -p test_video_hotplug.py
 
       - name: Test and build UI
         if: matrix.suite == 'ui'

@@ -11,6 +11,7 @@ compose=(
     docker compose
     --project-name "${project_name}"
     --file deploy/compose.yaml
+    --file deploy/compose.hotplug.yaml
     --file deploy/compose.smoke.yaml
 )
 acceptance_report=''
@@ -70,6 +71,9 @@ for _ in $(seq 1 30); do
     sleep 1
 done
 [[ "${ready}" == "true" ]]
+
+docker logs restreamer 2>&1 | grep -F 'USB camera hot-plug enabled:' >/dev/null
+printf '%s\n' 'Validated integrated USB watcher startup without a host helper.'
 
 about_json=$(curl --fail --silent --show-error http://127.0.0.1:8080/api)
 if [[ -n "${SMOKE_EXPECTED_COMMIT:-}" ]]; then

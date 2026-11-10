@@ -6,6 +6,7 @@ import (
 
 	"github.com/datarhei/core/v16/app/api"
 	"github.com/datarhei/core/v16/config/store"
+	"github.com/datarhei/core/v16/internal/videohotplug"
 	"github.com/datarhei/core/v16/log"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -13,6 +14,19 @@ import (
 
 func main() {
 	logger := log.New("Core").WithOutput(log.NewConsoleWriter(os.Stderr, log.Lwarn, true))
+	hotplugLogger := log.New("VideoHotplug").WithOutput(log.NewConsoleWriter(os.Stderr, log.Linfo, true))
+	stopHotplug, err := videohotplug.Start(os.Getenv("RESTREAMER_VIDEO_HOTPLUG_SOURCE"), func(message string, err error) {
+		if err != nil {
+			hotplugLogger.Warn().WithError(err).Log("%s", message)
+		} else {
+			hotplugLogger.Info().Log("%s", message)
+		}
+	})
+	if err != nil {
+		logger.Error().WithError(err).Log("Failed to initialize USB camera hot-plug")
+		os.Exit(1)
+	}
+	defer stopHotplug()
 
 	configfile := store.Location(os.Getenv("CORE_CONFIGFILE"))
 

@@ -1,58 +1,73 @@
 # USB camera hot-plug
 
-On a Linux host with rootful Docker, systemd, udev and Python 3, the optional
-host helper synchronizes V4L2 capture devices into the running container. It
-does not require privileged mode, a Docker socket inside the container, or a
-mount of the host's entire `/dev` directory. Docker permission is limited to
-the V4L2 character-device major (81); metadata-only video nodes are excluded.
+USB discovery and device synchronization run inside Core. No host helper,
+custom systemd unit, Python runtime, Docker socket, or privileged container is
+needed. This mode requires Linux with rootful Docker and Core running as root.
 
-Run from the repository on the Docker host:
+From the repository on the Docker host:
 
 ```sh
-sudo install -m 0755 scripts/video-hotplug.py /usr/local/sbin/restreamer-video-hotplug
-sudo install -m 0644 deploy/hotplug/restreamer-video-hotplug.service /etc/systemd/system/
-sudo install -m 0644 deploy/hotplug/restreamer-video-hotplug.timer /etc/systemd/system/
-sudo install -m 0644 deploy/hotplug/99-restreamer-video.rules /etc/udev/rules.d/
-sudo systemctl daemon-reload
-sudo udevadm control --reload-rules
 docker compose -p deploy -f deploy/compose.yaml -f deploy/compose.hotplug.yaml up -d
-sudo systemctl enable --now restreamer-video-hotplug.timer
-sudo systemctl start restreamer-video-hotplug.service
 ```
 
-Enabling this mode recreates the container once to grant its device-cgroup
-permission. Subsequent camera changes do not require recreation. Do not combine
-this override with explicit USB camera `devices` bind mounts: those retain the
-old node after a disconnect. Keep the default GPU device mapping as usual.
+The override mounts the host's `/dev` read-only at `/host/dev`, enables the
+built-in watcher, grants V4L2 character-device access (major 81), and retains
+`MKNOD` capability. The watcher mirrors capture devices and their stable
+`/dev/v4l/by-id/` aliases into the container's own `/dev`. Metadata-only nodes
+are excluded using the kernel's V4L2 capture-capability query.
 
-Use **Custom ...** in the UI's video-device selector to enter a source under
-`/dev/v4l/by-id/` where possible, since numbered
-`/dev/videoN` nodes can change after reconnection. Opening the source editor
-refreshes the camera list. Enable source reconnection so an existing channel
-recovers after its camera returns; recovery also depends on the configured
-reconnect interval. A newly connected camera still needs a channel configured
-in the UI. Cameras without unique serial numbers may have ambiguous aliases.
+The host device directory is visible inside the container. The read-only mount
+protects its filesystem entries; device I/O remains governed by device-cgroup
+rules and device permissions. This is broader host-device visibility than static
+individual camera mappings. The container does not receive unrestricted device
+access or permission to modify the host's device directory.
 
-The udev rule triggers a short host service. A five-second timer also retries
-after a container restart or missed event. State is kept under
-`/run/restreamer-video-hotplug`; only previously managed video paths are removed.
-The service targets the default container name `restreamer`. Change its
-`--container` argument if using another name. This setup does not support
-rootless Docker or Docker Desktop's USB forwarding.
+Enabling this mode requires one container recreation. Later camera changes do
+not. Do not combine this override with explicit USB camera `devices` bind mounts:
+those retain old nodes after a disconnect. Keep the GPU mapping as usual.
 
-Inspect synchronization without modifying the container:
+Initial camera synchronization completes before Core probes devices or starts
+channels. Core then checks for changes every second. Fast reconnects that reuse
+a device number are detected by host inode identity. Managed state is saved
+inside the container at `/run/restreamer-video-hotplug.json`, allowing stale nodes
+to be removed and missing nodes to be restored after restart. Only managed V4L2
+nodes and matching managed aliases are removed; unrelated files are preserved.
+
+Use **Custom ...** in the UI's video-device selector to enter a path under
+`/dev/v4l/by-id/`, since numbered `/dev/videoN` nodes can change after reconnection.
+Opening the source editor refreshes the camera list; use **Refresh** if it was
+already open when the camera was connected. Enable source reconnection so a
+channel recovers when its camera returns. Recovery also depends on the channel's
+reconnect interval. New cameras still need channels configured in the UI.
+Cameras without unique serial numbers can have ambiguous aliases.
+
+Inspect synchronization through the ordinary container logs:
 
 ```sh
-sudo /usr/local/sbin/restreamer-video-hotplug --dry-run
-sudo journalctl -u restreamer-video-hotplug.service -n 30
+docker logs restreamer 2>&1 | grep VideoHotplug
 ```
 
-To stop automatic synchronization:
+This mode does not support rootless Docker or Docker Desktop USB forwarding.
+Without the override, the watcher is disabled and fixed device mappings continue
+to work.
+
+## Migration from the previous host helper
+
+Do not run both synchronizers against the same container. If the old host helper
+was installed, disable it before bringing up the integrated mode:
 
 ```sh
 sudo systemctl disable --now restreamer-video-hotplug.timer
-sudo rm /etc/udev/rules.d/99-restreamer-video.rules
+sudo rm -f /etc/udev/rules.d/99-restreamer-video.rules
 sudo udevadm control --reload-rules
+sudo systemctl stop restreamer-video-hotplug.service
+docker compose -p deploy -f deploy/compose.yaml -f deploy/compose.hotplug.yaml up -d --force-recreate restreamer
 ```
 
-Recreate with just the base Compose file to remove the extra cgroup permission.
+After verifying camera recovery, remove the obsolete helper files:
+
+```sh
+sudo rm -f /etc/systemd/system/restreamer-video-hotplug.service /etc/systemd/system/restreamer-video-hotplug.timer
+sudo rm -f /usr/local/sbin/restreamer-video-hotplug
+sudo systemctl daemon-reload
+```

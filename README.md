@@ -141,7 +141,7 @@ docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d
 ```
 
 For USB cameras that need disconnect/reconnect support, use the optional
-[Linux USB hot-plug helper](docs/usb-hotplug.md). It updates camera devices inside
+[integrated Linux USB hot-plug support](docs/usb-hotplug.md). It updates camera devices inside
 the running container without recreating it after each camera change.
 
 For fixed USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the

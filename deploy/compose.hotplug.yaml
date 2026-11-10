@@ -1,8 +1,19 @@
 services:
   restreamer:
-    # Host helper populates /dev/video* and stable /dev/v4l/by-id aliases.
+    # Core mirrors capture nodes from this read-only host device directory.
     # Do not combine this with explicit USB camera device bind mounts.
     device_cgroup_rules:
       - 'c 81:* rwm'
+    cap_add:
+      - MKNOD
+    volumes:
+      - type: bind
+        source: /dev
+        target: /host/dev
+        read_only: true
+        bind:
+          create_host_path: false
+    environment:
+      RESTREAMER_VIDEO_HOTPLUG_SOURCE: /host/dev
     group_add:
       - "${VIDEO_GID:-44}"

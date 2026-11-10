@@ -1,8 +1,0 @@
-[Unit]
-Description=Synchronize USB video devices into Restreamer
-After=docker.service
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/sbin/restreamer-video-hotplug --container restreamer
-TimeoutStartSec=30
