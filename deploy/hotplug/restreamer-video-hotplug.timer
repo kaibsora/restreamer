@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch for Restreamer USB camera changes
+
+[Timer]
+OnBootSec=5
+OnUnitInactiveSec=5
+AccuracySec=1
+
+[Install]
+WantedBy=timers.target

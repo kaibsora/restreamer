@@ -41,7 +41,11 @@ and network conditions still require acceptance testing.
   successfully encoded 30 frames after adding `libmfx1` and `libmfx-gen1.2`, using
   system-memory NV12 input, `-low_power 1`, an explicit bitrate, and async depth 1.
   The runtime packages and compatible encoder mapping still need integration.
-- USB cameras are explicitly mapped by `/dev/v4l/by-id` capture-node identity.
-  Dynamic hot-plug visibility and reconnect recovery remain separate work.
+- The optional [USB hot-plug helper](usb-hotplug.md) was tested with both cameras
+  using stable `/dev/v4l/by-id` sources. A targeted `uvcvideo` driver detach removed
+  the Logitech capture node and alias from the running container. The Sonix and
+  both virtual streams continued advancing. After driver reattachment, all four
+  streams advanced again within 6.1 seconds, with the same container ID. This
+  tests software detach/reattach, not a physical cable unplug.
 
 Camera images and host credentials are deliberately excluded from this repository.

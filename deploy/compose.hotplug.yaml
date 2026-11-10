@@ -1,0 +1,8 @@
+services:
+  restreamer:
+    # Host helper populates /dev/video* and stable /dev/v4l/by-id aliases.
+    # Do not combine this with explicit USB camera device bind mounts.
+    device_cgroup_rules:
+      - 'c 81:* rwm'
+    group_add:
+      - "${VIDEO_GID:-44}"

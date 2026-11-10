@@ -137,7 +137,11 @@ For NVIDIA hardware acceleration:
 docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d
 ```
 
-For USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the
+For USB cameras that need disconnect/reconnect support, use the optional
+[Linux USB hot-plug helper](docs/usb-hotplug.md). It updates camera devices inside
+the running container without recreating it after each camera change.
+
+For fixed USB cameras, copy `deploy/compose.camera-example.yaml`, list only the devices the
 container needs, and add the copied file as another Compose override. Do not use
 `--privileged` merely because a webcam exists; device permissions are not a séance.
 

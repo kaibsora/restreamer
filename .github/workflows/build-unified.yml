@@ -85,6 +85,8 @@ jobs:
           scripts/test-accept-hls-viewers.sh
           scripts/test-accept-relays.sh
           scripts/test-resolve-ffmpeg-version.sh
+            docker run --rm --volume "${PWD}:/src:ro" python:3.14-alpine \
+              python -m unittest discover -s /src/scripts -p test_video_hotplug.py
 
       - name: Test and build UI
         if: matrix.suite == 'ui'
@@ -118,6 +120,7 @@ jobs:
             --file deploy/compose.camera-example.yaml \
             --file deploy/compose.smoke.yaml \
             config >/dev/null
+            docker compose --file deploy/compose.yaml --file deploy/compose.hotplug.yaml config >/dev/null
 
       - name: Validate MediaMTX configuration
         if: matrix.suite == 'configuration'

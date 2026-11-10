@@ -1,0 +1,1 @@
+ACTION=="add|remove", SUBSYSTEM=="video4linux", KERNEL=="video[0-9]*", RUN+="/usr/bin/systemctl --no-block start restreamer-video-hotplug.service"
