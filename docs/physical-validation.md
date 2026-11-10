@@ -53,3 +53,19 @@ and network conditions still require acceptance testing.
   the virtual sources in that run.
 
 Camera images and host credentials are deliberately excluded from this repository.
+
+## Additional host checks
+
+Both USB cameras passed targeted driver detach/reattach with the hot-plug helper.
+The Sonix recovered within 4.1 seconds; the Logitech within 6.1 seconds. Each test
+kept the other three sources advancing and preserved the container ID.
+Four simultaneous browser WebRTC players also decoded the two cameras and two
+virtual sources. The repository relay acceptance check passed WHEP discovery and
+sustained RTSP decoding on all four paths (at least 12 FPS over five seconds).
+
+A disposable container with Ubuntu's `intel-media-va-driver-non-free`, `libmfx1`
+and `libmfx-gen1.2` encoded 50 frames each through H.264/HEVC VA-API and H.264/HEVC
+Quick Sync. The free-kernel Intel driver only advertised H.264 encode on this
+host. Intel documents the [driver package feature differences](https://github.com/intel/media-driver).
+VP9 encoding remained unavailable on this UHD 630; it only advertised VP9 decode.
+These diagnostic package changes do not modify the running production container.

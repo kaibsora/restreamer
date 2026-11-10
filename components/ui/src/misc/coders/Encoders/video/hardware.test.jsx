@@ -31,7 +31,7 @@ test.each([
 
 test.each([
 	[H264QSV, 'h264_qsv', ['format=nv12']],
-	[HEVCQSV, 'hevc_qsv', ['format=nv12', 'hwupload=extra_hw_frames=16']],
+	[HEVCQSV, 'hevc_qsv', ['format=nv12']],
 	[H264Vulkan, 'h264_vulkan', ['format=nv12', 'hwupload=extra_hw_frames=16']],
 	[HEVCVulkan, 'hevc_vulkan', ['format=nv12', 'hwupload=extra_hw_frames=16']],
 	[AV1VAAPI, 'av1_vaapi', ['format=nv12', 'hwupload']],
@@ -60,6 +60,13 @@ test('QSV binds to the selected DRM render node', () => {
 test('QSV preserves an explicit full-power encoder selection', () => {
 	const { mapping } = H264QSV.defaults({}, skills, { low_power: '0' });
 	expect(mapping.local).toEqual(expect.arrayContaining(['-low_power', '0']));
+	expect(mapping.filter).toEqual(['format=nv12']);
+});
+
+test('HEVC QSV derives the selected render device and uses system-memory NV12', () => {
+	const { mapping } = HEVCQSV.defaults({}, skills, { device: '/dev/dri/renderD129' });
+	expect(mapping.global).toContainEqual(['-init_hw_device', 'vaapi=restreamer_vaapi:/dev/dri/renderD129']);
+	expect(mapping.global).toContainEqual(['-init_hw_device', 'qsv=restreamer_qsv@restreamer_vaapi']);
 	expect(mapping.filter).toEqual(['format=nv12']);
 });
 

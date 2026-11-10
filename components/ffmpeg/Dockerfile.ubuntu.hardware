@@ -7,12 +7,6 @@ ARG DEPLOY_IMAGE=ubuntu:24.04
 
 FROM $BUILD_IMAGE AS builder
 
-ARG FFNVCODEC_VERSION=12.2.72.0
-ARG VULKAN_HEADERS_VERSION=1.4.362
-ARG BUILD_DATE=1970-01-01T00:00:00Z
-ARG BUILD_COMMIT=unknown
-ARG FFMPEG_VERSION=none
-
 ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ENV SRC=/usr/local
 ENV DEBIAN_FRONTEND=noninteractive
@@ -63,6 +57,10 @@ RUN if [ -r /etc/ssl/certs/ca-certificates.crt ]; then \
   zlib1g-dev
 
 # install and patch ffmpeg
+ARG FFNVCODEC_VERSION=12.2.72.0
+ARG VULKAN_HEADERS_VERSION=1.4.362
+ARG FFMPEG_VERSION=none
+
 RUN mkdir -p /dist && cd /dist && \
   curl --fail --location --show-error \
     --retry 8 --retry-all-errors --retry-delay 5 --retry-max-time 180 \
@@ -106,6 +104,9 @@ RUN mkdir -p /dist && cd /dist && \
   make install
 
 COPY ./contrib /contrib
+
+ARG BUILD_DATE=1970-01-01T00:00:00Z
+ARG BUILD_COMMIT=unknown
 
 RUN cd /dist/ffmpeg-${FFMPEG_VERSION} && \
   git apply --whitespace=nowarn /contrib/ffmpeg-jsonstats.patch && \
@@ -185,7 +186,7 @@ RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   libvpl2 \
   libmfx1 \
   libmfx-gen1.2 \
-  intel-media-va-driver \
+  intel-media-va-driver-non-free \
   mesa-va-drivers \
   mesa-vulkan-drivers && \
   rm -rf /var/lib/apt/lists/* && \
