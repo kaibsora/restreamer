@@ -67,6 +67,34 @@ const optionValue = (options, name) => {
 	return index === -1 ? null : options[index + 1];
 };
 
+describe('HLS retention with long camera GOPs', () => {
+	it.each([3, 6, 7])('keeps playlists and media valid beyond the requested duration for HLS %s', async (version) => {
+		const [restreamer, getSavedProcess] = createRestreamer();
+		await restreamer.UpsertIngest(channelId, [], [{ address: '/dev/video4', options: [] }], [createOutput('h264')], createControl({ version }));
+		const output = getSavedProcess().output[0];
+		// Six 20-second camera segments need a 120-second window, despite
+		// hls_time=2. No rule may evict those segments at the old 24-second age.
+		expect(output.cleanup.every((rule) => !rule.max_file_age_seconds)).toBe(true);
+		expect(output.cleanup.find((rule) => rule.max_files)?.max_files).toBe(12);
+		expect(output.cleanup.every((rule) => rule.purge_on_delete)).toBe(true);
+		expect(optionValue(output.options, '-hls_flags')).not.toContain('temp_file');
+	});
+	it('does not impose a finite file count on an unbounded playlist', async () => {
+		const [restreamer, getSavedProcess] = createRestreamer();
+		const control = createControl();
+		control.hls.listSize = 0;
+		await restreamer.UpsertIngest(channelId, [], [{ address: '/dev/video4', options: [] }], [createOutput('h264')], control);
+		expect(getSavedProcess().output[0].cleanup.every((rule) => !rule.max_files && !rule.max_file_age_seconds)).toBe(true);
+	});
+	it('keeps atomic file replacement for local disk HLS only', async () => {
+		const [restreamer, getSavedProcess] = createRestreamer();
+		const control = createControl();
+		control.hls.storage = 'diskfs';
+		await restreamer.UpsertIngest(channelId, [], [{ address: '/dev/video4', options: [] }], [createOutput('h264')], control);
+		expect(optionValue(getSavedProcess().output[0].options, '-hls_flags')).toContain('temp_file');
+	});
+});
+
 describe('HLS video codec tags', () => {
 	it.each([
 		['copied HEVC', 'copy', 'hevc', 'hevc'],

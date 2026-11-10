@@ -1836,7 +1836,7 @@ class Restreamer {
 							['start_number', '0'],
 							['hls_time', '' + parseInt(control.hls.segmentDuration)],
 							['hls_list_size', '' + parseInt(control.hls.listSize)],
-							['hls_flags', 'append_list+delete_segments+program_date_time+independent_segments+temp_file'],
+							['hls_flags', 'append_list+delete_segments+program_date_time+independent_segments' + (hlsStorage === 'diskfs' ? '+temp_file' : '')],
 							['hls_delete_threshold', '4'],
 							['hls_segment_filename', hls_segment_filename],
 						];
@@ -1853,7 +1853,7 @@ class Restreamer {
 							['start_number', '0'],
 							['hls_time', '' + parseInt(control.hls.segmentDuration)],
 							['hls_list_size', '' + parseInt(control.hls.listSize)],
-							['hls_flags', 'append_list+delete_segments+program_date_time+independent_segments+temp_file'],
+							['hls_flags', 'append_list+delete_segments+program_date_time+independent_segments' + (hlsStorage === 'diskfs' ? '+temp_file' : '')],
 							['hls_delete_threshold', '4'],
 							['hls_segment_type', 'fmp4'],
 							['hls_fmp4_init_filename', hls_fmp4_init_filename],
@@ -1867,7 +1867,7 @@ class Restreamer {
 							['start_number', '0'],
 							['hls_time', '' + parseInt(control.hls.segmentDuration)],
 							['hls_list_size', '' + parseInt(control.hls.listSize)],
-							['hls_flags', 'append_list+delete_segments+program_date_time+temp_file'],
+							['hls_flags', 'append_list+delete_segments+program_date_time' + (hlsStorage === 'diskfs' ? '+temp_file' : '')],
 							['hls_delete_threshold', '4'],
 							['hls_segment_filename', hls_segment_filename],
 						];
@@ -1966,7 +1966,10 @@ class Restreamer {
 		const cleanup_hls_segment_playlist = `${hlsStorage}:/${segmentPlaylistPath}.m3u8`;
 		const cleanup_hls_segment_filename = `${hlsStorage}:/${cleanupSegmentFilePath}.` + (!control.hls.lhls && control.hls.version === 7 ? 'mp4' : 'ts');
 
-		// 4.3 Cleanup id* (process is deleted) + continuously hls_segment_playlist and hls_segment_filename
+		// HLS duration is a target, not a limit: stream-copy camera GOPs can make
+		// segments much longer. Age-based deletion can remove files still named in
+		// the live playlist (or its persistent fMP4 init file). Bound segment count
+		// instead; FFmpeg also maintains its window. Purge everything on deletion.
 		output.cleanup.push(
 			{
 				pattern: cleanup_global,
@@ -1974,13 +1977,13 @@ class Restreamer {
 			},
 			{
 				pattern: cleanup_hls_segment_playlist,
-				max_file_age_seconds: control.hls.cleanup ? parseInt(control.hls.segmentDuration) * (parseInt(control.hls.listSize) + 6) : 0,
+				max_file_age_seconds: 0,
 				purge_on_delete: true,
 			},
 			{
 				pattern: cleanup_hls_segment_filename,
-				max_files: parseInt(control.hls.listSize) + 6,
-				max_file_age_seconds: control.hls.cleanup ? parseInt(control.hls.segmentDuration) * (parseInt(control.hls.listSize) + 6) : 0,
+				max_files: control.hls.cleanup && parseInt(control.hls.listSize) > 0 ? parseInt(control.hls.listSize) + 6 : 0,
+				max_file_age_seconds: 0,
 				purge_on_delete: true,
 			},
 		);
@@ -1989,7 +1992,7 @@ class Restreamer {
 		if (control.hls.master_playlist) {
 			output.cleanup.push({
 				pattern: cleanup_hls_master_playlist,
-				max_file_age_seconds: control.hls.cleanup ? parseInt(control.hls.segmentDuration) * (parseInt(control.hls.listSize) + 6) : 0,
+				max_file_age_seconds: 0,
 				purge_on_delete: true,
 			});
 		}
@@ -1998,7 +2001,7 @@ class Restreamer {
 		if (!control.hls.lhls && control.hls.version === 7) {
 			output.cleanup.push({
 				pattern: cleanup_hls_fmp4_init_filename,
-				max_file_age_seconds: control.hls.cleanup ? parseInt(control.hls.segmentDuration) * (parseInt(control.hls.listSize) + 6) : 0,
+				max_file_age_seconds: 0,
 				purge_on_delete: true,
 			});
 		}
