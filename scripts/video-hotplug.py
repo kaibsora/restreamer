@@ -80,11 +80,12 @@ def main():
         parser.error('Invalid container name')
     if not args.dry_run and os.geteuid() != 0:
         parser.error('Run as root on the Docker host')
-    inspection = subprocess.run(['docker', 'inspect', '--format', '{{.Id}} {{.State.Running}}', args.container],
+    inspection = subprocess.run(['docker', 'inspect', '--format', '{{.Id}} {{.State.StartedAt}} {{.State.Running}}', args.container],
                                 capture_output=True, text=True)
     if inspection.returncode != 0 or not inspection.stdout.strip().endswith(' true'):
         return  # The timer will retry after the container starts or is recreated.
     container_id = inspection.stdout.split()[0]
+    started_at = inspection.stdout.split()[1]
     if args.dry_run:
         current = discover()
         print(json.dumps({'container': container_id, 'devices': current, 'commands': plan({}, current)}, indent=2))
@@ -96,12 +97,13 @@ def main():
         current = discover()
         statefile = directory / (args.container + '.json')
         previous = json.loads(statefile.read_text()) if statefile.exists() else {}
-        if previous.get('container') != container_id:
+        if previous.get('container') != container_id or previous.get('started_at') != started_at:
             previous = {}
         commands = plan(previous, current)
         for command in commands:
             subprocess.run(['docker', 'exec', '--user', '0', args.container] + command, check=True)
         current['container'] = container_id
+        current['started_at'] = started_at
         with tempfile.NamedTemporaryFile(mode='w', dir=directory, delete=False) as output:
             json.dump(current, output)
             temporary = output.name

@@ -47,5 +47,9 @@ and network conditions still require acceptance testing.
   both virtual streams continued advancing. After driver reattachment, all four
   streams advanced again within 6.1 seconds, with the same container ID. This
   tests software detach/reattach, not a physical cable unplug.
+  A subsequent container restart also restored both dynamically synchronized
+  cameras and both virtual streams; all eight HLS/RTSP outputs decoded. RTSP
+  first-frame acquisition measured 467/867 ms for the cameras and 794/802 ms for
+  the virtual sources in that run.
 
 Camera images and host credentials are deliberately excluded from this repository.
