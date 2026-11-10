@@ -17,6 +17,10 @@ on:
         required: false
         default: false
         type: boolean
+      expected_commit:
+        description: "Optional exact application commit; abort if GitHub dispatches a different snapshot"
+        required: false
+        type: string
   schedule:
     - cron: "23 6 * * *"
   push:
@@ -80,6 +84,14 @@ jobs:
     runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     steps:
       - uses: actions/checkout@v7
+
+      - name: Verify requested application commit
+        if: github.event_name == 'workflow_dispatch' && inputs.expected_commit != ''
+        env:
+          EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+        run: |
+          test "${GITHUB_SHA}" = "${EXPECTED_COMMIT}"
+          test "$(git rev-parse HEAD)" = "${EXPECTED_COMMIT}"
 
       - name: Validate self-hosted runner
         run: scripts/verify-self-hosted-runner.sh
