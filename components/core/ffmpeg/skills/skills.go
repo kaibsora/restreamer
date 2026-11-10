@@ -286,7 +286,8 @@ func formats(binary string) ffFormats {
 func parseFormats(data []byte) ffFormats {
 	formats := ffFormats{}
 
-	re := regexp.MustCompile(`^\s([D ])([E ]) ([0-9A-Za-z_,]+)\s+(.*?)$`)
+	// Recent FFmpeg adds a third flag column for device formats.
+	re := regexp.MustCompile(`^\s([D ])([E ])(?:[ d])? ([0-9A-Za-z_,]+)\s+(.*?)$`)
 
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	scanner.Split(bufio.ScanLines)
@@ -330,7 +331,7 @@ func devices(binary string) ffDevices {
 func parseDevices(data []byte, binary string) ffDevices {
 	devices := ffDevices{}
 
-	re := regexp.MustCompile(`^\s([D ])([E ]) ([0-9A-Za-z_,]+)\s+(.*?)$`)
+	re := regexp.MustCompile(`^\s([D ])([E ])(?:[ d])? ([0-9A-Za-z_,]+)\s+(.*?)$`)
 
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	scanner.Split(bufio.ScanLines)

@@ -189,6 +189,16 @@ grep -F '<title>Restreamer</title>' <<<"${ui_redirect_html}" >/dev/null
 docker exec restreamer restreamer-verify-ffmpeg
 docker exec restreamer restreamer-verify-hevc-hls
 
+# Publications rely on Core's parsed capabilities, not just compiled encoders.
+skills_json=$(curl --fail --silent --show-error http://127.0.0.1:8080/api/v3/skills)
+for format in flv rtsp hls mpegts; do
+    if ! grep -E "\"id\":[[:space:]]*\"${format}\"" <<<"${skills_json}" >/dev/null; then
+        printf 'Core skills API did not advertise required format %s.\n' "${format}" >&2
+        exit 1
+    fi
+done
+printf '%s\n' 'Validated publication formats advertised by the Core skills API.'
+
 api_process_id='restreamer-smoke:api-control'
 curl --fail --silent --show-error \
     --request POST \
