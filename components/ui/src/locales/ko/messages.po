@@ -269,6 +269,10 @@ msgstr "사용자 인증"
 msgid "Auto"
 msgstr "자동"
 
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Automatic"
+msgstr ""
+
 #: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "모든 미디어 데이터를 자동으로 청소합니다."
@@ -362,6 +366,14 @@ msgstr "파란색"
 msgid "Bottom field"
 msgstr "하단 필드"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Bottom left"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Bottom right"
+msgstr ""
+
 #: src/views/Edit/index.jsx
 #: src/views/Edit/Wizard/Metadata.jsx
 msgid "Briefly describe what the audience will see during the live stream."
@@ -370,6 +382,10 @@ msgstr "이 영상이 어떤 것인지 시청자에게 간략히 설명해주세
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "brown"
 msgstr "갈색"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Burn logo or text into the encoded video"
+msgstr ""
 
 #: src/views/Publication/Player.jsx
 msgid "Button color"
@@ -407,18 +423,26 @@ msgstr "클릭 캡쳐"
 msgid "Capture cursor"
 msgstr "커서 캡쳐"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Center"
+msgstr ""
+
 #. placeholder {0}: $data.meta.name
 #: src/views/Edit/index.jsx
 msgid "Channel \"{0}\" saved"
 msgstr "\"{0}\" 채널을 저장했습니다."
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Channel name or custom text"
+msgstr ""
 
 #: src/views/Edit/Sources/ALSA.jsx
 msgid "Channels"
 msgstr "채널"
 
 #: src/views/Settings.jsx
-msgid "Check for updates"
-msgstr "업데이트 확인"
+#~ msgid "Check for updates"
+#~ msgstr "업데이트 확인"
 
 #: src/views/Publication/Add.jsx
 msgid "Check the requirements"
@@ -554,6 +578,10 @@ msgstr "copyts"
 #: src/Footer.jsx
 msgid "Cores"
 msgstr "코어"
+
+#: src/misc/filters/audio/Resample.jsx
+msgid "Correct live audio clock drift"
+msgstr ""
 
 #: src/misc/Progress.jsx
 msgid "CPU"
@@ -740,6 +768,14 @@ msgstr "디자인"
 msgid "Device"
 msgstr "장치"
 
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Disabled"
+msgstr ""
+
+#: src/views/Playersite.jsx
+msgid "Disabling this removes every generated landing page. Direct HLS, RTMP, SRT, RTSP, and MediaMTX publications remain available."
+msgstr ""
+
 #: src/misc/ActionButton.jsx
 msgid "Disconnect"
 msgstr "연결 해제"
@@ -800,6 +836,10 @@ msgstr "문서"
 msgid "Documentation"
 msgstr "문서"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Draw a translucent background behind text"
+msgstr ""
+
 #: src/misc/Progress.jsx
 msgid "Dup. frames"
 msgstr "복제된 프레임"
@@ -811,6 +851,10 @@ msgstr "각 필드"
 #: src/misc/filters/video/Bwdif.jsx
 msgid "Each frames"
 msgstr "각 프레임"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Edge margin (px)"
+msgstr ""
 
 #: src/views/Edit/index.jsx
 msgid "Edit"
@@ -885,6 +929,10 @@ msgstr "스냅샷 활성화"
 #: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Enable SRT server ..."
 msgstr "SRT 서버 활성화..."
+
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Enabled"
+msgstr ""
 
 #: src/views/Settings.jsx
 msgid "Enabling authorization is strongly advised. Otherwise, anybody can access this instance."
@@ -1067,6 +1115,10 @@ msgstr "크기 고정"
 msgid "Flags"
 msgstr "플래그"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Font size (px)"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "For Javascripts."
 msgstr "자바스크립트를 입력합니다."
@@ -1163,7 +1215,10 @@ msgstr "Google 애널리틱스 ID"
 msgid "Google Analytics Tracker Name"
 msgstr "Google 애널리틱스 추적 도구 이름"
 
+#: src/misc/coders/Encoders/video/h264_vaapi.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
+#: src/misc/coders/Encoders/video/hevc_vaapi.jsx
+#: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 #: src/views/Edit/Sources/V4L.jsx
 #: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Hardware device"
@@ -1330,6 +1385,10 @@ msgstr "문제 알리기"
 msgid "kbit/s"
 msgstr "kbit/s"
 
+#: src/views/Publication/Services/MediaMTXResilient.jsx
+msgid "Keep an H.264 LAN stream available with an offline slate while its camera or Restreamer process is unavailable. See the <0>deployment guide</0>."
+msgstr ""
+
 #: src/misc/coders/settings/Video.jsx
 msgid "Keyframe interval (seconds)"
 msgstr "키프레임 간격 (초)"
@@ -1482,6 +1541,18 @@ msgstr "로그인/JWT 인증"
 msgid "Logo"
 msgstr "로고"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo opacity"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo position"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo width (px)"
+msgstr ""
+
 #: src/Header.jsx
 msgid "Logout"
 msgstr "로그아웃"
@@ -1498,6 +1569,10 @@ msgstr "소리 크기 평균화"
 #: src/misc/controls/Process.jsx
 msgid "Low latency (Buffer)"
 msgstr "낮은 지연시간 (버퍼)"
+
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Low-power encoding"
+msgstr ""
 
 #: src/views/Main/index.jsx
 #: src/views/Playersite.jsx
@@ -1631,8 +1706,8 @@ msgid "More about licenses here"
 msgstr "저작권 안내 입력"
 
 #: src/views/Settings.jsx
-msgid "More about the service"
-msgstr "서비스 세부사항"
+#~ msgid "More about the service"
+#~ msgstr "서비스 세부사항"
 
 #: src/views/Publication/Services/Twitter.jsx
 msgid "More about Twitter's copyright <0>here</0>."
@@ -1896,7 +1971,6 @@ msgid "Player URL"
 msgstr "재생기 URL"
 
 #: src/Header.jsx
-#: src/views/Playersite.jsx
 msgid "Playersite"
 msgstr "재생사이트"
 
@@ -2096,6 +2170,10 @@ msgstr "공개"
 
 #: src/views/Publication/Services/MediaMTX.jsx
 msgid "Publish a low-latency H.264 stream to the bundled MediaMTX service for LAN RTSP and WebRTC clients. See the <0>deployment guide</0>."
+msgstr ""
+
+#: src/views/Playersite.jsx
+msgid "Publish public landing page"
 msgstr ""
 
 #: src/views/Publication/Services/MediaMTX.jsx
@@ -2448,8 +2526,8 @@ msgid "Selection"
 msgstr "선택"
 
 #: src/views/Settings.jsx
-msgid "Send anonymous metrics (helps us for future development)"
-msgstr "익명으로 통계 전송 (개발에 도움이 됩니다)"
+#~ msgid "Send anonymous metrics (helps us for future development)"
+#~ msgstr "익명으로 통계 전송 (개발에 도움이 됩니다)"
 
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
@@ -2707,6 +2785,10 @@ msgstr "스트림 이름"
 msgid "Stream path"
 msgstr ""
 
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Stream slot"
+msgstr ""
+
 #: src/misc/controls/Source.jsx
 msgid "Stream source for publication service (experimental)."
 msgstr "송출 서비스로 전달 (시험기능)"
@@ -2716,6 +2798,10 @@ msgstr "송출 서비스로 전달 (시험기능)"
 #: src/views/Publication/Services/Dailymotion.jsx
 msgid "Stream URL"
 msgstr "스트림 URL"
+
+#: src/misc/filters/audio/Resample.jsx
+msgid "Stretch or trim audio slightly to follow capture timestamps and prevent independently clocked USB audio and video from drifting apart."
+msgstr ""
 
 #: src/views/Playersite.jsx
 msgid "Support datarhei Restreamer"
@@ -2756,9 +2842,17 @@ msgstr "테스트 패턴"
 msgid "Test pattern (extended)"
 msgstr "테스트 패턴 (확장)"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Text color"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Text colors"
 msgstr "글씨 색상"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Text position"
+msgstr ""
 
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The amplitude (0.0 - 1.0) of the generated audio stream"
@@ -2911,8 +3005,8 @@ msgid "The video source is compatible. Select the desired resolution:"
 msgstr "호환되는 영상 스트림입니다. 원하는 해상도를 선택해주세요:"
 
 #: src/views/Settings.jsx
-msgid "There are updates available. Here you get more information."
-msgstr "업데이트가 있습니다. 자세한 사항은 다음을 참고하세요."
+#~ msgid "There are updates available. Here you get more information."
+#~ msgstr "업데이트가 있습니다. 자세한 사항은 다음을 참고하세요."
 
 #: src/views/Settings.jsx
 msgid "There was a problem storing the settings. Settings not saved."
@@ -2942,6 +3036,10 @@ msgstr "설정에 오류가 있습니다. 설정을 저장하지 않습니다."
 #: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "로그인 할 수 있는 방법이 없습니다."
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "This changes the encoded frames and therefore requires video transcoding. The branding is inherited by every publication and relay."
+msgstr ""
 
 #: src/views/Publication/Services/Dummy.jsx
 msgid "This is a dummy service that explains to you the concepts of service."
@@ -2982,6 +3080,10 @@ msgstr "이 라이선스는 이용자가 저작자 및 출처만 표시한다면
 #: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."
 msgstr "이 프로토콜은 확인할 수 없거나 현재 FFmpeg 바이너리에서 지원하지 않습니다."
+
+#: src/views/Publication/Services/MediaMTXResilient.jsx
+msgid "This resilient path is video-only. Audio is intentionally removed so MediaMTX can replace the publisher with its built-in H.264 offline slate without changing the stream track layout."
+msgstr ""
 
 #: src/views/Edit/index.jsx
 msgid "This source cannot be edited while it is in use. To continue, you have to disconnect the source."
@@ -3034,6 +3136,14 @@ msgstr "토큰"
 #: src/misc/filters/video/Bwdif.jsx
 msgid "Top field"
 msgstr "상단 필드"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Top left"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Top right"
+msgstr ""
 
 #: src/views/Publication/Services/Telegram.jsx
 msgid "Transmit a Livestream to a Telegram Channel."
@@ -3200,6 +3310,7 @@ msgstr "미선택"
 msgid "Update details (Changelog)"
 msgstr "업데이트 내역 (변경점)"
 
+#: src/misc/filters/video/Watermark.jsx
 #: src/views/Edit/Sources/AudioLoop.jsx
 #: src/views/Edit/Sources/VideoLoop.jsx
 #: src/views/Playersite.jsx
@@ -3349,6 +3460,10 @@ msgstr "소리 크기"
 #: src/views/Publication/Services/Livespotting.jsx
 msgid "VPU ID"
 msgstr "VPU ID"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Watermark image"
+msgstr ""
 
 #: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "We recommend OpenMAX IL for Raspberry PI (3/4) with a 32-bit operating system."

@@ -269,6 +269,10 @@ msgstr "Godkendelse"
 msgid "Auto"
 msgstr "Auto"
 
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Automatic"
+msgstr ""
+
 #: src/misc/controls/HLS.jsx
 msgid "Automatic cleanup of all media data"
 msgstr "Automatisk oprydning af alle mediedata"
@@ -362,6 +366,14 @@ msgstr "blå"
 msgid "Bottom field"
 msgstr "Nederste felt"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Bottom left"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Bottom right"
+msgstr ""
+
 #: src/views/Edit/index.jsx
 #: src/views/Edit/Wizard/Metadata.jsx
 msgid "Briefly describe what the audience will see during the live stream."
@@ -370,6 +382,10 @@ msgstr "Beskriv kort, hvad publikum vil se under live-streamingen."
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "brown"
 msgstr "brun"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Burn logo or text into the encoded video"
+msgstr ""
 
 #: src/views/Publication/Player.jsx
 msgid "Button color"
@@ -407,18 +423,26 @@ msgstr "Fang klik"
 msgid "Capture cursor"
 msgstr "Fang markør"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Center"
+msgstr ""
+
 #. placeholder {0}: $data.meta.name
 #: src/views/Edit/index.jsx
 msgid "Channel \"{0}\" saved"
 msgstr "Kanal \"{0}\" gemt"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Channel name or custom text"
+msgstr ""
 
 #: src/views/Edit/Sources/ALSA.jsx
 msgid "Channels"
 msgstr "Kanaler"
 
 #: src/views/Settings.jsx
-msgid "Check for updates"
-msgstr "Check opdatering"
+#~ msgid "Check for updates"
+#~ msgstr "Check opdatering"
 
 #: src/views/Publication/Add.jsx
 msgid "Check the requirements"
@@ -554,6 +578,10 @@ msgstr "copyts"
 #: src/Footer.jsx
 msgid "Cores"
 msgstr "Cores"
+
+#: src/misc/filters/audio/Resample.jsx
+msgid "Correct live audio clock drift"
+msgstr ""
 
 #: src/misc/Progress.jsx
 msgid "CPU"
@@ -740,6 +768,14 @@ msgstr "Design"
 msgid "Device"
 msgstr "Enhed"
 
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Disabled"
+msgstr ""
+
+#: src/views/Playersite.jsx
+msgid "Disabling this removes every generated landing page. Direct HLS, RTMP, SRT, RTSP, and MediaMTX publications remain available."
+msgstr ""
+
 #: src/misc/ActionButton.jsx
 msgid "Disconnect"
 msgstr "Afbrudt"
@@ -800,6 +836,10 @@ msgstr "Dokumenter"
 msgid "Documentation"
 msgstr "Dokumentation"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Draw a translucent background behind text"
+msgstr ""
+
 #: src/misc/Progress.jsx
 msgid "Dup. frames"
 msgstr "Dob. rammer"
@@ -811,6 +851,10 @@ msgstr "Hvert felt"
 #: src/misc/filters/video/Bwdif.jsx
 msgid "Each frames"
 msgstr "Hver ramme"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Edge margin (px)"
+msgstr ""
 
 #: src/views/Edit/index.jsx
 msgid "Edit"
@@ -885,6 +929,10 @@ msgstr "Aktiver snapshots"
 #: src/views/Edit/Wizard/Sources/InternalSRT.jsx
 msgid "Enable SRT server ..."
 msgstr "Aktiver SRT-server ..."
+
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Enabled"
+msgstr ""
 
 #: src/views/Settings.jsx
 msgid "Enabling authorization is strongly advised. Otherwise, anybody can access this instance."
@@ -1067,6 +1115,10 @@ msgstr "Fast størrelse"
 msgid "Flags"
 msgstr "Flag"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Font size (px)"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "For Javascripts."
 msgstr "For Javascripts."
@@ -1163,7 +1215,10 @@ msgstr "Google Analytics ID"
 msgid "Google Analytics Tracker Name"
 msgstr "Google Analytics Tracker Name"
 
+#: src/misc/coders/Encoders/video/h264_vaapi.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
+#: src/misc/coders/Encoders/video/hevc_vaapi.jsx
+#: src/misc/coders/Encoders/video/vp9_vaapi.jsx
 #: src/views/Edit/Sources/V4L.jsx
 #: src/views/Edit/Wizard/Sources/V4L.jsx
 msgid "Hardware device"
@@ -1330,6 +1385,10 @@ msgstr "Advarsel om spørgsmål"
 msgid "kbit/s"
 msgstr "kbit/s"
 
+#: src/views/Publication/Services/MediaMTXResilient.jsx
+msgid "Keep an H.264 LAN stream available with an offline slate while its camera or Restreamer process is unavailable. See the <0>deployment guide</0>."
+msgstr ""
+
 #: src/misc/coders/settings/Video.jsx
 msgid "Keyframe interval (seconds)"
 msgstr "Keyframe-interval (sekunder)"
@@ -1482,6 +1541,18 @@ msgstr "Login/JWT-autorisation"
 msgid "Logo"
 msgstr "Logginga"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo opacity"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo position"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Logo width (px)"
+msgstr ""
+
 #: src/Header.jsx
 msgid "Logout"
 msgstr "Logout"
@@ -1498,6 +1569,10 @@ msgstr "Normalisering af lydstyrke"
 #: src/misc/controls/Process.jsx
 msgid "Low latency (Buffer)"
 msgstr "Lav latenstid (buffer)"
+
+#: src/misc/coders/Encoders/video/hardware.jsx
+msgid "Low-power encoding"
+msgstr ""
 
 #: src/views/Main/index.jsx
 #: src/views/Playersite.jsx
@@ -1631,8 +1706,8 @@ msgid "More about licenses here"
 msgstr "Mere om licenser her"
 
 #: src/views/Settings.jsx
-msgid "More about the service"
-msgstr "Mere om tjenesten"
+#~ msgid "More about the service"
+#~ msgstr "Mere om tjenesten"
 
 #: src/views/Publication/Services/Twitter.jsx
 msgid "More about Twitter's copyright <0>here</0>."
@@ -1896,7 +1971,6 @@ msgid "Player URL"
 msgstr "Spiller-URL"
 
 #: src/Header.jsx
-#: src/views/Playersite.jsx
 msgid "Playersite"
 msgstr "Afspillerside"
 
@@ -2096,6 +2170,10 @@ msgstr "Publiceringer"
 
 #: src/views/Publication/Services/MediaMTX.jsx
 msgid "Publish a low-latency H.264 stream to the bundled MediaMTX service for LAN RTSP and WebRTC clients. See the <0>deployment guide</0>."
+msgstr ""
+
+#: src/views/Playersite.jsx
+msgid "Publish public landing page"
 msgstr ""
 
 #: src/views/Publication/Services/MediaMTX.jsx
@@ -2448,8 +2526,8 @@ msgid "Selection"
 msgstr "Udvælgelse"
 
 #: src/views/Settings.jsx
-msgid "Send anonymous metrics (helps us for future development)"
-msgstr "Send anonyme målinger (hjælper os med fremtidig udvikling)"
+#~ msgid "Send anonymous metrics (helps us for future development)"
+#~ msgstr "Send anonyme målinger (hjælper os med fremtidig udvikling)"
 
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/InternalRTMP.jsx
@@ -2707,6 +2785,10 @@ msgstr "Stream navne"
 msgid "Stream path"
 msgstr ""
 
+#: src/views/Publication/Services/MediaMTX.jsx
+msgid "Stream slot"
+msgstr ""
+
 #: src/misc/controls/Source.jsx
 msgid "Stream source for publication service (experimental)."
 msgstr "Streamkilde til publikationstjeneste (eksperimentel)."
@@ -2716,6 +2798,10 @@ msgstr "Streamkilde til publikationstjeneste (eksperimentel)."
 #: src/views/Publication/Services/Dailymotion.jsx
 msgid "Stream URL"
 msgstr "URL til stream"
+
+#: src/misc/filters/audio/Resample.jsx
+msgid "Stretch or trim audio slightly to follow capture timestamps and prevent independently clocked USB audio and video from drifting apart."
+msgstr ""
 
 #: src/views/Playersite.jsx
 msgid "Support datarhei Restreamer"
@@ -2756,9 +2842,17 @@ msgstr "Test mønster"
 msgid "Test pattern (extended)"
 msgstr "Test mønster (udvidet)"
 
+#: src/misc/filters/video/Watermark.jsx
+msgid "Text color"
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Text colors"
 msgstr "Tekstfarver"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Text position"
+msgstr ""
 
 #: src/views/Edit/Sources/VirtualAudio.jsx
 msgid "The amplitude (0.0 - 1.0) of the generated audio stream"
@@ -2911,8 +3005,8 @@ msgid "The video source is compatible. Select the desired resolution:"
 msgstr "Video kilde er kompatibel. Vælg opløsning:"
 
 #: src/views/Settings.jsx
-msgid "There are updates available. Here you get more information."
-msgstr "Der er opdateringer til rådighed. Her får du flere oplysninger."
+#~ msgid "There are updates available. Here you get more information."
+#~ msgstr "Der er opdateringer til rådighed. Her får du flere oplysninger."
 
 #: src/views/Settings.jsx
 msgid "There was a problem storing the settings. Settings not saved."
@@ -2942,6 +3036,10 @@ msgstr "Der var nogle fejl i konfiguration. Konfiguration ikke gemt."
 #: src/views/Login.jsx
 msgid "There's no login method available."
 msgstr "Der er ingen login-metode tilgængelig."
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "This changes the encoded frames and therefore requires video transcoding. The branding is inherited by every publication and relay."
+msgstr ""
 
 #: src/views/Publication/Services/Dummy.jsx
 msgid "This is a dummy service that explains to you the concepts of service."
@@ -2982,6 +3080,10 @@ msgstr "Denne licens tillader genbrugere at distribuere, remixe, tilpasse og byg
 #: src/views/Edit/Sources/Network.jsx
 msgid "This protocol is unknown or not supported by the available FFmpeg binary."
 msgstr "Denne protokol er ukendt eller understøttes ikke af den tilgængelige binære FFmpeg-protokol."
+
+#: src/views/Publication/Services/MediaMTXResilient.jsx
+msgid "This resilient path is video-only. Audio is intentionally removed so MediaMTX can replace the publisher with its built-in H.264 offline slate without changing the stream track layout."
+msgstr ""
 
 #: src/views/Edit/index.jsx
 msgid "This source cannot be edited while it is in use. To continue, you have to disconnect the source."
@@ -3034,6 +3136,14 @@ msgstr "Token"
 #: src/misc/filters/video/Bwdif.jsx
 msgid "Top field"
 msgstr "Top felt"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Top left"
+msgstr ""
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Top right"
+msgstr ""
 
 #: src/views/Publication/Services/Telegram.jsx
 msgid "Transmit a Livestream to a Telegram Channel."
@@ -3200,6 +3310,7 @@ msgstr "Ikke-valgt"
 msgid "Update details (Changelog)"
 msgstr "Detaljer om opdatering (Ændringsliste)"
 
+#: src/misc/filters/video/Watermark.jsx
 #: src/views/Edit/Sources/AudioLoop.jsx
 #: src/views/Edit/Sources/VideoLoop.jsx
 #: src/views/Playersite.jsx
@@ -3349,6 +3460,10 @@ msgstr "Volumen"
 #: src/views/Publication/Services/Livespotting.jsx
 msgid "VPU ID"
 msgstr "VPU ID"
+
+#: src/misc/filters/video/Watermark.jsx
+msgid "Watermark image"
+msgstr ""
 
 #: src/misc/coders/Encoders/video/h264_v4l2m2m.jsx
 msgid "We recommend OpenMAX IL for Raspberry PI (3/4) with a 32-bit operating system."
