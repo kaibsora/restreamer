@@ -26,7 +26,7 @@ export default function VideoJS(inputProps) {
 			const player = (playerRef.current = videojs(videoElement, options, () => {
 				onReady && onReady(player);
 			}));
-			installNetworkRecovery(player);
+			installNetworkRecovery(player, 5000, options.sources?.[0]);
 
 			// add internal/public skin style
 			if (props.type === 'videojs-public') {

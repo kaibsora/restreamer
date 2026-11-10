@@ -1,6 +1,7 @@
 // Live HLS can return 404 until the first camera GOP has completed. Retrying
 // only once in the error event leaves the second failure latched forever.
-export function installNetworkRecovery(player, retryDelay = 5000) {
+export function installNetworkRecovery(player, retryDelay = 5000, originalSource = player.currentSource()) {
+	const source = { ...originalSource };
 	let timer = null;
 	let disposed = false;
 	const clear = () => {
@@ -8,15 +9,21 @@ export function installNetworkRecovery(player, retryDelay = 5000) {
 		timer = null;
 	};
 	const recover = () => {
-		if (disposed || player.isDisposed() || player.error()?.code !== 2 || timer !== null) return;
+		if (disposed || player.isDisposed()) return;
+		if (player.error()?.code !== 2) {
+			clear();
+			return;
+		}
+		if (timer !== null) return;
 		const resume = !player.paused() || !!player.autoplay();
 		timer = setTimeout(() => {
 			timer = null;
-			if (disposed || player.isDisposed() || player.error()?.code !== 2) return;
-			const source = player.currentSource();
+			// Video.js may clear error() during loadstart before metadata arrives.
+			// The scheduled network failure still needs recovery in that state.
+			if (disposed || player.isDisposed()) return;
 			if (!source?.src) return;
 			player.error(null);
-			player.src(source);
+			player.src({ ...source });
 			if (resume) player.play()?.catch(() => {});
 		}, retryDelay);
 	};
