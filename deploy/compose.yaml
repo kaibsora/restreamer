@@ -1,6 +1,6 @@
 services:
   restreamer:
-    image: ghcr.io/kaibsora/restreamer:sha-ceeef31
+    image: ghcr.io/kaibsora/restreamer:sha-8ec7aa3
     container_name: restreamer
     restart: unless-stopped
     ports:
