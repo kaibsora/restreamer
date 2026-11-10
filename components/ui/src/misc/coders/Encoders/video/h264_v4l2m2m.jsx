@@ -112,8 +112,8 @@ function createMapping(settings, stream, skills) {
 	}
 
 	if (settings.gop !== 'auto') {
-		local.push('-g', `${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`);
-		local.push('-keyint_min', `${parseInt(settings.fps)}`);
+		local.push('-g', `${Math.max(1, Math.round(parseFloat(settings.fps) * parseFloat(settings.gop))).toFixed(0)}`);
+		local.push('-keyint_min', `${Math.max(1, Math.round(parseFloat(settings.fps) * parseFloat(settings.gop))).toFixed(0)}`);
 	}
 
 	if (settings.profile !== 'auto') {

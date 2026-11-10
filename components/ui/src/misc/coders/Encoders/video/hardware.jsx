@@ -46,7 +46,7 @@ function createHardwareEncoder(config) {
 		addFramerateOptions(local, settings, skills);
 
 		if (settings.gop !== 'auto') {
-			local.push('-g', `${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`);
+			local.push('-g', `${Math.max(1, Math.round(parseFloat(settings.fps) * parseFloat(settings.gop))).toFixed(0)}`);
 		}
 
 		if (config.presets && settings.preset !== '') {

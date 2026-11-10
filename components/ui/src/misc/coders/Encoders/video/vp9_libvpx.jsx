@@ -43,9 +43,9 @@ function createMapping(settings, stream, skills) {
 	if (settings.gop !== 'auto') {
 		local.push(
 			'-g',
-			`${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`,
+			`${Math.max(1, Math.round(parseFloat(settings.fps) * parseFloat(settings.gop))).toFixed(0)}`,
 			'-keyint_min',
-			`${Math.round(parseInt(settings.fps) * parseInt(settings.gop)).toFixed(0)}`,
+			`${Math.max(1, Math.round(parseFloat(settings.fps) * parseFloat(settings.gop))).toFixed(0)}`,
 		);
 	}
 

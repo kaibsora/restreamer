@@ -41,6 +41,18 @@ function optionValue(options, name) {
 	return index === -1 ? undefined : options[index + 1];
 }
 
+test.each(encoders)('%s preserves fractional FPS and sub-second keyframe intervals', (_name, encoder) => {
+	const halfSecond = encoder.defaults({}, modernSkills, { fps: '29.97', gop: '0.5' });
+	expect(optionValue(halfSecond.mapping.local, '-g')).toBe('15');
+	const quarterSecond = encoder.defaults({}, modernSkills, { fps: '15', gop: '0.25' });
+	expect(optionValue(quarterSecond.mapping.local, '-g')).toBe('4');
+	if (quarterSecond.mapping.local.includes('-keyint_min')) {
+		expect(optionValue(quarterSecond.mapping.local, '-keyint_min')).toBe('4');
+	}
+	const lowFps = encoder.defaults({}, modernSkills, { fps: '0.5', gop: '0.25' });
+	expect(optionValue(lowFps.mapping.local, '-g')).toBe('1');
+});
+
 test.each(encoders)(
 	'%s omits output -r in passthrough mode',
 	(_name, encoder) => {

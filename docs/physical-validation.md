@@ -69,3 +69,16 @@ Quick Sync. The free-kernel Intel driver only advertised H.264 encode on this
 host. Intel documents the [driver package feature differences](https://github.com/intel/media-driver).
 VP9 encoding remained unavailable on this UHD 630; it only advertised VP9 decode.
 These diagnostic package changes do not modify the running production container.
+
+## Shorter keyframe intervals
+
+A Windows-client RTSP check with the seven-frame GOP measured 1035 ms on the
+Logitech, exceeding the one-second acquisition target. With a four-frame GOP at
+15 FPS (a requested 0.25-second interval, rounded to whole frames), the same
+client measured 751 ms Logitech, 681 ms Sonix, 549 ms test bars and 748 ms Game of
+Life. All eight HLS/RTSP outputs also passed concurrent decode again. These
+single-run acquisition values are not a latency guarantee or optical latency.
+
+The UI now offers 0.25- and 0.5-second keyframe intervals and preserves fractional
+FPS/intervals when generating encoder options. Previously integer parsing turned
+sub-second intervals into a zero-frame GOP.
