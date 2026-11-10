@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-ceeef31`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-d57a8c6`.
 
 Published image digest:
-`sha256:e48bc10e7dd480d533bfc96ecd64592a466622b4b493084e10669bf4a2690327`.
+`sha256:b10908b08fa5f87e7c8664f3beaf13aa5e0dd7ce354ee1eaeb9aabf96116c209`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -181,3 +181,48 @@ published-image digest verification. The deployed digest matched GHCR. After
 verification, all four existing user processes remained, with no diagnostic
 processes left. Test browser tabs, local test containers/cache images, and remote
 diagnostic scripts were removed.
+
+## Camera controls, translations and rotation
+
+The `sha-d57a8c6` candidate includes refreshed catalogs for all 15 languages,
+restoring 28 previously unextracted messages. Builds now extract/compile catalogs
+automatically and verify compiled message coverage, with English fallback where
+translations are unavailable. A deliberately removed compiled label was rejected
+by this guard. Existing translated text was preserved.
+
+The native V4L2 API reported 12 controls on the Logitech and 14 on the Sonix.
+On each camera, a one-step brightness change was read back and the original
+value restored. This passed both through the native backend and through the
+authenticated API on the final deployed image. Unauthenticated reads returned
+401; non-camera device paths returned 400. Driver menus with missing indices,
+ranges/steps, inactive controls and path restrictions have regression coverage.
+Neither tested camera advertises zoom. Hardware control persistence across
+reconnection/restart is not implemented; see the [control guide](usb-hotplug.md).
+
+Browser checks verified actual controls in the USB wizard and advanced editor,
+including readable automatic-mode labels and disabled manual controls while
+automatic modes are active. The Quick Sync low-power field now displays
+**Enabled**, and the advanced filter editor exposes **Rotate** with None, 90,
+180 and 270 degrees while Quick Sync is selected. A 90-degree selection was
+verified in an unsaved draft; existing camera configurations were not modified.
+
+Bounded 20-frame Intel H.264 VA-API and Quick Sync tests rotated a 640x480 source
+90 degrees and successfully decoded the resulting 480x640 video. This verifies
+encoding and dimensions, not a new optical-latency measurement. NVIDIA/AMD
+rotation and hardware encoding remain physically untested.
+
+The browser check also caught FFmpeg's changed filter-capability output: current
+rows use two flag columns instead of three. Core now accepts both layouts.
+The deployed API advertises 518 filters, including transpose, hflip, vflip,
+scale and drawtext. Container smoke tests now require these API capabilities,
+so successful FFmpeg encoding alone cannot hide a broken UI filter list.
+
+All 301 UI tests, production build/catalog checks, full Core tests and vet,
+configuration checks, expanded container smoke tests and published digest
+verification passed. The deployed digest matched GHCR. All eight existing
+user processes remained; no temporary streams or test viewers remained.
+Local test containers and remote diagnostic files were removed.
+
+This candidate did **not** update `latest`. Maintainer physical acceptance,
+RC-1 promotion, final branding/documentation and the development-branch cutover
+remain pending under the [release plan](rc-1-release-plan.md).
