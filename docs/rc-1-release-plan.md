@@ -25,3 +25,9 @@ After acceptance:
 
 Maintainer acceptance is pending. This file records release intent, not a
 completed release or a claim that all core features have passed physical tests.
+
+Candidate builds no longer update `latest` automatically. The unified workflow
+requires the explicit manual `publish_latest` input, which defaults to false and
+is disabled on `development`. Scheduled builds still build updated upstream
+sources into candidate tags without silently promoting them to the accepted
+public image. RC-1 tagging and release-branch promotion remain pending acceptance.
