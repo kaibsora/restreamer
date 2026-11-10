@@ -7,10 +7,12 @@ package skills
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 )
 
 // Codec represents a codec with its availabe encoders and decoders
@@ -88,10 +90,11 @@ type Library struct {
 }
 
 type ffmpeg struct {
-	Version       string
-	Compiler      string
-	Configuration string
-	Libraries     []Library
+	Version                     string
+	Compiler                    string
+	Configuration               string
+	Libraries                   []Library
+	InputThreadQueueUnsupported bool
 }
 
 // Skills are the detected capabilities of a ffmpeg binary
@@ -121,6 +124,7 @@ func New(binary string) (Skills, error) {
 	}
 
 	c.FFmpeg = ffmpeg
+	c.FFmpeg.InputThreadQueueUnsupported = inputThreadQueueUnsupported(binary)
 
 	c.Filters = filters(binary)
 	c.HWAccels = hwaccels(binary)
@@ -131,6 +135,33 @@ func New(binary string) (Skills, error) {
 	c.Protocols = protocols(binary)
 
 	return c, nil
+}
+
+func inputThreadQueueUnsupported(binary string) bool {
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, binary, "-hide_banner", "-h", "full")
+	cmd.Env = []string{}
+	data, err := cmd.Output()
+	if err != nil {
+		return false
+	}
+	return parseInputThreadQueueUnsupported(string(data))
+}
+
+func parseInputThreadQueueUnsupported(help string) bool {
+	section := ""
+	for _, line := range strings.Split(help, "\n") {
+		line = strings.TrimSpace(line)
+		if strings.HasSuffix(line, ":") && strings.Contains(strings.ToLower(line), "options") {
+			section = strings.ToLower(line)
+		}
+		fields := strings.Fields(line)
+		if len(fields) != 0 && fields[0] == "-thread_queue_size" {
+			return strings.Contains(section, "output-only")
+		}
+	}
+	return false // Preserve compatibility when an older/custom binary cannot report scope.
 }
 
 func version(binary string) (ffmpeg, error) {

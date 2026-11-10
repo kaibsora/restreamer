@@ -348,7 +348,7 @@ func (r *restream) load() error {
 			continue
 		}
 
-		t.command = t.config.CreateCommand()
+		t.command = t.config.CreateCommandWithInputOptions(r.inputOptions)
 		t.parser = r.ffmpeg.NewProcessParser(t.logger, t.id, t.reference)
 
 		ffmpeg, err := r.ffmpeg.New(ffmpeg.ProcessConfig{
@@ -490,7 +490,7 @@ func (r *restream) createTask(config *app.Config) (*task, error) {
 		return nil, err
 	}
 
-	t.command = t.config.CreateCommand()
+	t.command = t.config.CreateCommandWithInputOptions(r.inputOptions)
 	t.parser = r.ffmpeg.NewProcessParser(t.logger, t.id, t.reference)
 
 	ffmpeg, err := r.ffmpeg.New(ffmpeg.ProcessConfig{
@@ -1175,7 +1175,7 @@ func (r *restream) reloadProcess(id string) error {
 		return err
 	}
 
-	t.command = t.config.CreateCommand()
+	t.command = t.config.CreateCommandWithInputOptions(r.inputOptions)
 
 	order := "stop"
 	if t.process.Order == "start" {
@@ -1351,7 +1351,7 @@ func (r *restream) ProbeWithTimeout(id string, timeout time.Duration) app.Probe 
 
 	for _, input := range task.config.Input {
 		// Add the resolved input to the process command
-		command = append(command, input.Options...)
+		command = append(command, r.inputOptions(input.Options)...)
 		command = append(command, "-i", input.Address)
 	}
 

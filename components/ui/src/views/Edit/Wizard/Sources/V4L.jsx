@@ -13,14 +13,12 @@ import Typography from '@mui/material/Typography';
 
 import * as S from '../../Sources/V4L';
 import Select from '../../../../misc/Select';
+import Video from '../../../../misc/coders/settings/Video';
 import { withDefaults } from '../../../../utils/props';
 
 function initSettings(initialSettings, knownDevices) {
 	const settings = {
 		...S.func.initSettings(initialSettings),
-		format: 'nv12',
-		framerate: '25',
-		size: '1280x720',
 	};
 
 	const devices = initDevices(knownDevices);
@@ -51,7 +49,7 @@ function initSettings(initialSettings, knownDevices) {
 }
 
 function initDevices(initialDevices) {
-	const devices = initialDevices.filter((device) => device.media === 'video' && device.extra.match(/bcm2835[-_]v4l2/) === null);
+	const devices = initialDevices.filter((device) => device.media === 'video' && !/bcm2835[-_]v4l2/.test(device.extra || ''));
 
 	return devices;
 }
@@ -74,7 +72,7 @@ function Source(inputProps) {
 
 	const update = (what) => (event) => {
 		const value = event.target.value;
-		const newSettings = settings;
+		const newSettings = { ...settings };
 
 		if (what in newSettings) {
 			newSettings[what] = value;
@@ -123,6 +121,15 @@ function Source(inputProps) {
 					<Trans>Refresh</Trans>
 				</Button>
 			</Grid>
+			<Grid item xs={12}>
+				<Video.Format value={settings.format} onChange={update('format')} allowAuto allowCustom />
+			</Grid>
+			<Grid item xs={12}>
+				<Video.Size value={settings.size} onChange={update('size')} allowAuto allowCustom />
+			</Grid>
+			<Grid item xs={12}>
+				<Video.Framerate value={settings.framerate} onChange={update('framerate')} allowAuto allowCustom />
+			</Grid>
 		</React.Fragment>
 	);
 }
@@ -143,4 +150,4 @@ const type = 'video4linux2';
 const name = <Trans>Hardware device</Trans>;
 const capabilities = ['video'];
 
-export { id, type, name, capabilities, SourceIcon as icon, Source as component };
+export { id, type, name, capabilities, SourceIcon as icon, Source as component, initSettings };

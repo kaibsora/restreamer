@@ -42,6 +42,20 @@ channel recovers when its camera returns. Recovery also depends on the channel's
 reconnect interval. New cameras still need channels configured in the UI.
 Cameras without unique serial numbers can have ambiguous aliases.
 
+## Adding a camera in the UI
+
+The USB wizard starts with automatic format, size, and frame rate. Verification
+prefers MJPEG when the camera supports it and saves the verified capture format;
+otherwise it falls back to the camera's automatic mode. Format, resolution, and
+frame rate can also be selected explicitly. For the tested Logitech C270 and
+Sonix USB cameras, MJPEG at 640x480 and 15 FPS works on both devices. Raw capture
+can use considerably more USB bandwidth and may negotiate a lower frame rate.
+
+New USB sources omit input throttling and the obsolete input queue option.
+For existing sources, Core checks the running FFmpeg binary's option scope and
+omits input `-thread_queue_size` only when FFmpeg advertises it as output-only.
+Stored source settings and output queue options are preserved.
+
 Inspect synchronization through the ordinary container logs:
 
 ```sh

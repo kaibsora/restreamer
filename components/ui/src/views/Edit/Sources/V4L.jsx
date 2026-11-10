@@ -29,9 +29,9 @@ const initSettings = (initialSettings) => {
 
 	const settings = {
 		device: 'none',
-		format: 'nv12',
-		framerate: '25',
-		size: '1280x720',
+		format: 'auto',
+		framerate: 'auto',
+		size: 'auto',
 		...initialSettings,
 	};
 
@@ -45,13 +45,10 @@ const createInputs = (settings) => {
 		options: [],
 	};
 
-	input.options.push('-thread_queue_size', '512');
-	input.options.push('-re');
-	input.options.push('-r', '' + settings.framerate);
 	input.options.push('-f', 'video4linux2');
-	input.options.push('-framerate', '' + settings.framerate);
-	input.options.push('-video_size', settings.size);
-	input.options.push('-input_format', settings.format);
+	if (settings.framerate !== 'auto') input.options.push('-framerate', '' + settings.framerate);
+	if (settings.size !== 'auto') input.options.push('-video_size', settings.size);
+	if (settings.format !== 'auto') input.options.push('-input_format', settings.format);
 
 	return [input];
 };
@@ -124,13 +121,13 @@ function Source(inputProps) {
 				</Button>
 			</Grid>
 			<Grid item xs={12}>
-				<Video.Format value={settings.format} onChange={handleChange('format')} allowCustom />
+				<Video.Format value={settings.format} onChange={handleChange('format')} allowAuto allowCustom />
 			</Grid>
 			<Grid item xs={12}>
-				<Video.Framerate value={settings.framerate} onChange={handleChange('framerate')} allowCustom />
+				<Video.Framerate value={settings.framerate} onChange={handleChange('framerate')} allowAuto allowCustom />
 			</Grid>
 			<Grid item xs={12}>
-				<Video.Size value={settings.size} onChange={handleChange('size')} allowCustom />
+				<Video.Size value={settings.size} onChange={handleChange('size')} allowAuto allowCustom />
 			</Grid>
 			<Grid item xs={12}>
 				<FormInlineButton onClick={handleProbe}>

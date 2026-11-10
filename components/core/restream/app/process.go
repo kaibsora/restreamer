@@ -81,6 +81,11 @@ func (config *Config) Clone() *Config {
 
 // CreateCommand created the FFmpeg command from this config.
 func (config *Config) CreateCommand() []string {
+	return config.CreateCommandWithInputOptions(nil)
+}
+
+// CreateCommandWithInputOptions applies runtime compatibility only to inputs.
+func (config *Config) CreateCommandWithInputOptions(normalize func([]string) []string) []string {
 	var command []string
 
 	// Copy global options
@@ -88,7 +93,11 @@ func (config *Config) CreateCommand() []string {
 
 	for _, input := range config.Input {
 		// Add the resolved input to the process command
-		command = append(command, input.Options...)
+		options := input.Options
+		if normalize != nil {
+			options = normalize(options)
+		}
+		command = append(command, options...)
 		command = append(command, "-i", input.Address)
 	}
 

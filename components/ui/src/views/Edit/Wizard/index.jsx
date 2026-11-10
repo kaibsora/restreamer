@@ -26,6 +26,7 @@ import Abort from './Abort';
 import Error from './Error';
 import Saving from './Saving';
 import Probe from './Probe';
+import { probeSource } from './probeSource';
 import License from './License';
 import Metadata from './Metadata';
 import { withDefaults } from '../../../utils/props';
@@ -107,7 +108,8 @@ export default function Wizard(inputProps) {
 			status: 'none',
 		});
 
-		let [res, err] = await props.restreamer.Probe(_channelid, source.inputs);
+		let { source: resolvedSource, res, err } = await probeSource((inputs) => props.restreamer.Probe(_channelid, inputs), source);
+		source = resolvedSource;
 		if (err !== null) {
 			res = {
 				streams: [],

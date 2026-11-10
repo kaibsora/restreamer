@@ -180,6 +180,7 @@ function Size(inputProps) {
 		{ value: '1280x720', label: '1280x720 (HD)' },
 		{ value: '960x540', label: '960x540 (qHD)' },
 		{ value: '640x360', label: '640x360 (nHD)' },
+		{ value: '640x480', label: '640x480 (VGA)' },
 	];
 
 	if (props.allowAuto === true) {
@@ -303,6 +304,7 @@ function Format(inputProps) {
 	const props = withDefaults(inputProps, FormatDefaultProps);
 	const { i18n } = useLingui();
 	const sizes = [
+		{ value: 'yuyv422', label: 'YUYV (raw)' },
 		{ value: 'yuv420p', label: 'yuv420p' },
 		{ value: 'nv12', label: 'nv12' },
 		{ value: 'h264', label: 'H.264' },
