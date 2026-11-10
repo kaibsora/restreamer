@@ -198,6 +198,7 @@ curl --fail --silent --show-error \
 {
   "id": "restreamer-smoke:api-control",
   "type": "ffmpeg",
+  "options": ["-loglevel", "level+info"],
   "input": [{
     "id": "video",
     "address": "testsrc2=size=160x90:rate=5",
@@ -246,6 +247,20 @@ wait_for_process_state() {
 
 process_command start
 wait_for_process_state start running
+telemetry_ready=false
+for _ in $(seq 1 20); do
+    process_state=$(curl --fail --silent --show-error \
+        "http://127.0.0.1:8080/api/v3/process/${api_process_id}/state")
+    if grep -E '"frame":[[:space:]]*[1-9][0-9]*' <<<"${process_state}" >/dev/null; then
+        telemetry_ready=true
+        break
+    fi
+    sleep 0.25
+done
+if [[ "${telemetry_ready}" != true ]]; then
+    printf '%s\n' 'Core did not parse level-prefixed FFmpeg frame telemetry.' >&2
+    exit 1
+fi
 process_command stop
 wait_for_process_state stop finished
 curl --fail --silent --show-error \

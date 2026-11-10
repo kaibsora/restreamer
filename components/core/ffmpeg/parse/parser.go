@@ -169,6 +169,9 @@ func New(config Config) Parser {
 }
 
 func (p *parser) Parse(line string) uint64 {
+	// FFmpeg's level+info logging also prefixes our JSON telemetry records.
+	// Normalize that prefix before classifying them as progress or log output.
+	line = strings.TrimPrefix(line, "[info] ")
 	isDefaultProgress := strings.HasPrefix(line, "frame=")
 	isFFmpegInputs := strings.HasPrefix(line, "ffmpeg.inputs:")
 	isFFmpegOutputs := strings.HasPrefix(line, "ffmpeg.outputs:")

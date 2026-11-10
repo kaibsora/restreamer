@@ -56,6 +56,7 @@ func (p *prober) Probe() app.Probe {
 }
 
 func (p *prober) Parse(line string) uint64 {
+	line = strings.TrimPrefix(line, "[info] ")
 	if strings.HasPrefix(line, "avstream.progress:") {
 		return 0
 	}
