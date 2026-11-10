@@ -1,6 +1,12 @@
 # Physical video validation
 
-Verified image: `ghcr.io/kaibsora/restreamer:sha-c545e64`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-027760a`.
+
+Published image digest:
+`sha256:3ac0a5007ccbab959d8cc018bc399f643f031762257ff7c5cbab2a2d368bea4b`.
+
+The initial four-stream baseline below used `sha-c545e64`. Updated-image results
+are recorded at the end of this document.
 
 The validation host used an Intel UHD Graphics 630, a Logitech USB camera at
 640x480, and a Sonix USB camera at 1280x720. Both cameras used MJPEG capture
@@ -33,14 +39,14 @@ the publication menu enabled RTSP, RTMP, HLS, MPEG-TS, and MediaMTX services.
 These results validate this host and camera combination; other GPUs, camera modes,
 and network conditions still require acceptance testing.
 
-## Hardware findings still being addressed
+## Hardware findings
 
-- VA-API H.264 passed on the deployed image.
+- VA-API H.264 and HEVC passed on the updated deployed image.
 - The UHD 630 does not expose Vulkan Video encode-queue support in this runtime.
-- Quick Sync failed on the deployed image. A disposable diagnostic container
-  successfully encoded 30 frames after adding `libmfx1` and `libmfx-gen1.2`, using
-  system-memory NV12 input, `-low_power 1`, an explicit bitrate, and async depth 1.
-  The runtime packages and compatible encoder mapping still need integration.
+- Quick Sync H.264 and HEVC passed on the updated deployed image. The runtime
+  includes `libmfx1`, `libmfx-gen1.2`, and the full-feature Intel media driver.
+  Encoder mappings use system-memory NV12 and a derived VA-API/QSV device.
+  H.264 defaults to low-power encoding, with a UI override available.
 - The optional [USB hot-plug helper](usb-hotplug.md) was tested with both cameras
   using stable `/dev/v4l/by-id` sources. A targeted `uvcvideo` driver detach removed
   the Logitech capture node and alias from the running container. The Sonix and
@@ -82,3 +88,35 @@ single-run acquisition values are not a latency guarantee or optical latency.
 The UI now offers 0.25- and 0.5-second keyframe intervals and preserves fractional
 FPS/intervals when generating encoder options. Previously integer parsing turned
 sub-second intervals into a zero-frame GOP.
+
+## Updated image verification
+
+The published `sha-027760a` runtime and the deployed unified image both passed
+active VA-API and Quick Sync verification. H.264 QSV, HEVC QSV and HEVC VA-API each
+encoded a 50-frame file, and all 50 frames decoded successfully afterward.
+A fifth, temporary Core-managed Game of Life source used H.264 QSV while the
+four baseline streams ran; its HLS and RTSP outputs each decoded 75 frames over
+five seconds. That temporary QSV process was removed after testing.
+
+After restarting the updated container, all four baseline sources resumed and
+all eight HLS/RTSP outputs decoded concurrently with a four-frame GOP at 15 FPS.
+
+| Source | RTSP first decoded frame after updated-image restart |
+| --- | ---: |
+| Logitech USB | 543 ms |
+| Sonix USB | 546 ms |
+| Virtual test bars | 621 ms |
+| Virtual Game of Life | 639 ms |
+
+These remain acquisition measurements, not optical camera-to-display latency.
+NVIDIA and AMD hardware have not been physically validated on this Intel host.
+
+The updated image also passed both driver detach/reattach checks again (Logitech
+6.1 seconds, Sonix 4.1 seconds), preserving the container ID and keeping the other
+three sources advancing. The final Windows-client RTSP acquisition check measured
+706 ms Logitech, 690 ms Sonix, 742 ms test bars and 818 ms Game of Life.
+
+FFmpeg was compiled from resolved upstream master commit
+`49a3b1f259e1c34033bf6cca4091a4cb07ebf90d`; its banner reports `8.0.git`.
+The source is pinned when the workflow starts; upstream can advance while a build
+and its physical checks run. The scheduled workflow resolves upstream again.

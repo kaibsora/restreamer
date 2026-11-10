@@ -25,7 +25,8 @@ permission. Subsequent camera changes do not require recreation. Do not combine
 this override with explicit USB camera `devices` bind mounts: those retain the
 old node after a disconnect. Keep the default GPU device mapping as usual.
 
-Select a source under `/dev/v4l/by-id/` where possible, since numbered
+Use **Custom ...** in the UI's video-device selector to enter a source under
+`/dev/v4l/by-id/` where possible, since numbered
 `/dev/videoN` nodes can change after reconnection. Opening the source editor
 refreshes the camera list. Enable source reconnection so an existing channel
 recovers after its camera returns; recovery also depends on the configured

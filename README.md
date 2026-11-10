@@ -10,6 +10,9 @@
 
 ## About this fork
 
+Limited physical results are available in the [video validation report](docs/physical-validation.md),
+including Intel encoding, two concurrent USB cameras, and two virtual sources.
+
 This is a personal continuation of Restreamer driven by a practical need to monitor
 multiple 3D printers with low-latency local streams and a separately buffered public
 view. The maintainer is a systems engineer with this use case, not a professional
