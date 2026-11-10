@@ -12,7 +12,6 @@ type fakeBackend struct {
 	desired                snapshot
 	actual                 snapshot
 	scanError, createError error
-	replacements           int
 }
 
 func TestDisabledWatcherNeedsNoHostMount(t *testing.T) {
@@ -25,19 +24,15 @@ func TestDisabledWatcherNeedsNoHostMount(t *testing.T) {
 
 func fake() *fakeBackend                               { return &fakeBackend{desired: empty(), actual: empty()} }
 func (b *fakeBackend) scan(snapshot) (snapshot, error) { return b.desired, b.scanError }
-func (b *fakeBackend) ensureNode(name string, n node, replace bool) (bool, error) {
+func (b *fakeBackend) ensureNode(name string) (bool, error) {
 	if b.createError != nil {
 		return false, b.createError
 	}
 	_, found := b.actual.Nodes[name]
-	if !found || replace {
-		b.actual.Nodes[name] = n
-		b.replacements++
-		return true, nil
-	}
-	return false, nil
+	b.actual.Nodes[name] = b.desired.Nodes[name]
+	return !found, nil
 }
-func (b *fakeBackend) removeNode(name string, _ node) error { delete(b.actual.Nodes, name); return nil }
+func (b *fakeBackend) removeNode(name string) error { delete(b.actual.Nodes, name); return nil }
 func (b *fakeBackend) ensureAlias(name, target string) (bool, error) {
 	changed := b.actual.Aliases[name] != target
 	b.actual.Aliases[name] = target
@@ -71,15 +66,15 @@ func TestReconnectMovesStableAliasAndOnlyRemovesManagedNodes(t *testing.T) {
 	}
 }
 
-func TestFastReplugReusingMinorReplacesContainerInode(t *testing.T) {
+func TestFastReplugReusingMinorTracksNewHostGeneration(t *testing.T) {
 	b := fake()
 	w := &watcher{backend: b, owned: empty()}
 	b.desired.Nodes["video0"] = node{Generation: "old"}
 	mustSync(t, w)
 	b.desired.Nodes["video0"] = node{Generation: "new"}
 	mustSync(t, w)
-	if b.replacements != 2 {
-		t.Fatal("host inode change did not refresh device")
+	if w.owned.Nodes["video0"].Generation != "new" {
+		t.Fatal("host inode change was not recorded")
 	}
 	if changed, err := w.sync(); changed || err != nil {
 		t.Fatal("unchanged snapshot should be idle", changed, err)

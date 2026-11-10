@@ -130,49 +130,38 @@ func (b *linuxBackend) devicePath(name string) (string, error) {
 	return filepath.Join(b.target, name), nil
 }
 
-func (b *linuxBackend) ensureNode(name string, wanted node, replace bool) (bool, error) {
+func (b *linuxBackend) ensureNode(name string) (bool, error) {
 	path, err := b.devicePath(name)
 	if err != nil {
 		return false, err
 	}
-	current, err := statNode(path)
-	if err == nil {
-		if current.Minor != wanted.Minor {
-			return false, fmt.Errorf("refusing to replace unexpected device: %s", path)
-		}
-		if !replace {
-			return false, nil
-		}
-		if err := os.Remove(path); err != nil {
-			return false, err
-		}
-	} else if !os.IsNotExist(err) {
-		return false, err
+	wanted := filepath.Join(b.source, name)
+	current, err := os.Readlink(path)
+	if err == nil && current == wanted {
+		return false, nil
 	}
-	if err := unix.Mknod(path, unix.S_IFCHR|0660, int(unix.Mkdev(81, wanted.Minor))); err != nil {
-		return false, err
+	if !os.IsNotExist(err) {
+		return false, fmt.Errorf("refusing to overwrite camera path: %s", path)
 	}
-	if err := os.Chown(path, 0, int(wanted.GID)); err != nil {
-		os.Remove(path)
-		return false, err
-	}
-	return true, nil
+	// Opening the link always resolves the current host inode, even when a
+	// fast replug reuses the same minor before the watcher sees the removal.
+	return true, os.Symlink(wanted, path)
 }
 
-func (b *linuxBackend) removeNode(name string, expected node) error {
+func (b *linuxBackend) removeNode(name string) error {
 	path, err := b.devicePath(name)
 	if err != nil {
 		return err
 	}
-	n, err := statNode(path)
+	current, err := os.Readlink(path)
 	if os.IsNotExist(err) {
 		return nil
 	}
 	if err != nil {
 		return err
 	}
-	if n.Minor != expected.Minor {
-		return fmt.Errorf("device changed ownership: %s", path)
+	if current != filepath.Join(b.source, name) {
+		return fmt.Errorf("camera path changed ownership: %s", path)
 	}
 	return os.Remove(path)
 }

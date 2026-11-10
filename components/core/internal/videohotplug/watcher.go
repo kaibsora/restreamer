@@ -27,8 +27,8 @@ func empty() snapshot { return snapshot{Nodes: map[string]node{}, Aliases: map[s
 
 type backend interface {
 	scan(snapshot) (snapshot, error)
-	ensureNode(string, node, bool) (bool, error)
-	removeNode(string, node) error
+	ensureNode(string) (bool, error)
+	removeNode(string) error
 	ensureAlias(string, string) (bool, error)
 	removeAlias(string, string) error
 }
@@ -73,6 +73,7 @@ func Start(source string, report func(string, error)) (func(), error) {
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
+	report(fmt.Sprintf("USB camera hot-plug enabled: %d capture devices", len(w.owned.Nodes)), nil)
 	go func() {
 		defer close(done)
 		ticker := time.NewTicker(time.Second)
@@ -98,7 +99,6 @@ func Start(source string, report func(string, error)) (func(), error) {
 			}
 		}
 	}()
-	report(fmt.Sprintf("USB camera hot-plug enabled: %d capture devices", len(w.owned.Nodes)), nil)
 	return func() { cancel(); <-done }, nil
 }
 
@@ -120,11 +120,11 @@ func (w *watcher) sync() (bool, error) {
 		delete(w.owned.Aliases, name)
 		changed = true
 	}
-	for name, previous := range w.owned.Nodes {
+	for name := range w.owned.Nodes {
 		if _, found := desired.Nodes[name]; found {
 			continue
 		}
-		if err := w.backend.removeNode(name, previous); err != nil {
+		if err := w.backend.removeNode(name); err != nil {
 			failures = append(failures, err)
 			continue
 		}
@@ -133,7 +133,7 @@ func (w *watcher) sync() (bool, error) {
 	}
 	for name, current := range desired.Nodes {
 		previous, found := w.owned.Nodes[name]
-		updated, err := w.backend.ensureNode(name, current, !found || previous != current)
+		updated, err := w.backend.ensureNode(name)
 		if err != nil {
 			failures = append(failures, err)
 			continue

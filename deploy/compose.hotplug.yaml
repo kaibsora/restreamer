@@ -1,10 +1,10 @@
 services:
   restreamer:
-    # Core mirrors capture nodes from this read-only host device directory.
+    # Core links capture devices from this read-only host device directory.
     # Do not combine this with explicit USB camera device bind mounts.
     device_cgroup_rules:
-      - 'c 81:* rwm'
-    cap_add:
+      - 'c 81:* rw'
+    cap_drop:
       - MKNOD
     volumes:
       - type: bind

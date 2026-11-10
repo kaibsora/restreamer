@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
 func TestCaptureCapabilityFiltersMetadataAndHonorsDeviceCaps(t *testing.T) {
@@ -34,14 +36,14 @@ func TestRefusesUnrelatedFilesAndEscapingPaths(t *testing.T) {
 	if err := os.WriteFile(path, []byte("preserve me"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := b.ensureNode("video0", node{}, true); err == nil {
+	if _, err := b.ensureNode("video0"); err == nil {
 		t.Fatal("regular file was replaced")
 	}
-	if err := b.removeNode("video0", node{}); err == nil {
+	if err := b.removeNode("video0"); err == nil {
 		t.Fatal("regular file was removed")
 	}
 	for _, name := range []string{"../sda", "video0/../../etc/passwd", "/dev/video0"} {
-		if _, err := b.ensureNode(name, node{}, true); err == nil {
+		if _, err := b.ensureNode(name); err == nil {
 			t.Fatal("unsafe device path accepted", name)
 		}
 	}
@@ -53,6 +55,42 @@ func TestRefusesUnrelatedFilesAndEscapingPaths(t *testing.T) {
 	data, err := os.ReadFile(path)
 	if err != nil || string(data) != "preserve me" {
 		t.Fatal("unrelated file modified")
+	}
+}
+
+func TestDeviceLinkFollowsFastReplugWithoutRecreatingPrivateInode(t *testing.T) {
+	b := &linuxBackend{source: t.TempDir(), target: t.TempDir()}
+	host := filepath.Join(b.source, "video0")
+	if err := os.WriteFile(host, []byte("first"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := b.ensureNode("video0"); err != nil {
+		t.Fatal(err)
+	}
+	private := filepath.Join(b.target, "video0")
+	before, err := os.Lstat(private)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Remove(host); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(host, []byte("second"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(private)
+	if err != nil || string(data) != "second" {
+		t.Fatal("link retained the old host inode", err)
+	}
+	after, err := os.Lstat(private)
+	if err != nil || !os.SameFile(before, after) {
+		t.Fatal("private link was unexpectedly recreated")
+	}
+	if err := b.removeNode("video0"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(host); err != nil {
+		t.Fatal("removing private link modified host file", err)
 	}
 }
 
@@ -104,9 +142,15 @@ func TestHardwareInitialSync(t *testing.T) {
 	}
 	defer stop()
 	for name, n := range wanted.Nodes {
-		actual, err := statNode(filepath.Join("/dev", name))
-		if err != nil || actual.Minor != n.Minor || actual.GID != n.GID {
-			t.Fatal("capture node not mirrored", name, actual, err)
+		fd, err := unix.Open(filepath.Join("/dev", name), unix.O_RDWR|unix.O_NONBLOCK|unix.O_CLOEXEC, 0)
+		if err != nil {
+			t.Fatal("capture link cannot be opened read/write", name, err)
+		}
+		var actual unix.Stat_t
+		err = unix.Fstat(fd, &actual)
+		unix.Close(fd)
+		if err != nil || unix.Major(actual.Rdev) != 81 || unix.Minor(actual.Rdev) != n.Minor || actual.Gid != n.GID {
+			t.Fatal("capture link points to incorrect device", name, err)
 		}
 	}
 	for name, target := range wanted.Aliases {

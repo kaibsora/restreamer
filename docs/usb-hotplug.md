@@ -11,10 +11,11 @@ docker compose -p deploy -f deploy/compose.yaml -f deploy/compose.hotplug.yaml u
 ```
 
 The override mounts the host's `/dev` read-only at `/host/dev`, enables the
-built-in watcher, grants V4L2 character-device access (major 81), and retains
-`MKNOD` capability. The watcher mirrors capture devices and their stable
+built-in watcher, grants V4L2 read/write device access (major 81), and drops the
+`MKNOD` capability. The watcher maintains links to capture devices and their stable
 `/dev/v4l/by-id/` aliases into the container's own `/dev`. Metadata-only nodes
-are excluded using the kernel's V4L2 capture-capability query.
+are excluded from these managed links using the V4L2 capture-capability query. No character-device
+creation is needed: opening a managed link resolves the current host device.
 
 The host device directory is visible inside the container. The read-only mount
 protects its filesystem entries; device I/O remains governed by device-cgroup
@@ -29,9 +30,9 @@ those retain old nodes after a disconnect. Keep the GPU mapping as usual.
 Initial camera synchronization completes before Core probes devices or starts
 channels. Core then checks for changes every second. Fast reconnects that reuse
 a device number are detected by host inode identity. Managed state is saved
-inside the container at `/run/restreamer-video-hotplug.json`, allowing stale nodes
-to be removed and missing nodes to be restored after restart. Only managed V4L2
-nodes and matching managed aliases are removed; unrelated files are preserved.
+inside the container at `/run/restreamer-video-hotplug.json`, allowing stale links
+to be removed and missing links to be restored after restart. Only managed camera
+links and matching managed aliases are removed; unrelated files are preserved.
 
 Use **Custom ...** in the UI's video-device selector to enter a path under
 `/dev/v4l/by-id/`, since numbered `/dev/videoN` nodes can change after reconnection.
