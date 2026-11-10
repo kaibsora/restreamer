@@ -13,7 +13,7 @@ testing so they do not become permanent CPU consumers.
   mode, resolution and frame rate; verify visible motion rather than a still image.
 - [ ] Try at least two driver-reported sizes and verify that frame-rate choices
   follow the selected format/size. On the attached C920, test native H.264 and
-  **stream copy** at 720p or 1080p. The post-probe Profile list is the verified
+  **stream copy** at 720p or 1080p. The post-probe Detected video track list is the verified
   input track, not the list of every capture resolution; change capture modes
   using the preceding device-settings page.
 - [ ] Open **Camera controls** in the wizard and advanced editor. Change brightness,

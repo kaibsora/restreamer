@@ -46,7 +46,9 @@ Cameras without unique serial numbers can have ambiguous aliases.
 
 The USB wizard starts with automatic format, size, and frame rate. Core queries
 the selected camera's advertised V4L2 formats, resolutions and frame intervals.
-Choose **Format**, then **Size**, then **Framerate** before verifying the source.
+Choose **Capture format**, then **Capture resolution**, then **Capture frame rate
+(FPS)** before verifying the source. This page configures the camera input;
+output encoder choices appear after verification.
 The lists are device-specific: changing format resets size and frame rate, and
 changing size resets frame rate. The API preserves rational rates such as
 `30000/1001` and `15/2`, rather than rounding them to integers.
@@ -58,9 +60,10 @@ camera's negotiated default, not its largest resolution. For the tested Logitech
 Sonix USB cameras, MJPEG at 640x480 and 15 FPS works on both devices. Raw capture
 can use considerably more USB bandwidth and may negotiate a lower frame rate.
 
-The **Profile** list after verification shows detected input tracks, not every
-camera capture mode. It normally has one entry for a USB camera. Go **Back** to
-change capture size or format. Camera H.264 can use **stream copy** to avoid
+The **Detected video track** list after verification shows detected input tracks,
+not every camera capture mode. It normally has one entry for a USB camera. Use
+**Change camera format, resolution or frame rate** to return to the capture
+choices without saving the draft. Camera H.264 can use **stream copy** to avoid
 re-encoding; the wizard exposes that choice explicitly. Disable stream copy and
 choose an encoder if rotation or other video filters are needed.
 
