@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 		'& .headerTitle': {
 			fontFamily: '"Dosis", "Roboto", "Helvetica", "Arial", sans-serif',
-			fontSize: '3rem',
+			fontSize: 'clamp(1.2rem, 3.6vw, 3rem)',
 			fontWeight: 300,
 			marginLeft: 10,
 			marginBottom: '0.2em',
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 				marginLeft: 20,
 			},
 			'& .headerTitle': {
-				fontSize: '2.4rem',
+				fontSize: 'clamp(1.2rem, 4vw, 2.4rem)',
 			},
 		},
 		'@media (max-width: 415px)': {
