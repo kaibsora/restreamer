@@ -37,6 +37,9 @@ Keep both Compose files and the same project name when updating.
   CPU can sustain, or copy a camera's native H.264 stream where available.
   Upstream FFmpeg does not provide the Pi's stateless V4L2 Request HEVC decoder
   in this build; DRM presence alone does not enable it.
+  `restreamer-hardware-report` lists compiled APIs/devices; its `--verify` mode
+  currently validates desktop GPU backends, not Pi V4L2 M2M. It is expected to
+  report no usable hardware encoder on a Pi 5 using this build.
 * USB/IP cameras are supported through the existing source setup. CSI cameras
   requiring libcamera/rpicam are not integrated into this container. Publish a
   compatible network stream from the host and add it as a network source.
