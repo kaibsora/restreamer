@@ -38,6 +38,8 @@ without rebuilding. The workflow refuses development images and conflicting RC
 tags. Preserve the source-image digest and verification evidence with each release.
 For hardware acceptance, explicitly pass the candidate build tag/digest; the
 hardware workflow's `latest` default only checks the already accepted release.
+Keep the About release label as `Development` on this branch. Set it to the
+upcoming `RC-N` on `2.x` before building the next release candidate.
 
 The maintained source lives in one repository:
 
