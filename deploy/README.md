@@ -25,7 +25,8 @@ VIDEO_GID="$(getent group video | cut -d: -f3)" \
 docker compose -f deploy/compose.yaml up -d
 ```
 
-For NVIDIA acceleration, install NVIDIA Container Toolkit on the host and use:
+For NVIDIA acceleration, use Compose 2.30+ (required for `gpus: all`),
+install NVIDIA Container Toolkit on the host and use:
 
 ```sh
 docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d

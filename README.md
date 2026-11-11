@@ -21,7 +21,7 @@ while providing bug fixes and features on demand.
 
 ## Quick start
 
-Requirements: a **Linux x86-64** host, Docker Engine and **Docker Compose 2.24.4+**.
+Requirements: a **Linux x86-64** host, Docker Engine and **Docker Compose 2.30+**.
 Hardware encoding requires a compatible host GPU/driver. Docker Desktop USB/GPU
 passthrough and ARM images are outside the validated deployment target.
 
@@ -105,8 +105,9 @@ docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml -f deploy/compo
 ```
 
 For mixed NVIDIA + Intel/AMD hosts, omit `compose.cpu.yaml` to retain DRM devices.
-The NVIDIA override uses `gpus: all`; configure NVIDIA Container Toolkit on the
-host before starting. The image includes the codec support, not a host driver.
+The NVIDIA override uses `gpus: all`, which requires Compose 2.30+;
+configure [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+on the host before starting. The image includes the codec support, not a host driver.
 
 ## USB cameras, controls and hot-plug
 
