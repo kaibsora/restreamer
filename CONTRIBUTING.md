@@ -36,6 +36,8 @@ builds never update `latest`. Run `promote-release.yml` on `2.x` with the accept
 image digest, exact application commit and a new `rc-N` tag to publish a release
 without rebuilding. The workflow refuses development images and conflicting RC
 tags. Preserve the source-image digest and verification evidence with each release.
+For hardware acceptance, explicitly pass the candidate build tag/digest; the
+hardware workflow's `latest` default only checks the already accepted release.
 
 The maintained source lives in one repository:
 

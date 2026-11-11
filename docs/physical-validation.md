@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-e64d3be`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:rc-1` (also `latest`).
 
 Published image digest:
-`sha256:e21b3d4e5aa1954c819cada480c77cdae6cf686d0d0a4717a296f93c673acb78`.
+`sha256:798eee3f0bd960afb18fd73e9e64041a7dc1f06aeb1fad90d0c2f1f424649bc6`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -399,3 +399,31 @@ pre-deployment baseline afterward. The running image revision/digest matched
 GHCR. All 318 UI tests, 15 catalog coverage checks, production build, Core tests,
 configuration checks and image smoke/publication checks passed. `latest` was not
 promoted.
+
+## November 11 RC-1 packaging and deployment verification
+
+[RC-1](https://github.com/kaibsora/restreamer/releases/tag/rc-1) uses application
+revision `1055016ed537ebcc5a22deb68dbb2dacd20ae8e8` and the FFmpeg source revision
+`e79f6cd023e57847d898358f9e80a65200d94d44` used in the accepted functional candidate.
+The release adds CQComber branding, source/notices distribution and release guards.
+
+The final container passed active Intel VA-API and Quick Sync encode checks with
+the deployment's real DRM mapping. The C920's existing native H.264 1280x720 stream
+played in the browser after recreation, with the UI reporting 15 FPS. The
+MediaMTX publication remained enabled. All 10 saved process configurations and
+original start/stop orders matched the immediate pre-deployment snapshot, including
+the intentionally stopped second USB camera. A private configuration backup was
+retained on the test host. Browser playback and About attribution screenshots are
+retained in private verification artifacts.
+
+Full UI/Core/configuration checks, source-archive/notices validation and the
+integration smoke stack passed in the release build. The accepted digest was then
+promoted without rebuilding. Anonymous manifest access was checked for `rc-1`,
+`latest` and the exact corresponding-source image. The release asset
+`rc-1-image.json` records all immutable identities.
+
+This was an incremental packaging/release check after the maintainer's overnight
+functional acceptance. No new optical delay measurement, AMD/NVIDIA physical test
+or audio acceptance is claimed. Verification viewers, preview containers and
+hardware-test containers/scripts were stopped or removed; user channel orders were
+preserved.

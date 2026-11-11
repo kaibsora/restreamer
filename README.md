@@ -1,5 +1,8 @@
 # CQComber Restreamer
 
+[RC-1 release and exact image/source record](https://github.com/kaibsora/restreamer/releases/tag/rc-1)
+— published as `ghcr.io/kaibsora/restreamer:rc-1` and `:latest`.
+
 An independent adaptation of **[datarhei Restreamer](https://github.com/datarhei/restreamer)**,
 maintained by **CQComber** (GitHub: **kaibsora**). One source repository and one
 Linux AMD64 application image combine the web UI, Core backend and a hardware-enabled
@@ -10,7 +13,8 @@ overnight run, simultaneous cameras, hot-plug, camera controls, rotation and
 acceptable local delay. This is a release candidate, with the limitations below.
 Intel VA-API and Quick Sync have physical validation; **AMD and NVIDIA GPUs are
 untested as of publication**. See the [acceptance record](docs/rc-1-acceptance.md)
-and [validation report](docs/physical-validation.md).
+and [validation report](docs/physical-validation.md). Physical acceptance covered
+video; audio was outside that scope.
 
 This is a personal project by a systems engineer with a printer-monitoring use
 case, not a professional programmer. Refactoring, updates, features, documentation

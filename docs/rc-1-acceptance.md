@@ -1,6 +1,11 @@
 # RC-1 physical acceptance checklist
 
-Status: **maintainer physical acceptance complete; release preparation pending**.
+Status: **maintainer physical acceptance complete; RC-1 published November 11, 2026**.
+
+The [release](https://github.com/kaibsora/restreamer/releases/tag/rc-1) records the
+exact image/source digests. The maintainer's overnight functional acceptance
+preceded final branding/source packaging; the release container subsequently
+passed CI, Intel encode checks and live browser camera playback verification.
 
 On November 11, 2026, the maintainer reported that every checklist item passed,
 including an overnight run without issues, acceptable local delay, physical
@@ -8,7 +13,8 @@ hot-plug and rotation. The checked items below record that maintainer report;
 they are separate from the engineering measurements in the
 [validation report](physical-validation.md).
 
-Use the immutable image pinned in `deploy/compose.yaml`. Hard-refresh the UI
+Pin `ghcr.io/kaibsora/restreamer:rc-1` or its published digest for reproduction;
+`deploy/compose.yaml` follows the accepted `latest` tag. Hard-refresh the UI
 after an image update. Keep the existing configuration/data volumes and a backup
 before changing source settings. Stop test streams and close viewer tabs after
 testing so they do not become permanent CPU consumers.
@@ -56,6 +62,5 @@ AMD/NVIDIA support remains explicitly untested at publication unless new physica
 evidence is recorded. Report failures with the exact image tag, capture mode,
 encoder, device and relevant sanitized process report.
 
-With the tested core behavior accepted, follow
-[the RC-1 release plan](rc-1-release-plan.md) for branding, final documentation,
-release promotion and the `development` branch transition.
+See [the completed RC-1 release gate](rc-1-release-plan.md) for branding, source
+distribution, release promotion and the `development` branch transition.
