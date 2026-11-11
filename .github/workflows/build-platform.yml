@@ -35,7 +35,10 @@ jobs:
         id: resources
         run: |
           set -euo pipefail
-          parent="$(awk -F: '$1 == "0" { print $3 }' /proc/self/cgroup)"
+          # The runner's private cgroup namespace reports '/', so inspect a
+          # bounded, self-cleaning child using the daemon's configured parent.
+          parent="$(docker run --rm --cgroupns=host --memory=32m --memory-swap=32m \
+            --cpus=0.1 busybox:1.37 cat /proc/self/cgroup | awk -F: '$1 == "0" { print $3 }')"
           parent="${parent%/*}"
           case "${parent}" in
             /kubepods.slice/kubepods-*.slice/kubepods-*-pod*.slice) ;;
