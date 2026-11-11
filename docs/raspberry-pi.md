@@ -58,6 +58,8 @@ ARC selectors contain no `self-hosted` label. Optional repository
 variables `RESTREAMER_RUNNER_LABELS` and `RESTREAMER_ARM64_RUNNER_LABELS` override
 these selectors with JSON arrays. A preflight rejects runner/Docker architecture
 mismatches; QEMU is not used.
+Each ARC namespace must already have its configured GitHub authentication secret.
+The image workflows do not create or distribute runner credentials.
 
 Both builds use one resolved FFmpeg source revision. Architecture-specific
 runtime/source tags and caches prevent cross-platform collisions. The 4 GB Pi
