@@ -10,7 +10,7 @@ There is no implied endorsement by any upstream project.
 | Application integration | This repository's exact image revision | [datarhei/restreamer](https://github.com/datarhei/restreamer) | Apache-2.0 |
 | Administration UI | Fork of UI 1.14.0; dependencies locked in `components/ui/yarn.lock` | [datarhei/restreamer-ui](https://github.com/datarhei/restreamer-ui) | Apache-2.0 |
 | Core process manager / API / media server | Fork of Core 16.16.0; modules vendored in `components/core/vendor` | [datarhei/core](https://github.com/datarhei/core) | Apache-2.0 |
-| FFmpeg packaging and progress/HLS patches | Forked build integration, exact source selected by CI | [datarhei/ffmpeg](https://github.com/datarhei/ffmpeg) | See preserved component licenses |
+| FFmpeg packaging and progress/HLS patches | Forked build integration, exact source selected by CI | [datarhei/ffmpeg](https://github.com/datarhei/ffmpeg) | Upstream README declares LGPL with optional GPL components; patched FFmpeg uses GPL-3.0-or-later here |
 | FFmpeg / FFprobe | Current upstream Git revision resolved to an immutable SHA for every build | [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) | GPL-3.0-or-later for this configuration (`--enable-gpl --enable-version3`) |
 | NVIDIA codec headers | 12.2.72.0 | [FFmpeg/nv-codec-headers](https://github.com/FFmpeg/nv-codec-headers) | MIT |
 | Vulkan headers | 1.4.362 | [KhronosGroup/Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers) | Apache-2.0 / MIT as specified by each file |

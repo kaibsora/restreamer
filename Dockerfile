@@ -74,6 +74,7 @@ COPY --from=ui-builder /src/ui/build /core/ui
 COPY run.sh /core/bin/run.sh
 COPY ui-root /core/ui-root
 COPY LICENSE NOTICE THIRD_PARTY.md MODIFICATIONS.md /usr/share/doc/cqcomber-restreamer/
+COPY components/ffmpeg/README.md /usr/share/doc/cqcomber-restreamer/ffmpeg-build-README.md
 COPY --from=core-builder /licenses /usr/share/doc/cqcomber-restreamer/core-dependencies
 COPY --from=ui-builder /src/ui/licenses /usr/share/doc/cqcomber-restreamer/ui-dependencies
 COPY scripts/hardware-report.sh /usr/local/bin/restreamer-hardware-report
