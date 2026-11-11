@@ -1795,7 +1795,7 @@ class Restreamer {
 
 		// 3.1 Injects a metadata link as title
 		const metadata = `${this.GetPublicHTTPAddress()}/${channel.channelid}/oembed.json`;
-		const metadata_options = ['-metadata', `title=${metadata}`, '-metadata', 'service_provider=datarhei-Restreamer'];
+		const metadata_options = ['-metadata', `title=${metadata}`, '-metadata', 'service_provider=CQComber-Restreamer'];
 		output.options.push(...metadata_options);
 
 		// Manifest versions

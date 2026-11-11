@@ -1,0 +1,51 @@
+name: Promote accepted release
+
+on:
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: "Physically accepted unified image digest (sha256:...)"
+        required: true
+        type: string
+      expected_commit:
+        description: "Exact 40-character application commit in that image"
+        required: true
+        type: string
+      release_tag:
+        description: "New immutable release image tag, e.g. rc-1"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: accepted-release-promotion
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/2.x'
+    runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Validate runner
+        run: scripts/verify-self-hosted-runner.sh
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify accepted image and promote without rebuilding
+        env:
+          IMAGE_REPOSITORY: ghcr.io/${{ github.repository }}
+          ACCEPTED_DIGEST: ${{ inputs.digest }}
+          EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: scripts/promote-release.sh

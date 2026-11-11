@@ -1,4 +1,4 @@
-name: Build unified Restreamer
+name: Build unified CQComber Restreamer
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
         default: false
         type: boolean
       publish_latest:
-        description: "Promote to latest only after physical acceptance (never for development)"
+        description: "Deprecated: must be false; use Promote accepted release to update latest"
         required: false
         default: false
         type: boolean
@@ -27,11 +27,16 @@ on:
     branches:
       - 2.x
       - main
+      - development
     paths:
       - "components/**"
       - "scripts/**"
       - "ui-root/**"
       - "Dockerfile"
+      - "LICENSE"
+      - "NOTICE"
+      - "THIRD_PARTY.md"
+      - "MODIFICATIONS.md"
       - ".dockerignore"
       - "run.sh"
       - "deploy/**"
@@ -109,6 +114,7 @@ jobs:
           scripts/test-accept-relays.sh
           scripts/test-resolve-ffmpeg-version.sh
           bash scripts/test-ffmpeg-build-inputs.sh
+          bash scripts/test-promote-release.sh
 
       - name: Test and build UI
         if: matrix.suite == 'ui'
@@ -143,6 +149,8 @@ jobs:
             --file deploy/compose.smoke.yaml \
             config >/dev/null
           docker compose --file deploy/compose.yaml --file deploy/compose.hotplug.yaml config >/dev/null
+          docker compose --file deploy/compose.yaml --file deploy/compose.cpu.yaml config >/dev/null
+          docker compose --file deploy/compose.yaml --file deploy/compose.cpu.yaml --file deploy/compose.nvidia.yaml --file deploy/compose.hotplug.yaml config >/dev/null
 
       - name: Validate MediaMTX configuration
         if: matrix.suite == 'configuration'
@@ -175,6 +183,15 @@ jobs:
 
       - name: Validate self-hosted runner
         run: scripts/verify-self-hosted-runner.sh
+
+      - name: Require separate release promotion
+        env:
+          PUBLISH_LATEST: ${{ inputs.publish_latest }}
+        run: |
+          if [[ "${PUBLISH_LATEST}" == true ]]; then
+            echo 'Builds publish candidates only. Use promote-release.yml with an accepted image digest.' >&2
+            exit 1
+          fi
 
       - name: Resolve FFmpeg source
         id: resolve
@@ -298,18 +315,40 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Publish corresponding FFmpeg and runtime sources
+        id: sources
+        uses: docker/build-push-action@v7
+        with:
+          context: components/ffmpeg
+          file: components/ffmpeg/Dockerfile.ubuntu.hardware
+          target: source-export
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            BUILD_DATE=${{ github.run_id }}
+            BUILD_PACKAGE_EPOCH=${{ github.run_id }}
+            BUILD_COMMIT=${{ github.sha }}
+            FFMPEG_VERSION=${{ needs.version.outputs.ffmpeg }}
+          tags: ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:${{ env.FFMPEG_TAG_PREFIX }}-sources-${{ needs.version.outputs.ffmpeg }}-${{ needs.version.outputs.build_inputs }}
+          cache-from: type=gha,scope=ffmpeg-hardware
+          cache-to: type=gha,mode=max,scope=ffmpeg-hardware
+          provenance: mode=max
+
       - name: Build hardware FFmpeg
         id: build
         uses: docker/build-push-action@v7
         with:
           context: components/ffmpeg
           file: components/ffmpeg/Dockerfile.ubuntu.hardware
+          target: runtime
           platforms: linux/amd64
           push: true
           build-args: |
             BUILD_DATE=${{ github.run_id }}
             BUILD_COMMIT=${{ github.sha }}
             FFMPEG_VERSION=${{ needs.version.outputs.ffmpeg }}
+            FFMPEG_SOURCE_IMAGE=${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}@${{ steps.sources.outputs.digest }}
+            BUILD_PACKAGE_EPOCH=${{ github.run_id }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:${{ env.FFMPEG_TAG_PREFIX }}-${{ needs.version.outputs.ffmpeg }}-${{ needs.version.outputs.build_inputs }}
             ${{ env.REGISTRY }}/${{ env.FFMPEG_IMAGE_NAME }}:${{ env.FFMPEG_TAG_PREFIX }}-${{ needs.version.outputs.ffmpeg }}
@@ -355,10 +394,12 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ github.event_name == 'workflow_dispatch' && inputs.publish_latest && github.ref_name != 'development' }}
             type=raw,value=ffmpeg-${{ needs.version.outputs.ffmpeg }}
             type=sha
           labels: |
+            org.opencontainers.image.title=CQComber Restreamer
+            org.opencontainers.image.description=Independent adaptation of datarhei Restreamer with unified hardware-accelerated FFmpeg
+            org.opencontainers.image.licenses=Apache-2.0 AND GPL-3.0-or-later
             org.opencontainers.image.version=${{ github.sha }}
             io.restreamer.repository.branch=${{ github.ref_name }}
 

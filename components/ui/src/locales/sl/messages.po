@@ -3636,9 +3636,14 @@ msgstr ""
 msgid "We recommend OpenMAX IL for Raspberry PI (3/4) with a 32-bit operating system."
 msgstr "Priporočamo OpenMAX IL za Raspberry PI (3/4) z 32-bitnim operacijskim sistemom."
 
+#. placeholder {0}: Project.Name
 #: src/views/Welcome.jsx
-msgid "Welcome to Restreamer v2, the solution for fast and easy video publishing. Free for private and commercial use. Further help in the <0>docs</0>."
-msgstr "Dobrodošli v Restreamerju v2, rešitvi za hitro in enostavno objavljanje videoposnetkov. Brezplačno za zasebno in komercialno uporabo. Dodatna pomoč v <0>dokumentih</0>."
+msgid "Welcome to {0}, an independent adaptation of datarhei Restreamer for multi-camera video streaming. Further help in the <0>docs</0>."
+msgstr ""
+
+#: src/views/Welcome.jsx
+#~ msgid "Welcome to Restreamer v2, the solution for fast and easy video publishing. Free for private and commercial use. Further help in the <0>docs</0>."
+#~ msgstr "Dobrodošli v Restreamerju v2, rešitvi za hitro in enostavno objavljanje videoposnetkov. Brezplačno za zasebno in komercialno uporabo. Dodatna pomoč v <0>dokumentih</0>."
 
 #: src/misc/coders/Encoders/video/av1_librav1e.jsx
 msgid "What speed preset to use."

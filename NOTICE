@@ -1,0 +1,15 @@
+CQComber Restreamer
+An independent adaptation maintained by CQComber (kaibsora on GitHub).
+Fork modifications and original CQComber artwork: Copyright 2026 CQComber contributors.
+
+Based on datarhei Restreamer, Restreamer UI, Core and FFmpeg build integration.
+Original Restreamer: Copyright 2022 FOSS GmbH and contributors.
+https://github.com/datarhei/restreamer
+https://github.com/datarhei/restreamer-ui
+https://github.com/datarhei/core
+https://github.com/datarhei/ffmpeg
+
+Original copyright, license and third-party notices remain applicable.
+The CQComber name identifies this independent adaptation, not the upstream authors.
+No endorsement by datarhei, FOSS GmbH or other upstream projects is implied.
+See LICENSE, MODIFICATIONS.md and THIRD_PARTY.md for terms, changes and components.

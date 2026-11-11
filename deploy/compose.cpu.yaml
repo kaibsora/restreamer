@@ -1,0 +1,6 @@
+# CQComber Restreamer: CPU-only or NVIDIA-only hosts without /dev/dri.
+# Requires Docker Compose 2.24.4+ for !reset.
+services:
+  restreamer:
+    devices: !reset []
+    group_add: !reset []

@@ -1,4 +1,4 @@
-# Restreamer modernization architecture
+# CQComber Restreamer architecture
 
 ## Repository layout
 
@@ -48,8 +48,8 @@ hardware encoding, LAN conditions, and browser rendering are outside the contain
 
 The existing Core accepts RTSP inputs and can publish *to* an RTSP server, but it is
 not itself a general RTSP origin. MediaMTX therefore provides the LAN RTSP/WebRTC
-origin as a separate process. Restreamer publishes named paths to it; Crowsnest,
-Moonraker/Mainsail, VLC, and other clients can consume those paths without involving
+origin as a separate process. Restreamer publishes named paths to it; Mainsail,
+Fluidd, VLC, and other compatible clients can consume those paths without involving
 the buffered public HLS delivery plane.
 
 ## Release policy
@@ -58,8 +58,14 @@ The unified workflow resolves FFmpeg's current `master` commit on scheduled and
 manual builds, builds the patched hardware image first, then pins the final
 Restreamer build to the resulting immutable digest. Each source image is tagged with
 the full Git commit (`ffmpeg-hardware-git-SHA`) inside the same GHCR package as the
-unified image, so a moving branch never produces a moving artifact and no second
-package permission grant is required. `stable` and exact numbered releases remain
+unified image. Each build records exact binary and corresponding-source digests;
+source-only tags may be rebuilt, so the digest is the reproducible identity.
+No second package permission grant is required. `stable` and exact numbered releases remain
 available for reproduction and rollback. Patch drift is expected to fail loudly in
 CI so it can be rebased and reviewed instead of silently publishing an unpatched
 binary.
+
+The `development` branch produces candidates. The accepted branch is `2.x`.
+Neither scheduled nor ordinary manual builds can publish `latest`; a separate
+digest-based promotion workflow on `2.x` updates `latest` and a new immutable
+`rc-N` tag after acceptance. See [component notices and source distribution](../THIRD_PARTY.md).

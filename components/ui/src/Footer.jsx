@@ -382,7 +382,8 @@ export default function Footer(inputProps) {
 						<Stack className="footerLeft" direction="row" alignItems="center" spacing={0}>
 							<Logo className={classes.logo} />
 							<Typography className="footerVersion">
-								{props.app} v{version.number} ({version.arch}) {props.name ? '- ' + props.name : ''}
+								{/* Modified for CQComber Restreamer: display name only; backend identity stays compatible. */}
+								{props.app === 'datarhei-core' ? 'Core' : props.app} v{version.number} ({version.arch}) {props.name ? '- ' + props.name : ''}
 							</Typography>
 						</Stack>
 						<Resources resources={props.resources} />

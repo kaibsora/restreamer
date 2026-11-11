@@ -2,6 +2,7 @@
 .github
 **/.git
 **/node_modules
+components/ui/licenses
 components/ui/build
 components/ui/dist
 **/.cache

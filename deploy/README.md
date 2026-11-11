@@ -1,10 +1,20 @@
 # Container deployment
 
-Start the unified container without passing through a GPU:
+Start CQComber Restreamer with the default Intel/AMD DRM device mapping:
 
 ```sh
 docker compose -f deploy/compose.yaml up -d
 ```
+
+For hosts without `/dev/dri`, clear that mapping with Compose 2.24.4+:
+
+```sh
+docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml up -d
+```
+
+The image is `ghcr.io/kaibsora/restreamer:latest`; pin `rc-1` or an accepted
+digest for a fixed deployment. See the [main installation guide](../README.md)
+for release status, hardware limitations and component attribution.
 
 The primary Compose file exposes `/dev/dri` for Intel and AMD acceleration by
 default. Set the host's actual `video` and `render` group IDs before starting it:
@@ -20,6 +30,10 @@ For NVIDIA acceleration, install NVIDIA Container Toolkit on the host and use:
 ```sh
 docker compose -f deploy/compose.yaml -f deploy/compose.nvidia.yaml up -d
 ```
+
+For NVIDIA-only hosts without `/dev/dri`, insert `-f deploy/compose.cpu.yaml`
+before the NVIDIA override. Place `compose.hotplug.yaml` last when also using USB
+hot-plug, so the camera's video group remains present.
 
 Copy `compose.camera-example.yaml`, enumerate every required `/dev/videoN` device,
 and include the copy as another Compose override. Device numbers may change after a

@@ -7,7 +7,8 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
-import welcomeImage from '../assets/images/welcome.png';
+// Modified for CQComber Restreamer: independent fork welcome and artwork.
+import welcomeImage from '../assets/images/cqcomber-banner.svg';
 import * as Project from '../project';
 import Paper from '../misc/Paper';
 import PaperThumb from '../misc/PaperThumb';
@@ -20,13 +21,13 @@ export default function Welcome(props) {
 		<Paper xs={12} md={6} className="PaperM">
 			<Grid container justifyContent="center" spacing={2}>
 				<Grid item xs={12}>
-					<PaperThumb image={welcomeImage} title="Welcome to Restreamer v2" height="200px" />
+					<PaperThumb image={welcomeImage} title={Project.Name} height="200px" />
 				</Grid>
 				<Grid item xs={12}></Grid>
 				<Grid item xs={12}>
 					<Typography align="center">
 						<Trans>
-							Welcome to Restreamer v2, the solution for fast and easy video publishing. Free for private and commercial use. Further help in the{' '}
+							Welcome to {Project.Name}, an independent adaptation of datarhei Restreamer for multi-camera video streaming. Further help in the{' '}
 							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.Documentation}>
 								docs
 							</Link>

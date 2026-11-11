@@ -7,7 +7,7 @@ Branding, attribution/documentation review and release preparation are now unblo
 
 Remaining release work:
 
-- Replace product-facing datarhei branding in the UI with kaibsora branding.
+- Replace product-facing datarhei branding in the UI with **CQComber Restreamer** branding.
   Preserve upstream license notices, copyright and attribution.
 - Rewrite the main README as a complete installation and usage guide, including
   image tags, persistent data, ports, reverse proxy configuration, USB devices,
@@ -27,9 +27,13 @@ Remaining release work:
 Maintainer acceptance is complete. Branding, final documentation and release
 promotion remain unfinished; this file does not record a completed RC-1 release.
 
-Candidate builds no longer update `latest` automatically. The unified workflow
-requires the explicit manual `publish_latest` input, which defaults to false and
-is disabled on `development`. Scheduled builds still build updated upstream
-sources into candidate tags without silently promoting them to the accepted
-public image. RC-1 tagging and release-branch promotion remain pending the release
-work above.
+The unified workflow now publishes candidates only. Its old `publish_latest`
+input must remain false. `promote-release.yml` runs only on `2.x`, verifies the
+accepted digest/revision/source availability, refuses development images and
+conflicting RC tags, then promotes without rebuilding. Scheduled upstream builds
+remain candidates. The release also adds bundled dependency notices and a public,
+digest-pinned corresponding-source container for the FFmpeg runtime.
+
+CQComber branding, the usage guide and these release guards are implemented;
+the final candidate build, deployment verification and promotion must succeed
+before this record can be marked published.

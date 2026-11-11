@@ -10,8 +10,10 @@ FROM $BUILD_IMAGE AS builder
 ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ENV SRC=/usr/local
 ENV DEBIAN_FRONTEND=noninteractive
+ARG BUILD_PACKAGE_EPOCH=local
 
-RUN if [ -r /etc/ssl/certs/ca-certificates.crt ]; then \
+RUN echo "Package snapshot refresh: ${BUILD_PACKAGE_EPOCH}" && \
+  if [ -r /etc/ssl/certs/ca-certificates.crt ]; then \
     sed -i 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g; s|http://security.ubuntu.com|https://security.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources; \
   fi && \
   apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update -y && \
@@ -155,7 +157,24 @@ RUN cd /dist/ffmpeg-${FFMPEG_VERSION} && \
 RUN mkdir -p /ffmpeglibs && \
   ldd /usr/local/bin/ffmpeg | grep -o -e '/lib/[a-z0-9_]*-linux-gnu/[^ ]*' | xargs -I % cp -v % /ffmpeglibs
 
-FROM $DEPLOY_IMAGE
+# Modified for CQComber Restreamer: retain the exact patched source, build
+# instructions, third-party headers and licenses for binary redistribution.
+RUN mkdir -p /distribution/ffmpeg /distribution/licenses/builder && \
+  cp /dist/ffmpeg-${FFMPEG_VERSION}/ffbuild/config.log /distribution/ffmpeg/config.log && \
+  /usr/local/bin/ffmpeg -buildconf > /distribution/ffmpeg/build-configuration.txt 2>&1 && \
+  cd /dist/ffmpeg-${FFMPEG_VERSION} && make distclean && \
+  tar -cJf /distribution/ffmpeg/ffmpeg-patched-source.tar.xz -C /dist ffmpeg-${FFMPEG_VERSION} \
+    nv-codec-headers-${FFNVCODEC_VERSION} Vulkan-Headers-${VULKAN_HEADERS_VERSION} && \
+  cp -R /contrib /distribution/ffmpeg/patches && \
+  cp LICENSE.md COPYING.* /distribution/ffmpeg/ && \
+  for library in /ffmpeglibs/*; do \
+    original="/usr/lib/x86_64-linux-gnu/$(basename "$library")"; \
+    owner="$(dpkg-query -S "$original" | head -n 1 | sed 's/: \/.*//')"; \
+    dpkg-query -W -f '${source:Package}=${source:Version}\n' "$owner"; \
+  done | sort -u > /distribution/builder-library-sources.txt && \
+  find /usr/share/doc -name copyright -type f -exec cp --parents '{}' /distribution/licenses/builder/ \;
+
+FROM $DEPLOY_IMAGE AS runtime-base
 
 # Bootstrap HTTPS package downloads before ca-certificates is installed below.
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
@@ -192,6 +211,26 @@ RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   rm -rf /var/lib/apt/lists/* && \
   chmod +x /usr/local/bin/restreamer-verify-ffmpeg && \
   /usr/local/bin/restreamer-verify-ffmpeg
+
+# Sources are distributed as a separate public OCI image to keep the application
+# image small. This stage also supplies bundled FFmpeg source and notices below.
+FROM runtime-base AS source-collector
+ARG FFMPEG_VERSION
+COPY --from=builder /distribution /distribution
+COPY Dockerfile.ubuntu.hardware collect-source-packages.sh /distribution/build/
+RUN sh /distribution/build/collect-source-packages.sh
+
+FROM scratch AS source-export
+COPY --from=source-collector /distribution /sources
+
+FROM runtime-base AS runtime
+ARG FFMPEG_SOURCE_IMAGE=local-build-source-export
+COPY --from=source-collector /distribution/ffmpeg /usr/share/doc/ffmpeg
+COPY --from=source-collector /distribution/licenses /usr/share/doc/ffmpeg/dependency-licenses
+COPY --from=source-collector /distribution/SHA256SUMS /usr/share/doc/ffmpeg/source-SHA256SUMS
+RUN printf 'Corresponding source container: %s\nCopy /sources from that image. See THIRD_PARTY.md in the application repository.\n' \
+    "${FFMPEG_SOURCE_IMAGE}" > /usr/share/doc/ffmpeg/SOURCES.txt
+LABEL io.cqcomber.ffmpeg.sources="${FFMPEG_SOURCE_IMAGE}"
 
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,video,utility

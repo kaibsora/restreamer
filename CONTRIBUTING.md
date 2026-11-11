@@ -1,7 +1,7 @@
 # Contributing
 
-This repository is an independent, experimental continuation of datarhei
-Restreamer. Report defects caused by this fork in
+CQComber Restreamer is an independent adaptation of datarhei Restreamer.
+Report defects caused by this fork in
 [`kaibsora/restreamer`](https://github.com/kaibsora/restreamer/issues), not in the
 original projects. The upstream maintainers did not volunteer to debug our
 renovation.
@@ -28,6 +28,14 @@ glass-to-glass delay. Include the measurement method and whether the stream is c
 or transcoded. “It feels slow” is valid frustration but regrettably not a unit.
 
 ## Development
+
+Use the `development` branch for changes after RC-1. `2.x` holds accepted release
+code. Open feature/fix pull requests against `development`; promote reviewed and
+physically accepted changes back to `2.x` for a public release. Candidate image
+builds never update `latest`. Run `promote-release.yml` on `2.x` with the accepted
+image digest, exact application commit and a new `rc-N` tag to publish a release
+without rebuilding. The workflow refuses development images and conflicting RC
+tags. Preserve the source-image digest and verification evidence with each release.
 
 The maintained source lives in one repository:
 

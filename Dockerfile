@@ -20,7 +20,7 @@ RUN case "${RUN_TESTS}" in \
       false) ;; \
       *) echo "RUN_TESTS must be true or false, got ${RUN_TESTS}" >&2; exit 64 ;; \
     esac && \
-    yarn build
+    yarn build && node scripts/collect-licenses.cjs
 
 FROM --platform=$BUILDPLATFORM ${GOLANG_IMAGE} AS core-builder
 ARG TARGETOS
@@ -45,7 +45,9 @@ RUN rm -rf core import ffmigrate && \
       BRANCH="${RESTREAMER_BRANCH}" \
       BUILD="${RESTREAMER_BUILD_DATE}" && \
     make import && \
-    make ffmigrate
+    make ffmigrate && \
+    find vendor -type f \( -iname '*license*' -o -iname '*notice*' -o -iname 'copying*' \) \
+      -exec sh -c 'for file; do mkdir -p "/licenses/$(dirname "$file")"; cp "$file" "/licenses/$file"; done' sh {} +
 
 FROM ${FFMPEG_IMAGE}
 
@@ -53,11 +55,12 @@ ARG RESTREAMER_COMMIT=unknown
 ARG RESTREAMER_BRANCH=local
 ARG RESTREAMER_BUILD_DATE=1970-01-01T00:00:00Z
 
-LABEL org.opencontainers.image.title="Restreamer" \
-      org.opencontainers.image.description="Unified Restreamer application with hardware-accelerated FFmpeg" \
+# Modified for CQComber Restreamer: fork branding and bundled component attribution.
+LABEL org.opencontainers.image.title="CQComber Restreamer" \
+      org.opencontainers.image.description="Independent adaptation of datarhei Restreamer with unified hardware-accelerated FFmpeg" \
       org.opencontainers.image.source="https://github.com/kaibsora/restreamer" \
       org.opencontainers.image.documentation="https://github.com/kaibsora/restreamer#readme" \
-      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.licenses="Apache-2.0 AND GPL-3.0-or-later" \
       org.opencontainers.image.version="${RESTREAMER_COMMIT}" \
       org.opencontainers.image.revision="${RESTREAMER_COMMIT}" \
       org.opencontainers.image.created="${RESTREAMER_BUILD_DATE}" \
@@ -70,6 +73,9 @@ COPY --from=core-builder /src/core/mime.types /core/mime.types
 COPY --from=ui-builder /src/ui/build /core/ui
 COPY run.sh /core/bin/run.sh
 COPY ui-root /core/ui-root
+COPY LICENSE NOTICE THIRD_PARTY.md MODIFICATIONS.md /usr/share/doc/cqcomber-restreamer/
+COPY --from=core-builder /licenses /usr/share/doc/cqcomber-restreamer/core-dependencies
+COPY --from=ui-builder /src/ui/licenses /usr/share/doc/cqcomber-restreamer/ui-dependencies
 COPY scripts/hardware-report.sh /usr/local/bin/restreamer-hardware-report
 COPY scripts/healthcheck.sh /usr/local/bin/restreamer-healthcheck
 COPY scripts/verify-hevc-hls.sh /usr/local/bin/restreamer-verify-hevc-hls

@@ -1,0 +1,8 @@
+<!-- Copyright 2026 CQComber contributors. SPDX-License-Identifier: Apache-2.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <rect width="96" height="96" rx="22" fill="#202b33"/>
+  <path d="M61 27a27 27 0 1 0 0 42" fill="none" stroke="#50d3c6" stroke-width="9" stroke-linecap="round"/>
+  <path d="M43 36h19v24H43z" fill="#50d3c6"/>
+  <path d="m65 41 14-8v30l-14-8z" fill="#f5c85a"/>
+  <path d="m60 66 12 12" stroke="#f5c85a" stroke-width="7" stroke-linecap="round"/>
+</svg>

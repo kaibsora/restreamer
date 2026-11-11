@@ -27,7 +27,8 @@ import WebIcon from '@mui/icons-material/Web';
 import * as Storage from './utils/storage';
 import * as Version from './version';
 import * as Project from './project';
-import welcomeImage from './assets/images/welcome.png';
+// Modified for CQComber Restreamer: product branding and retained upstream attribution.
+import welcomeImage from './assets/images/cqcomber-banner.svg';
 import LanguageSelect from './misc/LanguageSelect';
 import Logo from './misc/Logo/rsLogo';
 import ModalContent from './misc/ModalContent';
@@ -152,14 +153,14 @@ function AboutModal(inputProps) {
 
 	return (
 		<Modal open={props.open} onClose={props.onClose} className="modal">
-			<ModalContent title="About Restreamer" onClose={props.onClose} className={classes.modalPaper}>
+			<ModalContent title={`About ${Project.Name}`} onClose={props.onClose} className={classes.modalPaper}>
 				<Grid container spacing={1}>
 					<Grid item xs={12} className={classes.aboutImage}>
-						<PaperThumb image={welcomeImage} title="Welcome to Restreamer v2" height="200px" />
+						<PaperThumb image={welcomeImage} title={Project.Name} height="200px" />
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="body1">
-							This maintained fork packages the Restreamer UI, Core, and FFmpeg build into one repository. It is based on the original{' '}
+							{Project.Name} is maintained by CQComber (kaibsora on GitHub). This independent adaptation packages the UI, Core, and FFmpeg build into one repository. It is based on the original{' '}
 							<Link color="secondary" href={Project.UpstreamRepository} target="_blank" rel="noopener noreferrer">
 								datarhei Restreamer
 							</Link>{' '}
@@ -173,7 +174,7 @@ function AboutModal(inputProps) {
 					<Grid item xs={12}></Grid>
 					<Grid item xs={12}>
 						<Typography>
-							<strong>Release</strong>: {Version.UI}
+							<strong>Release</strong>: {Project.Release} (UI {Version.UI})
 						</Typography>
 						<Typography>
 							<strong>Maintained repo</strong>:{' '}
@@ -204,6 +205,10 @@ function AboutModal(inputProps) {
 							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.UpstreamWebsite}>
 								datarhei.com
 							</Link>
+						</Typography>
+						<Typography>Original Restreamer copyright 2022 FOSS GmbH and contributors. No upstream endorsement is implied.</Typography>
+						<Typography>
+							<Link color="secondary" href={Project.Credits} target="_blank" rel="noopener noreferrer">Component licenses and source credits</Link>
 						</Typography>
 					</Grid>
 				</Grid>
@@ -367,7 +372,7 @@ export default function Header(inputProps) {
 				<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0}>
 					<Stack direction="row" alignItems="center" spacing={0} className="headerLeft">
 						<Logo className="fabIcon" />
-						<Typography className="headerTitle">Restreamer</Typography>
+						<Typography className="headerTitle">{Project.Name}</Typography>
 					</Stack>
 					<Stack className="headerRight" direction="row" alignItems="center" spacing={0}>
 						<HeaderMenu {...props}></HeaderMenu>

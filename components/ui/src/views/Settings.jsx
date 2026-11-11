@@ -20,7 +20,9 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import WarningIcon from '@mui/icons-material/Warning';
 
-import settingsImage from '../assets/images/settings.png';
+// Modified for CQComber Restreamer: independent fork settings artwork.
+import settingsImage from '../assets/images/cqcomber-banner.svg';
+import * as Project from '../project';
 import BoxText from '../misc/BoxText';
 import BoxTextarea from '../misc/BoxTextarea';
 import Checkbox from '../misc/Checkbox';
@@ -1217,7 +1219,7 @@ export default function Settings(inputProps) {
 							<Grid container spacing={2}>
 								<Grid item xs={12}>
 									<Grid item xs={12}>
-										<PaperThumb image={settingsImage} title="Welcome to Restreamer v2" height="200px" />
+										<PaperThumb image={settingsImage} title={Project.Name} height="200px" />
 									</Grid>
 								</Grid>
 								<Grid item xs={12}>
