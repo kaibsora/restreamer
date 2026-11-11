@@ -1,6 +1,6 @@
 // Modified for CQComber Restreamer: independent fork branding and project links.
 const Name = 'CQComber Restreamer';
-const Release = 'RC-2';
+const Release = 'Development';
 const Repository = 'https://github.com/kaibsora/restreamer';
 const Documentation = `${Repository}/tree/main/docs`;
 const Issues = `${Repository}/issues`;
