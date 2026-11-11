@@ -20,6 +20,7 @@ import Duration from './misc/Duration';
 import Logo from './misc/Logo';
 import Number from './misc/Number';
 import { withDefaults } from './utils/props';
+import { buildName } from './utils/build-name';
 
 const useStyles = makeStyles((theme) => ({
 	footer: {
@@ -374,6 +375,7 @@ export default function Footer(inputProps) {
 	const props = withDefaults(inputProps, FooterDefaultProps);
 	const classes = useStyles();
 	const version = initVersion(props.version);
+	const codename = buildName(version.repository_commit || version.number);
 
 	if (props.expand === true) {
 		return (
@@ -384,7 +386,7 @@ export default function Footer(inputProps) {
 							<Logo className={classes.logo} />
 							<Typography className="footerVersion">
 								{/* Modified for CQComber Restreamer: display name only; backend identity stays compatible. */}
-								{props.app === 'datarhei-core' ? 'Core' : props.app} v{version.number} ({version.arch}) {props.name ? '- ' + props.name : ''}
+								{props.app === 'datarhei-core' ? 'Core' : props.app} v{version.number} ({version.arch}) - {codename}
 							</Typography>
 						</Stack>
 						<Resources resources={props.resources} />

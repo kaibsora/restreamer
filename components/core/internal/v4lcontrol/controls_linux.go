@@ -70,11 +70,31 @@ func openCamera(path string, write bool) (int, error) {
 	if flags&0x80000000 != 0 {
 		flags = binary.NativeEndian.Uint32(capability[88:92])
 	}
-	if flags&(1|0x1000) == 0 {
-		return -1, fmt.Errorf("not a video capture device")
+	if err := cameraCapability(flags); err != nil {
+		return -1, err
 	}
 	ok = true
 	return fd, nil
+}
+
+func cameraCapability(flags uint32) error {
+	if flags&0xc000 != 0 {
+		return ErrCodecDevice
+	}
+	if flags&(1|0x1000) == 0 {
+		return fmt.Errorf("not a video capture device")
+	}
+	return nil
+}
+
+// IsCodecDevice lets discovery hide M2M devices while preserving the fallback
+// for mapped devices that cannot be queried until a later source probe.
+func IsCodecDevice(path string) bool {
+	fd, err := openCamera(path, false)
+	if fd >= 0 {
+		unix.Close(fd)
+	}
+	return errors.Is(err, ErrCodecDevice)
 }
 
 func name(data []byte) string   { return string(bytes.SplitN(data, []byte{0}, 2)[0]) }

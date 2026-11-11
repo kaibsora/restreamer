@@ -9,6 +9,7 @@ ARG RUN_TESTS=true
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS ui-builder
 ARG YARN_VERSION
 ARG RUN_TESTS
+ENV NODE_OPTIONS=--max-old-space-size=1024
 WORKDIR /src/ui
 COPY components/ui/package.json components/ui/yarn.lock components/ui/.yarnrc.yml ./
 RUN corepack enable && \
@@ -27,18 +28,21 @@ ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT
 ARG RUN_TESTS
+ARG CORE_RUN_TESTS=true
+ARG GO_BUILD_PARALLELISM=2
 ARG RESTREAMER_COMMIT=unknown
 ARG RESTREAMER_BRANCH=local
 ARG RESTREAMER_BUILD_DATE=1970-01-01T00:00:00Z
-ENV GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT}
+ENV GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} \
+    GOFLAGS="-p=${GO_BUILD_PARALLELISM}" GOMAXPROCS=${GO_BUILD_PARALLELISM} GOMEMLIMIT=768MiB
 WORKDIR /src/core
 RUN apk add --no-cache git make
 COPY components/core/ ./
 RUN rm -rf core import ffmigrate && \
-    case "${RUN_TESTS}" in \
+    case "${CORE_RUN_TESTS}" in \
       true) go test ./... && go vet ./... ;; \
       false) ;; \
-      *) echo "RUN_TESTS must be true or false, got ${RUN_TESTS}" >&2; exit 64 ;; \
+      *) echo "CORE_RUN_TESTS must be true or false, got ${CORE_RUN_TESTS}" >&2; exit 64 ;; \
     esac && \
     make release \
       COMMIT="${RESTREAMER_COMMIT}" \

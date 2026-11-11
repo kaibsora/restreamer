@@ -25,19 +25,23 @@ if [[ "$(uname -s)" != Linux ]]; then
 	exit 1
 fi
 
-case "$(uname -m)" in
-	x86_64 | amd64) ;;
-	*)
-		printf 'The current image target requires an x86-64 runner, found: %s\n' \
-			"$(uname -m)" >&2
-		exit 1
-		;;
-esac
+normalize_arch() {
+  case "$1" in
+    x86_64 | amd64) echo amd64 ;;
+    aarch64 | arm64) echo arm64 ;;
+    *) echo "Unsupported native architecture: $1" >&2; return 1 ;;
+  esac
+}
+native_arch="$(normalize_arch "$(uname -m)")"
+[[ "${native_arch}" == "${EXPECTED_RUNNER_ARCH:-amd64}" ]]
 
 if ! docker info >/dev/null 2>&1; then
 	echo 'Docker Engine is unavailable to the self-hosted runner user.' >&2
 	exit 1
 fi
+
+daemon_arch="$(normalize_arch "$(docker info --format '{{.Architecture}}')")"
+[[ "${daemon_arch}" == "${native_arch}" ]] || { echo 'Docker daemon and runner architectures differ.' >&2; exit 1; }
 
 if ! docker compose version >/dev/null 2>&1; then
 	echo 'Docker Compose v2 is unavailable on the self-hosted runner.' >&2

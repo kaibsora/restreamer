@@ -19,6 +19,8 @@ func TestCaptureCapabilityFiltersMetadataAndHonorsDeviceCaps(t *testing.T) {
 	}{
 		{capability{Capabilities: 1}, true},
 		{capability{Capabilities: 0x1000}, true},
+		{capability{Capabilities: 0x4000}, true},
+		{capability{Capabilities: 0x8000}, true},
 		{capability{Capabilities: 0x800000}, false},
 		{capability{Capabilities: 0x80000001, DeviceCaps: 0x800000}, false},
 		{capability{Capabilities: 0x80000000, DeviceCaps: 1}, true},

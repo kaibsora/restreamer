@@ -19,8 +19,8 @@ function init(initialState) {
 		gop: '4',
 		profile: 'auto',
 		force_key_frames: 'expr:gte(t,n_forced*1)',
-		num_capture_buffers: '256',
-		num_output_buffers: '512',
+		num_capture_buffers: '16',
+		num_output_buffers: '32',
 		fps_mode: 'cfr',
 
 		...initialState,

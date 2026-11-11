@@ -33,8 +33,8 @@ Corresponding source:
 and [digest promotion](https://github.com/kaibsora/restreamer/actions/runs/43060716396).
 The release's `rc-1-image.json` asset also records the FFmpeg runtime/source identity.
 
-`2.x` holds accepted release code. Future changes and tests belong on `development`;
-promote reviewed, physically accepted changes back to `2.x` before releasing.
+`main` holds accepted release code. Future changes and tests belong on `development`;
+promote reviewed, physically accepted changes back to `main` before releasing.
 `promote-release.yml` verifies the image revision, release branch, notices and source
 availability, then tags the accepted digest. Ordinary/scheduled builds publish
 unique `build-<run>-<attempt>` candidates. The deprecated `publish_latest` build input

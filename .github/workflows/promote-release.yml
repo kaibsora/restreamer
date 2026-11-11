@@ -24,8 +24,58 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate:
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+    runs-on: ${{ fromJSON(matrix.arch == 'arm64' && (vars.RESTREAMER_ARM64_RUNNER_LABELS || '["restreamer-arm64"]') || (vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]')) }}
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify both platforms and validate native release image
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}
+          DIGEST: ${{ inputs.digest }}
+          EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+          EXPECTED_RUNNER_ARCH: ${{ matrix.arch }}
+          RESTREAMER_MIN_RUNNER_DISK_GB: 20
+        run: |
+          set -euo pipefail
+          scripts/verify-self-hosted-runner.sh
+          [[ "${DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "${EXPECTED_COMMIT}" =~ ^[0-9a-f]{40}$ ]]
+          git merge-base --is-ancestor "${EXPECTED_COMMIT}" HEAD
+          image="${IMAGE}@${DIGEST}"
+          docker buildx imagetools inspect --raw "${image}" | \
+            docker run --rm -i -v "${PWD}/scripts:/scripts:ro" node:24-alpine3.22 node /scripts/validate-image-index.cjs
+          docker pull --platform "linux/${EXPECTED_RUNNER_ARCH}" "${image}"
+          [[ "$(docker image inspect "${image}" --format '{{.Architecture}}')" == "${EXPECTED_RUNNER_ARCH}" ]]
+          [[ "$(docker image inspect "${image}" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')" == "${EXPECTED_COMMIT}" ]]
+          [[ "$(docker image inspect "${image}" --format '{{index .Config.Labels "io.restreamer.repository.branch"}}')" == main ]]
+          source="$(docker image inspect "${image}" --format '{{index .Config.Labels "io.cqcomber.ffmpeg.sources"}}')"
+          [[ "${source}" == "${IMAGE}"@sha256:* ]]
+          docker manifest inspect "${source}" >/dev/null
+          docker run --rm --entrypoint sh "${image}" -ec '
+            test -s /usr/share/doc/cqcomber-restreamer/NOTICE
+            test -s /usr/share/doc/ffmpeg/SOURCES.txt
+            restreamer-verify-ffmpeg
+            restreamer-verify-hevc-hls
+          '
   promote:
-    if: github.ref == 'refs/heads/2.x'
+    needs: validate
+    if: github.ref == 'refs/heads/main'
     runs-on: ${{ fromJSON(vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
     permissions:
       contents: read

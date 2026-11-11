@@ -65,7 +65,16 @@ available for reproduction and rollback. Patch drift is expected to fail loudly 
 CI so it can be rebased and reviewed instead of silently publishing an unpatched
 binary.
 
-The `development` branch produces candidates. The accepted branch is `2.x`.
+The `development` branch produces candidates. The accepted branch is `main`.
 Neither scheduled nor ordinary manual builds can publish `latest`; a separate
-digest-based promotion workflow on `2.x` updates `latest` and a new immutable
+digest-based promotion workflow on `main` updates `latest` and a new immutable
 `rc-N` tag after acceptance. See [component notices and source distribution](../THIRD_PARTY.md).
+
+## Native ARM64 images
+
+The native matrix uses `restreamer-linux` for AMD64 and `restreamer-arm64` for
+ARM64. The ARM recipe is `components/ffmpeg/Dockerfile.ubuntu.arm64`, with V4L2
+M2M/DRM and software codecs instead of desktop GPU libraries. Each platform
+passes its own acceptance job before the combined OCI index is created. The
+promotion workflow validates both architectures natively before moving latest.
+See [Pi deployment and limitations](raspberry-pi.md).

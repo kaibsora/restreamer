@@ -15,3 +15,10 @@ The Git history records changes by file and date. Individual change notices in
 modified files supplement this overview. Vendored third-party source, dependency
 licenses, upstream credit and protocol/API identifiers are retained. Product
 branding does not transfer authorship of the upstream implementation.
+
+* November 2026: generate the footer codename deterministically from the Core
+  application Git commit; rename the accepted branch to main; add native AMD64
+  and ARM64 image builds with platform-specific FFmpeg/source images, dual
+  native acceptance and a combined OCI index. Add a Raspberry Pi V4L2 deployment
+  override, expose M2M codec nodes without listing them as cameras, and bound
+  V4L2 M2M buffer defaults for constrained hosts. Original notices are retained.

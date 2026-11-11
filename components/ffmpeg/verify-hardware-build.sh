@@ -38,18 +38,34 @@ if printf '%s\n' "$license" | grep -F -i -- 'unredistributable' >/dev/null; then
 fi
 require_pattern "$license" 'GNU General Public License'
 
-for accelerator in cuda vaapi qsv drm vulkan; do
+case "${RESTREAMER_FFMPEG_PROFILE:-desktop}" in
+  desktop) accelerators='cuda vaapi qsv drm vulkan'; backends='nvenc qsv vaapi vulkan' ;;
+  raspberrypi) accelerators='drm'; backends='v4l2m2m' ;;
+  *) fail 'unknown hardware build profile' ;;
+esac
+for accelerator in $accelerators; do
     require_fixed_line "$hwaccels" "$accelerator"
 done
 
 for codec in av1 h264 hevc; do
-    for backend in nvenc qsv vaapi vulkan; do
+    for backend in $backends; do
+        [ "$backend" != v4l2m2m ] || [ "$codec" = h264 ] || continue
         require_pattern "$encoders" "[[:space:]]${codec}_${backend}[[:space:]]"
     done
 done
 require_pattern "$encoders" '[[:space:]]aac[[:space:]]+AAC'
 
-for filter in overlay_vulkan scale_vulkan transpose_vulkan movie overlay scale format colorchannelmixer setpts drawtext aresample; do
+if [ "${RESTREAMER_FFMPEG_PROFILE:-desktop}" = desktop ]; then
+    for filter in overlay_vulkan scale_vulkan transpose_vulkan; do
+        require_pattern "$filters" "[[:space:]]${filter}[[:space:]]"
+    done
+else
+    # The Pi build must not silently acquire desktop GPU dependencies.
+    if printf '%s\n' "$hwaccels" | grep -Ex 'cuda|qsv|vaapi|vulkan' >/dev/null; then
+        fail 'desktop GPU API present in Raspberry Pi profile'
+    fi
+fi
+for filter in movie overlay scale format transpose hflip vflip colorchannelmixer setpts drawtext aresample; do
     require_pattern "$filters" "[[:space:]]${filter}[[:space:]]"
 done
 
