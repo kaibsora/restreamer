@@ -17,6 +17,7 @@ RUN echo "Package snapshot refresh: ${BUILD_PACKAGE_EPOCH}" && \
     sed -i 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g; s|http://security.ubuntu.com|https://security.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources; \
   fi && \
   apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update -y && \
+  apt-get -o Acquire::Retries=5 upgrade -y && \
   apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y \
   pkg-config \
   curl \
@@ -167,11 +168,15 @@ RUN mkdir -p /distribution/ffmpeg /distribution/licenses/builder && \
     nv-codec-headers-${FFNVCODEC_VERSION} Vulkan-Headers-${VULKAN_HEADERS_VERSION} && \
   cp -R /contrib /distribution/ffmpeg/patches && \
   cp LICENSE.md COPYING.* /distribution/ffmpeg/ && \
+  : > /distribution/builder-library-sources.txt && \
   for library in /ffmpeglibs/*; do \
     original="/usr/lib/x86_64-linux-gnu/$(basename "$library")"; \
-    owner="$(dpkg-query -S "$original" | head -n 1 | sed 's/: \/.*//')"; \
-    dpkg-query -W -f '${source:Package}=${source:Version}\n' "$owner"; \
-  done | sort -u > /distribution/builder-library-sources.txt && \
+    dpkg-query -S "$original" > /tmp/library-owner || exit 1; \
+    owner="$(head -n 1 /tmp/library-owner | sed 's/: \/.*//')"; \
+    dpkg-query -W -f '${source:Package}=${source:Version}\n' "$owner" \
+      >> /distribution/builder-library-sources.txt || exit 1; \
+  done && \
+  sort -u -o /distribution/builder-library-sources.txt /distribution/builder-library-sources.txt && \
   find /usr/share/doc -name copyright -type f -exec cp --parents '{}' /distribution/licenses/builder/ \;
 
 FROM $DEPLOY_IMAGE AS runtime-base
@@ -189,6 +194,7 @@ RUN echo "/ffmpeglibs" > /etc/ld.so.conf.d/ffmpeg.conf && \
   ldconfig && \
   sed -i 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g; s|http://security.ubuntu.com|https://security.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources && \
   apt-get -o Acquire::Retries=5 -o Acquire::https::Timeout=30 update && \
+  apt-get -o Acquire::Retries=5 upgrade -y && \
   apt-get -o Acquire::Retries=5 -o Acquire::https::Timeout=30 install -y --no-install-recommends \
   ca-certificates \
   openssl \
