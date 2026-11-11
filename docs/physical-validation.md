@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:sha-dd1d09f`.
+Latest verified image: `ghcr.io/kaibsora/restreamer:sha-e64d3be`.
 
 Published image digest:
-`sha256:6113490a248ae17d928f80a8741093ec39fd195adce8d7a7c7f043ebabd49cb2`.
+`sha256:e21b3d4e5aa1954c819cada480c77cdae6cf686d0d0a4717a296f93c673acb78`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -381,3 +381,21 @@ diagnostic readers were removed. Fingerprints of all ten saved process configs
 and their original start/stop orders matched after every run. The HLS UI player,
 saved source/encoder settings and published image tag were unchanged. NVIDIA/AMD
 hardware and other camera modes still require their own physical validation.
+
+## Clearer camera wizard wording
+
+Image `sha-e64d3be` renames the post-probe **Profile** field to **Detected video
+track**. The capture step labels format, resolution and frame rate explicitly,
+explains the selection order and clarifies that automatic resolution uses a
+camera default rather than its maximum. A separate button on the detected-track
+page returns directly to the camera capture choices.
+
+On the deployed image, an unsaved draft selected the stopped Logitech camera's
+MJPEG 1280x720/30 FPS mode. Verification displayed that 1280x720 MJPEG track under
+the new label. The return button preserved all three capture selections. No
+channel was saved; the running C920 was not used for this probe. All eight
+current process configurations and their original start/stop orders matched the
+pre-deployment baseline afterward. The running image revision/digest matched
+GHCR. All 318 UI tests, 15 catalog coverage checks, production build, Core tests,
+configuration checks and image smoke/publication checks passed. `latest` was not
+promoted.
