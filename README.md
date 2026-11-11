@@ -75,7 +75,7 @@ does not change repository or package ownership.
 | `rc-1` | Fixed first release candidate; recommended for reproducible testing |
 | `latest` | Most recently accepted public release; updated only by explicit promotion |
 | `build-<run>-<attempt>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
-| `ffmpeg-hardware-*` | Internal runtime/source images, not the complete application |
+| `ffmpeg-hardware-*` / `ffmpeg-sources-*` | Internal runtime/source images, not the complete application |
 
 The checked-in Compose image is `latest`. To pin a release, change its `image:`
 line to `ghcr.io/kaibsora/restreamer:rc-1` or the published digest.
