@@ -9,6 +9,7 @@ import (
 )
 
 var ErrUnsupported = errors.New("V4L2 controls require Linux")
+var ErrCodecDevice = errors.New("V4L2 memory-to-memory codec is not a camera source")
 var devicePath = regexp.MustCompile(`^/dev/(video[0-9]+|v4l/by-(id|path)/[A-Za-z0-9_.:+-]+)$`)
 
 type Choice struct {

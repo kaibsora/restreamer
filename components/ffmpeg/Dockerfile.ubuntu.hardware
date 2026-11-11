@@ -110,6 +110,7 @@ COPY ./contrib /contrib
 
 ARG BUILD_DATE=1970-01-01T00:00:00Z
 ARG BUILD_COMMIT=unknown
+ARG BUILD_JOBS=2
 
 RUN cd /dist/ffmpeg-${FFMPEG_VERSION} && \
   git apply --whitespace=nowarn /contrib/ffmpeg-jsonstats.patch && \
@@ -151,7 +152,7 @@ RUN cd /dist/ffmpeg-${FFMPEG_VERSION} && \
   --disable-ffplay \
   --disable-debug \
   --disable-doc || { grep -n -A20 -B10 -i vulkan ffbuild/config.log | tail -n 240; exit 1; }; \
-  make -j$(nproc) && \
+  make -j"${BUILD_JOBS}" && \
   make install && \
   hash -r
 
@@ -180,6 +181,7 @@ RUN mkdir -p /distribution/ffmpeg /distribution/licenses/builder && \
   find /usr/share/doc -name copyright -type f -exec cp --parents '{}' /distribution/licenses/builder/ \;
 
 FROM $DEPLOY_IMAGE AS runtime-base
+ENV RESTREAMER_FFMPEG_PROFILE=desktop
 
 # Bootstrap HTTPS package downloads before ca-certificates is installed below.
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

@@ -9,8 +9,8 @@ export LOG="${fixture}/docker.log"
 export IMAGE_REPOSITORY=ghcr.io/example/restreamer
 export EXPECTED_COMMIT=1111111111111111111111111111111111111111
 export ACCEPTED_DIGEST=sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-export GITHUB_REF=refs/heads/2.x RELEASE_TAG=rc-1
-export IMAGE_BRANCH=2.x EXISTING_DIGEST="${ACCEPTED_DIGEST}"
+export GITHUB_REF=refs/heads/main RELEASE_TAG=rc-1
+export IMAGE_BRANCH=main EXISTING_DIGEST="${ACCEPTED_DIGEST}"
 cat > "${fixture}/bin/git" <<'EOF'
 #!/bin/sh
 exit 0

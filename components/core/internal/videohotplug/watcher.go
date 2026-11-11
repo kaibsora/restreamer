@@ -1,4 +1,4 @@
-// Package videohotplug mirrors capture devices from a read-only host /dev mount.
+// Package videohotplug mirrors camera and codec devices from a read-only host /dev mount.
 package videohotplug
 
 import (
@@ -73,7 +73,7 @@ func Start(source string, report func(string, error)) (func(), error) {
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
-	report(fmt.Sprintf("USB camera hot-plug enabled: %d capture devices", len(w.owned.Nodes)), nil)
+	report(fmt.Sprintf("USB camera hot-plug enabled: %d video devices", len(w.owned.Nodes)), nil)
 	go func() {
 		defer close(done)
 		ticker := time.NewTicker(time.Second)
@@ -92,7 +92,7 @@ func Start(source string, report func(string, error)) (func(), error) {
 					lastError = err.Error()
 				} else {
 					if changed || lastError != "" {
-						report(fmt.Sprintf("USB cameras synchronized: %d capture devices", len(w.owned.Nodes)), nil)
+						report(fmt.Sprintf("USB cameras synchronized: %d video devices", len(w.owned.Nodes)), nil)
 					}
 					lastError = ""
 				}

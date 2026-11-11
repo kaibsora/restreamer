@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2026 CQComber contributors. SPDX-License-Identifier: Apache-2.0
 set -euo pipefail
-[[ "${GITHUB_REF}" == refs/heads/2.x ]]
+[[ "${GITHUB_REF}" == refs/heads/main ]]
 [[ "${ACCEPTED_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
 [[ "${EXPECTED_COMMIT}" =~ ^[0-9a-f]{40}$ ]]
 [[ "${RELEASE_TAG}" =~ ^rc-[1-9][0-9]*$ ]]
@@ -10,7 +10,7 @@ image="${IMAGE_REPOSITORY}@${ACCEPTED_DIGEST}"
 docker pull "${image}"
 label() { docker image inspect "${image}" --format "{{index .Config.Labels \"$1\"}}"; }
 [[ "$(label org.opencontainers.image.revision)" == "${EXPECTED_COMMIT}" ]]
-[[ "$(label io.restreamer.repository.branch)" == 2.x ]]
+[[ "$(label io.restreamer.repository.branch)" == main ]]
 [[ "$(label org.opencontainers.image.title)" == 'CQComber Restreamer' ]]
 source="$(label io.cqcomber.ffmpeg.sources)"
 [[ "${source}" == "${IMAGE_REPOSITORY}"@sha256:* ]]

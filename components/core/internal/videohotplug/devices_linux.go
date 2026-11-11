@@ -56,7 +56,9 @@ func captureCaps(c capability) bool {
 	if flags&0x80000000 != 0 {
 		flags = c.DeviceCaps
 	}
-	return flags&(0x00000001|0x00001000) != 0 // capture / multiplanar capture
+	// Include stateful codec nodes so FFmpeg can discover Pi V4L2 M2M encoders.
+	// The camera API separately rejects codec nodes as capture sources.
+	return flags&(0x00000001|0x00001000|0x00004000|0x00008000) != 0
 }
 
 func captureDevice(path string, expected node) bool {

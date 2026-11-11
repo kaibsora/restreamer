@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/datarhei/core/v16/internal/v4lcontrol"
 )
 
 // DevicesV4L returns a list of available V4L devices
@@ -23,7 +25,13 @@ func DevicesV4L() ([]HWDevice, error) {
 	}
 
 	if len(devices) != 0 {
-		return devices, nil
+		cameras := make([]HWDevice, 0, len(devices))
+		for _, device := range devices {
+			if !v4lcontrol.IsCodecDevice(device.Id) {
+				cameras = append(cameras, device)
+			}
+		}
+		return cameras, nil
 	}
 
 	if commandErr != nil {

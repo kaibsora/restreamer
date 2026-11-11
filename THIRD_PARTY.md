@@ -28,6 +28,11 @@ libdrm, libva, oneVPL, Intel media drivers, Mesa and Vulkan loader libraries.
 The exact package inventory and notices are authoritative for a particular image;
 the table is an overview, not a replacement for dependency licenses.
 
+The ARM64 Raspberry Pi variant omits the NVIDIA codec/Vulkan header bundles,
+CUDA libraries, libva/oneVPL/Intel media drivers and Mesa/Vulkan desktop stacks.
+It retains Linux V4L2/DRM and software codec dependencies. Each architecture's
+image label points to its own matching corresponding-source container.
+
 Node and Go toolchains, GCC, CUDA development tools, Vite and other build tools
 are build-stage dependencies. Their presence in the build does not imply their
 entire toolchains are shipped in the application image. NVIDIA's host driver and
@@ -55,7 +60,7 @@ Application/UI/Core source and scripts are in this repository at the image's
 runtime/library sources, use the immutable source image recorded in the binary:
 
 ```sh
-IMAGE=ghcr.io/kaibsora/restreamer:rc-1
+IMAGE=ghcr.io/kaibsora/restreamer:latest
 docker pull "$IMAGE"
 SOURCES=$(docker image inspect "$IMAGE" --format '{{index .Config.Labels "io.cqcomber.ffmpeg.sources"}}')
 docker pull "$SOURCES"

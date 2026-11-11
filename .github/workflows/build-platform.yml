@@ -1,0 +1,224 @@
+name: Build and validate native platform
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      runner_labels:
+        required: true
+        type: string
+      ffmpeg_version:
+        required: true
+        type: string
+      build_inputs:
+        required: true
+        type: string
+      rebuild_ffmpeg:
+        default: false
+        type: boolean
+jobs:
+  native:
+    name: native / ${{ inputs.arch }}
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    timeout-minutes: 360
+    env:
+      EXPECTED_RUNNER_ARCH: ${{ inputs.arch }}
+      RESTREAMER_MIN_RUNNER_DISK_GB: 20
+      IMAGE: ghcr.io/${{ github.repository }}
+      ARCH: ${{ inputs.arch }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify native runner and Docker architecture
+        run: scripts/verify-self-hosted-runner.sh
+      - name: Select bounded builder resources
+        id: resources
+        run: |
+          set -euo pipefail
+          # The runner's private cgroup namespace reports '/', so inspect a
+          # bounded, self-cleaning child using the daemon's configured parent.
+          parent="$(docker run --rm --cgroupns=host --memory=32m --memory-swap=32m \
+            --cpus=0.1 busybox:1.37 cat /proc/self/cgroup | awk -F: '$1 == "0" { print $3 }')"
+          parent="${parent%/*}"
+          case "${parent}" in
+            /kubepods.slice/kubepods-*.slice/kubepods-*-pod*.slice | \
+            /kubepods.slice/kubepods-pod*.slice | \
+            /kubepods/pod* | /kubepods/burstable/pod* | /kubepods/besteffort/pod*) ;;
+            *) parent=/docker/buildx ;;
+          esac
+          echo "cgroup_parent=${parent}" >> "${GITHUB_OUTPUT}"
+      - uses: docker/setup-buildx-action@v4
+        id: builder
+        with:
+          driver-opts: |
+            cgroup-parent=${{ steps.resources.outputs.cgroup_parent }}
+            memory=${{ inputs.arch == 'arm64' && '1900m' || '4g' }}
+            memory-swap=${{ inputs.arch == 'arm64' && '1900m' || '4g' }}
+            cpu-period=100000
+            cpu-quota=200000
+          buildkitd-config-inline: |
+            [worker.oci]
+              max-parallelism = ${{ inputs.arch == 'arm64' && 1 || 2 }}
+      - name: Verify builder resource limits
+        env:
+          BUILDER_NAME: ${{ steps.builder.outputs.name }}
+          EXPECTED_PARENT: ${{ steps.resources.outputs.cgroup_parent }}
+        run: |
+          set -euo pipefail
+          container="buildx_buildkit_${BUILDER_NAME}0"
+          [[ "$(docker inspect "${container}" --format '{{.HostConfig.Memory}}')" == '${{ inputs.arch == 'arm64' && '1992294400' || '4294967296' }}' ]]
+          [[ "$(docker inspect "${container}" --format '{{.HostConfig.CpuQuota}}')" == 200000 ]]
+          if [[ "$(docker info --format '{{.CgroupDriver}}')" == cgroupfs ]]; then
+            [[ "$(docker inspect "${container}" --format '{{.HostConfig.CgroupParent}}')" == "${EXPECTED_PARENT}" ]]
+          fi
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Resolve architecture-specific runtime
+        id: plan
+        env:
+          VERSION: ${{ inputs.ffmpeg_version }}
+          INPUTS: ${{ inputs.build_inputs }}
+          FORCE: ${{ inputs.rebuild_ffmpeg }}
+        run: |
+          set -euo pipefail
+          tag="${IMAGE}:ffmpeg-hardware-${ARCH}-${VERSION}-${INPUTS}"
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          if [[ "${ARCH}" == arm64 ]]; then
+            echo 'file=components/ffmpeg/Dockerfile.ubuntu.arm64' >> "${GITHUB_OUTPUT}"
+          else
+            echo 'file=components/ffmpeg/Dockerfile.ubuntu.hardware' >> "${GITHUB_OUTPUT}"
+          fi
+          if [[ "${FORCE}" != true ]] && docker manifest inspect "${tag}" >/dev/null 2>&1; then
+            digest="$(docker buildx imagetools inspect "${tag}" --format '{{.Manifest.Digest}}')"
+            [[ "${digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
+            echo "digest=${digest}" >> "${GITHUB_OUTPUT}"
+            echo 'rebuild=false' >> "${GITHUB_OUTPUT}"
+          else
+            echo 'rebuild=true' >> "${GITHUB_OUTPUT}"
+          fi
+          echo "date=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> "${GITHUB_OUTPUT}"
+      - name: Publish corresponding source archive
+        if: steps.plan.outputs.rebuild == 'true'
+        id: sources
+        uses: docker/build-push-action@v7
+        with:
+          context: components/ffmpeg
+          file: ${{ steps.plan.outputs.file }}
+          target: source-export
+          platforms: linux/${{ inputs.arch }}
+          push: true
+          build-args: |
+            BUILD_DATE=${{ github.run_id }}
+            BUILD_PACKAGE_EPOCH=${{ github.run_id }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_JOBS=${{ inputs.arch == 'arm64' && 1 || 2 }}
+            FFMPEG_VERSION=${{ inputs.ffmpeg_version }}
+          tags: ${{ env.IMAGE }}:ffmpeg-sources-${{ inputs.arch }}-${{ inputs.ffmpeg_version }}-${{ inputs.build_inputs }}
+          cache-from: type=gha,scope=ffmpeg-hardware-${{ inputs.arch }}
+          cache-to: type=gha,mode=max,scope=ffmpeg-hardware-${{ inputs.arch }},ignore-error=true
+          provenance: mode=max
+      - name: Publish architecture-specific FFmpeg runtime
+        if: steps.plan.outputs.rebuild == 'true'
+        id: runtime
+        uses: docker/build-push-action@v7
+        with:
+          context: components/ffmpeg
+          file: ${{ steps.plan.outputs.file }}
+          target: runtime
+          platforms: linux/${{ inputs.arch }}
+          push: true
+          build-args: |
+            BUILD_DATE=${{ github.run_id }}
+            BUILD_PACKAGE_EPOCH=${{ github.run_id }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_JOBS=${{ inputs.arch == 'arm64' && 1 || 2 }}
+            FFMPEG_VERSION=${{ inputs.ffmpeg_version }}
+            FFMPEG_SOURCE_IMAGE=${{ env.IMAGE }}@${{ steps.sources.outputs.digest }}
+          tags: ${{ steps.plan.outputs.tag }}
+          cache-from: type=gha,scope=ffmpeg-hardware-${{ inputs.arch }}
+          cache-to: type=gha,mode=max,scope=ffmpeg-hardware-${{ inputs.arch }},ignore-error=true
+          provenance: mode=max
+          sbom: true
+      - name: Release published FFmpeg build cache before application stages
+        if: steps.plan.outputs.rebuild == 'true'
+        env:
+          BUILDER_NAME: ${{ steps.builder.outputs.name }}
+        run: |
+          set -euo pipefail
+          # Source/runtime images and their GHA caches are already exported.
+          # Prune only this job's builder, not the runner's other Docker data.
+          docker buildx prune --builder "${BUILDER_NAME}" --all --force
+      - name: Build native application for acceptance
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/${{ inputs.arch }}
+          load: true
+          build-args: |
+            FFMPEG_IMAGE=${{ env.IMAGE }}@${{ steps.runtime.outputs.digest || steps.plan.outputs.digest }}
+            RUN_TESTS=false
+            CORE_RUN_TESTS=${{ inputs.arch == 'arm64' && 'true' || 'false' }}
+            GO_BUILD_PARALLELISM=${{ inputs.arch == 'arm64' && 1 || 2 }}
+            RESTREAMER_COMMIT=${{ github.sha }}
+            RESTREAMER_BRANCH=${{ github.ref_name }}
+            RESTREAMER_BUILD_DATE=${{ steps.plan.outputs.date }}
+          tags: restreamer-smoke:local
+          cache-from: type=gha,scope=restreamer-unified-${{ inputs.arch }}
+          cache-to: type=gha,mode=max,scope=restreamer-unified-${{ inputs.arch }},ignore-error=true
+      - name: Check image size and native architecture
+        run: |
+          set -euo pipefail
+          [[ "$(docker image inspect restreamer-smoke:local --format '{{.Architecture}}')" == "${ARCH}" ]]
+          size="$(docker image inspect restreamer-smoke:local --format '{{.Size}}')"
+          [[ "${size}" =~ ^[0-9]+$ ]] && (( size <= 1500000000 ))
+      - name: Native camera stack acceptance
+        env:
+          RESTREAMER_IMAGE: restreamer-smoke:local
+          SMOKE_CAMERA_COUNT: ${{ inputs.arch == 'arm64' && 2 || 4 }}
+          SMOKE_EXPECTED_COMMIT: ${{ github.sha }}
+          SMOKE_EXPECTED_BRANCH: ${{ github.ref_name }}
+          SMOKE_EXPECTED_BUILD_DATE: ${{ steps.plan.outputs.date }}
+        run: scripts/smoke-compose.sh
+      - name: Publish accepted native image
+        id: image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/${{ inputs.arch }}
+          push: true
+          build-args: |
+            FFMPEG_IMAGE=${{ env.IMAGE }}@${{ steps.runtime.outputs.digest || steps.plan.outputs.digest }}
+            RUN_TESTS=false
+            CORE_RUN_TESTS=${{ inputs.arch == 'arm64' && 'true' || 'false' }}
+            GO_BUILD_PARALLELISM=${{ inputs.arch == 'arm64' && 1 || 2 }}
+            RESTREAMER_COMMIT=${{ github.sha }}
+            RESTREAMER_BRANCH=${{ github.ref_name }}
+            RESTREAMER_BUILD_DATE=${{ steps.plan.outputs.date }}
+          tags: ${{ env.IMAGE }}:build-${{ github.run_id }}-${{ github.run_attempt }}-${{ inputs.arch }}
+          cache-from: type=gha,scope=restreamer-unified-${{ inputs.arch }}
+          provenance: mode=max
+          sbom: true
+      - name: Verify published native image
+        env:
+          DIGEST: ${{ steps.image.outputs.digest }}
+          RUNTIME_DIGEST: ${{ steps.runtime.outputs.digest || steps.plan.outputs.digest }}
+        run: |
+          set -euo pipefail
+          [[ "${DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
+          image="${IMAGE}@${DIGEST}"
+          docker pull --platform "linux/${ARCH}" "${image}"
+          [[ "$(docker image inspect "${image}" --format '{{.Architecture}}')" == "${ARCH}" ]]
+          [[ "$(docker image inspect "${image}" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')" == "${GITHUB_SHA}" ]]
+          docker run --rm --entrypoint /usr/local/bin/restreamer-verify-ffmpeg "${image}"
+          docker run --rm --entrypoint /usr/local/bin/restreamer-verify-hevc-hls "${image}"
+          mkdir -p platform-records
+          printf '%s\n' "${DIGEST}" > "platform-records/${ARCH}.digest"
+          printf '%s\n' "${RUNTIME_DIGEST}" > "platform-records/${ARCH}.runtime"
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: platform-${{ inputs.arch }}
+          path: platform-records/*
+          if-no-files-found: error

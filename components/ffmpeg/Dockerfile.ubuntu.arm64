@@ -1,0 +1,91 @@
+# CQComber Restreamer ARM64: upstream FFmpeg + Linux V4L2/DRM, no desktop GPU stacks.
+# Copyright 2026 CQComber contributors. SPDX-License-Identifier: Apache-2.0
+ARG BUILD_IMAGE=ubuntu:24.04
+ARG DEPLOY_IMAGE=ubuntu:24.04
+FROM $BUILD_IMAGE AS builder
+ENV DEBIAN_FRONTEND=noninteractive PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+ARG BUILD_PACKAGE_EPOCH=local
+RUN echo "Package snapshot: ${BUILD_PACKAGE_EPOCH}" && \
+    apt-get -o Acquire::Retries=5 update && apt-get -o Acquire::Retries=5 upgrade -y && \
+    apt-get -o Acquire::Retries=5 install -y --no-install-recommends \
+      build-essential pkg-config curl ca-certificates git patch xz-utils \
+      libcurl4-openssl-dev libssl-dev libxml2-dev zlib1g-dev \
+      libdrm-dev libv4l-dev libasound2-dev libfreetype-dev libharfbuzz-dev \
+      libsrt-openssl-dev libx264-dev libx265-dev libvpx-dev libmp3lame-dev \
+      libopus-dev libvorbis-dev libogg-dev libdav1d-dev librav1e-dev libaom-dev && \
+    sed -i 's|http://ports.ubuntu.com|https://ports.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources
+ARG FFMPEG_VERSION=none
+RUN set -eu; mkdir -p /dist/ffmpeg-${FFMPEG_VERSION}; \
+    case "${FFMPEG_VERSION}" in \
+      git-*) sha="${FFMPEG_VERSION#git-}"; printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; url="https://github.com/FFmpeg/FFmpeg/archive/${sha}.tar.gz" ;; \
+      *) printf '%s' "${FFMPEG_VERSION}" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?$'; url="https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz" ;; \
+    esac; \
+    curl --fail --location --show-error --retry 8 --retry-all-errors --retry-max-time 180 \
+      --connect-timeout 20 "$url" -o /dist/ffmpeg.tar.gz; \
+    tar -xzf /dist/ffmpeg.tar.gz --strip-components=1 -C /dist/ffmpeg-${FFMPEG_VERSION}; \
+    rm /dist/ffmpeg.tar.gz
+COPY contrib /contrib
+ARG BUILD_DATE=1970-01-01T00:00:00Z
+ARG BUILD_COMMIT=unknown
+ARG BUILD_JOBS=1
+RUN cd /dist/ffmpeg-${FFMPEG_VERSION} && \
+    git apply --whitespace=nowarn /contrib/ffmpeg-jsonstats.patch && \
+    patch -p1 < /contrib/ffmpeg-hls.patch && \
+    ./configure --prefix=/usr/local --extra-version="datarhei-${BUILD_COMMIT}-${BUILD_DATE}" \
+      --extra-libs='-lpthread -lxml2 -lm -lz -lsupc++ -lstdc++ -lssl -lcrypto -lc -ldl -lcurl' \
+      --enable-gpl --enable-version3 --enable-static --enable-openssl --enable-libxml2 \
+      --enable-libdrm --enable-libv4l2 --enable-v4l2-m2m --enable-alsa \
+      --enable-libfreetype --enable-libharfbuzz --enable-libsrt \
+      --enable-libx264 --enable-libx265 --enable-libvpx --enable-libmp3lame \
+      --enable-libopus --enable-libvorbis --enable-libdav1d --enable-librav1e --enable-libaom \
+      --disable-cuda --disable-cuvid --disable-nvenc --disable-nvdec \
+      --disable-vaapi --disable-vdpau --disable-vulkan --disable-libvpl \
+      --disable-ffplay --disable-debug --disable-doc && \
+    make -j"${BUILD_JOBS}" && make install
+RUN set -eu; mkdir -p /ffmpeglibs /distribution/ffmpeg /distribution/licenses/builder; \
+    ldd /usr/local/bin/ffmpeg | grep -o -e '/lib/[a-z0-9_]*-linux-gnu/[^ ]*' | \
+      xargs -I % cp -v % /ffmpeglibs; \
+    cp /dist/ffmpeg-${FFMPEG_VERSION}/ffbuild/config.log /distribution/ffmpeg/; \
+    ffmpeg -buildconf > /distribution/ffmpeg/build-configuration.txt 2>&1; \
+    cd /dist/ffmpeg-${FFMPEG_VERSION}; make distclean; \
+    tar -cJf /distribution/ffmpeg/ffmpeg-patched-source.tar.xz -C /dist ffmpeg-${FFMPEG_VERSION}; \
+    cp LICENSE.md COPYING.* /distribution/ffmpeg/; cp -R /contrib /distribution/ffmpeg/patches; \
+    : > /distribution/builder-library-sources.txt; \
+    triplet="$(gcc -print-multiarch)"; \
+    for library in /ffmpeglibs/*; do \
+      dpkg-query -S "/usr/lib/${triplet}/$(basename "$library")" > /tmp/library-owner; \
+      owner="$(head -n 1 /tmp/library-owner | sed 's/: \/.*//')"; \
+      dpkg-query -W -f '${source:Package}=${source:Version}\n' "$owner" >> /distribution/builder-library-sources.txt; \
+    done; \
+    sort -u -o /distribution/builder-library-sources.txt /distribution/builder-library-sources.txt; \
+    find /usr/share/doc -type f -name copyright -exec cp --parents '{}' /distribution/licenses/builder/ \;
+FROM $DEPLOY_IMAGE AS runtime-base
+ENV DEBIAN_FRONTEND=noninteractive RESTREAMER_FFMPEG_PROFILE=raspberrypi
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=builder /usr/local/bin/ffmpeg /usr/local/bin/ffmpeg
+COPY --from=builder /usr/local/bin/ffprobe /usr/local/bin/ffprobe
+COPY --from=builder /ffmpeglibs /ffmpeglibs
+COPY verify-hardware-build.sh /usr/local/bin/restreamer-verify-ffmpeg
+RUN echo /ffmpeglibs > /etc/ld.so.conf.d/ffmpeg.conf && ldconfig && \
+    sed -i 's|http://ports.ubuntu.com|https://ports.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources && \
+    apt-get -o Acquire::Retries=5 update && apt-get -o Acquire::Retries=5 upgrade -y && \
+    apt-get -o Acquire::Retries=5 install -y --no-install-recommends \
+      ca-certificates openssl tzdata v4l-utils fonts-dejavu-core libdrm2 && \
+    rm -rf /var/lib/apt/lists/* && chmod +x /usr/local/bin/restreamer-verify-ffmpeg && \
+    /usr/local/bin/restreamer-verify-ffmpeg
+FROM runtime-base AS source-collector
+COPY --from=builder /distribution /distribution
+COPY Dockerfile.ubuntu.arm64 collect-source-packages.sh /distribution/build/
+RUN sh /distribution/build/collect-source-packages.sh
+FROM scratch AS source-export
+COPY --from=source-collector /distribution /sources
+FROM runtime-base AS runtime
+ARG FFMPEG_SOURCE_IMAGE=local-build-source-export
+COPY --from=source-collector /distribution/ffmpeg /usr/share/doc/ffmpeg
+COPY --from=source-collector /distribution/licenses /usr/share/doc/ffmpeg/dependency-licenses
+COPY --from=source-collector /distribution/SHA256SUMS /usr/share/doc/ffmpeg/source-SHA256SUMS
+RUN printf 'Corresponding source container: %s\nCopy /sources from that image.\n' "${FFMPEG_SOURCE_IMAGE}" > /usr/share/doc/ffmpeg/SOURCES.txt
+LABEL io.cqcomber.ffmpeg.sources="${FFMPEG_SOURCE_IMAGE}"
+WORKDIR /tmp
+ENTRYPOINT ["/usr/local/bin/ffmpeg"]
+CMD ["-version"]

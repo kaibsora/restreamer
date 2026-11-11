@@ -1,0 +1,19 @@
+# 64-bit Raspberry Pi OS. Combine with compose.yaml; no desktop GPU mapping.
+services:
+  restreamer:
+    devices: !reset []
+    group_add: !override
+      - "${VIDEO_GID:-44}"
+    device_cgroup_rules:
+      - 'c 81:* rw'
+    cap_drop:
+      - MKNOD
+    volumes:
+      - type: bind
+        source: /dev
+        target: /host/dev
+        read_only: true
+        bind:
+          create_host_path: false
+    environment:
+      RESTREAMER_VIDEO_HOTPLUG_SOURCE: /host/dev

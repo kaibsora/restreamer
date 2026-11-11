@@ -39,7 +39,8 @@ buffering profile:
 2. Public web: HLS is allowed to buffer and prioritize resilience through the reverse
    proxy. This path can transcode independently from the LAN feed.
 
-CI exercises four concurrent synthetic H.264 publishers and readers. Each publisher
+CI exercises four concurrent synthetic H.264 publishers and readers on AMD64,
+and two on the constrained ARM64 runner. Each publisher
 uses all-intra frames to isolate relay and read-startup overhead from a camera's GOP,
 and every first decoded RTSP frame must arrive in less than one second. The same test
 also verifies that every named path exposes a WebRTC endpoint. Physical
@@ -57,7 +58,7 @@ the buffered public HLS delivery plane.
 The unified workflow resolves FFmpeg's current `master` commit on scheduled and
 manual builds, builds the patched hardware image first, then pins the final
 Restreamer build to the resulting immutable digest. Each source image is tagged with
-the full Git commit (`ffmpeg-hardware-git-SHA`) inside the same GHCR package as the
+the full Git commit and input hash (`ffmpeg-hardware-ARCH-git-SHA-INPUTS`) inside the same GHCR package as the
 unified image. Each build records exact binary and corresponding-source digests;
 source-only tags may be rebuilt, so the digest is the reproducible identity.
 No second package permission grant is required. `stable` and exact numbered releases remain
@@ -65,7 +66,16 @@ available for reproduction and rollback. Patch drift is expected to fail loudly 
 CI so it can be rebased and reviewed instead of silently publishing an unpatched
 binary.
 
-The `development` branch produces candidates. The accepted branch is `2.x`.
+The `development` branch produces candidates. The accepted branch is `main`.
 Neither scheduled nor ordinary manual builds can publish `latest`; a separate
-digest-based promotion workflow on `2.x` updates `latest` and a new immutable
+digest-based promotion workflow on `main` updates `latest` and a new immutable
 `rc-N` tag after acceptance. See [component notices and source distribution](../THIRD_PARTY.md).
+
+## Native ARM64 images
+
+The native matrix uses `restreamer-linux` for AMD64 and `restreamer-arm64` for
+ARM64. The ARM recipe is `components/ffmpeg/Dockerfile.ubuntu.arm64`, with V4L2
+M2M/DRM and software codecs instead of desktop GPU libraries. Each platform
+passes its own acceptance job before the combined OCI index is created. The
+promotion workflow validates both architectures natively before moving latest.
+See [Pi deployment and limitations](raspberry-pi.md).

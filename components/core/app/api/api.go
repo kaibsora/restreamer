@@ -215,7 +215,7 @@ func (a *api) Reload() error {
 	logfields := log.Fields{
 		"application": app.Name,
 		"version":     app.Version.String(),
-		"repository":  "https://github.com/kaibsora/restreamer/tree/2.x/components/core",
+		"repository":  "https://github.com/kaibsora/restreamer/tree/main/components/core",
 		"license":     "Apache License Version 2.0",
 		"arch":        app.Arch,
 		"compiler":    app.Compiler,

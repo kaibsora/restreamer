@@ -5,7 +5,7 @@
 
 An independent adaptation of **[datarhei Restreamer](https://github.com/datarhei/restreamer)**,
 maintained by **CQComber** (GitHub: **kaibsora**). One source repository and one
-Linux AMD64 application image combine the web UI, Core backend and a hardware-enabled
+multi-platform Linux application image combine the web UI, Core backend and a hardware-enabled
 FFmpeg build. MediaMTX is an optional companion service for LAN delivery.
 
 **RC-1:** the maintainer completed the physical acceptance checklist, including an
@@ -25,12 +25,15 @@ while providing bug fixes and features on demand.
 
 ## Quick start
 
-Requirements: a **Linux x86-64** host, Docker Engine and **Docker Compose 2.30+**.
-Hardware encoding requires a compatible host GPU/driver. Docker Desktop USB/GPU
-passthrough and ARM images are outside the validated deployment target.
+Requirements: a **Linux x86-64 or 64-bit ARM** host, Docker Engine and **Docker
+Compose 2.30+**. Hardware encoding requires compatible host devices/drivers.
+Docker Desktop USB/GPU passthrough is outside the validated deployment target.
+The multi-platform build targets AMD64 and ARM64 natively; until its release is
+promoted, the existing `latest` and fixed `rc-1` remain AMD64-only.
+See [Raspberry Pi deployment and hardware limits](docs/raspberry-pi.md).
 
 ```sh
-git clone --branch 2.x https://github.com/kaibsora/restreamer.git
+git clone --branch main https://github.com/kaibsora/restreamer.git
 cd restreamer
 ```
 
@@ -47,6 +50,17 @@ For a CPU-only host **without `/dev/dri`**, clear that mapping:
 docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml up -d
 ```
 
+For a **64-bit Raspberry Pi**, use the dedicated V4L2 hot-plug override:
+
+```sh
+docker compose -f deploy/compose.yaml -f deploy/compose.raspberrypi.yaml up -d
+```
+
+Pi 5 uses software H.264 encoding or native camera H.264 passthrough; Pi 4 can
+use V4L2 M2M when supported by its host kernel. Physical Pi codec acceleration
+is not yet validated. Docker selects the architecture automatically from a
+multi-platform tag.
+
 Open **`http://HOST:8080/ui/`** and complete the initial account/setup screens.
 Use a strong password. Existing installations retain their account and settings.
 Configuration and media persist in the `restreamer-config` and `restreamer-data`
@@ -61,11 +75,14 @@ does not change repository or package ownership.
 | `rc-1` | Fixed first release candidate; recommended for reproducible testing |
 | `latest` | Most recently accepted public release; updated only by explicit promotion |
 | `build-<run>-<attempt>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
-| `sha-<commit>` | Convenience tag for an application revision; can move when FFmpeg/dependencies are rebuilt |
-| `ffmpeg-hardware-*` | Internal runtime/source images, not the complete application |
+| `ffmpeg-hardware-*` / `ffmpeg-sources-*` | Internal runtime/source images, not the complete application |
 
 The checked-in Compose image is `latest`. To pin a release, change its `image:`
 line to `ghcr.io/kaibsora/restreamer:rc-1` or the published digest.
+
+The footer's generated `adjective-noun-number` name is seeded from the application
+Git commit. It stays the same across architectures/restarts and changes with
+the source revision. The original configured Core instance name is retained.
 
 ## GPU encoding
 
@@ -225,11 +242,11 @@ command with `down`. Adding `--volumes` deletes its persistent data.
 
 ## Release channels and upstream updates
 
-`2.x` is the accepted release branch. `development` is for subsequent changes and
+`main` is the accepted release branch. `development` is for subsequent changes and
 testing. GitHub Actions uses the custom `restreamer-linux` runner pool. Routine
 builds produce unique build tags and **cannot update `latest`**. After review
 and physical acceptance, the separate **Promote accepted release** workflow on
-`2.x` promotes an exact digest to a new `rc-N` tag and `latest`, without rebuilding.
+`main` promotes an exact digest to a new `rc-N` tag and `latest`, without rebuilding.
 Existing release tags cannot be moved to a different digest.
 
 Scheduled/manual builds resolve current FFmpeg master to an immutable commit;
