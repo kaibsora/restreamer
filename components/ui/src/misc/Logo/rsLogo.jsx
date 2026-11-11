@@ -8,7 +8,11 @@ import * as Project from '../../project';
 
 const useStyles = makeStyles((theme) => ({
 	Logo: {
+		display: 'inline-flex',
 		height: 95,
+		width: 95,
+		flexShrink: 0,
+		'& img': { display: 'block', width: '100%', height: '100%' },
 	},
 }));
 

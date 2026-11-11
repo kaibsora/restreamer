@@ -40,6 +40,25 @@ MSYS_NO_PATHCONV=1 docker run --rm --entrypoint /bin/sh "${restreamer_image}" -c
 '
 printf '%s\n' 'Validated executable Core application binaries.'
 
+# Release images must carry the advertised notices and a readable source archive.
+docker run --rm --entrypoint /bin/sh "${restreamer_image}" -ec '
+    for notice in \
+        /usr/share/doc/cqcomber-restreamer/LICENSE \
+        /usr/share/doc/cqcomber-restreamer/NOTICE \
+        /usr/share/doc/cqcomber-restreamer/THIRD_PARTY.md \
+        /usr/share/doc/cqcomber-restreamer/ui-dependencies/UI-LICENSE \
+        /usr/share/doc/ffmpeg/COPYING.GPLv3 \
+        /usr/share/doc/ffmpeg/source-SHA256SUMS \
+        /usr/share/doc/ffmpeg/SOURCES.txt; do
+        test -s "${notice}"
+    done
+    find /usr/share/doc/cqcomber-restreamer/core-dependencies -type f -iname "*license*" -print -quit | grep -q .
+    tar -tJf /usr/share/doc/ffmpeg/ffmpeg-patched-source.tar.xz >/dev/null
+'
+source_image="$(docker image inspect "${restreamer_image}" --format '{{index .Config.Labels "io.cqcomber.ffmpeg.sources"}}')"
+[[ "${source_image}" =~ ^ghcr\.io/.+@sha256:[0-9a-f]{64}$ ]]
+printf '%s\n' 'Validated bundled notices, FFmpeg source archive and immutable source-image reference.'
+
 cleanup() {
     status=$?
     trap - EXIT
@@ -140,7 +159,7 @@ grep -F '/dev/video99' <<<"${skills_json}" >/dev/null
 printf '%s\n' 'Validated fallback discovery for a container-mapped V4L2 device.'
 
 ui_html=$(curl --fail --silent --show-error http://127.0.0.1:8080/ui/)
-grep -F '<title>Restreamer</title>' <<<"${ui_html}" >/dev/null
+grep -F '<title>CQComber Restreamer</title>' <<<"${ui_html}" >/dev/null
 
 overlay_plugin=$(curl --fail --silent --show-error \
     http://127.0.0.1:8080/ui/_player/videojs/dist/videojs-overlay.min.js)
@@ -188,7 +207,7 @@ fi
 
 ui_redirect_html=$(curl --fail --location --silent --show-error \
     http://127.0.0.1:8080/ui)
-grep -F '<title>Restreamer</title>' <<<"${ui_redirect_html}" >/dev/null
+grep -F '<title>CQComber Restreamer</title>' <<<"${ui_redirect_html}" >/dev/null
 
 docker exec restreamer restreamer-verify-ffmpeg
 docker exec restreamer restreamer-verify-hevc-hls
