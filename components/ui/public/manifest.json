@@ -1,6 +1,7 @@
 {
 	"short_name": "CQComber",
 	"name": "CQComber Restreamer",
+	"description": "An independent adaptation of datarhei Restreamer, modified and maintained by CQComber contributors.",
 	"icons": [
 		{
 			"src": "cqcomber-mark.svg",

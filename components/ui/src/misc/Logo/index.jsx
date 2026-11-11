@@ -9,6 +9,7 @@ import * as Project from '../../project';
 const useStyles = makeStyles((theme) => ({
 	Logo: {
 		height: 27,
+		marginRight: 12,
 		display: 'inline-flex',
 		alignItems: 'center',
 		gap: 8,

@@ -1,3 +1,4 @@
+// Modified for CQComber Restreamer: maintained fork behavior and stream-provider branding.
 import { i18n } from '@lingui/core';
 import { t } from '@lingui/core/macro';
 import { v4 as uuidv4 } from 'uuid';

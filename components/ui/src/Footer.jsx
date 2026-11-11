@@ -1,3 +1,4 @@
+// Modified for CQComber Restreamer: footer branding; compatible backend identity retained.
 import React from 'react';
 
 import { isMobile } from 'react-device-detect';

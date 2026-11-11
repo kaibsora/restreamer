@@ -189,7 +189,7 @@ function AboutModal(inputProps) {
 							</Link>
 						</Typography>
 						<Typography>
-							<strong>Licence</strong>:{' '}
+							<strong>Application license</strong>:{' '}
 							<Link color="secondary" target="_blank" rel="noopener noreferrer" href={Project.License}>
 								Apache License 2.0
 							</Link>

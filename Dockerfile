@@ -81,7 +81,13 @@ COPY scripts/hardware-report.sh /usr/local/bin/restreamer-hardware-report
 COPY scripts/healthcheck.sh /usr/local/bin/restreamer-healthcheck
 COPY scripts/verify-hevc-hls.sh /usr/local/bin/restreamer-verify-hevc-hls
 
-RUN mkdir -p /core/config /core/data && \
+# Pin the archive reader to liblzma's installed version: its corresponding source
+# is already retained in the runtime's Ubuntu xz-utils source package.
+RUN apt-get -o Acquire::Retries=5 -o Acquire::https::Timeout=30 update && \
+    apt-get -o Acquire::Retries=5 install -y --no-install-recommends \
+      "xz-utils=$(dpkg-query -W -f '${Version}' liblzma5)" && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /core/config /core/data && \
     chmod +x /core/bin/run.sh \
       /usr/local/bin/restreamer-hardware-report \
       /usr/local/bin/restreamer-healthcheck \
