@@ -29,17 +29,17 @@ or transcoded. “It feels slow” is valid frustration but regrettably not a un
 
 ## Development
 
-Use the `development` branch for changes after RC-1. `2.x` holds accepted release
+Use the `development` branch for future changes. `main` holds accepted release
 code. Open feature/fix pull requests against `development`; promote reviewed and
-physically accepted changes back to `2.x` for a public release. Candidate image
-builds never update `latest`. Run `promote-release.yml` on `2.x` with the accepted
+physically accepted changes back to `main` for a public release. Candidate image
+builds never update `latest`. Run `promote-release.yml` on `main` with the accepted
 image digest, exact application commit and a new `rc-N` tag to publish a release
 without rebuilding. The workflow refuses development images and conflicting RC
 tags. Preserve the source-image digest and verification evidence with each release.
 For hardware acceptance, explicitly pass the candidate build tag/digest; the
 hardware workflow's `latest` default only checks the already accepted release.
 Keep the About release label as `Development` on this branch. Set it to the
-upcoming `RC-N` on `2.x` before building the next release candidate.
+upcoming `RC-N` on `main` before building the next release candidate.
 
 The maintained source lives in one repository:
 

@@ -1,7 +1,8 @@
 # CQComber Restreamer
 
-[RC-1 release and exact image/source record](https://github.com/kaibsora/restreamer/releases/tag/rc-1)
-— published as `ghcr.io/kaibsora/restreamer:rc-1` and `:latest`.
+[RC-2 release and exact image/source record](https://github.com/kaibsora/restreamer/releases/tag/rc-2)
+— published as `ghcr.io/kaibsora/restreamer:rc-2` and `:latest` for
+`linux/amd64` and `linux/arm64`. Docker selects the matching architecture.
 
 An independent adaptation of **[datarhei Restreamer](https://github.com/datarhei/restreamer)**,
 maintained by **CQComber** (GitHub: **kaibsora**). One source repository and one
@@ -16,6 +17,13 @@ untested as of publication**. See the [acceptance record](docs/rc-1-acceptance.m
 and [validation report](docs/physical-validation.md). Physical acceptance covered
 video; audio was outside that scope.
 
+**RC-2:** native AMD64/ARM64 builds passed automated acceptance, including four
+concurrent synthetic streams on AMD64 and two on a Raspberry Pi 5. The exact
+release image also passed Intel encode checks and live USB camera playback;
+all saved configurations and start/stop orders survived recreation. See the
+[RC-2 acceptance record](docs/rc-2-acceptance.md). Pi hardware encoding remains
+physically untested; Pi 5 uses software encoding or camera H.264 passthrough.
+
 This is a personal project by a systems engineer with a printer-monitoring use
 case, not a professional programmer. Refactoring, updates, features, documentation
 and tests use substantial AI coding assistance. Physical results and automated
@@ -28,8 +36,8 @@ while providing bug fixes and features on demand.
 Requirements: a **Linux x86-64 or 64-bit ARM** host, Docker Engine and **Docker
 Compose 2.30+**. Hardware encoding requires compatible host devices/drivers.
 Docker Desktop USB/GPU passthrough is outside the validated deployment target.
-The multi-platform build targets AMD64 and ARM64 natively; until its release is
-promoted, the existing `latest` and fixed `rc-1` remain AMD64-only.
+The `latest` and `rc-2` tags include native AMD64 and ARM64 images. The immutable
+first release, `rc-1`, remains AMD64-only.
 See [Raspberry Pi deployment and hardware limits](docs/raspberry-pi.md).
 
 ```sh
@@ -72,13 +80,14 @@ does not change repository or package ownership.
 
 | Image tag | Purpose |
 | --- | --- |
-| `rc-1` | Fixed first release candidate; recommended for reproducible testing |
+| `rc-2` | Fixed multi-platform release candidate; recommended for reproducible testing |
+| `rc-1` | Preserved first release candidate, AMD64 only |
 | `latest` | Most recently accepted public release; updated only by explicit promotion |
 | `build-<run>-<attempt>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
 | `ffmpeg-hardware-*` / `ffmpeg-sources-*` | Internal runtime/source images, not the complete application |
 
 The checked-in Compose image is `latest`. To pin a release, change its `image:`
-line to `ghcr.io/kaibsora/restreamer:rc-1` or the published digest.
+line to `ghcr.io/kaibsora/restreamer:rc-2` or the published digest.
 
 The footer's generated `adjective-noun-number` name is seeded from the application
 Git commit. It stays the same across architectures/restarts and changes with
