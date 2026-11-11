@@ -21,9 +21,14 @@ docker run --rm --entrypoint sh "${image}" -c '
   test -s /usr/share/doc/ffmpeg/SOURCES.txt &&
   restreamer-verify-ffmpeg && restreamer-verify-hevc-hls
 '
-if docker manifest inspect "${IMAGE_REPOSITORY}:${RELEASE_TAG}" >/dev/null 2>&1; then
-  existing="$(docker buildx imagetools inspect "${IMAGE_REPOSITORY}:${RELEASE_TAG}" --format '{{.Manifest.Digest}}')"
+lookup_error="$(mktemp)"
+trap 'rm -f -- "${lookup_error}"' EXIT
+if existing="$(docker buildx imagetools inspect "${IMAGE_REPOSITORY}:${RELEASE_TAG}" --format '{{.Manifest.Digest}}' 2>"${lookup_error}")"; then
   [[ "${existing}" == "${ACCEPTED_DIGEST}" ]] || { echo 'Refusing to overwrite an existing release tag.' >&2; exit 1; }
+elif ! grep -Eqi 'manifest unknown|: not found$' "${lookup_error}"; then
+  cat "${lookup_error}" >&2
+  echo 'Release tag lookup failed; refusing to treat a registry error as a missing tag.' >&2
+  exit 1
 fi
 docker buildx imagetools create --prefer-index=false \
   --tag "${IMAGE_REPOSITORY}:${RELEASE_TAG}" --tag "${IMAGE_REPOSITORY}:latest" "${image}"

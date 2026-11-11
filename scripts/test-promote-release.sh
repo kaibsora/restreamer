@@ -23,7 +23,9 @@ case "$*" in
   *io.restreamer.repository.branch*) echo "${IMAGE_BRANCH}" ;;
   *org.opencontainers.image.title*) echo 'CQComber Restreamer' ;;
   *io.cqcomber.ffmpeg.sources*) echo "${IMAGE_REPOSITORY}@${ACCEPTED_DIGEST}" ;;
-  'buildx imagetools inspect'*) echo "${EXISTING_DIGEST}" ;;
+  'buildx imagetools inspect'*)
+    if [[ "${RELEASE_LOOKUP_FAILURE:-false}" == true ]]; then echo 'Registry connection failed' >&2; exit 1; fi
+    echo "${EXISTING_DIGEST}" ;;
 esac
 EOF
 chmod +x "${fixture}/bin/"*
@@ -34,6 +36,8 @@ IMAGE_BRANCH=development bash "${script}" >/dev/null 2>&1 && exit 1
 ! grep -q 'imagetools create' "${LOG}"
 EXISTING_DIGEST=sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb bash "${script}" >/dev/null 2>&1 && exit 1
 ! grep -q 'imagetools create' "${LOG}"
+RELEASE_LOOKUP_FAILURE=true bash "${script}" >/dev/null 2>&1 && exit 1
+! grep -q 'imagetools create' "${LOG}"
 bash "${script}" >/dev/null
 test "$(grep -c 'imagetools create' "${LOG}")" -eq 1
-echo 'PASS: development images and changed release tags cannot be promoted; accepted digest is promoted once.'
+echo 'PASS: development images, changed release tags and registry lookup errors block promotion; accepted digest is promoted once.'

@@ -174,7 +174,7 @@ function AboutModal(inputProps) {
 					<Grid item xs={12}></Grid>
 					<Grid item xs={12}>
 						<Typography>
-							<strong>Release</strong>: {Project.Release} (UI {Version.UI})
+							<strong>Release</strong>: {Project.Release} (UI {Version.Version})
 						</Typography>
 						<Typography>
 							<strong>Maintained repo</strong>:{' '}
