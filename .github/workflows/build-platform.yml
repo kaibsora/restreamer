@@ -41,7 +41,9 @@ jobs:
             --cpus=0.1 busybox:1.37 cat /proc/self/cgroup | awk -F: '$1 == "0" { print $3 }')"
           parent="${parent%/*}"
           case "${parent}" in
-            /kubepods.slice/kubepods-*.slice/kubepods-*-pod*.slice) ;;
+            /kubepods.slice/kubepods-*.slice/kubepods-*-pod*.slice | \
+            /kubepods.slice/kubepods-pod*.slice | \
+            /kubepods/pod* | /kubepods/burstable/pod* | /kubepods/besteffort/pod*) ;;
             *) parent=/docker/buildx ;;
           esac
           echo "cgroup_parent=${parent}" >> "${GITHUB_OUTPUT}"
