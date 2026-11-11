@@ -56,7 +56,8 @@ does not change repository or package ownership.
 | --- | --- |
 | `rc-1` | Fixed first release candidate; recommended for reproducible testing |
 | `latest` | Most recently accepted public release; updated only by explicit promotion |
-| `sha-<commit>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
+| `build-<run>-<attempt>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
+| `sha-<commit>` | Convenience tag for an application revision; can move when FFmpeg/dependencies are rebuilt |
 | `ffmpeg-hardware-*` | Internal runtime/source images, not the complete application |
 
 The checked-in Compose image is `latest`. To pin a release, change its `image:`
@@ -221,7 +222,7 @@ command with `down`. Adding `--volumes` deletes its persistent data.
 
 `2.x` is the accepted release branch. `development` is for subsequent changes and
 testing. GitHub Actions uses the custom `restreamer-linux` runner pool. Routine
-builds produce candidate commit tags and **cannot update `latest`**. After review
+builds produce unique build tags and **cannot update `latest`**. After review
 and physical acceptance, the separate **Promote accepted release** workflow on
 `2.x` promotes an exact digest to a new `rc-N` tag and `latest`, without rebuilding.
 Existing release tags cannot be moved to a different digest.

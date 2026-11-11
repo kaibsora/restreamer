@@ -8,7 +8,7 @@ renovation.
 
 ## Before opening an issue
 
-Use an immutable `ghcr.io/kaibsora/restreamer:sha-*` image when possible and include:
+Use a `ghcr.io/kaibsora/restreamer:build-<run>-<attempt>` tag or image digest when possible and include:
 
 - the complete image tag and repository digest;
 - output from `docker exec restreamer restreamer-hardware-report`;

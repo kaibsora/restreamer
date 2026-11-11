@@ -394,6 +394,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            type=raw,value=build-${{ github.run_id }}-${{ github.run_attempt }}
             type=raw,value=ffmpeg-${{ needs.version.outputs.ffmpeg }}
             type=sha
           labels: |
