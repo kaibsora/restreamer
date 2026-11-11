@@ -12,9 +12,10 @@ ARG RUN_TESTS
 ENV NODE_OPTIONS=--max-old-space-size=1024
 WORKDIR /src/ui
 COPY components/ui/package.json components/ui/yarn.lock components/ui/.yarnrc.yml ./
+COPY components/ui/scripts/install-ci.sh ./scripts/install-ci.sh
 RUN corepack enable && \
     corepack prepare yarn@${YARN_VERSION} --activate && \
-    yarn install --frozen-lockfile
+    sh scripts/install-ci.sh
 COPY components/ui/ ./
 RUN case "${RUN_TESTS}" in \
       true) yarn test-ci ;; \

@@ -115,6 +115,7 @@ jobs:
           scripts/test-resolve-ffmpeg-version.sh
           bash scripts/test-ffmpeg-build-inputs.sh
           bash scripts/test-promote-release.sh
+          bash scripts/test-ui-install.sh
           docker run --rm -v "${PWD}/scripts:/scripts:ro" node:24-alpine3.22 node --test /scripts/validate-image-index.test.cjs
 
       - name: Test and build UI
@@ -125,7 +126,7 @@ jobs:
           docker run --rm \
             --volume "${PWD}/components/ui:/src:ro" \
             node:24-alpine3.22 \
-            sh -lc 'cp -R /src /tmp/ui && cd /tmp/ui && corepack enable && corepack prepare yarn@1.22.22 --activate >/dev/null && yarn install --frozen-lockfile && yarn audit-production && yarn test-ci && yarn build'
+            sh -lc 'cp -R /src /tmp/ui && cd /tmp/ui && corepack enable && corepack prepare yarn@1.22.22 --activate >/dev/null && sh scripts/install-ci.sh && yarn audit-production && yarn test-ci && yarn build'
 
       - name: Test and vet Core
         if: matrix.suite == 'core'
