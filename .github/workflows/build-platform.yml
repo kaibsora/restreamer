@@ -142,6 +142,15 @@ jobs:
           cache-to: type=gha,mode=max,scope=ffmpeg-hardware-${{ inputs.arch }},ignore-error=true
           provenance: mode=max
           sbom: true
+      - name: Release published FFmpeg build cache before application stages
+        if: steps.plan.outputs.rebuild == 'true'
+        env:
+          BUILDER_NAME: ${{ steps.builder.outputs.name }}
+        run: |
+          set -euo pipefail
+          # Source/runtime images and their GHA caches are already exported.
+          # Prune only this job's builder, not the runner's other Docker data.
+          docker buildx prune --builder "${BUILDER_NAME}" --all --force
       - name: Build native application for acceptance
         uses: docker/build-push-action@v7
         with:

@@ -67,6 +67,10 @@ runner builds FFmpeg and Go with one worker and BuildKit serializes stages.
 Buildx is explicitly placed inside the ARC pod cgroup, with a 1900 MiB memory
 limit, no additional swap allowance and a two-core ceiling on ARM. Its default
 `/docker/buildx` parent would otherwise override the daemon's pod cgroup setting.
+After the runtime/source images and caches are published, the job prunes only
+its own FFmpeg builder cache before compiling the application. Keeping the CUDA
+toolchain and application stages together otherwise exceeds a 25 GiB Docker
+workspace. Published images and remote caches are retained.
 Native acceptance covers software video, source/license retention and the
 camera/relay stack; it is not a physical Pi camera or codec test.
 
