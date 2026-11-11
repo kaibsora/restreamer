@@ -1,16 +1,15 @@
 # Raspberry Pi and native multi-platform builds
 
-The multi-platform candidate pipeline targets `linux/amd64` and `linux/arm64`.
+The published `latest` and fixed `rc-2` tags include `linux/amd64` and `linux/arm64`.
 Docker selects the matching architecture from the combined image tag; no
 `platform:` setting or architecture-specific application tag is necessary.
-Until that candidate passes both native jobs and release promotion, the existing
-`latest` and immutable `rc-1` remain the previously accepted AMD64 release.
+The immutable `rc-1` tag remains the previously accepted AMD64-only release.
+See the [RC-2 acceptance record](rc-2-acceptance.md) for tested hardware and limits.
 
 ## Deploy on a 64-bit Raspberry Pi
 
 Use a 64-bit Linux OS, Docker Engine and Docker Compose 2.30 or newer. The image
-does not support 32-bit `armv7`/`armv6` systems. Clone the `main` branch after
-the multi-platform release is published, then run:
+does not support 32-bit `armv7`/`armv6` systems. Clone the `main` branch, then run:
 
 ```sh
 docker compose -f deploy/compose.yaml -f deploy/compose.raspberrypi.yaml pull
