@@ -64,6 +64,9 @@ The image workflows do not create or distribute runner credentials.
 Both builds use one resolved FFmpeg source revision. Architecture-specific
 runtime/source tags and caches prevent cross-platform collisions. The 4 GB Pi
 runner builds FFmpeg and Go with one worker and BuildKit serializes stages.
+Buildx is explicitly placed inside the ARC pod cgroup, with a 1900 MiB memory
+limit, no additional swap allowance and a two-core ceiling on ARM. Its default
+`/docker/buildx` parent would otherwise override the daemon's pod cgroup setting.
 Native acceptance covers software video, source/license retention and the
 camera/relay stack; it is not a physical Pi camera or codec test.
 
