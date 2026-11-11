@@ -55,7 +55,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: unified-${{ github.ref }}
+  # Separate the native matrix from the legacy single-platform pipeline queue.
+  group: unified-native-${{ github.ref }}
   # Nightly checks wait for active work; they must not cancel a release push.
   cancel-in-progress: ${{ github.event_name != 'schedule' }}
 
