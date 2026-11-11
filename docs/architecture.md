@@ -39,7 +39,8 @@ buffering profile:
 2. Public web: HLS is allowed to buffer and prioritize resilience through the reverse
    proxy. This path can transcode independently from the LAN feed.
 
-CI exercises four concurrent synthetic H.264 publishers and readers. Each publisher
+CI exercises four concurrent synthetic H.264 publishers and readers on AMD64,
+and two on the constrained ARM64 runner. Each publisher
 uses all-intra frames to isolate relay and read-startup overhead from a camera's GOP,
 and every first decoded RTSP frame must arrive in less than one second. The same test
 also verifies that every named path exposes a WebRTC endpoint. Physical
@@ -57,7 +58,7 @@ the buffered public HLS delivery plane.
 The unified workflow resolves FFmpeg's current `master` commit on scheduled and
 manual builds, builds the patched hardware image first, then pins the final
 Restreamer build to the resulting immutable digest. Each source image is tagged with
-the full Git commit (`ffmpeg-hardware-git-SHA`) inside the same GHCR package as the
+the full Git commit and input hash (`ffmpeg-hardware-ARCH-git-SHA-INPUTS`) inside the same GHCR package as the
 unified image. Each build records exact binary and corresponding-source digests;
 source-only tags may be rebuilt, so the digest is the reproducible identity.
 No second package permission grant is required. `stable` and exact numbered releases remain
