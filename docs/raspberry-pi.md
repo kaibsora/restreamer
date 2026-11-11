@@ -50,7 +50,8 @@ and [official Pi 5 H.264 performance paper](https://pip-assets.raspberrypi.com/c
 ## Build and release
 
 `restreamer-linux` runs native AMD64 jobs and `restreamer-arm64` runs native
-ARM64 jobs. ARC selectors contain no `self-hosted` label. Optional repository
+ARM64 jobs using its advertised `[linux, arm64, docker]` routing labels.
+ARC selectors contain no `self-hosted` label. Optional repository
 variables `RESTREAMER_RUNNER_LABELS` and `RESTREAMER_ARM64_RUNNER_LABELS` override
 these selectors with JSON arrays. A preflight rejects runner/Docker architecture
 mismatches; QEMU is not used.

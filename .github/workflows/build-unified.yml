@@ -197,7 +197,7 @@ jobs:
       packages: write
     with:
       arch: ${{ matrix.arch }}
-      runner_labels: ${{ matrix.arch == 'arm64' && (vars.RESTREAMER_ARM64_RUNNER_LABELS || '["restreamer-arm64"]') || (vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
+      runner_labels: ${{ matrix.arch == 'arm64' && (vars.RESTREAMER_ARM64_RUNNER_LABELS || '["linux","arm64","docker"]') || (vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]') }}
       ffmpeg_version: ${{ needs.version.outputs.ffmpeg }}
       build_inputs: ${{ needs.version.outputs.build_inputs }}
       rebuild_ffmpeg: ${{ inputs.rebuild_ffmpeg == true }}

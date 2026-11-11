@@ -30,7 +30,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: [amd64, arm64]
-    runs-on: ${{ fromJSON(matrix.arch == 'arm64' && (vars.RESTREAMER_ARM64_RUNNER_LABELS || '["restreamer-arm64"]') || (vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]')) }}
+    runs-on: ${{ fromJSON(matrix.arch == 'arm64' && (vars.RESTREAMER_ARM64_RUNNER_LABELS || '["linux","arm64","docker"]') || (vars.RESTREAMER_RUNNER_LABELS || '["restreamer-linux"]')) }}
     permissions:
       contents: read
       packages: read
