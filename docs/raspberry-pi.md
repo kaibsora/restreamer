@@ -24,6 +24,21 @@ Keep both Compose files and the same project name when updating.
 
 ## Acceleration and limits
 
+For Pi 5 CPU H.264 encoding, choose **H.264 (libx264)**. The application path is
+`Restreamer Core -> FFmpeg -> libavcodec -> libx264 -> ARM CPU`. Core manages an
+FFmpeg process; it does not link directly to libavcodec. Raspberry Pi's official
+[H.264 encoding performance on Raspberry Pi 5-series computers](https://pip-assets.raspberrypi.com/categories/685-app-notes-guides-whitepapers/documents/RP-010033-WP-1-H.264%20encoding%20performance%20on%20Raspberry%20Pi%205_series%20computers.pdf)
+compares this software encoder with Pi 4 hardware encoding. Our use of the same
+encoder does not reproduce every version, preset, resource limit or benchmark
+condition in that paper. Test sustained load with your own camera modes, filters,
+cooling and number of streams.
+
+The maintainer reported successful ARM image testing on a Pi 5 with USB cameras.
+Direct engineering checks also exercised two USB cameras plus two virtual video
+sources concurrently, camera-control change/readback/restore, rotation, and
+RTSP/RTMP decoded video in the test pod. These checks covered software encoding;
+they do not validate Pi 4's V4L2 M2M hardware encoder or optical latency.
+
 * The ARM image contains upstream FFmpeg with Linux V4L2 M2M and DRM support,
   plus software encoders/decoders. It omits CUDA, NVENC, Quick Sync, VA-API and
   Vulkan driver stacks. The AMD64 image retains the desktop GPU stacks.
