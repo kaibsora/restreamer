@@ -69,8 +69,8 @@ binary.
 
 The `development` branch produces candidates. The accepted branch is `main`.
 Neither scheduled nor ordinary manual builds can publish `latest`; a separate
-digest-based promotion workflow on `main` updates `latest` and a new immutable
-immutable stable version after acceptance, with major/minor/`latest` aliases.
+digest-based promotion workflow on `main` publishes an immutable stable version
+after acceptance, with major/minor/`latest` aliases.
 See [component notices and source distribution](../THIRD_PARTY.md).
 
 ## Native ARM64 images
