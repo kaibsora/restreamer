@@ -134,6 +134,10 @@ msgstr ""
 msgid "Address:"
 msgstr "주소:"
 
+#: src/views/Main/LiveCameraControls.jsx
+msgid "Adjust camera controls while streaming. To change capture format, resolution, frame rate or encoding, edit the stream."
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Adjust publication site colors and background as you like."
 msgstr "송출 사이트의 색상과 배경을 원하는대로 설정합니다."

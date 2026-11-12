@@ -134,6 +134,10 @@ msgstr ""
 msgid "Address:"
 msgstr "Indirizzo:"
 
+#: src/views/Main/LiveCameraControls.jsx
+msgid "Adjust camera controls while streaming. To change capture format, resolution, frame rate or encoding, edit the stream."
+msgstr ""
+
 #: src/views/Playersite.jsx
 msgid "Adjust publication site colors and background as you like."
 msgstr "Regoli i colori del sito di pubblicazione e lo sfondo come preferisce."

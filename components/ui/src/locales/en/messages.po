@@ -134,6 +134,10 @@ msgstr "Address used by printer dashboards and other LAN clients."
 msgid "Address:"
 msgstr "Address:"
 
+#: src/views/Main/LiveCameraControls.jsx
+msgid "Adjust camera controls while streaming. To change capture format, resolution, frame rate or encoding, edit the stream."
+msgstr "Adjust camera controls while streaming. To change capture format, resolution, frame rate or encoding, edit the stream."
+
 #: src/views/Playersite.jsx
 msgid "Adjust publication site colors and background as you like."
 msgstr "Adjust publication site colors and background as you like."

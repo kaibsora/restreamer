@@ -20,6 +20,7 @@ import H from '../../utils/help';
 import Paper from '../../misc/Paper';
 import PaperHeader from '../../misc/PaperHeader';
 import Player from '../../misc/Player';
+import LiveCameraControls from './LiveCameraControls';
 import Progress from './Progress';
 import Publication from './Publication';
 import ProcessModal from '../../misc/modals/Process';
@@ -435,6 +436,7 @@ export default function Main(inputProps) {
 							<Grid item xs={12} marginTop="-.3em">
 								<Progress progress={$state.progress} />
 							</Grid>
+							<LiveCameraControls metadata={$metadata} restreamer={props.restreamer} />
 							<Grid item xs={12} marginTop="-.2em">
 								<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
 									<Typography variant="body">
