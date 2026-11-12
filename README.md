@@ -144,7 +144,8 @@ The built-in player uses **HLS**, which buffers. Use RTSP/RTMP or the MediaMTX
 WebRTC relay for latency-sensitive local clients. Stream copy avoids encoding
 work, but a camera with long keyframe intervals can still have slow startup.
 
-For **Mainsail / Fluidd**, enable the channel's Core RTMP output, add a
+For **Mainsail / Fluidd**, enable Core's RTMP server in Settings and the channel's
+RTMP output, then add a
 **MediaMTX LAN relay** publication using that live RTMP source, and publish to
 `rtsp://mediamtx:8554/STREAM_PATH`. In the dashboard select **WebRTC (MediaMTX)**
 and enter `http://HOST:8889/STREAM_PATH`, without `/whep`. Native RTSP clients use
@@ -179,6 +180,9 @@ Named volumes retain `/core/config` and `/core/data`. Keep the same Compose
 project name and the same override files for subsequent commands.
 
 ## Versions, updates and rollback
+
+See [published releases](https://github.com/kaibsora/restreamer/releases) for
+available versions. Stable promotion creates the following tag scheme:
 
 | Tag | Purpose |
 | --- | --- |
@@ -222,7 +226,9 @@ without rebuilding.
 | Runtime base | **Ubuntu 24.04**, with architecture-specific libraries |
 
 FFmpeg's historical development banner does not identify a stable release or
-limit its library APIs. The source SHA and each release's image/source record
+limit its library APIs. This snapshot includes libavcodec **63.28.100**,
+libavformat **63.18.100** and libavutil **61.20.100**.
+The source SHA and each release's image/source record
 identify the actual build. [Release records](https://github.com/kaibsora/restreamer/releases)
 include immutable image identities; [THIRD_PARTY.md](THIRD_PARTY.md) lists codecs,
 drivers, UI dependencies and corresponding-source download instructions.
