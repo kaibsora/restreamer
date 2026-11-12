@@ -42,10 +42,10 @@ test('live dashboard applies a control without restarting capture, saving metada
 	const restreamer = setup();
 	const player = await screen.findByLabelText('Live preview');
 	fireEvent.click(await screen.findByText('Camera controls'));
-	const field = await screen.findByRole('spinbutton', { name: 'Brightness' });
+	const field = await screen.findByRole('slider', { name: 'Brightness' });
 	fireEvent.change(field, { target: { value: '129' } });
-	fireEvent.click(screen.getByRole('button', { name: 'Brightness' }));
 	await waitFor(() => expect(restreamer.SetCameraControl).toHaveBeenCalledWith('/dev/video2', 10, 129));
+	expect(screen.queryByRole('button', { name: 'Brightness' })).not.toBeInTheDocument();
 	expect(screen.getByLabelText('Live preview')).toBe(player);
 	expect(restreamer.StopIngest).not.toHaveBeenCalled();
 	expect(restreamer.StartIngest).not.toHaveBeenCalled();

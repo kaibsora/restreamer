@@ -26,7 +26,7 @@ export default function LiveCameraControls({ metadata, restreamer }) {
 			{devices.map((device) => (
 				<React.Fragment key={device}>
 					{devices.length > 1 && <Typography variant="caption">{device}</Typography>}
-					<CameraControls device={device} restreamer={restreamer} />
+					<CameraControls device={device} restreamer={restreamer} live />
 				</React.Fragment>
 			))}
 			<Typography variant="caption">

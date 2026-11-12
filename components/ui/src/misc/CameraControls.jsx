@@ -10,11 +10,13 @@ import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import LiveCameraPanel from './LiveCameraPanel';
 
 // A device change remounts this panel so delayed reads cannot populate another
 // camera's controls. No polling, subprocesses, or streaming workload is needed.
-export default function CameraControls({ device, restreamer }) {
+export default function CameraControls({ device, restreamer, live = false }) {
 	if (!device || !restreamer || !restreamer.CameraControls) return null;
+	if (live) return <LiveCameraPanel key={device} device={device} restreamer={restreamer} />;
 	return <Panel key={device} device={device} restreamer={restreamer} />;
 }
 

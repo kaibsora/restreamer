@@ -219,6 +219,7 @@ msgid "Application"
 msgstr "Aplicação"
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Apply"
 msgstr ""
 
@@ -437,6 +438,7 @@ msgid "Camera capture settings"
 msgstr ""
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Camera controls"
 msgstr ""
 
@@ -493,6 +495,7 @@ msgid "Change camera format, resolution or frame rate"
 msgstr ""
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Changes apply immediately to this physical camera, including other streams using it. The camera may reset them after unplugging or restarting."
 msgstr ""
 
@@ -851,6 +854,7 @@ msgstr "Dispositivo"
 
 #: src/misc/CameraControls.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Disabled"
 msgstr ""
 
@@ -1022,6 +1026,7 @@ msgstr "Habilitar servidor SRT ..."
 
 #: src/misc/CameraControls.jsx
 #: src/misc/coders/Encoders/video/hardware.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Enabled"
 msgstr ""
 
@@ -2331,10 +2336,12 @@ msgid "Read input at native speed"
 msgstr "Ler a entrada em velocidade nativa"
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Read-only, unavailable in the current camera mode, or unsupported control type."
 msgstr ""
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Reading camera controls..."
 msgstr ""
 
@@ -2379,6 +2386,7 @@ msgid "Refresh"
 msgstr "Atualização"
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Refresh controls"
 msgstr ""
 
@@ -2531,6 +2539,7 @@ msgid "Rule"
 msgstr "Regra"
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "Run"
 msgstr ""
 
@@ -3201,6 +3210,7 @@ msgid "These are capture capabilities, not simultaneous video tracks. Verificati
 msgstr ""
 
 #: src/misc/CameraControls.jsx
+#: src/misc/LiveCameraPanel.jsx
 msgid "This camera reports no adjustable controls."
 msgstr ""
 
@@ -3484,6 +3494,10 @@ msgstr "Não selecionado"
 #: src/misc/Changelog.jsx
 msgid "Update details (Changelog)"
 msgstr "Detalhes de atualização (Changelog)"
+
+#: src/misc/LiveCameraPanel.jsx
+msgid "Updating camera controls..."
+msgstr ""
 
 #: src/misc/filters/video/Watermark.jsx
 #: src/views/Edit/Sources/AudioLoop.jsx
