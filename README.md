@@ -64,10 +64,18 @@ For a **64-bit Raspberry Pi**, use the dedicated V4L2 hot-plug override:
 docker compose -f deploy/compose.yaml -f deploy/compose.raspberrypi.yaml up -d
 ```
 
-Pi 5 uses software H.264 encoding or native camera H.264 passthrough; Pi 4 can
-use V4L2 M2M when supported by its host kernel. Physical Pi codec acceleration
-is not yet validated. Docker selects the architecture automatically from a
-multi-platform tag.
+Pi 5 has no H.264 hardware encoder. Select **H.264 (libx264)** for CPU encoding:
+Restreamer launches FFmpeg, whose `libavcodec` interface calls `libx264` to encode
+the video. This uses the same underlying software encoder discussed in Raspberry
+Pi's [H.264 encoding performance paper](https://pip-assets.raspberrypi.com/categories/685-app-notes-guides-whitepapers/documents/RP-010033-WP-1-H.264%20encoding%20performance%20on%20Raspberry%20Pi%205_series%20computers.pdf).
+Its benchmark results depend on the tested settings and workload; they are not a
+guarantee for every camera, filter or concurrent-stream configuration. A camera
+that supplies compatible H.264 can use stream copy to avoid re-encoding.
+
+The maintainer has successfully tested the ARM image on a Pi 5 with USB cameras.
+Pi 4 can use V4L2 M2M when supported by its host kernel; physical Pi hardware
+encoder validation remains outstanding. Docker selects the architecture
+automatically from a multi-platform tag.
 
 Open **`http://HOST:8080/ui/`** and complete the initial account/setup screens.
 Use a strong password. Existing installations retain their account and settings.
