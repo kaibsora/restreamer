@@ -1,10 +1,9 @@
 # Raspberry Pi and native multi-platform builds
 
-The published `latest` and fixed `rc-2` tags include `linux/amd64` and `linux/arm64`.
+The application image includes `linux/amd64` and `linux/arm64` variants.
 Docker selects the matching architecture from the combined image tag; no
 `platform:` setting or architecture-specific application tag is necessary.
-The immutable `rc-1` tag remains the previously accepted AMD64-only release.
-See the [RC-2 acceptance record](rc-2-acceptance.md) for tested hardware and limits.
+See the [main guide](../README.md#supported-systems) for tested hardware and limits.
 
 ## Deploy on a 64-bit Raspberry Pi
 
