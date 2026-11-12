@@ -447,6 +447,10 @@ were fingerprinted before testing and checked afterward.
   streams advanced by 30 and 62 frames during their respective checks. In Chrome,
   the new player-page panel applied brightness from 0 to 1 and back to 0 with the
   live preview running. Driver-dependent inactive controls stayed disabled.
+  Zoom changed by one driver-reported step on both cameras and was restored.
+  Temporarily disabling initially enabled autofocus made manual focus available;
+  restoring autofocus made manual focus inactive again. No manual focus value
+  was written. Capture and relay PIDs remained unchanged throughout these checks.
   Unauthenticated writes returned 401; an authenticated `/dev/null` write was
   rejected with 400. No stream edit/save, stop/start or camera-mode change was
   needed. The unit/integration checks also verified player DOM continuity and
@@ -493,3 +497,37 @@ RTSP/UDP on a suitable routed receiver, optical delay, the new overnight IP soak
 UI-authored hardware watermark publication, real printer/Frigate client details
 and WAN load remain open in [tracking issue #2](https://github.com/kaibsora/restreamer/issues/2).
 Audio remains outside this video-only run.
+
+### Exact native development candidate and final cleanup
+
+The native AMD64/ARM64 workflow above passed all quality, acceptance,
+published-image and combined-index gates for application commit
+`fb117f88af529475c01c03f38e64e69b6e4e1e7f` on `development`:
+
+- Candidate: `ghcr.io/kaibsora/restreamer:build-43279430890-1`
+- Combined index: `sha256:bc85929f4e268232e8017d916f0ee5388bed057999e07d5223d4f50eaa57ba02`
+- AMD64 manifest: `sha256:afef695ba2bbf7c83c99139d32eb46d2122d7c9c79d0eddb7eab1b79a6d6d0e6`
+- ARM64 manifest: `sha256:ae1a7e8b554a7ca2952f77851165f0f26e4ae01a1dd3327df57ea4eae27a3853`
+
+Both platform images and their labeled corresponding FFmpeg source packages were
+anonymously accessible. The exact combined digest was installed on the Intel
+physical test host through a separate development-image Compose override, keeping
+the same configuration/data volumes and companion service. The test checkout was
+switched to `development`; existing untracked deployment files were preserved.
+All seven configurations and start/stop orders survived recreation.
+
+On this exact candidate, live brightness write/readback/restore passed again on
+both cameras with unchanged capture PIDs and 38/50 advancing frames. Required
+VA-API and Quick Sync finite encode checks passed. The C920 advanced 60 frames
+in the four-second progress observation, and three seconds of its current HLS
+output decoded. Chrome played the candidate's live camera and applied/read back
+brightness 128 to 129 and back to 128 directly below the player; its capture
+uptime continued advancing. The generated footer was `calm-maple-9237`.
+
+Final saved-configuration/order and image revision/digest checks passed. There
+were no temporary FFmpeg test processes, preview containers or agent-created
+viewers left running; finite diagnostic commands had exited. No application test
+pods/services or native ARC job pods remained in the test namespaces. The normal
+camera streams and application stayed running for the maintainer's own tests.
+Stable `main`, `1.0.0`, `1.0`, `1`, `latest`, `rc-1` and `rc-2` were unchanged;
+stable aliases were checked anonymously against their prior accepted digests.
