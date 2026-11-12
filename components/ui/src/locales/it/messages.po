@@ -2939,8 +2939,12 @@ msgid "Stretch or trim audio slightly to follow capture timestamps and prevent i
 msgstr ""
 
 #: src/views/Playersite.jsx
-msgid "Support datarhei Restreamer"
-msgstr "Supporto datarhei Restreamer"
+msgid "Support CQComber Restreamer"
+msgstr ""
+
+#: src/views/Playersite.jsx
+#~ msgid "Support datarhei Restreamer"
+#~ msgstr "Supporto datarhei Restreamer"
 
 #: src/views/Edit/Sources/Network.jsx
 #: src/views/Edit/Wizard/Sources/Network.jsx

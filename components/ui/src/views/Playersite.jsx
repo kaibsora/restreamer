@@ -470,7 +470,7 @@ export default function Playersite(inputProps) {
 								</Grid>
 								<Grid item xs={12}>
 									<Checkbox
-										label={<Trans>Support datarhei Restreamer</Trans>}
+										label={<Trans>Support CQComber Restreamer</Trans>}
 										checked={$settings.support}
 										disabled={!$settings.playersite}
 										onChange={handleChange('support')}
