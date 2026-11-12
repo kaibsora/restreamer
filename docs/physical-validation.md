@@ -1,9 +1,9 @@
 # Physical video validation
 
-Latest verified image: `ghcr.io/kaibsora/restreamer:rc-1` (also `latest`).
+Published release baseline: `ghcr.io/kaibsora/restreamer:1.0.0`.
 
 Published image digest:
-`sha256:798eee3f0bd960afb18fd73e9e64041a7dc1f06aeb1fad90d0c2f1f424649bc6`.
+`sha256:867fef634c8c96f5630ae3c3480ffcbfa89644d0b257dc8c7ac0de9c25a9ffc2`.
 
 The initial four-stream baseline below used `sha-c545e64`. Updated-image results
 are recorded at the end of this document.
@@ -427,3 +427,69 @@ functional acceptance. No new optical delay measurement, AMD/NVIDIA physical tes
 or audio acceptance is claimed. Verification viewers, preview containers and
 hardware-test containers/scripts were stopped or removed; user channel orders were
 preserved.
+
+## Live dashboard controls and additional Intel checks, November 12, 2026
+
+The new dashboard UI at development commit
+`fb117f88af529475c01c03f38e64e69b6e4e1e7f` was built locally and served through a
+loopback-only preview proxy to the running 1.0.0 backend identified above. This
+kept the stable application's files and saved source settings unchanged. The
+[native development candidate workflow](https://github.com/kaibsora/restreamer/actions/runs/43279430890)
+qualifies the separately built development image; the preview results below do
+not themselves claim a deployment of that image.
+
+Two connected physical USB cameras (C920 and a USB 2.0 camera) were already
+streaming. All seven saved process configurations and their start/stop orders
+were fingerprinted before testing and checked afterward.
+
+- **Live controls:** brightness changed by one driver-reported step on each
+  camera, read back, and restored. Capture PIDs remained identical; the two
+  streams advanced by 30 and 62 frames during their respective checks. In Chrome,
+  the new player-page panel applied brightness from 0 to 1 and back to 0 with the
+  live preview running. Driver-dependent inactive controls stayed disabled.
+  Unauthenticated writes returned 401; an authenticated `/dev/null` write was
+  rejected with 400. No stream edit/save, stop/start or camera-mode change was
+  needed. The unit/integration checks also verified player DOM continuity and
+  that a network channel does not expose unrelated local USB controls.
+- **Hardware filter composition:** a live camera's HLS output was decoded, scaled
+  to 640x360, overlaid with a PNG logo and UTF-8 text, and encoded into 45-frame
+  H.264 samples with Intel VA-API and Quick Sync separately. Both outputs decoded
+  all 45 frames. Encoder tags identified the requested hardware backend. Decoded
+  screenshots visibly contained the logo and `CQComber — café Ω`. This is a
+  finite FFmpeg filter/backend check, not a new test of a UI-authored watermark
+  publication, optical latency or low-latency HLS forwarding.
+- **Concurrent capture/encode:** both saved USB cameras continued advancing
+  while additional test-bars and Game-of-Life inputs each ran a 45-second
+  640x480/15 FPS VA-API encode. Five observations eight seconds apart found both
+  physical captures and both virtual encoders active. The virtual encoders
+  completed normally. This is a bounded four-source regression check, not a new
+  overnight soak or multi-IP-camera test.
+- **RTSP input recovery:** an isolated synthetic short-GOP RTSP/TCP publisher and
+  temporary Core stream-copy reader produced frames, the publisher was stopped,
+  and a replacement publisher was started. The reader resumed advancing frames
+  without recreating Restreamer. The recovery observation was 3.609 seconds
+  after the replacement publisher's two-second warmup; this is not ongoing frame
+  age or an end-to-end latency measurement. Reader reconnect delay was one
+  second, input timeout three seconds and stale timeout five seconds. This
+  validates controlled source-loss recovery, not real IP-camera firmware,
+  authentication or reboot behavior.
+- **Resilient browser relay:** an unused configured resilient slot was viewed in
+  Chrome using MediaMTX's built-in WebRTC player. The offline slate changed to a
+  finite physical-camera readback publication encoded with Intel VA-API, then
+  returned to the slate when that publisher exited. There were no page reloads;
+  video readiness stayed at 4 and playback time advanced from approximately
+  27.731 to 62.343 to 89.984 seconds. The decoded dimensions changed from the
+  1920x1080 slate to 640x360 video and back. This is browser relay evidence;
+  it does not substitute for the pending real Mainsail/Fluidd/Frigate tests.
+
+Temporary encoders, the synthetic RTSP publisher/reader, the finite resilient
+publisher and the local UI preview were stopped/removed; agent-created viewers
+were closed. Temporary remote sample files were removed. Camera brightness was
+restored, and saved process configurations/orders were preserved. No new Pi
+application test deployment was created.
+
+AMD/NVIDIA/AV1 and Pi 4 hardware encoding, two independent physical IP cameras,
+RTSP/UDP on a suitable routed receiver, optical delay, the new overnight IP soak,
+UI-authored hardware watermark publication, real printer/Frigate client details
+and WAN load remain open in [tracking issue #2](https://github.com/kaibsora/restreamer/issues/2).
+Audio remains outside this video-only run.
