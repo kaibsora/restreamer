@@ -52,6 +52,8 @@ Choose a deployment mode below, then open **`http://HOST:8080/ui/`**. Configure
 authentication during initial setup before granting access to untrusted clients.
 There is no shared default administrator password. Keep public viewing and
 administration access boundaries appropriate to your deployment.
+Fresh Core configuration has API authentication disabled; enable it in Settings
+before exposing the service beyond trusted hosts.
 
 ### Intel / AMD host with `/dev/dri`
 
