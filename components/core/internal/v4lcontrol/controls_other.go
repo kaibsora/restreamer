@@ -2,7 +2,7 @@
 
 package v4lcontrol
 
-func IsCodecDevice(path string) bool { return false }
+func IsNonCameraDevice(path string) bool { return false }
 
 func Modes(path string) ([]CaptureFormat, error) { return nil, ErrUnsupported }
 

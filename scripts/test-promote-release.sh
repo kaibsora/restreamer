@@ -40,4 +40,19 @@ RELEASE_LOOKUP_FAILURE=true bash "${script}" >/dev/null 2>&1 && exit 1
 ! grep -q 'imagetools create' "${LOG}"
 bash "${script}" >/dev/null
 test "$(grep -c 'imagetools create' "${LOG}")" -eq 1
-echo 'PASS: development images, changed release tags and registry lookup errors block promotion; accepted digest is promoted once.'
+! grep -q "${IMAGE_REPOSITORY}:latest" "${LOG}"
+for invalid in 1.0 v1.0.0 01.0.0 1.00.0 1.0.0-rc.1 '1.0.0;echo unsafe'; do
+  : > "${LOG}"
+  RELEASE_TAG="${invalid}" bash "${script}" >/dev/null 2>&1 && exit 1
+  test ! -s "${LOG}"
+done
+: > "${LOG}"
+RELEASE_TAG=1.0.0 EXISTING_DIGEST=sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb bash "${script}" >/dev/null 2>&1 && exit 1
+! grep -q 'imagetools create' "${LOG}"
+: > "${LOG}"
+RELEASE_TAG=1.0.0 bash "${script}" >/dev/null
+test "$(grep -c 'imagetools create' "${LOG}")" -eq 1
+for tag in 1.0.0 1.0 1 latest; do
+  grep -Fq -- "--tag ${IMAGE_REPOSITORY}:${tag} " "${LOG}"
+done
+echo 'PASS: invalid versions, development images, changed release tags and registry errors block promotion; stable aliases share one accepted digest; candidates cannot move latest.'

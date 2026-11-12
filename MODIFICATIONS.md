@@ -27,3 +27,8 @@ branding does not transfer authorship of the upstream implementation.
   CQComber Restreamer; repair MediaMTX help links after the main branch rename;
   document Pi 5 libavcodec/libx264 CPU encoding with Raspberry Pi's performance
   paper and record successful ARM USB camera testing.
+
+* 1.0 release preparation: reorganize deployment documentation and component
+  versions/credits; add immutable semantic-version promotion with stable aliases;
+  exclude metadata/output and media-controller processing queues from camera
+  discovery while retaining standalone cameras and runtime codec access.

@@ -27,7 +27,7 @@ func DevicesV4L() ([]HWDevice, error) {
 	if len(devices) != 0 {
 		cameras := make([]HWDevice, 0, len(devices))
 		for _, device := range devices {
-			if !v4lcontrol.IsCodecDevice(device.Id) {
+			if !v4lcontrol.IsNonCameraDevice(device.Id) {
 				cameras = append(cameras, device)
 			}
 		}

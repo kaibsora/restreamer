@@ -22,6 +22,11 @@ watcher. It needs no external hot-plug daemon and grants no `privileged` access.
 Set `VIDEO_GID` to the host video group's numeric ID if it differs from 44.
 Keep both Compose files and the same project name when updating.
 
+The source selector lists standalone capture devices. Metadata-only nodes, codec
+devices and PiSP processing queues are not camera inputs. The Pi's ISP queues
+require a media-controller pipeline; CSI/libcamera integration remains outside
+the container's supported capture setup. Codec nodes remain available to FFmpeg.
+
 ## Acceleration and limits
 
 For Pi 5 CPU H.264 encoding, choose **H.264 (libx264)**. The application path is
@@ -91,8 +96,10 @@ camera/relay stack; it is not a physical Pi camera or codec test.
 Successful platform images, including their provenance/SBOM manifests, become
 one `build-<run>-<attempt>` candidate index. Promotion on `main` requires both
 architectures and native verification before updating `latest` and a new fixed
-`rc-N` tag. `rc-1` is never overwritten. `development` builds publish candidates
-only. See [Docker's native matrix guidance](https://docs.docker.com/build/ci/github-actions/multi-platform/).
+stable version tag, for example `1.0.0`, together with its `1.0`, `1` and `latest`
+aliases. Fixed release tags are never overwritten. Candidate tags do not move
+stable aliases; `development` builds publish candidates only.
+See [Docker's native matrix guidance](https://docs.docker.com/build/ci/github-actions/multi-platform/).
 
 ## Generated footer name
 
