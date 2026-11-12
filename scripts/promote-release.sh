@@ -4,7 +4,13 @@ set -euo pipefail
 [[ "${GITHUB_REF}" == refs/heads/main ]]
 [[ "${ACCEPTED_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
 [[ "${EXPECTED_COMMIT}" =~ ^[0-9a-f]{40}$ ]]
-[[ "${RELEASE_TAG}" =~ ^rc-[1-9][0-9]*$ ]]
+tags=("${RELEASE_TAG}")
+if [[ "${RELEASE_TAG}" =~ ^([1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+  tags+=("${BASH_REMATCH[1]}.${BASH_REMATCH[2]}" "${BASH_REMATCH[1]}" latest)
+elif [[ ! "${RELEASE_TAG}" =~ ^rc-[1-9][0-9]*$ ]]; then
+  echo 'Release tag must be an exact stable version (1.0.0) or an immutable rc-N tag.' >&2
+  exit 1
+fi
 git merge-base --is-ancestor "${EXPECTED_COMMIT}" HEAD
 image="${IMAGE_REPOSITORY}@${ACCEPTED_DIGEST}"
 docker pull "${image}"
@@ -30,10 +36,11 @@ elif ! grep -Eqi 'manifest unknown|: not found$' "${lookup_error}"; then
   echo 'Release tag lookup failed; refusing to treat a registry error as a missing tag.' >&2
   exit 1
 fi
-docker buildx imagetools create --prefer-index=false \
-  --tag "${IMAGE_REPOSITORY}:${RELEASE_TAG}" --tag "${IMAGE_REPOSITORY}:latest" "${image}"
-for tag in "${RELEASE_TAG}" latest; do
+tag_arguments=()
+for tag in "${tags[@]}"; do tag_arguments+=(--tag "${IMAGE_REPOSITORY}:${tag}"); done
+docker buildx imagetools create --prefer-index=false "${tag_arguments[@]}" "${image}"
+for tag in "${tags[@]}"; do
   actual="$(docker buildx imagetools inspect "${IMAGE_REPOSITORY}:${tag}" --format '{{.Manifest.Digest}}')"
   [[ "${actual}" == "${ACCEPTED_DIGEST}" ]]
 done
-echo "Promoted ${image} to ${RELEASE_TAG} and latest without rebuilding."
+echo "Promoted ${image} to ${tags[*]} without rebuilding."

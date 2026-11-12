@@ -23,7 +23,7 @@ const description = (
 		<Link
 			color="secondary"
 			target="_blank"
-			href="https://github.com/kaibsora/restreamer/blob/2.x/deploy/README.md#lan-rtsp-and-webrtc"
+			href="https://github.com/kaibsora/restreamer/blob/main/deploy/README.md#lan-rtsp-and-webrtc"
 		>
 			deployment guide
 		</Link>

@@ -70,7 +70,7 @@ func openCamera(path string, write bool) (int, error) {
 	if flags&0x80000000 != 0 {
 		flags = binary.NativeEndian.Uint32(capability[88:92])
 	}
-	if err := cameraCapability(flags); err != nil {
+	if err := cameraDeviceCapability(name(capability[:16]), flags); err != nil {
 		return -1, err
 	}
 	ok = true
@@ -82,19 +82,32 @@ func cameraCapability(flags uint32) error {
 		return ErrCodecDevice
 	}
 	if flags&(1|0x1000) == 0 {
-		return fmt.Errorf("not a video capture device")
+		return ErrNotCameraDevice
 	}
 	return nil
 }
 
-// IsCodecDevice lets discovery hide M2M devices while preserving the fallback
-// for mapped devices that cannot be queried until a later source probe.
-func IsCodecDevice(path string) bool {
+func cameraDeviceCapability(driver string, flags uint32) error {
+	if err := cameraCapability(flags); err != nil {
+		return err
+	}
+	// PiSP exposes separate processing queues as capture/output devices. They
+	// need a configured media-controller pipeline, not a standalone FFmpeg input.
+	// Keep real multiplanar and platform cameras; do not filter by bus or path.
+	if driver == "pispbe" || flags&0x20000000 != 0 {
+		return fmt.Errorf("%w: media-controller pipeline configuration is required", ErrNotCameraDevice)
+	}
+	return nil
+}
+
+// IsNonCameraDevice hides codec, metadata, output and ISP processing nodes,
+// preserving fallback discovery when a mapped device cannot yet be queried.
+func IsNonCameraDevice(path string) bool {
 	fd, err := openCamera(path, false)
 	if fd >= 0 {
 		unix.Close(fd)
 	}
-	return errors.Is(err, ErrCodecDevice)
+	return errors.Is(err, ErrCodecDevice) || errors.Is(err, ErrNotCameraDevice)
 }
 
 func name(data []byte) string   { return string(bytes.SplitN(data, []byte{0}, 2)[0]) }

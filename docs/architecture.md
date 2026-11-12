@@ -14,8 +14,9 @@ application. Upstream updates can still be reviewed and imported independently.
 ## Image model
 
 `Dockerfile` builds Core and UI from the source in this repository. The final stage
-uses the hardware FFmpeg image produced from
-`components/ffmpeg/Dockerfile.ubuntu.hardware`.
+uses an architecture-specific FFmpeg image produced from
+`components/ffmpeg/Dockerfile.ubuntu.hardware` (AMD64) or
+`components/ffmpeg/Dockerfile.ubuntu.arm64` (ARM64).
 
 The AMD64 hardware image intentionally contains all three Linux GPU stacks:
 
@@ -68,8 +69,9 @@ binary.
 
 The `development` branch produces candidates. The accepted branch is `main`.
 Neither scheduled nor ordinary manual builds can publish `latest`; a separate
-digest-based promotion workflow on `main` updates `latest` and a new immutable
-`rc-N` tag after acceptance. See [component notices and source distribution](../THIRD_PARTY.md).
+digest-based promotion workflow on `main` publishes an immutable stable version
+after acceptance, with major/minor/`latest` aliases.
+See [component notices and source distribution](../THIRD_PARTY.md).
 
 ## Native ARM64 images
 

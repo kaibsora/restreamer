@@ -33,13 +33,16 @@ Use the `development` branch for future changes. `main` holds accepted release
 code. Open feature/fix pull requests against `development`; promote reviewed and
 physically accepted changes back to `main` for a public release. Candidate image
 builds never update `latest`. Run `promote-release.yml` on `main` with the accepted
-image digest, exact application commit and a new `rc-N` tag to publish a release
-without rebuilding. The workflow refuses development images and conflicting RC
-tags. Preserve the source-image digest and verification evidence with each release.
+image digest, exact application commit and a new version such as `1.0.0` to publish
+without rebuilding. Stable versions update their minor/major aliases and `latest`;
+an `rc-N` tag is immutable and does not move stable aliases. The workflow refuses
+development images and conflicting fixed tags. Preserve the source-image digest
+and verification evidence with each release.
 For hardware acceptance, explicitly pass the candidate build tag/digest; the
 hardware workflow's `latest` default only checks the already accepted release.
 Keep the About release label as `Development` on this branch. Set it to the
-upcoming `RC-N` on `main` before building the next release candidate.
+upcoming release version on the release preparation branch before merging to
+`main` and building the release image.
 
 The maintained source lives in one repository:
 

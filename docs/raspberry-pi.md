@@ -1,10 +1,9 @@
 # Raspberry Pi and native multi-platform builds
 
-The published `latest` and fixed `rc-2` tags include `linux/amd64` and `linux/arm64`.
+The application image includes `linux/amd64` and `linux/arm64` variants.
 Docker selects the matching architecture from the combined image tag; no
 `platform:` setting or architecture-specific application tag is necessary.
-The immutable `rc-1` tag remains the previously accepted AMD64-only release.
-See the [RC-2 acceptance record](rc-2-acceptance.md) for tested hardware and limits.
+See the [main guide](../README.md#supported-systems) for tested hardware and limits.
 
 ## Deploy on a 64-bit Raspberry Pi
 
@@ -21,6 +20,11 @@ mapping and exposes V4L2 camera/codec devices through Core's integrated hot-plug
 watcher. It needs no external hot-plug daemon and grants no `privileged` access.
 Set `VIDEO_GID` to the host video group's numeric ID if it differs from 44.
 Keep both Compose files and the same project name when updating.
+
+The source selector lists standalone capture devices. Metadata-only nodes, codec
+devices and PiSP processing queues are not camera inputs. The Pi's ISP queues
+require a media-controller pipeline; CSI/libcamera integration remains outside
+the container's supported capture setup. Codec nodes remain available to FFmpeg.
 
 ## Acceleration and limits
 
@@ -91,8 +95,10 @@ camera/relay stack; it is not a physical Pi camera or codec test.
 Successful platform images, including their provenance/SBOM manifests, become
 one `build-<run>-<attempt>` candidate index. Promotion on `main` requires both
 architectures and native verification before updating `latest` and a new fixed
-`rc-N` tag. `rc-1` is never overwritten. `development` builds publish candidates
-only. See [Docker's native matrix guidance](https://docs.docker.com/build/ci/github-actions/multi-platform/).
+stable version tag, for example `1.0.0`, together with its `1.0`, `1` and `latest`
+aliases. Fixed release tags are never overwritten. Candidate tags do not move
+stable aliases; `development` builds publish candidates only.
+See [Docker's native matrix guidance](https://docs.docker.com/build/ci/github-actions/multi-platform/).
 
 ## Generated footer name
 

@@ -22,3 +22,13 @@ branding does not transfer authorship of the upstream implementation.
   native acceptance and a combined OCI index. Add a Raspberry Pi V4L2 deployment
   override, expose M2M codec nodes without listing them as cameras, and bound
   V4L2 M2M buffer defaults for constrained hosts. Original notices are retained.
+
+* November 2026: update new-source metadata and the player-site support label to
+  CQComber Restreamer; repair MediaMTX help links after the main branch rename;
+  document Pi 5 libavcodec/libx264 CPU encoding with Raspberry Pi's performance
+  paper and record successful ARM USB camera testing.
+
+* 1.0 release preparation: reorganize deployment documentation and component
+  versions/credits; add immutable semantic-version promotion with stable aliases;
+  exclude metadata/output and media-controller processing queues from camera
+  discovery while retaining standalone cameras and runtime codec access.

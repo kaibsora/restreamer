@@ -17,7 +17,7 @@ const description = (
 		<Link
 			color="secondary"
 			target="_blank"
-			href="https://github.com/kaibsora/restreamer/blob/2.x/deploy/README.md#keep-a-dashboard-stream-available-while-its-camera-is-offline"
+			href="https://github.com/kaibsora/restreamer/blob/main/deploy/README.md#keep-a-dashboard-stream-available-while-its-camera-is-offline"
 		>
 			deployment guide
 		</Link>

@@ -1,123 +1,61 @@
 # CQComber Restreamer
 
-[RC-2 release and exact image/source record](https://github.com/kaibsora/restreamer/releases/tag/rc-2)
-— published as `ghcr.io/kaibsora/restreamer:rc-2` and `:latest` for
-`linux/amd64` and `linux/arm64`. Docker selects the matching architecture.
+Self-hosted camera and livestream management in a Docker image. Ingest USB or IP
+cameras, copy or transcode their video, and share streams through a web player,
+printer dashboard or publishing service.
 
-An independent adaptation of **[datarhei Restreamer](https://github.com/datarhei/restreamer)**,
-maintained by **CQComber** (GitHub: **kaibsora**). One source repository and one
-multi-platform Linux application image combine the web UI, Core backend and a hardware-enabled
-FFmpeg build. MediaMTX is an optional companion service for LAN delivery.
+The image bundles a React web UI, the Core media/process backend and FFmpeg.
+The included Compose setup also runs MediaMTX for LAN RTSP and WebRTC delivery.
+This is an independent adaptation of [datarhei Restreamer](https://github.com/datarhei/restreamer).
 
-**RC-1:** the maintainer completed the physical acceptance checklist, including an
-overnight run, simultaneous cameras, hot-plug, camera controls, rotation and
-acceptable local delay. This is a release candidate, with the limitations below.
-Intel VA-API and Quick Sync have physical validation; **AMD and NVIDIA GPUs are
-untested as of publication**. See the [acceptance record](docs/rc-1-acceptance.md)
-and [validation report](docs/physical-validation.md). Physical acceptance covered
-video; audio was outside that scope.
+**Image:** `ghcr.io/kaibsora/restreamer` · **Platforms:** `linux/amd64`, `linux/arm64`
 
-**RC-2:** native AMD64/ARM64 builds passed automated acceptance, including four
-concurrent synthetic streams on AMD64 and two on a Raspberry Pi 5. The exact
-release image also passed Intel encode checks and live USB camera playback;
-all saved configurations and start/stop orders survived recreation. See the
-[RC-2 acceptance record](docs/rc-2-acceptance.md). Pi hardware encoding remains
-physically untested; Pi 5 uses software encoding or camera H.264 passthrough.
+[Changelog](CHANGELOG.md) · [Deployment details](deploy/README.md) · [Report an issue](https://github.com/kaibsora/restreamer/issues)
 
-This is a personal project by a systems engineer with a printer-monitoring use
-case, not a professional programmer. Refactoring, updates, features, documentation
-and tests use substantial AI coding assistance. Physical results and automated
-checks describe what was tested; they do not guarantee every camera, driver or
-network combination. The project attempts to keep upstream components current,
-while providing bug fixes and features on demand.
+## Features
+
+- Multiple USB/V4L2, network and virtual video sources.
+- CPU encoding, desktop GPU encoding, or compatible camera H.264 stream copy.
+- Integrated USB hot-plug, driver-provided camera controls and encoded rotation.
+- HLS web playback and public pages; RTMP/SRT services; optional RTSP/WebRTC relay.
+- Persistent configuration, reverse-proxy support, native multi-platform builds,
+  image provenance/SBOMs and matching FFmpeg source packages.
+
+## Supported systems
+
+Use a Linux host, Docker Engine and **Docker Compose 2.30+**. Docker selects the
+image architecture automatically. Host drivers and device permissions are still
+required; a container cannot add hardware capabilities that the machine lacks.
+
+| Platform / encoder | Support and validation |
+| --- | --- |
+| AMD64 CPU | Software encoding supported and tested |
+| Intel VA-API / Quick Sync | Physically tested with Intel UHD 630; available codecs depend on GPU generation |
+| AMD VA-API / Vulkan Video | Compiled support; **physical GPU validation outstanding** |
+| NVIDIA NVENC | Requires host driver and NVIDIA Container Toolkit; **physical GPU validation outstanding** |
+| ARM64 / Raspberry Pi 5 | CPU encoding and USB cameras physically tested |
+| Raspberry Pi 4 V4L2 M2M | Compiled support; requires a compatible host kernel/codec device; **physical encoder validation outstanding** |
+
+The ARM image contains software codecs and Linux V4L2/DRM support; it omits the
+AMD64 CUDA, Intel and Vulkan driver stacks. There is no 32-bit ARM image or
+integrated CSI/libcamera camera support. Docker Desktop USB/GPU passthrough is
+outside the validated deployment target.
 
 ## Quick start
-
-Requirements: a **Linux x86-64 or 64-bit ARM** host, Docker Engine and **Docker
-Compose 2.30+**. Hardware encoding requires compatible host devices/drivers.
-Docker Desktop USB/GPU passthrough is outside the validated deployment target.
-The `latest` and `rc-2` tags include native AMD64 and ARM64 images. The immutable
-first release, `rc-1`, remains AMD64-only.
-See [Raspberry Pi deployment and hardware limits](docs/raspberry-pi.md).
 
 ```sh
 git clone --branch main https://github.com/kaibsora/restreamer.git
 cd restreamer
 ```
 
-The primary Compose file maps `/dev/dri` by default, as needed for Intel/AMD GPUs.
-For a host with that directory, start with:
+Choose a deployment mode below, then open **`http://HOST:8080/ui/`**. Configure
+authentication during initial setup before granting access to untrusted clients.
+There is no shared default administrator password. Keep public viewing and
+administration access boundaries appropriate to your deployment.
+Fresh Core configuration has API authentication disabled; enable it in Settings
+before exposing the service beyond trusted hosts.
 
-```sh
-docker compose -f deploy/compose.yaml up -d
-```
-
-For a CPU-only host **without `/dev/dri`**, clear that mapping:
-
-```sh
-docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml up -d
-```
-
-For a **64-bit Raspberry Pi**, use the dedicated V4L2 hot-plug override:
-
-```sh
-docker compose -f deploy/compose.yaml -f deploy/compose.raspberrypi.yaml up -d
-```
-
-Pi 5 has no H.264 hardware encoder. Select **H.264 (libx264)** for CPU encoding:
-Restreamer launches FFmpeg, whose `libavcodec` interface calls `libx264` to encode
-the video. This uses the same underlying software encoder discussed in Raspberry
-Pi's [H.264 encoding performance paper](https://pip-assets.raspberrypi.com/categories/685-app-notes-guides-whitepapers/documents/RP-010033-WP-1-H.264%20encoding%20performance%20on%20Raspberry%20Pi%205_series%20computers.pdf).
-Its benchmark results depend on the tested settings and workload; they are not a
-guarantee for every camera, filter or concurrent-stream configuration. A camera
-that supplies compatible H.264 can use stream copy to avoid re-encoding.
-
-The maintainer has successfully tested the ARM image on a Pi 5 with USB cameras.
-Pi 4 can use V4L2 M2M when supported by its host kernel; physical Pi hardware
-encoder validation remains outstanding. Docker selects the architecture
-automatically from a multi-platform tag.
-
-Open **`http://HOST:8080/ui/`** and complete the initial account/setup screens.
-Use a strong password. Existing installations retain their account and settings.
-Configuration and media persist in the `restreamer-config` and `restreamer-data`
-named volumes. Keep the same Compose project name and files when updating so
-Docker uses the same volumes.
-
-The application image stays at `ghcr.io/kaibsora/restreamer`; the new product name
-does not change repository or package ownership.
-
-| Image tag | Purpose |
-| --- | --- |
-| `rc-2` | Fixed multi-platform release candidate; recommended for reproducible testing |
-| `rc-1` | Preserved first release candidate, AMD64 only |
-| `latest` | Most recently accepted public release; updated only by explicit promotion |
-| `build-<run>-<attempt>` / `@sha256:<digest>` | Exact candidate/release build, useful for rollback |
-| `ffmpeg-hardware-*` / `ffmpeg-sources-*` | Internal runtime/source images, not the complete application |
-
-The checked-in Compose image is `latest`. To pin a release, change its `image:`
-line to `ghcr.io/kaibsora/restreamer:rc-2` or the published digest.
-
-The footer's generated `adjective-noun-number` name is seeded from the application
-Git commit. It stays the same across architectures/restarts and changes with
-the source revision. The original configured Core instance name is retained.
-
-## GPU encoding
-
-The UI exposes compiled encoders, but the GPU must support the requested codec,
-resolution and driver API. Run a short real encode check after deployment:
-
-```sh
-docker exec restreamer restreamer-hardware-report --verify
-```
-
-| Hardware | Deployment and encoder selection | Physical status |
-| --- | --- | --- |
-| Intel | Map `/dev/dri`; choose H.264/HEVC VA-API or Intel Quick Sync. Set the hardware device to the correct `/dev/dri/renderD*` node. | UHD 630 VA-API / Quick Sync validated; codecs depend on GPU generation |
-| AMD | Map `/dev/dri`; choose a VA-API encoder, or Vulkan Video when supported by GPU and Mesa driver. | Compiled support; physical GPU untested |
-| NVIDIA | Install compatible NVIDIA host driver and Container Toolkit; use the NVIDIA override; choose NVENC. | Compiled support; physical GPU untested |
-| CPU | Use `compose.cpu.yaml` if `/dev/dri` is absent; select H.264 libx264 or another software encoder. | Validated; consumes more CPU |
-
-Set group IDs to match the host's device ownership when needed. For example:
+### Intel / AMD host with `/dev/dri`
 
 ```sh
 export RENDER_GID="$(stat -c %g /dev/dri/renderD128)"
@@ -125,167 +63,205 @@ export VIDEO_GID="$(getent group video | cut -d: -f3)"
 docker compose -f deploy/compose.yaml up -d
 ```
 
-On multi-GPU hosts inspect `/dev/dri` and select the actual node; `renderD128` is
-an example, not a universal GPU identifier. `RESTREAMER_VAAPI_DEVICE` and
-`RESTREAMER_QSV_DEVICE` select report/verification devices; the UI encoder's
-hardware-device field controls an individual stream. Vulkan uses
-`RESTREAMER_VULKAN_DEVICE` (default index `0`). Require a specific working backend:
+Use the actual render node on multi-GPU hosts. In the UI choose VA-API or Quick
+Sync and set that stream's hardware-device field to the correct device.
+
+### CPU-only host without `/dev/dri`
 
 ```sh
-docker exec restreamer restreamer-hardware-report --require vaapi
-# Alternatives: --require qsv, --require nvenc, --require vulkan
+docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml up -d
 ```
 
-For NVIDIA-only hosts without `/dev/dri`:
+Choose **H.264 (libx264)** or another supported software encoder.
+
+### 64-bit Raspberry Pi
+
+```sh
+export VIDEO_GID="$(getent group video | cut -d: -f3)"
+docker compose -f deploy/compose.yaml -f deploy/compose.raspberrypi.yaml up -d
+```
+
+**Pi 5 has no H.264 hardware encoder.** Select **H.264 (libx264)**: Core launches
+FFmpeg, whose `libavcodec` interface calls `libx264` to encode on the ARM CPU.
+Raspberry Pi's [H.264 encoding performance paper](https://pip-assets.raspberrypi.com/categories/685-app-notes-guides-whitepapers/documents/RP-010033-WP-1-H.264%20encoding%20performance%20on%20Raspberry%20Pi%205_series%20computers.pdf)
+compares this encoder with Pi 4 hardware encoding. Its benchmark settings are not
+a guarantee for every camera, filter or number of concurrent streams. Compatible
+camera-native H.264 can use stream copy to avoid re-encoding.
+
+The Pi override includes USB hot-plug access. See the [Pi guide](docs/raspberry-pi.md)
+for Pi 4 codec devices, cooling/load considerations and camera limitations.
+
+### NVIDIA
+
+Install the host driver and [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html), then run:
 
 ```sh
 docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml -f deploy/compose.nvidia.yaml up -d
 ```
 
-For mixed NVIDIA + Intel/AMD hosts, omit `compose.cpu.yaml` to retain DRM devices.
-The NVIDIA override uses `gpus: all`, which requires Compose 2.30+;
-configure [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-on the host before starting. The image includes the codec support, not a host driver.
+Choose an NVENC encoder in the UI. On mixed NVIDIA + Intel/AMD hosts, omit the
+CPU override to retain `/dev/dri` access.
 
-## USB cameras, controls and hot-plug
+### USB cameras and hot-plug
 
-For integrated hot-plug support, append `-f deploy/compose.hotplug.yaml` to your
-chosen Compose command. For an Intel/AMD host:
+Append `-f deploy/compose.hotplug.yaml` to the selected non-Pi command:
 
 ```sh
 export VIDEO_GID="$(getent group video | cut -d: -f3)"
 docker compose -f deploy/compose.yaml -f deploy/compose.hotplug.yaml up -d
 ```
 
-This uses the integrated Core device watcher, a read-only host `/dev` mount and
-V4L2 device access rules. It needs no external service, privileged container or
-Docker socket. Do not combine hot-plug mode with explicit camera device binds.
-For fixed devices instead, adapt [compose.camera-example.yaml](deploy/compose.camera-example.yaml).
-See [USB hot-plug](docs/usb-hotplug.md) for permissions and device identity details.
-For CPU/NVIDIA-only hosts, put the hot-plug override **after** `compose.cpu.yaml`
-so it adds the camera's video group back.
+Put this override after the CPU override when combining them. The Pi override
+already includes hot-plug. These Compose modes use Core's built-in watcher and
+V4L2 device rules, without a privileged container, Docker socket or host daemon.
+Do not combine hot-plug mode with explicit camera device bind mounts. For fixed
+devices, adapt [compose.camera-example.yaml](deploy/compose.camera-example.yaml).
 
-In **Add video source → Hardware source**, select a capture device and then:
+Select **Hardware device**, then the camera's capture format, resolution and frame
+rate. **Detected video track** shows the selected mode's verified track, usually
+one—not every resolution the camera supports. Camera controls depend on the
+driver; rotation requires transcoding. See [USB details](docs/usb-hotplug.md).
 
-1. Choose **Format** (for example MJPEG, raw YUYV or native H.264), **Resolution**
-   and **Frame rate**. Only modes advertised by that device/driver are listed.
-2. Probe the selected capture mode. **Detected video track** lists the verified
-   input tracks, usually one; it is not the list of all camera resolutions.
-3. Choose decoding/encoding. Native H.264 may use stream copy when compatible;
-   raw and MJPEG inputs need encoding for HLS/RTMP/browser-compatible output.
-4. Adjust **Camera controls** such as exposure, brightness, focus or zoom when
-   the driver provides them. Unsupported controls cannot be invented by the UI.
-5. Set source image rotation if needed. Rotation changes encoded output for all
-   viewers; stream copy cannot apply a rotation filter.
+### Minimal standalone container
 
-IP cameras use **Network source** with the camera's supported URL and credentials.
-Capture and driver control settings are device-specific. Camera controls may reset
-after a disconnect/reboot and are not automatically persisted/reapplied. Driver
-advertising a mode does not guarantee adequate USB bandwidth for several cameras;
-reduce resolution/rate or use separate USB controllers when necessary.
-
-## Local streams, printers and public viewing
-
-The built-in player uses **HLS**. It buffers and is not a sub-second player.
-For local clients, use RTSP/RTMP or a MediaMTX WebRTC relay. For fast starts use a
-short encoder keyframe interval (about one second or less) and avoid B-frames.
-Native camera H.264 can have a long fixed GOP: copying it may make clients wait
-many seconds for their first keyframe. Re-encode with a short GOP if needed.
-
-For Mainsail/Fluidd:
-
-1. Enable Core RTMP and the channel's RTMP output in the UI.
-2. Add a **MediaMTX LAN relay** publication. Choose its live **RTMP** source
-   (or a supported live SRT source), rather than HLS. Relaying HLS retains HLS delay.
-3. Publish to the Compose relay at `rtsp://mediamtx:8554` with a unique stream path.
-4. In the printer dashboard choose **WebRTC (MediaMTX)** and use
-   `http://HOST:8889/STREAM_PATH`, without appending `/whep`.
-
-Native clients can read `rtsp://HOST:8554/STREAM_PATH` (TCP recommended).
-Mainsail/Fluidd do not directly play arbitrary RTMP/SRT streams. Crowsnest normally
-captures/provides cameras; it is not an arbitrary RTSP input adapter. These relays
-let the dashboard consume the shared camera without opening the same USB device
-from two independent capture processes.
-
-If ICE advertises an unreachable container address, set
-`RESTREAMER_WEBRTC_HOSTS=HOST_LAN_IP` before Compose startup; comma-separated
-additional addresses are supported. WebRTC needs reachable UDP port 8189 and
-signaling port 8889. HTTPS dashboards require HTTPS signaling, with a suitable
-reverse proxy. See [LAN deployment instructions](deploy/README.md#lan-rtsp-and-webrtc)
-and [latency measurements and limitations](docs/low-latency-validation.md).
-
-For public HLS pages, configure the correct externally reachable hostname in the
-UI, terminate HTTPS at a dedicated reverse-proxy hostname, and forward the whole
-site to port 8080. [NGINX, Caddy and IIS examples](docs/reverse-proxy.md) cover the
-required headers and upload handling. Subpath hosting is not the documented setup.
-Do not expose the unauthenticated LAN relay directly to the internet; add appropriate
-network access controls/authentication before sharing it beyond a trusted network.
-
-## Ports and persistent data
-
-| Host port | Service |
-| --- | --- |
-| 8080/TCP | UI, API, HLS/public pages |
-| 8181/TCP | Core HTTPS, if enabled |
-| 1935 / 1936 TCP | Core RTMP / RTMPS, when enabled |
-| 6000/UDP | Core SRT, when enabled |
-| 8554/TCP | MediaMTX RTSP |
-| 8000 / 8001 UDP | MediaMTX RTP/RTCP, if used |
-| 8889/TCP | MediaMTX WebRTC signaling/page |
-| 8189/UDP | MediaMTX WebRTC ICE media |
-
-Port publication alone does not enable the corresponding Core service. Unused
-ports/services may be removed from your own deployment. Back up the named volumes
-and use the UI's configuration export before upgrading; exported configurations
-can include camera passwords and publication keys, so store them privately.
-
-## Update, recreate and roll back
-
-From the existing checkout, use the **same project name and override files** used
-at installation. For the Intel/AMD hot-plug example:
+For a new CPU-only installation without the Compose relay:
 
 ```sh
-git pull --ff-only
-docker compose -f deploy/compose.yaml -f deploy/compose.hotplug.yaml pull restreamer
-docker compose -f deploy/compose.yaml -f deploy/compose.hotplug.yaml up -d --no-deps --force-recreate restreamer
-docker compose -f deploy/compose.yaml -f deploy/compose.hotplug.yaml logs --tail 80 restreamer
+docker run -d --name restreamer --restart unless-stopped \
+  -p 8080:8080 \
+  -v restreamer-config:/core/config \
+  -v restreamer-data:/core/data \
+  ghcr.io/kaibsora/restreamer:latest
 ```
 
-This retains volumes. Manually started sources with autostart disabled may need
-starting again after recreation. To roll back, change the Compose image to a known
-immutable tag/digest, then run the pull and recreate commands again. To stop/remove
-the deployment's containers and network while retaining data, run the same Compose
-command with `down`. Adding `--volumes` deletes its persistent data.
+This publishes the UI/API/HLS port only. Use Compose for the documented GPU,
+camera and relay configurations. Compose users should keep their existing
+project and volume names rather than switch deployment methods during an upgrade.
 
-## Release channels and upstream updates
+## Local clients, printer dashboards and public viewers
 
-`main` is the accepted release branch. `development` is for subsequent changes and
-testing. GitHub Actions uses the custom `restreamer-linux` runner pool. Routine
-builds produce unique build tags and **cannot update `latest`**. After review
-and physical acceptance, the separate **Promote accepted release** workflow on
-`main` promotes an exact digest to a new `rc-N` tag and `latest`, without rebuilding.
-Existing release tags cannot be moved to a different digest.
+The built-in player uses **HLS**, which buffers. Use RTSP/RTMP or the MediaMTX
+WebRTC relay for latency-sensitive local clients. Stream copy avoids encoding
+work, but a camera with long keyframe intervals can still have slow startup.
 
-Scheduled/manual builds resolve current FFmpeg master to an immutable commit;
-manual builds can select an exact commit or release. A fresh build is a candidate,
-not automatically an accepted release. The FFmpeg banner may contain a historical
-version string; use the recorded source SHA/build provenance rather than guessing
-its APIs from that banner. Source images, notices, provenance and SBOMs accompany
-binary builds. [Contributing](CONTRIBUTING.md) describes development; see the
-[release gate](docs/rc-1-release-plan.md) for release evidence.
+For **Mainsail / Fluidd**, enable the channel's Core RTMP output, add a
+**MediaMTX LAN relay** publication using that live RTMP source, and publish to
+`rtsp://mediamtx:8554/STREAM_PATH`. In the dashboard select **WebRTC (MediaMTX)**
+and enter `http://HOST:8889/STREAM_PATH`, without `/whep`. Native RTSP clients use
+`rtsp://HOST:8554/STREAM_PATH`. Mainsail/Fluidd do not directly play arbitrary
+RTMP/SRT streams; Crowsnest is not a general RTSP input adapter.
 
-## Credit and licenses
+Set `RESTREAMER_WEBRTC_HOSTS` to reachable LAN addresses if ICE discovers an
+unreachable container address. HTTPS dashboards require HTTPS signaling.
+[LAN relay configuration](deploy/README.md#lan-rtsp-and-webrtc) covers ports,
+reconnection and resilient streams.
 
-Original Restreamer was created by **datarhei / FOSS GmbH and contributors**.
-This adaptation combines their [application](https://github.com/datarhei/restreamer),
-[UI](https://github.com/datarhei/restreamer-ui), [Core](https://github.com/datarhei/core)
-and [FFmpeg build integration](https://github.com/datarhei/ffmpeg). Their work made
-this project possible. This is not an official datarhei release; report fork-specific
-issues to [this repository](https://github.com/kaibsora/restreamer/issues).
+For external HLS viewing, use a dedicated HTTPS reverse-proxy hostname and set
+the correct published addresses in the UI. See [reverse-proxy examples](docs/reverse-proxy.md).
+The supplied MediaMTX relay is for a trusted LAN; add authentication/network
+controls before exposing it beyond that network.
 
-Application source remains **Apache-2.0**, with upstream copyright/licenses preserved.
-The bundled FFmpeg configuration is **GPL-3.0-or-later** and dependencies retain their
-own licenses. See [LICENSE](LICENSE), [NOTICE](NOTICE), [modification notices](MODIFICATIONS.md)
-and the [component inventory and exact source-download instructions](THIRD_PARTY.md).
-Credit also remains visible in the UI's About dialog. The CQComber name identifies
-the maintained adaptation and does not claim authorship of the original code.
+## Ports and storage
+
+| Port | Purpose |
+| --- | --- |
+| `8080/tcp` | Web UI, API, HLS and public pages |
+| `8181/tcp` | Core HTTPS, when enabled |
+| `1935/tcp`, `1936/tcp` | Core RTMP / RTMPS, when enabled |
+| `6000/udp` | Core SRT, when enabled |
+| `8554/tcp` | MediaMTX RTSP |
+| `8000/udp`, `8001/udp` | MediaMTX RTP / RTCP, if used |
+| `8889/tcp`, `8189/udp` | MediaMTX WebRTC signaling / media |
+
+Publishing a port does not enable its Core service. The Compose files start
+Restreamer and MediaMTX; use `up -d restreamer` for the application alone.
+Named volumes retain `/core/config` and `/core/data`. Keep the same Compose
+project name and the same override files for subsequent commands.
+
+## Versions, updates and rollback
+
+| Tag | Purpose |
+| --- | --- |
+| `1.0.0` | Immutable versioned application release |
+| `1.0`, `1` | Most recently accepted stable release in that minor / major line |
+| `latest` | Most recently accepted stable release |
+| `build-<run>-<attempt>` | Development or release-validation candidate |
+| `@sha256:<digest>` | Exact immutable image identity |
+
+The checked-in Compose file follows `latest`. For reproducible deployments, pin
+its `image:` to a version or digest. Back up the volumes and export the UI
+configuration before upgrading; exports may contain camera passwords or keys.
+
+Using the **same files and project options as your original deployment**:
+
+```sh
+docker compose -f deploy/compose.yaml pull
+docker compose -f deploy/compose.yaml up -d
+```
+
+Include your GPU/camera/Pi overrides in both commands. Hard-refresh the browser
+after updating. To roll back, restore the previous image reference and recreate
+the containers; restore a matching configuration backup if a newer release has
+migrated settings. **`docker compose down -v` deletes saved volumes.**
+
+`main` holds release code; new work and testing happen on `development`. Native
+ARC jobs build AMD64/ARM64 candidates, run acceptance checks and combine their
+manifests. Scheduled/manual builds resolve upstream FFmpeg to an immutable
+revision. They do not move `latest`; stable promotion retags a validated digest
+without rebuilding.
+
+## Component baseline
+
+| Component | Version / source |
+| --- | --- |
+| CQComber Restreamer | 1.0 release line |
+| Core | Fork of datarhei Core **16.16.0** |
+| Administration UI | Fork of Restreamer UI **1.14.0** |
+| FFmpeg / FFprobe | **8.0.git** upstream development snapshot, source [`02970f067cf06c5c23209d521575b1024898bb29`](https://github.com/FFmpeg/FFmpeg/commit/02970f067cf06c5c23209d521575b1024898bb29) |
+| MediaMTX | **1.21.3**, optional companion container |
+| Runtime base | **Ubuntu 24.04**, with architecture-specific libraries |
+
+FFmpeg's historical development banner does not identify a stable release or
+limit its library APIs. The source SHA and each release's image/source record
+identify the actual build. [Release records](https://github.com/kaibsora/restreamer/releases)
+include immutable image identities; [THIRD_PARTY.md](THIRD_PARTY.md) lists codecs,
+drivers, UI dependencies and corresponding-source download instructions.
+
+## Known limits and troubleshooting
+
+- AMD/NVIDIA GPU support and Pi 4 hardware encoding remain physically untested.
+- Physical acceptance covered video; audio has not received equivalent testing.
+- HLS startup depends on buffering and source keyframes; no universal sub-second
+  camera-to-display guarantee is made. See [latency validation](docs/low-latency-validation.md).
+- Camera controls may reset after reconnect/reboot and are not automatically
+  reapplied. Camera modes and USB bandwidth vary by device and host controller.
+- CSI/libcamera and media-controller ISP pipelines are not integrated camera
+  inputs; publish a compatible network stream from host camera software instead.
+
+For desktop GPU diagnostics, run `docker exec restreamer restreamer-hardware-report --verify`.
+On Pi 5, use the report without `--verify`: no H.264 hardware encoder is expected.
+Report defects with an exact image tag/digest and sanitized logs in
+[this repository](https://github.com/kaibsora/restreamer/issues).
+
+## Credits and licenses
+
+- **datarhei / FOSS GmbH and contributors** — original [Restreamer](https://github.com/datarhei/restreamer),
+  [UI](https://github.com/datarhei/restreamer-ui), [Core](https://github.com/datarhei/core)
+  and [FFmpeg build integration](https://github.com/datarhei/ffmpeg).
+- **[FFmpeg developers](https://ffmpeg.org/)** and codec/library authors — the
+  multimedia engine, including x264 and the other bundled upstream libraries.
+- **[MediaMTX contributors](https://github.com/bluenviron/mediamtx)** — the LAN relay.
+- **CQComber / [kaibsora](https://github.com/kaibsora)** — maintainer, project
+  direction, systems/infrastructure engineering and physical acceptance testing.
+- **OpenAI Codex** — substantial AI assistance with implementation, debugging,
+  tests and documentation, reviewed and physically tested by the maintainer.
+
+The maintainer is a systems engineer with no professional programming background,
+developing this adaptation for a practical camera-monitoring use case. The project
+aims to keep upstream components current
+and provide fixes/features as needed. It is not an official datarhei release.
+
+Application source is **Apache-2.0**; this FFmpeg configuration is
+**GPL-3.0-or-later**. Dependencies retain their own licenses. Original authorship,
+copyright and notices remain applicable: [LICENSE](LICENSE), [NOTICE](NOTICE),
+[MODIFICATIONS.md](MODIFICATIONS.md), [component licenses and sources](THIRD_PARTY.md).

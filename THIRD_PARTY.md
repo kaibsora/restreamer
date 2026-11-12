@@ -5,6 +5,11 @@ CQComber Restreamer is an independent adaptation, maintained by CQComber
 and their contributors. Rebranding does not replace their authorship or copyright.
 There is no implied endorsement by any upstream project.
 
+CQComber provides project direction, infrastructure, maintenance and physical
+acceptance testing. OpenAI Codex provided substantial AI assistance with code,
+debugging, tests and documentation under the maintainer's review. This credit
+does not replace the authorship, copyright or licenses of any upstream component.
+
 | Component | Version / source policy | Original source | License |
 | --- | --- | --- | --- |
 | Application integration | This repository's exact image revision | [datarhei/restreamer](https://github.com/datarhei/restreamer) | Apache-2.0 |

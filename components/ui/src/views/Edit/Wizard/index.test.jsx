@@ -905,7 +905,7 @@ test('wizard: metadata', async () => {
 
 	expect(screen.queryByText(/Metadata/)).toBeInTheDocument();
 	expect(screen.queryByLabelText('Name')).toHaveValue('test');
-	expect(screen.queryByLabelText('Description')).toHaveValue('Live from earth. Powered by datarhei Restreamer.');
+	expect(screen.queryByLabelText('Description')).toHaveValue('Live from earth. Powered by CQComber Restreamer.');
 
 	// Confirm metadata
 	button = screen.getByRole('button', { name: 'Next' });

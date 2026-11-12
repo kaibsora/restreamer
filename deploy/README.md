@@ -6,14 +6,16 @@ Start CQComber Restreamer with the default Intel/AMD DRM device mapping:
 docker compose -f deploy/compose.yaml up -d
 ```
 
-For hosts without `/dev/dri`, clear that mapping with Compose 2.24.4+:
+Use Docker Compose 2.30+ for the provided deployment modes. For hosts without
+`/dev/dri`, clear the default mapping:
 
 ```sh
 docker compose -f deploy/compose.yaml -f deploy/compose.cpu.yaml up -d
 ```
 
-The image is `ghcr.io/kaibsora/restreamer:latest`; pin `rc-1` or an accepted
-digest for a fixed deployment. See the [main installation guide](../README.md)
+The image is `ghcr.io/kaibsora/restreamer:latest`; pin an exact release version
+(for example `1.0.0`) or an accepted digest for a fixed deployment.
+See the [main installation guide](../README.md)
 for release status, hardware limitations and component attribution.
 
 The primary Compose file exposes `/dev/dri` for Intel and AMD acceleration by

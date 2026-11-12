@@ -1,3 +1,30 @@
+# Changelog
+
+## 1.0.0
+
+First stable CQComber Restreamer release, an independent adaptation of datarhei
+Restreamer, Core, UI and FFmpeg packaging.
+
+- Unified native AMD64/ARM64 application images with architecture-specific
+  FFmpeg runtimes, matching source packages, provenance and SBOMs.
+- Intel VA-API/Quick Sync, AMD VA-API/Vulkan and NVIDIA NVENC build support;
+  ARM CPU and V4L2 M2M support. Physical validation limits are listed in the README.
+- Multiple USB/IP/virtual sources, driver-reported capture modes and controls,
+  encoded rotation, integrated USB hot-plug and MediaMTX LAN relay integration.
+- HLS playback fixes for long camera GOPs, retained initialization segments and
+  current FFmpeg APIs; RTSP/RTMP video delivery validation.
+- CQComber default source descriptions and player-site branding, with original
+  upstream attribution and licenses preserved.
+- Camera discovery excludes metadata/output nodes, codecs and unsupported ISP
+  processing queues while retaining standalone capture devices and codec access.
+- Stable semantic-version image tags, immutable fixed releases and explicit
+  promotion of a validated digest to the major/minor/`latest` aliases.
+
+See the [deployment guide](README.md), [component inventory](THIRD_PARTY.md) and
+[physical validation evidence](docs/physical-validation.md) for details and limits.
+
+---
+
 # Restreamer
 
 ## Unreleased
