@@ -531,3 +531,74 @@ pods/services or native ARC job pods remained in the test namespaces. The normal
 camera streams and application stayed running for the maintainer's own tests.
 Stable `main`, `1.0.0`, `1.0`, `1`, `latest`, `rc-1` and `rc-2` were unchanged;
 stable aliases were checked anonymously against their prior accepted digests.
+
+## Continuous live camera sliders, November 12, 2026
+
+Development commit `c135719e4f00fd9c96f58ef287880b15f440b21b` replaces the live
+dashboard's integer control fields with driver-bounded sliders. The setup editor
+retains its existing controls. Updates are serialized per camera, throttled at
+150 ms during a continuous drag, coalesced to the latest pending value, and
+flushed on thumb release. Menu/automatic-mode selections apply immediately;
+explicit action buttons and bitmask/range fallbacks remain explicit.
+
+Nineteen targeted tests passed: queue throttling/final flush, slow-response
+serialization and pending-value preservation, cancellation when returning to a
+confirmed value or leaving a camera, error rollback without retry, mode-dependent
+control cancellation, slider bounds/step (including a one-unit fallback), lazy
+reads, disabled controls, and preservation of the mounted player and ingest
+configuration. Production build and all 15 catalog checks passed.
+
+A loopback-only production-UI preview was connected to the prior accepted
+`build-43279430890-1` backend. Chrome keyboard input changed brightness from 0 to
+1, and an actual pointer drag moved it to 8 without an Apply click. Keyboard
+input restored 0. Selecting autofocus Disabled immediately made the manual-focus
+slider available; restoring Enabled made it inactive again. Backend readback
+confirmed brightness 0 and autofocus 1 afterward. Both physical capture PIDs and
+all seven saved configurations/start-stop orders were preserved. Playback uptime
+continued advancing. The viewer was closed and the temporary preview container
+removed. The final UI also reserves status-line height so update messages do not
+shift the slider while dragging.
+
+The [native candidate workflow](https://github.com/kaibsora/restreamer/actions/runs/43288542142)
+uses the same pinned FFmpeg source as 1.0.0. Its first Core job stopped before
+tests because its runner had 36 GiB free against the existing 40 GiB preflight
+minimum; this was an infrastructure preflight failure, not a failed Core test.
+
+The next failed-job retry hit the same work-disk limit. Read-only node statistics
+showed ample capacity on the other two AMD64 nodes. This runner pool was
+therefore temporarily kept off the low-space node for the next retry; the
+40 GiB guard was retained and unrelated workloads/data were left untouched.
+Core tests and vet then passed, alongside the successful UI/configuration gates.
+Original runner placement was restored and verified after the native workflow passed.
+
+### Accepted slider candidate
+
+All native AMD64/ARM64 quality, camera-stack acceptance, publication and
+combined-index checks passed for the same application commit on attempt 3:
+
+- Candidate: `ghcr.io/kaibsora/restreamer:build-43288542142-3`
+- Combined index: `sha256:5282dea5b118526cb9311041d566b5f0ee7fef49ac38e3f5dd90883b74ad4227`
+- AMD64 manifest: `sha256:e89d74faf2279e0a557fe799daf3fb70592b896eb9852cd898a19bf534768a05`
+- ARM64 manifest: `sha256:13f439f99d5964e82485e21b869d966a4f741d3484faf362a160763c46509cb0`
+
+Both platform images and their labeled corresponding FFmpeg sources were
+anonymously accessible. The exact index was installed through the existing
+separate development Compose override on the Intel test host. All seven saved
+configurations/orders survived recreation and subsequent checks.
+
+In Chrome on the installed candidate, the C920 brightness slider applied 128 to
+129 and back to 128 without an Apply button. Capture uptime advanced and both
+physical capture PIDs stayed unchanged during those interactions. Backend
+readback confirmed brightness 128 afterward. The slider's layout position was
+unchanged during the update, accounting for page scrolling. The driver bounds
+were 0–255 with step 1. The earlier preview covered the other attached camera's
+negative brightness range and immediate autofocus mode changes. The candidate's
+generated footer was `lively-cedar-1585`.
+
+The final viewer was closed, the preview container removed, and finite test/build
+commands exited. No temporary diagnostic FFmpeg processes, application test
+pods/services or native ARC job pods remained. The temporary runner-node
+exclusion was removed while preserving the pool's original pod anti-affinity.
+Normal user camera streams stayed running. Stable `main` and all 1.0/RC image
+tags were verified unchanged. The unrelated low-space service's temporary volume
+was left untouched; its node can still fail the disk preflight in a future job.
